@@ -1,12 +1,13 @@
 import {createElement,Box,ExternalLink,FileText,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
-type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown};
+type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown};
 type RelationField={relationId:string;physicalName:string};
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
 type EdgeField={name:string;physicalName:string;valueType?:string};
 export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];visibleFields:string[];fieldDetails:EdgeField[];roleName?:string};
+export type StructureSelection={kind:'structure';conceptId:string;fromId?:string;relationId?:string}|{kind:'attribute';conceptId:string;informationId:string};
 const visibleDirections:Direction[]=['owned','reference','unknownOut'];
 
 /** Read only declared concepts, mappings and relations; never infer a relation from a label. */
@@ -87,7 +88,61 @@ const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const 
 const shortPhysicalName=(path:string)=>path.split(' / ').map(part=>part.trim().split('.').pop()??part).join(' / ');
 function typeLabel(mapping:Mapping|undefined){
  const value=typeof mapping?.valueType==='string'&&mapping.valueType.trim()?mapping.valueType:'未定義';
- return value+(mapping?.nullable===true?'・未決可':'');
+ return mapping?.nullableStatus==='proposal'?value.split('|').map(part=>part.trim()).filter(part=>part!=='null').join(' | ')||'未定義':value;
+}
+
+// The proposed business constraint is separate from an example, the source
+// format's type notation, and whether a property may be omitted.
+function nullableLabel(mapping:Mapping|undefined){
+ if(typeof mapping?.nullable==='boolean')return mapping.nullable?'許容する':'許容しない';
+ return mapping&&Object.hasOwn(mapping,'nullable')?'未決':'未定義';
+}
+
+/** Present only information declared on the selected concept, field or relation. */
+export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selection?:StructureSelection){
+ root.replaceChildren();
+ if(!selection){text(root,'p','ツリーの項目を選択すると詳細を確認できます。');return;}
+ const graph=structureGraph(model),concept=graph.nodes.get(selection.conceptId);if(!concept){text(root,'p','項目が見つかりません。');return;}
+ const names=(id:string)=>{const node=graph.nodes.get(id),authored=graph.conceptNames[id] as {typeName?:unknown;logicalName?:unknown}|undefined;
+  return {local:typeof authored?.logicalName==='string'&&authored.logicalName?authored.logicalName:node?.name??id,type:typeof authored?.typeName==='string'&&authored.typeName?authored.typeName:node?.name??'未定義'};};
+ const list=document.createElement('dl');list.className='structure-detail-list';root.append(list);
+ const add=(label:string,value:string|string[]|undefined)=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;const values=Array.isArray(value)?value:[value??'未定義'];if(!values.length)dd.textContent='なし';else for(const [index,item]of values.entries()){if(index)dd.append(document.createElement('br'));dd.append(document.createTextNode(item));}list.append(dt,dd);};
+ if(selection.kind==='attribute'){
+  const info=concept.information.find(item=>item.id===selection.informationId);if(!info){list.remove();text(root,'p','項目が見つかりません。');return;}
+  const mapping=graph.mappings.get(info.id),data=info as typeof info&{description?:unknown};
+  const references=mapping?.relationIds.flatMap(id=>{const edges=(graph.edges.get(concept.id)??[]).filter(edge=>edge.relation.id===id);return edges.length?edges.map(edge=>names(edge.to).local+'（'+labels[edge.direction]+'）'):[id+'（未定義）'];});
+  add('論理名',mapping?.physicalName?shortPhysicalName(mapping.physicalName):undefined);add('ローカル名',info.name);add('型名',typeLabel(mapping));
+  add(mapping?.nullableStatus==='proposal'?'null許容（候補）':'null許容',nullableLabel(mapping));if(mapping?.nullableReason)add('判定理由',mapping.nullableReason);
+  add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
+  add('説明',typeof data.description==='string'&&data.description?data.description:mapping?.logicalMeaning);
+  add('サンプル',mapping?sampleLabels(mapping):undefined);
+  add('情報項目のID',info.id);
+  if(mapping?.physicalName)add('対応する項目',mapping.physicalName);
+  if(mapping?.sourceSchemaPath)add('定義元',mapping.sourceSchemaPath);
+  if(mapping?.nullableStatus==='proposal'&&mapping.valueType)add('参照元の型表記',mapping.valueType);
+  if(mapping?.logicalSourcePaths?.length)add('対応する定義',mapping.logicalSourcePaths);
+  if(typeof mapping?.optional==='boolean')add('項目の省略',mapping.optional?'可能':'不可');
+  if(mapping?.representation)add('対応の種類',mapping.representation);
+  if(info.responsibilityStatus)add('責任の確認状態',info.responsibilityStatus);
+  if(info.responsibleSubsystemId)add('責任を持つサブシステム',info.responsibleSubsystemId);
+  return;
+ }
+ const edge=selection.relationId?graph.edges.get(selection.fromId??'')?.find(item=>item.relation.id===selection.relationId&&item.to===concept.id):undefined;
+ const n=names(concept.id),parent=edge?names(edge.from):undefined;
+ const owners=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='owner').map(item=>names(item.to).local);
+ const outgoing=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='reference').map(item=>(item.roleName??'参照')+'：'+names(item.to).local);
+ const relationNames=edge?.fieldDetails.map(field=>field.physicalName).filter(Boolean).map(shortPhysicalName);
+ add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type);add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
+ add('所属',parent?parent.local+'（'+parent.type+'）':owners.length?owners:undefined);add('参照',edge?.direction==='reference'?[n.local+'（'+n.type+'）']:outgoing);
+ add('説明',edge?.relation.condition||concept.description||undefined);add('サンプル',undefined);
+ if(edge){add('関係の種類',labels[edge.direction]);add('多重度',edge.count);add('反対側の多重度',edge.reverseCount);add('関係のID',edge.relation.id);if(edge.fields.length)add('対応する項目',edge.fields);if(edge.relation.reviewState)add('関係の確認状態',edge.relation.reviewState);if(edge.relation.sourceRefs.length)add('関係の出所',edge.relation.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));if(edge.relation.condition&&concept.description)add('構造の説明',concept.description);}
+ add('構造のID',concept.id);
+ if(concept.reason)add('理由',concept.reason);if(concept.reviewState)add('確認状態',concept.reviewState);
+ if(concept.subsystemId){const subsystem=model.subsystems.find(item=>item.id===concept.subsystemId);add('サブシステム',subsystem?subsystem.name+'（'+concept.subsystemId+'）':concept.subsystemId);}
+ const referencedBy=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='referencedBy').map(item=>names(item.to).local);if(referencedBy.length)add('参照元',referencedBy);
+ if(concept.businessObjectIds.length)add('関連する対象',concept.businessObjectIds);
+ if(concept.activityLinks.length)add('関連する業務',concept.activityLinks.map(link=>link.activityId+(link.uses.length?'：'+link.uses.join('、'):'')));
+ if(concept.sourceRefs.length)add('出所',concept.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));
 }
 function sampleLabels(mapping:Mapping|undefined){
  if(!mapping)return [];
@@ -99,7 +154,7 @@ function sampleLabels(mapping:Mapping|undefined){
 }
 
 /** The DOM is lazy per path. A full expansion visits each concept once. */
-export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,options:{rootId?:string;openStructure?:(id:string)=>void}={}){
+export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,options:{rootId?:string;openStructure?:(id:string)=>void;select?:(selection:StructureSelection)=>void}={}){
  const graph=structureGraph(model);host.replaceChildren();host.className='structure-explorer';
  if(!graph.roots.length){text(host,'p','この構造モデルには概念がありません。','structure-empty');return;}
  if(options.rootId&&!graph.nodes.has(options.rootId)){text(host,'p','指定した構造が見つかりません。','structure-empty');return;}
@@ -114,7 +169,11 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  const unreachable=[...graph.nodes.keys()].filter(id=>!graph.reachable.has(id));
  if(!options.rootId&&unreachable.length)text(panel,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
  const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);
- let savedTree:Node|null=null;
+ let savedTree:Node|null=null,selectedKey:string|undefined;
+ const keyOf=(selection:StructureSelection)=>JSON.stringify(selection.kind==='attribute'?['attribute',selection.conceptId,selection.informationId]:['structure',selection.conceptId,selection.fromId??'',selection.relationId??'']);
+ const mark=(row:HTMLElement)=>{row.classList.add('structure-selected');row.setAttribute('aria-current','true');};
+ const restoreSelection=()=>{tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});const row=Array.from(tree.querySelectorAll<HTMLElement>('[data-structure-selection]')).find(item=>item.dataset.structureSelection===selectedKey);if(row)mark(row);};
+ const select=(selection:StructureSelection,row:HTMLElement)=>{selectedKey=keyOf(selection);tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});mark(row);options.select?.(selection);};
 
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
   const concept=graph.nodes.get(id)!;const item=document.createElement('li');item.className='structure-item';item.dataset.conceptId=id;
@@ -128,6 +187,8 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
   const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
   row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));
+  const selectedStructure:StructureSelection={kind:'structure',conceptId:id,...(edge?{fromId:edge.from,relationId:edge.relation.id}:{})};row.dataset.structureSelection=keyOf(selectedStructure);
+  row.addEventListener('click',()=>select(selectedStructure,row));
   if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}${edge.fields.length>edge.visibleFields.length?' — 物理項目：'+edge.fields.join('、'):''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
@@ -136,25 +197,23 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
    else{if(edge.roleName)entry(edge.roleName,undefined);fields.forEach((field,index)=>{if(index||edge.roleName)text(row,'span','／');entry(field?.name?.trim()||'名前未定義',field);});}
   }else{ text(row,'strong',typeName);if(logicalName&&logicalName!==typeName)text(row,'span',logicalName,'structure-type'); }
   if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
-  if(edge?.relation.condition)text(row,'span',edge.relation.condition,'structure-condition');
-  if(edge?.visibleFields.length){const detail=text(row,'span',edge.visibleFields.map(shortPhysicalName).join('、'),'structure-edge-detail');detail.title=edge.visibleFields.join('、');}
   if(cycle||visited)text(row,'span','既出','structure-seen');
   const details=document.createElement('details');details.className='structure-node';details.append(row);item.append(details);
   let built=false;const nextPath=new Set(path);nextPath.add(id);
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
-   for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText,'属性'));text(field,'span',info.name);text(field,'span','型：'+typeLabel(mapping),'structure-type');if(mapping?.physicalName)text(field,'code',mapping.physicalName);for(const sample of sampleLabels(mapping)){const example=text(field,'span',sample,'structure-example');example.title=sample;}children.append(field);}
+   for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id),button=document.createElement('button'),selection:StructureSelection={kind:'attribute',conceptId:id,informationId:info.id};field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.informationId=info.id;field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();button.type='button';button.className='structure-field-button';button.dataset.structureSelection=keyOf(selection);button.append(icon(FileText,'属性'));text(button,'span',info.name);text(button,'span','型：'+typeLabel(mapping),'structure-type');button.onclick=()=>select(selection,button);field.append(button);children.append(field);}
    for(const direction of visibleDirections){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
     for(const relation of outgoing)children.append(buildNode(relation.to,nextPath,relation,expand));
-   }
+   }if(tree.contains(details))restoreSelection();
   };
   details.addEventListener('toggle',()=>{if(details.open)build();});
   if(seen&&!visited&&!cycle){seen.add(id);details.open=true;build(seen);}
   return item;
  };
- const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';const seen=expand?new Set<string>():undefined;for(const id of roots)ul.append(buildNode(id,new Set(),undefined,seen));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}};
+ const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';const seen=expand?new Set<string>():undefined;for(const id of roots)ul.append(buildNode(id,new Set(),undefined,seen));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}restoreSelection();};
  const filter=()=>{const query=search.value.trim().toLocaleLowerCase();
-  if(query&&!savedTree){savedTree=tree.firstChild;render(true);}else if(!query&&savedTree){tree.replaceChildren(savedTree);savedTree=null;return;}
+  if(query&&!savedTree){savedTree=tree.firstChild;render(true);}else if(!query&&savedTree){tree.replaceChildren(savedTree);savedTree=null;restoreSelection();return;}
   const items=Array.from(tree.querySelectorAll<HTMLElement>('[data-search-text]')).reverse();
   for(const item of items){const own=(item.dataset.searchText??'').includes(query),descendant=Array.from(item.querySelectorAll<HTMLElement>('[data-search-text]')).some(child=>!child.hidden);item.hidden=!!query&&!own&&!descendant;}
  };

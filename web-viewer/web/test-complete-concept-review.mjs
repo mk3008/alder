@@ -103,12 +103,12 @@ assert.match(relation('nr-step-party').condition,/未記録.*存在しない/);c
 const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
 const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{
- w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');w.Explorer.renderStructureExplorer(host,model);
+ w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host'),detail=w.document.createElement('div');w.Explorer.renderStructureExplorer(host,model,{select:selection=>w.Explorer.renderStructureDetails(detail,model,selection)});
  const root=host.querySelector('.structure-root > [data-concept-id="n-package"] > details > summary');assert(root);assert.match(root.textContent,/DocumentPackage.*文書パッケージ/);
  for(const id of ['nr-package-bd','nr-package-checkdoc','nr-package-state-doc','nr-package-concept-doc'])assert(host.querySelector(`[data-relation-id="${id}"]`),id);
  assert(!host.textContent.includes('この起点からたどれない構造'));
  [...host.querySelectorAll('button')].find(x=>x.textContent==='すべて展開').click();
- assert(host.textContent.includes('情報項目グループ'));assert(host.textContent.includes('状態遷移文書'));assert(host.textContent.includes('参考例：受付済'));
+ assert(host.textContent.includes('情報項目グループ'));assert(host.textContent.includes('状態遷移文書'));const sampleField=host.querySelector(`[data-information-id="${reference.informationId}"] button`);assert(sampleField);sampleField.click();assert(detail.textContent.includes('参考例：受付済'));
  assert(host.querySelectorAll('.structure-item').length<model.relations.length+model.concepts.length+10,'expand all terminates');
 }finally{w.close();}
 coverage(covered);for(const [path,digest] of Object.entries(required))assert.equal(hash(readFileSync(path)),digest,path+' changed after verification');

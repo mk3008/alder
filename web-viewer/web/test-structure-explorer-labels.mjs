@@ -60,13 +60,14 @@ try{
  assert.equal(root.querySelector(':scope > .structure-type').textContent,'手順行','root shows the declared logical name separately');
  assert.equal(root.querySelector('.structure-element'),null,'a root is a type, not a child property');
  const attribute=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');
- assert.match(attribute.textContent,/識別子.*型：未定義.*steps\.id/,'an attribute shows its name and known or undefined type before the original physical name');
+ assert.match(attribute.textContent,/識別子.*型：未定義/,'an attribute shows its name and known or undefined type');
+ const detail=window.document.createElement('div');window.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-step',informationId:attribute.dataset.informationId});assert.match(detail.textContent,/steps\.id/,'the physical mapping remains in the detail');
  open(host.querySelector('[data-relation-id="nr-step-exchange"] > details'));
  const paired=row('nr-exchange-pair');
  assert.deepEqual(pairs(paired),[['対応する手順','型：Step']]);
  assert.equal(paired.querySelector('.structure-edge-detail'),null,'relationship keys are not repeated at the end of the row');
  assert.match(paired.title,/stepInteractions\.pairedStepId/,'the full physical mapping remains available');
- assert.match(paired.textContent,/対応手順。/,'the relation description remains available');
+ assert.doesNotMatch(paired.textContent,/対応手順。/);window.Explorer.renderStructureDetails(detail,normalized,{kind:'structure',conceptId:'n-step',fromId:'n-exchange',relationId:'nr-exchange-pair'});assert.match(detail.textContent,/対応手順。/,'the relation description remains available in the detail');
  assert.equal(paired.querySelector('.structure-count').textContent,'0..1');
  assert.deepEqual(pairs(row('nr-step-data')),[['操作対象の項目グループ','型：InformationGroup']],'the authored conceptual name is shown without inventing an array');
  assert.equal(row('nr-step-data').querySelector('.structure-count').textContent,'0..N');
@@ -92,7 +93,7 @@ try{
  const explicit=structuredClone(physical),mapping=explicit.meta.fieldMappings.find(item=>item.informationId==='fmt-package-field-1');
  mapping.valueType='string';render(explicit,'fmt-package');
  const first=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');
- assert.match(first.textContent,/形式.*型：string.*format/,'explicit attribute types remain visible');
+ assert.match(first.textContent,/形式.*型：string/,'explicit attribute types remain visible');window.Explorer.renderStructureDetails(detail,explicit,{kind:'attribute',conceptId:'fmt-package',informationId:first.dataset.informationId});assert.match(detail.textContent,/format/,'the mapping remains available in the detail');
  render(normalized,'n-bd');
  assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：Who']],'owned role name and declared type are clearly distinguished');
  render(normalized,'n-who');const whoRoot=host.querySelector('.structure-root > .structure-item > details > summary');
@@ -119,7 +120,7 @@ try{
  assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > strong').textContent,'主体（Who）','missing types use the declared original label');
  assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > .structure-type'),null,'a logical name alone does not invent a type association');
  const declaredInteger=structuredClone(normalized);declaredInteger.meta.fieldMappings.find(item=>item.informationId==='n-who-field-1').valueType='int';render(declaredInteger,'n-who');
- assert.match(host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field').textContent,/識別子.*型：int.*actors\.id/,'an explicitly declared primitive type is shown as recorded');
+ const integerField=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');assert.match(integerField.textContent,/識別子.*型：int/,'an explicitly declared primitive type is shown as recorded');window.Explorer.renderStructureDetails(detail,declaredInteger,{kind:'attribute',conceptId:'n-who',informationId:integerField.dataset.informationId});assert.match(detail.textContent,/actors\.id/);
  covered.push('STRUCTURE-LABEL-003');
 }finally{window.close();}
 coverage(covered);for(const path of Object.keys(hashes))verify(path,readFileSync(path));

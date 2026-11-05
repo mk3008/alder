@@ -37,11 +37,14 @@ const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts
 const covered=[];
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');
- const render=(m,id)=>w.Explorer.renderStructureExplorer(host,m,{rootId:id});
+ const detail=w.document.createElement('div');let shown;
+ const render=(m,id)=>{shown=m;w.Explorer.renderStructureExplorer(host,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection)});};
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
- const attribute=path=>[...host.querySelectorAll('.structure-root > .structure-item > details > .structure-children > .structure-field')].find(node=>node.querySelector('code')?.textContent===path);
- const sample=path=>attribute(path)?.querySelector('.structure-example')?.textContent;
- const samples=path=>[...(attribute(path)?.querySelectorAll('.structure-example')??[])].map(node=>node.textContent);
+ const attribute=path=>{const id=shown.meta.fieldMappings.find(item=>item.physicalName===path)?.informationId;return [...host.querySelectorAll('.structure-root > .structure-item > details > .structure-children > .structure-field')].find(node=>node.dataset.informationId===id);};
+ const values=label=>{const dt=[...detail.querySelectorAll('dt')].find(node=>node.textContent===label),dd=dt?.nextElementSibling;return dd?[...dd.childNodes].filter(node=>node.nodeType===w.Node.TEXT_NODE).map(node=>node.textContent):[];};
+ const samples=path=>{attribute(path)?.querySelector('button').click();const result=values('サンプル');return result.length===1&&['なし','未定義'].includes(result[0])?[]:result;};
+ const sample=path=>samples(path)[0];
+ const showRelation=(conceptId,fromId,relationId)=>w.Explorer.renderStructureDetails(detail,shown,{kind:'structure',conceptId,fromId,relationId});
 
  render(model,'n-activity');
  for(const [id,label,count] of [
@@ -49,7 +52,7 @@ try{
   ['nr-activity-decision','判定表','0..N'],['nr-activity-exception','例外','0..N'],
   ['nr-activity-order','旧順序規則','0..N'],['nr-who-activity','実行主体','0..1']
  ]){const current=row(id);assert(current);assert(current.textContent.includes(label));assert.equal(current.querySelector('.structure-count').textContent,count);assert.equal(current.querySelector('.structure-edge-detail'),null,id+' has no redundant key suffix');}
- assert(row('nr-who-activity').textContent.includes('未決はNULL'),'relationship description is retained');
+ assert(!row('nr-who-activity').textContent.includes('未決はNULL'));showRelation('n-who','n-activity','nr-who-activity');assert(detail.textContent.includes('未決はNULL'),'relationship description is retained in the detail');
  render(model,'n-object');assert.equal(row('nr-object-information').querySelector('.structure-edge-detail'),null);
  covered.push('STRUCTURE-KEYDISPLAY-001');
 
@@ -61,10 +64,10 @@ try{
  assert([...host.querySelectorAll('[data-relation-id="nr-bd-object"]')].some(node=>!node.hidden));
  covered.push('STRUCTURE-KEYDISPLAY-002');
 
- render(physical,'fmt-package');assert.equal(row('rel-package-bd').querySelector('.structure-edge-detail').title,'documents[]');assert.equal(host.querySelectorAll('.structure-example').length,0);
- render(physical,'fmt-order');assert.match(row('rel-order-step').querySelector('.structure-edge-detail').title,/beforeId \/ afterId/);assert.match(row('rel-order-step').querySelector('.structure-edge-detail').title,/stepIds\[\]/);
+ render(physical,'fmt-package');assert.equal(row('rel-package-bd').querySelector('.structure-edge-detail'),null);showRelation('fmt-bd','fmt-package','rel-package-bd');assert(detail.textContent.includes('documents[]'));assert.equal(host.querySelectorAll('.structure-example').length,0);
+ render(physical,'fmt-order');const order=shown.relations.find(item=>item.id==='rel-order-step');showRelation(order.toConceptId,order.fromConceptId,order.id);assert.match(detail.textContent,/beforeId \/ afterId/);assert.match(detail.textContent,/stepIds\[\]/);
  const unmarked=structuredClone(model),who=unmarked.meta.fieldMappings.find(item=>item.physicalName==='activities.whoId');delete who.representation;render(unmarked,'n-activity');
- assert.equal(row('nr-who-activity').querySelector('.structure-edge-detail').title,'activities.whoId');
+ assert.equal(row('nr-who-activity').querySelector('.structure-edge-detail'),null);showRelation('n-who','n-activity','nr-who-activity');assert(detail.textContent.includes('activities.whoId'));
  assert(attribute('activities.whoId'),'an unmarked mapping remains an attribute');
  covered.push('STRUCTURE-KEYDISPLAY-003');
 
@@ -80,14 +83,14 @@ try{
  render(model,'n-data');assert.deepEqual(samples('data.name'),['例：'+normalized.entities.data[0].name,'参考例：連絡先（氏名・電話番号）']);
  render(model,'n-dataitem');assert.deepEqual(samples('dataItems.condition'),['例：null','参考例：電話連絡を希望する場合']);
  render(model,'n-information');assert.deepEqual(samples('information.name'),['例：'+normalized.entities.information[0].name,'参考例：電話番号']);
- render(model,'n-dependency');assert.equal(host.querySelectorAll('.structure-example').length,0,'a structure with no sample rows has no invented values');
+ render(model,'n-dependency');for(const button of host.querySelectorAll('.structure-field button')){button.click();assert.deepEqual(values('サンプル'),['なし'],'a structure with no sample rows has no invented values');}
  covered.push('STRUCTURE-SAMPLE-002');
 
  const modified=structuredClone(model),name=modified.meta.fieldMappings.find(item=>item.physicalName==='activities.name');
  for(const [value,expected] of [[0,'例：0'],[false,'例：false'],[null,'例：null'],['','例：""'],[['a','b'],'例：["a","b"]'],[{x:1},'例：{"x":1}']]){
   name.sampleValue=value;render(modified,'n-activity');assert.equal(sample('activities.name'),expected);assert(attribute('activities.name').textContent.includes('型：未定義'));
  }
- name.sampleValue='<script>example</script>';render(modified,'n-activity');assert.equal(sample('activities.name'),'例：<script>example</script>');assert.equal(attribute('activities.name').querySelector('script'),null,'sample text cannot create DOM elements');
+ name.sampleValue='<script>example</script>';render(modified,'n-activity');assert.equal(sample('activities.name'),'例：<script>example</script>');assert.equal(detail.querySelector('script'),null,'sample text cannot create DOM elements');
  delete name.sampleValue;render(modified,'n-activity');assert.equal(sample('activities.name'),undefined);
  covered.push('STRUCTURE-SAMPLE-003');
 }finally{w.close();}

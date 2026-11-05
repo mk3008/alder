@@ -1084,6 +1084,10 @@
             {
               "id": "cf-423df2519d7898",
               "name": "課題の程度"
+            },
+            {
+              "id": "cf-bed444b46e4cc9",
+              "name": "課題の確認状態"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
@@ -1188,6 +1192,10 @@
             {
               "id": "n-dataitem-field-3",
               "name": "含める条件"
+            },
+            {
+              "id": "cf-7e9fb3e051ad15",
+              "name": "条件の確定状態"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
@@ -5550,63 +5558,90 @@
             "physicalName": "businessDesigns.id",
             "relationIds": [],
             "sampleValue": "bd-score-example",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-bd-field-2",
             "physicalName": "businessDesigns.title",
             "relationIds": [],
             "sampleValue": "モルックの点数計算",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "業務設計書を識別し、確認相手が何の設計か分かる名前が必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-bd-field-3",
             "physicalName": "businessDesigns.revision",
             "relationIds": [],
             "sampleValue": "bd-review-1",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-who-field-1",
             "physicalName": "actors.id",
             "relationIds": [],
             "sampleValue": "score-reviewer",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-who-field-2",
             "physicalName": "actors.kind",
             "relationIds": [],
             "sampleValue": "role",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "役割か自動主体かを区別する。未決のWhoは主体を仮作成せず、業務の参照を未決にする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-who-field-3",
             "physicalName": "actors.name",
             "relationIds": [],
             "sampleValue": "記録係",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "主体を他の主体と区別して業務に結び付けるため、名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-who-field-4",
             "physicalName": "actors.color",
             "relationIds": [],
             "sampleValue": "#8b5cf6",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": null,
+            "nullableReason": "色はRoleにのみ関係する。非該当と未設定を区別し、主体の種類との持たせ方を検討する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-activity-field-1",
             "physicalName": "activities.id",
             "relationIds": [],
             "sampleValue": "calculate-score",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-activity-field-2",
             "physicalName": "activities.name",
             "relationIds": [],
             "sampleValue": "1回の点数を計算する",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "業務を区別し、他の資料から参照できる名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-activity-field-3",
@@ -5624,49 +5659,70 @@
             "physicalName": "activities.scope",
             "relationIds": [],
             "sampleValue": true,
-            "valueType": "boolean | null"
+            "valueType": "boolean | null",
+            "nullable": true,
+            "nullableReason": "システム化対象の判定が未決の業務を保持し、対象外のfalseと区別する。合意時には判定を求める。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-activity-field-5",
             "physicalName": "activities.why",
             "relationIds": [],
             "sampleValue": "利用者が1回投げた結果の点数を知るため",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "目的が未決の草案を保持できるようにする。合意済みの業務では目的を明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-activity-field-6",
             "physicalName": "activities.when",
             "relationIds": [],
             "sampleValue": "利用者が計算対象の投擲順と各回に倒れた棒の番号を入力したとき。0回を含む。",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "開始条件が未決の草案を保持できるようにする。合意済みの業務では開始条件を明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-object-field-1",
             "physicalName": "objects.id",
             "relationIds": [],
             "sampleValue": "player",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-object-field-2",
             "physicalName": "objects.name",
             "relationIds": [],
             "sampleValue": "利用者",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "対象を業務上区別し、入出力から参照できる名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-object-field-3",
             "physicalName": "objects.scope",
             "relationIds": [],
             "sampleValue": false,
-            "valueType": "boolean | null"
+            "valueType": "boolean | null",
+            "nullable": true,
+            "nullableReason": "システム化対象の判定が未決の対象を保持し、対象外のfalseと区別する。合意時には判定を求める。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-information-field-1",
             "physicalName": "information.id",
             "relationIds": [],
             "sampleValue": "throws-info",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-information-field-2",
@@ -5674,7 +5730,10 @@
             "relationIds": [],
             "sampleValue": "投擲順・各回の棒の番号",
             "referenceValue": "電話番号",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "対象が持つ情報項目を他の項目と区別できる名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-information-field-3",
@@ -5690,7 +5749,10 @@
             "physicalName": "data.id",
             "relationIds": [],
             "sampleValue": "throws",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-data-field-2",
@@ -5698,7 +5760,10 @@
             "relationIds": [],
             "sampleValue": "投擲順・各回の棒の番号",
             "referenceValue": "連絡先（氏名・電話番号）",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "受渡しや業務フローで参照する情報項目のまとまりに名前を付ける。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-dataitem-field-1",
@@ -5724,14 +5789,20 @@
             "relationIds": [],
             "sampleValue": null,
             "referenceValue": "電話連絡を希望する場合",
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": true,
+            "nullableReason": "無条件・条件未決は条件の確定状態で区別する。条件ありの場合は条件の内容が必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-step-field-1",
             "physicalName": "steps.id",
             "relationIds": [],
             "sampleValue": "receive",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-step-field-2",
@@ -5747,7 +5818,10 @@
             "physicalName": "steps.action",
             "relationIds": [],
             "sampleValue": "受け取る",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "手順の操作が未決の草案を保持できるようにする。合意済みの手順では操作を明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-step-field-4",
@@ -5755,14 +5829,20 @@
             "relationIds": [],
             "sampleValue": "目視",
             "sampleKind": "reference",
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": true,
+            "nullableReason": "方法が未決の手順を保持する。方法が不要・該当しない場合との区別は別途必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-step-field-5",
             "physicalName": "steps.exchangeKind",
             "relationIds": [],
             "sampleValue": "interaction",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "手順のやり取りの有無・種類が未決の場合を保持し、やり取りなしの確定と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-step-field-6",
@@ -5800,14 +5880,20 @@
             "physicalName": "stepInteractions.direction",
             "relationIds": [],
             "sampleValue": "input",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "受渡しの向きが未決の草案を保持し、合意時に方向を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-exchange-field-4",
             "physicalName": "stepInteractions.phase",
             "relationIds": [],
             "sampleValue": "request",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "要求か応答かが未決の受渡しを保持し、応答がない場合と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-exchange-field-5",
@@ -5844,13 +5930,19 @@
             "informationId": "n-party-field-2",
             "physicalName": "stepParties.side",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "手順上の当事者がFromとToのどちらかを区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-party-field-3",
             "physicalName": "stepParties.kind",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "当事者の種類が未決の場合を保持する。主体が存在しないと確定した意味にはしない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-party-field-4",
@@ -5905,7 +5997,10 @@
             "informationId": "n-order-field-2",
             "physicalName": "orderRules.kind",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-order-field-3",
@@ -5930,7 +6025,10 @@
             "physicalName": "results.id",
             "relationIds": [],
             "sampleValue": "score-result",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-result-field-2",
@@ -5946,14 +6044,20 @@
             "physicalName": "results.text",
             "relationIds": [],
             "sampleValue": "入力が有効なら投擲順・各回の点数が分かる。0回の場合、1回分の点数はない。",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "結果が未決の草案を保持する。合意済み業務では成立する結果を明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-decision-field-1",
             "physicalName": "decisions.id",
             "relationIds": [],
             "sampleValue": "input-validation",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-decision-field-2",
@@ -5969,14 +6073,20 @@
             "physicalName": "decisions.title",
             "relationIds": [],
             "sampleValue": "入力の検査",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-decision-field-4",
             "physicalName": "decisions.kind",
             "relationIds": [],
             "sampleValue": "validation",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-decision-field-5",
@@ -5994,7 +6104,10 @@
             "physicalName": "axes.id",
             "relationIds": [],
             "sampleValue": "axis-numbers",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-axis-field-2",
@@ -6010,14 +6123,20 @@
             "physicalName": "axes.name",
             "relationIds": [],
             "sampleValue": "棒の番号",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-row-field-1",
             "physicalName": "rows.id",
             "relationIds": [],
             "sampleValue": "valid",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-row-field-2",
@@ -6033,14 +6152,20 @@
             "physicalName": "rows.resultKind",
             "relationIds": [],
             "sampleValue": "accepted",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-row-field-4",
             "physicalName": "rows.resultText",
             "relationIds": [],
             "sampleValue": "有効",
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": null,
+            "nullableReason": "結果の種類によって説明が不要な場合と、結果が未決の場合を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-condition-field-1",
@@ -6067,21 +6192,30 @@
             "physicalName": "conditions.kind",
             "relationIds": [],
             "sampleValue": "value",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-condition-field-4",
             "physicalName": "conditions.operator",
             "relationIds": [],
             "sampleValue": "is",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": null,
+            "nullableReason": "条件の種類によって比較が非該当の場合と、比較方法が未決の場合を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-condition-field-5",
             "physicalName": "conditions.value",
             "relationIds": [],
             "sampleValue": "1〜12の整数",
-            "valueType": "string | number | boolean"
+            "valueType": "string | number | boolean",
+            "nullable": null,
+            "nullableReason": "条件の種類によって値が非該当の場合と、比較値が未決の場合を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-rowcheck-field-1",
@@ -6108,14 +6242,20 @@
             "physicalName": "rowChecks.coverage",
             "relationIds": [],
             "sampleValue": "full",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "チェックとの対応範囲を調査中の状態を保持し、合意時に何を保証する対応かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-exception-field-1",
             "physicalName": "exceptions.id",
             "relationIds": [],
             "sampleValue": "invalid-input",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-exception-field-2",
@@ -6131,14 +6271,20 @@
             "physicalName": "exceptions.name",
             "relationIds": [],
             "sampleValue": "入力エラー",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-exception-field-4",
             "physicalName": "exceptions.description",
             "relationIds": [],
             "sampleValue": "入力に誤りが1回でもあれば計算せず、全体をエラーとし、投擲順・各回の点数・合計点・各回までの合計点の推移を返さない。",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-continuity-field-1",
@@ -6153,39 +6299,57 @@
             "informationId": "n-continuity-field-2",
             "physicalName": "continuities.trigger",
             "relationIds": [],
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-continuity-field-3",
             "physicalName": "continuities.outcome",
             "relationIds": [],
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-continuity-field-4",
             "physicalName": "continuities.resumeCondition",
             "relationIds": [],
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-continuity-field-5",
             "physicalName": "continuities.resumeAction",
             "relationIds": [],
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-relation-field-1",
             "physicalName": "relations.id",
             "relationIds": [],
             "sampleValue": "rel-input",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-relation-field-2",
             "physicalName": "relations.kind",
             "relationIds": [],
             "sampleValue": "input",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-relation-field-3",
@@ -6211,39 +6375,57 @@
             "informationId": "n-finding-field-1",
             "physicalName": "findings.id",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-finding-field-2",
             "physicalName": "findings.status",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-finding-field-3",
             "physicalName": "findings.scope",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "確認対象の範囲がまだ特定できない指摘も残せるようにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-finding-field-4",
             "physicalName": "findings.summary",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-external-field-1",
             "physicalName": "source.externalDocuments.id",
             "relationIds": [],
             "sourceSchemaPath": "Package.externalDocuments[].id",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-external-field-2",
             "physicalName": "source.externalDocuments.revision",
             "relationIds": [],
             "sourceSchemaPath": "Package.externalDocuments[].revision",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-checkdoc-field-1",
@@ -6251,7 +6433,10 @@
             "relationIds": [],
             "sampleValue": "checks-score-example",
             "sourceSchemaPath": "Check.id",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-checkdoc-field-2",
@@ -6259,7 +6444,10 @@
             "relationIds": [],
             "sampleValue": "checks-review-1",
             "sourceSchemaPath": "Check.revision",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-checkdoc-field-3",
@@ -6282,7 +6470,10 @@
             "relationIds": [],
             "sampleValue": "check-01",
             "sourceSchemaPath": "Check.items[].id",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-check-field-2",
@@ -6290,7 +6481,10 @@
             "relationIds": [],
             "sampleValue": "MK-01",
             "sourceSchemaPath": "Check.items[].checkId",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "検査項目を人が特定し、業務設計やテストとの対応を追跡するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "n-check-field-3",
@@ -6298,7 +6492,10 @@
             "relationIds": [],
             "sampleValue": "未レビュー",
             "sourceSchemaPath": "Check.items[].reviewState",
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-fa56ab6bd9ad29",
@@ -6306,7 +6503,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Package.format",
-            "sampleValue": "alder-document-package"
+            "sampleValue": "alder-document-package",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-cb2cab3103539a",
@@ -6314,7 +6514,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Package.formatVersion",
-            "sampleValue": "0.7"
+            "sampleValue": "0.7",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-56a9d80cc8c10f",
@@ -6322,7 +6525,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Package.revision",
-            "sampleValue": "normalized-example-source-1"
+            "sampleValue": "normalized-example-source-1",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3907e6aa0081d2",
@@ -6363,42 +6569,60 @@
             "physicalName": "Package.sources[].revision",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Package.sources[].revision"
+            "sourceSchemaPath": "Package.sources[].revision",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b911ffd2749455",
             "physicalName": "Package.sources[].sha256",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Package.sources[].sha256"
+            "sourceSchemaPath": "Package.sources[].sha256",
+            "nullable": true,
+            "nullableReason": "原典のハッシュが未取得でも原典の識別と改訂は保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-1b534ed06c44c9",
             "physicalName": "Package.sources[].uri",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Package.sources[].uri"
+            "sourceSchemaPath": "Package.sources[].uri",
+            "nullable": true,
+            "nullableReason": "リンク先を持たない原典もあるため、所在情報の未記録を許容する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-5246ed43cf82fc",
             "physicalName": "Package.externalDocuments[].kind",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Package.externalDocuments[].kind"
+            "sourceSchemaPath": "Package.externalDocuments[].kind",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c60748c7739ecb",
             "physicalName": "Package.externalDocuments[].activities[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Package.externalDocuments[].activities[].id"
+            "sourceSchemaPath": "Package.externalDocuments[].activities[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d31f49c46d6346",
             "physicalName": "Package.externalDocuments[].activities[].name",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Package.externalDocuments[].activities[].name"
+            "sourceSchemaPath": "Package.externalDocuments[].activities[].name",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2afe02557bfa91",
@@ -6406,7 +6630,10 @@
             "relationIds": [],
             "valueType": "string[]",
             "sourceSchemaPath": "Package.diagnostics",
-            "sampleValue": []
+            "sampleValue": [],
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d479ca1faa5493",
@@ -6414,7 +6641,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.schemaVersion",
-            "sampleValue": "0.1"
+            "sampleValue": "0.1",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7002a402a9b4a2",
@@ -6422,7 +6652,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.kind",
-            "sampleValue": "checkItems"
+            "sampleValue": "checkItems",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-460e5fb604bcb6",
@@ -6430,7 +6663,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.title",
-            "sampleValue": "点数計算のCheck"
+            "sampleValue": "点数計算のCheck",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d7b8496c2d645a",
@@ -6438,7 +6674,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.basedOn.revision",
-            "sampleValue": "bd-review-1"
+            "sampleValue": "bd-review-1",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-47944f407a4814",
@@ -6446,14 +6685,20 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.basedOn.verification",
-            "sampleValue": "unverified"
+            "sampleValue": "unverified",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-6f159c6e766495",
             "physicalName": "Check.intro[].kind",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Check.intro[].kind"
+            "sourceSchemaPath": "Check.intro[].kind",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-4deeafa4495eb6",
@@ -6461,7 +6706,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.intro[].value",
-            "optional": true
+            "optional": true,
+            "nullable": false,
+            "nullableReason": "文章要素として使う場合は文章を持つ。別の種類ではその種類に合う項目を使う。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-448e853c63ca63",
@@ -6488,7 +6736,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.intro[].label",
-            "optional": true
+            "optional": true,
+            "nullable": false,
+            "nullableReason": "参照・リンクに表示名が必要な種類では名前を持つ。別の種類では非該当を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c6d2e7337685ae",
@@ -6496,7 +6747,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.intro[].uri",
-            "optional": true
+            "optional": true,
+            "nullable": false,
+            "nullableReason": "外部リンクの要素ではリンク先を持つ。文章や内部参照には適用しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-558d1ceac82fda",
@@ -6517,7 +6771,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.index[].purpose",
-            "sampleValue": ""
+            "sampleValue": "",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-4bf003cc4cfb12",
@@ -6525,7 +6782,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.index[].connections",
-            "sampleValue": ""
+            "sampleValue": "",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-ebbba991e05cb9",
@@ -6552,7 +6812,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.sections[].id",
-            "sampleValue": "score-check-section"
+            "sampleValue": "score-check-section",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-68a6486ee86bf1",
@@ -6573,14 +6836,20 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.sections[].title",
-            "sampleValue": "点数計算"
+            "sampleValue": "点数計算",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c404e79971073d",
             "physicalName": "Check.guarantees[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Check.guarantees[].id"
+            "sourceSchemaPath": "Check.guarantees[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-57a0a7286f565e",
@@ -6598,14 +6867,20 @@
             "physicalName": "Check.guarantees[].title",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Check.guarantees[].title"
+            "sourceSchemaPath": "Check.guarantees[].title",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-e3a3e8b9cc7f36",
             "physicalName": "Check.guarantees[].blocks[].kind",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Check.guarantees[].blocks[].kind"
+            "sourceSchemaPath": "Check.guarantees[].blocks[].kind",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-8b153b4b9bac15",
@@ -6624,7 +6899,10 @@
             "physicalName": "Check.examples[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Check.examples[].id"
+            "sourceSchemaPath": "Check.examples[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-683948d485e46d",
@@ -6642,7 +6920,10 @@
             "physicalName": "Check.examples[].columns",
             "relationIds": [],
             "valueType": "string[]",
-            "sourceSchemaPath": "Check.examples[].columns"
+            "sourceSchemaPath": "Check.examples[].columns",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2af7e5abeb81ef",
@@ -6650,7 +6931,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.items[].title",
-            "sampleValue": "0本の点数"
+            "sampleValue": "0本の点数",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c9266f8766647e",
@@ -6658,7 +6942,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Check.items[].detailSummary",
-            "sampleValue": ""
+            "sampleValue": "",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c9b1db9948abbf",
@@ -6677,42 +6964,60 @@
             "physicalName": "Check.notes[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Check.notes[].id"
+            "sourceSchemaPath": "Check.notes[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-26c07fc54a97e6",
             "physicalName": "Check.notes[].title",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Check.notes[].title"
+            "sourceSchemaPath": "Check.notes[].title",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-1591c4b77df1b7",
             "physicalName": "State.id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.id"
+            "sourceSchemaPath": "State.id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-46c7022c8c0c56",
             "physicalName": "State.schemaVersion",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.schemaVersion"
+            "sourceSchemaPath": "State.schemaVersion",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d45319b8ff1cdd",
             "physicalName": "State.kind",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.kind"
+            "sourceSchemaPath": "State.kind",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-8f9f0382a64e3c",
             "physicalName": "State.revision",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.revision"
+            "sourceSchemaPath": "State.revision",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-79972e22c66be7",
@@ -6720,21 +7025,30 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "State.title",
-            "referenceValue": "申込状態の遷移"
+            "referenceValue": "申込状態の遷移",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7471e29c30cd89",
             "physicalName": "State.basedOn.revision",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.basedOn.revision"
+            "sourceSchemaPath": "State.basedOn.revision",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-99898735b216fb",
             "physicalName": "State.basedOn.verification",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.basedOn.verification"
+            "sourceSchemaPath": "State.basedOn.verification",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-0c6928ded152e8",
@@ -6752,7 +7066,10 @@
             "physicalName": "State.states[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.states[].id"
+            "sourceSchemaPath": "State.states[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-e0526c3d4b96d3",
@@ -6760,49 +7077,70 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "State.states[].name",
-            "referenceValue": "受付済"
+            "referenceValue": "受付済",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-cb26e3ccac9a71",
             "physicalName": "State.start",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.start"
+            "sourceSchemaPath": "State.start",
+            "nullable": true,
+            "nullableReason": "開始状態が未決の状態遷移を保持する。合意時には開始条件を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b63c33876057e6",
             "physicalName": "State.terminal",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.terminal"
+            "sourceSchemaPath": "State.terminal",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-0d219db14d46ce",
             "physicalName": "State.completeness",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.completeness"
+            "sourceSchemaPath": "State.completeness",
+            "nullable": false,
+            "nullableReason": "状態遷移を網羅済みか確認中かを明示し、無記録を網羅済みと扱わない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7beeaac9a2b451",
             "physicalName": "State.source",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.source"
+            "sourceSchemaPath": "State.source",
+            "nullable": true,
+            "nullableReason": "出所がまだ確認できない状態遷移を保持し、根拠を補う必要を残す。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f7d1cbaf255a14",
             "physicalName": "State.transitions[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.transitions[].id"
+            "sourceSchemaPath": "State.transitions[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-8908f4c37f4836",
             "physicalName": "State.transitions[].sourceId",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.transitions[].sourceId"
+            "sourceSchemaPath": "State.transitions[].sourceId",
+            "nullable": true,
+            "nullableReason": "元資料の個別識別子がない場合も、状態遷移自体の識別と内容は保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7dabb063b220f1",
@@ -6832,7 +7170,10 @@
             "relationIds": [],
             "valueType": "string | null",
             "sourceSchemaPath": "State.transitions[].event",
-            "referenceValue": "申込を受け付けた"
+            "referenceValue": "申込を受け付けた",
+            "nullable": null,
+            "nullableReason": "発生事象が記録不要な遷移と、事象が未決の遷移を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-8e1a6f3eb42961",
@@ -6840,7 +7181,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "State.transitions[].condition",
-            "referenceValue": "必要事項を確認済み"
+            "referenceValue": "必要事項を確認済み",
+            "nullable": null,
+            "nullableReason": "無条件の遷移と、条件未決の遷移を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-248bd7cd7e22cb",
@@ -6859,7 +7203,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "State.transitions[].effect",
-            "referenceValue": "change"
+            "referenceValue": "change",
+            "nullable": true,
+            "nullableReason": "状態への影響が未決の遷移を保持し、合意時に結果を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-37cfb1f0b37861",
@@ -6867,21 +7214,30 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "State.transitions[].path",
-            "referenceValue": "normal"
+            "referenceValue": "normal",
+            "nullable": true,
+            "nullableReason": "正常・例外などの経路が未決の遷移を保持し、合意時に分類する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-782e7748652561",
             "physicalName": "State.transitions[].evidence",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.transitions[].evidence"
+            "sourceSchemaPath": "State.transitions[].evidence",
+            "nullable": true,
+            "nullableReason": "根拠が未記録の遷移も保持し、必要な確認を残す。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c7b7a3c41c1024",
             "physicalName": "State.transitions[].note",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "State.transitions[].note"
+            "sourceSchemaPath": "State.transitions[].note",
+            "nullable": true,
+            "nullableReason": "注記がなくても遷移の条件・結果・出所を別々に保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d000e290c72442",
@@ -6900,7 +7256,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "State.transitions[].conditionLabel",
-            "optional": true
+            "optional": true,
+            "nullable": null,
+            "nullableReason": "未記録、未決、該当なしのどれを区別する必要があるか、この項目の意味に照らして確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-8dce497869ab6c",
@@ -6909,7 +7268,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.id",
             "sampleValue": "alder-normalized-model-study",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-65c7c1e771c6fb",
@@ -6918,7 +7280,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.schemaVersion",
             "sampleValue": "0.1",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3baed98548504d",
@@ -6927,7 +7292,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.kind",
             "sampleValue": "conceptModel",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-710c131201eaed",
@@ -6936,7 +7304,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.revision",
             "sampleValue": "normalized-study-6",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-013cc0b1c39ea6",
@@ -6945,7 +7316,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.basedOn.revision",
             "sampleValue": "alder-design-1",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f0cc7fdbbd6852",
@@ -6954,7 +7328,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.basedOn.verification",
             "sampleValue": "unverified",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-acb00996ceae6d",
@@ -6972,14 +7349,20 @@
             "physicalName": "Concept.relatedStates[].revision",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.relatedStates[].revision"
+            "sourceSchemaPath": "Concept.relatedStates[].revision",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-efee92b9c80efc",
             "physicalName": "Concept.relatedStates[].verification",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.relatedStates[].verification"
+            "sourceSchemaPath": "Concept.relatedStates[].verification",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-95b8e55978fb10",
@@ -6988,7 +7371,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.subsystems[].id",
             "sampleValue": "format-review",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-acb6b29b28e391",
@@ -6997,7 +7383,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.subsystems[].name",
             "sampleValue": "JSON正規化候補（全概念）",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c407aa8717369e",
@@ -7006,7 +7395,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.subsystems[].purpose",
             "sampleValue": "実際の0.7保存構造から作る正規化候補を検討する。",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-5440c55d88a9b8",
@@ -7019,7 +7411,10 @@
               "やり取りとData",
               "判定とCheck"
             ],
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-0e471e4abe3209",
@@ -7028,7 +7423,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.subsystems[].reason",
             "sampleValue": "概念図の整理用であり、物理システムやDBを定義しない。",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2b4a79c4f0f3e6",
@@ -7052,7 +7450,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.subsystems[].reviewState",
             "sampleValue": "未レビュー",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-18185457d05149",
@@ -7061,7 +7462,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].id",
             "sampleValue": "n-bd",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2a626ff0ff7d02",
@@ -7070,7 +7474,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].name",
             "sampleValue": "業務設計書（BusinessDesign）",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b051d0d470095e",
@@ -7092,7 +7499,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].information[].id",
             "sampleValue": "n-bd-field-1",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-ecd49d7d756a04",
@@ -7101,7 +7511,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].information[].name",
             "sampleValue": "識別子",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-9d0e9d927202a9",
@@ -7109,7 +7522,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].information[].responsibilityStatus",
-            "optional": true
+            "optional": true,
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7370db16dbe90f",
@@ -7130,7 +7546,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].reason",
             "sampleValue": "正規化候補の構造レビュー。",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-a9d8fb1ee82e79",
@@ -7139,7 +7558,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].description",
             "sampleValue": "候補の businessDesigns。現行0.7の物理構造そのものではない。",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-12e62a5c4c6af0",
@@ -7170,7 +7592,10 @@
             "physicalName": "Concept.concepts[].activityLinks[].uses",
             "relationIds": [],
             "valueType": "string[]",
-            "sourceSchemaPath": "Concept.concepts[].activityLinks[].uses"
+            "sourceSchemaPath": "Concept.concepts[].activityLinks[].uses",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f6bc7d2abf5cf0",
@@ -7189,28 +7614,40 @@
             "physicalName": "Concept.concepts[].sourceRefs[].revision",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].revision"
+            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].revision",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-6409e9670e47fe",
             "physicalName": "Concept.concepts[].sourceRefs[].targetType",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].targetType"
+            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].targetType",
+            "nullable": false,
+            "nullableReason": "根拠としてどの種類の対象を参照するかを識別するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-136963f419b6bc",
             "physicalName": "Concept.concepts[].sourceRefs[].targetId",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].targetId"
+            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].targetId",
+            "nullable": false,
+            "nullableReason": "根拠として参照する対象を特定するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-13dd73356c7793",
             "physicalName": "Concept.concepts[].sourceRefs[].section",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].section"
+            "sourceSchemaPath": "Concept.concepts[].sourceRefs[].section",
+            "nullable": true,
+            "nullableReason": "資料内の特定箇所が未記録でも、文書・改訂・対象の参照は保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d2c0cd0cfdbdca",
@@ -7219,7 +7656,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.concepts[].reviewState",
             "sampleValue": "未レビュー",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-15584cfab64de4",
@@ -7228,7 +7668,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].id",
             "sampleValue": "nr-bd-actor",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f2500eabc99f36",
@@ -7263,7 +7706,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].fromPerTarget",
             "sampleValue": "1",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-ac8bd26ae595ac",
@@ -7272,7 +7718,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].toPerSource",
             "sampleValue": "0..N",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-1ee8b5979a8779",
@@ -7281,7 +7730,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].condition",
             "sampleValue": "業務設計書が主体を定義する。",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": null,
+            "nullableReason": "未記録、未決、該当なしのどれを区別する必要があるか、この項目の意味に照らして確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-6adc11eb0279bd",
@@ -7290,7 +7742,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].reviewState",
             "sampleValue": "未レビュー",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-0d428562e56d4f",
@@ -7299,7 +7754,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].fromLabel",
             "sampleValue": "1",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-aaa7b589b330e5",
@@ -7308,7 +7766,10 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].toLabel",
             "sampleValue": "0..N",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3fa56825fe3b69",
@@ -7317,14 +7778,20 @@
             "valueType": "string",
             "sourceSchemaPath": "Concept.relations[].kind",
             "sampleValue": "down",
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-e34451304a3099",
             "physicalName": "Concept.handoffs[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.handoffs[].id"
+            "sourceSchemaPath": "Concept.handoffs[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-e9daa257c2795f",
@@ -7353,14 +7820,20 @@
             "physicalName": "Concept.handoffs[].information",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.handoffs[].information"
+            "sourceSchemaPath": "Concept.handoffs[].information",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b7bb16b824dde8",
             "physicalName": "Concept.handoffs[].description",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.handoffs[].description"
+            "sourceSchemaPath": "Concept.handoffs[].description",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-8db9bb0dea3381",
@@ -7378,21 +7851,30 @@
             "physicalName": "Concept.handoffs[].flowDirection",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.handoffs[].flowDirection"
+            "sourceSchemaPath": "Concept.handoffs[].flowDirection",
+            "nullable": true,
+            "nullableReason": "受渡しの向きが未確認の草案を保持し、合意時には方向を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-8b35f69146b6ae",
             "physicalName": "Concept.handoffs[].reviewState",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.handoffs[].reviewState"
+            "sourceSchemaPath": "Concept.handoffs[].reviewState",
+            "nullable": true,
+            "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-5fa9cfe53d9c72",
             "physicalName": "Concept.reviewGroups[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2a972279c5ff4d",
@@ -7410,14 +7892,20 @@
             "physicalName": "Concept.reviewGroups[].title",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].title"
+            "sourceSchemaPath": "Concept.reviewGroups[].title",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-e03f8ffc6530a7",
             "physicalName": "Concept.reviewGroups[].description",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].description"
+            "sourceSchemaPath": "Concept.reviewGroups[].description",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-43c418ff860c65",
@@ -7468,42 +7956,60 @@
             "physicalName": "Concept.reviewGroups[].graph.nodes[].name",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].name"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].name",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-0fae178ed578b4",
             "physicalName": "Concept.reviewGroups[].graph.nodes[].fields",
             "relationIds": [],
             "valueType": "string[]",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].fields"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].fields",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-4bc3013a01f24b",
             "physicalName": "Concept.reviewGroups[].graph.nodes[].description",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].description"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].description",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-42bad405d14c41",
             "physicalName": "Concept.reviewGroups[].graph.nodes[].sources",
             "relationIds": [],
             "valueType": "string[]",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].sources"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].sources",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-cbb08a4110ca13",
             "physicalName": "Concept.reviewGroups[].graph.nodes[].sourceActivityIds",
             "relationIds": [],
             "valueType": "string[]",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].sourceActivityIds"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.nodes[].sourceActivityIds",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-5301fdbc9906a9",
             "physicalName": "Concept.reviewGroups[].graph.edges[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-93690ea3ee9262",
@@ -7543,42 +8049,60 @@
             "physicalName": "Concept.reviewGroups[].graph.edges[].scope",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].scope"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].scope",
+            "nullable": null,
+            "nullableReason": "未記録、未決、該当なしのどれを区別する必要があるか、この項目の意味に照らして確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b2d932ed3dc905",
             "physicalName": "Concept.reviewGroups[].graph.edges[].fromLabel",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].fromLabel"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].fromLabel",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-651d015c32251d",
             "physicalName": "Concept.reviewGroups[].graph.edges[].toLabel",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].toLabel"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].toLabel",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-fef3e4afdf720a",
             "physicalName": "Concept.reviewGroups[].graph.edges[].kind",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].kind"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.edges[].kind",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-0bf8348b380872",
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews",
             "relationIds": [],
             "valueType": "boolean",
-            "logicalMeaning": "省略と明示された空を区別する。"
+            "logicalMeaning": "省略と明示された空を区別する。",
+            "nullable": false,
+            "nullableReason": "レビュー内の表示定義の存在と未指定を区別するための明示的な状態。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-4e67ab723e70e5",
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f2f85c784ba351",
@@ -7607,28 +8131,40 @@
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].name",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].name"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].name",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-40ac5527dfd311",
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].description",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].description"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].description",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-17dad34b3c55c0",
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].sources",
             "relationIds": [],
             "valueType": "string[]",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].sources"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].sources",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c2d4fcf9f8b82b",
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].fields[].name",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].fields[].name"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.nodes[].fields[].name",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-1e973b3890d796",
@@ -7646,7 +8182,10 @@
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-ca79b879ba2b5f",
@@ -7686,21 +8225,30 @@
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].fromLabel",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].fromLabel"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].fromLabel",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-254d5ccd385212",
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].toLabel",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].toLabel"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].toLabel",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2407b1f8ff5fe3",
             "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].kind",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].kind"
+            "sourceSchemaPath": "Concept.reviewGroups[].graph.subsystemViews.edges[].kind",
+            "nullable": true,
+            "nullableReason": "種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-82616e95cee368",
@@ -7718,21 +8266,30 @@
             "physicalName": "Concept.reviewGroups[].structureStatements[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].structureStatements[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].structureStatements[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-0ae2dd148a5964",
             "physicalName": "Concept.reviewGroups[].structureStatements[].title",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].structureStatements[].title"
+            "sourceSchemaPath": "Concept.reviewGroups[].structureStatements[].title",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-9e7ab1bab14e9f",
             "physicalName": "Concept.reviewGroups[].structureStatements[].description",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].structureStatements[].description"
+            "sourceSchemaPath": "Concept.reviewGroups[].structureStatements[].description",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-52bfaa02936440",
@@ -7750,56 +8307,80 @@
             "physicalName": "Concept.reviewGroups[].capabilities[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3b70ce3b31b5ba",
             "physicalName": "Concept.reviewGroups[].capabilities[].title",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].title"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].title",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-bcbf430241c767",
             "physicalName": "Concept.reviewGroups[].capabilities[].description",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].description"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].description",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b1e34fc5ffd0b7",
             "physicalName": "Concept.reviewGroups[].capabilities[].meta",
             "relationIds": [],
             "valueType": "object（任意構造）",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].meta"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].meta",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-e4eed8f01f48b8",
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-09dc6622db3672",
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].name",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].name"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].name",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f4a8445a61d27a",
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].when",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].when"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].when",
+            "nullable": null,
+            "nullableReason": "未記録、未決、該当なしのどれを区別する必要があるか、この項目の意味に照らして確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2f5c9c597760c6",
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].meaning",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].meaning"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].meaning",
+            "nullable": true,
+            "nullableReason": "例から何を確認するかが未決の草案を保持し、レビュー時に意味を明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3f99f834385412",
@@ -7817,14 +8398,20 @@
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-61152952713ecb",
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].name",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].name"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].name",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b46f7844799233",
@@ -7842,7 +8429,10 @@
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-10479709494816",
@@ -7860,7 +8450,10 @@
             "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].cells[].value",
             "relationIds": [],
             "valueType": "string | number",
-            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].cells[].value"
+            "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].cells[].value",
+            "nullable": false,
+            "nullableReason": "サンプルのセルとして作成した値は、空文字や0も含めて値そのものを保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-40910446fb8734",
@@ -7868,7 +8461,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].cells[].linkId",
-            "optional": true
+            "optional": true,
+            "nullable": true,
+            "nullableReason": "他の要素へのリンクを持たないセルもある。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-eebd7c70c2be51",
@@ -7876,7 +8472,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].blocks[].empty",
-            "optional": true
+            "optional": true,
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-4221263a67b8bd",
@@ -7884,7 +8483,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Concept.reviewGroups[].capabilities[].samples[].note",
-            "optional": true
+            "optional": true,
+            "nullable": true,
+            "nullableReason": "補足注記がなくてもサンプル本体と条件を保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-cefad66baec8fb",
@@ -7903,7 +8505,10 @@
             "physicalName": "Concept.reviewGroups[].capabilities[].testSpecification",
             "relationIds": [],
             "valueType": "boolean",
-            "logicalMeaning": "省略と明示された空を区別する。"
+            "logicalMeaning": "省略と明示された空を区別する。",
+            "nullable": false,
+            "nullableReason": "機能とチェックの対応を定義したかどうかを明示する状態。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f6c2348108ab40",
@@ -7954,42 +8559,60 @@
             "physicalName": "Concept.reviewGroups[].limitations[].id",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].id"
+            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].id",
+            "nullable": false,
+            "nullableReason": "設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-fbfca64ed42ab8",
             "physicalName": "Concept.reviewGroups[].limitations[].title",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].title"
+            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].title",
+            "nullable": false,
+            "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-172e5ea8df32b1",
             "physicalName": "Concept.reviewGroups[].limitations[].description",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].description"
+            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].description",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-85cfee4fb84b28",
             "physicalName": "Concept.reviewGroups[].limitations[].reason",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].reason"
+            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].reason",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-5e9aee6eef1ae1",
             "physicalName": "Concept.reviewGroups[].limitations[].meta",
             "relationIds": [],
             "valueType": "object（任意構造）",
-            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].meta"
+            "sourceSchemaPath": "Concept.reviewGroups[].limitations[].meta",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-74e3c7a00a6888",
             "physicalName": "Concept.reviewGroups[].meta.questions",
             "relationIds": [],
             "valueType": "string[]",
-            "sourceSchemaPath": "Concept.reviewGroups[].meta.questions"
+            "sourceSchemaPath": "Concept.reviewGroups[].meta.questions",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-20033ad39c9221",
@@ -7997,7 +8620,10 @@
             "relationIds": [],
             "valueType": "object（任意構造）",
             "sourceSchemaPath": "Concept.reviewGroups[].meta.hypotheses",
-            "optional": true
+            "optional": true,
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-6d5369a568adaa",
@@ -8006,7 +8632,10 @@
             "valueType": "string[]",
             "sourceSchemaPath": "Concept.benefits",
             "sampleValue": [],
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-21a3e76ff23010",
@@ -8015,7 +8644,10 @@
             "valueType": "string[]",
             "sourceSchemaPath": "Concept.considerations",
             "sampleValue": [],
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-06162a37975af9",
@@ -8024,14 +8656,20 @@
             "valueType": "string[]",
             "sourceSchemaPath": "Concept.reviewPoints",
             "sampleValue": [],
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7595370fd7be76",
             "physicalName": "Concept.meta",
             "relationIds": [],
             "valueType": "object（任意構造）",
-            "sourceSchemaPath": "Concept.meta"
+            "sourceSchemaPath": "Concept.meta",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-b4221e246a23a0",
@@ -8039,7 +8677,10 @@
             "relationIds": [],
             "valueType": "object（任意構造）",
             "sourceSchemaPath": "Concept.presentation.activityViews",
-            "optional": true
+            "optional": true,
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-ce0494dcadcd31",
@@ -8047,7 +8688,10 @@
             "relationIds": [],
             "valueType": "object（任意構造）",
             "sourceSchemaPath": "Concept.presentation.creatorActivityIds",
-            "optional": true
+            "optional": true,
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-79fd909da0c750",
@@ -8055,7 +8699,10 @@
             "relationIds": [],
             "valueType": "string",
             "sourceSchemaPath": "Concept.presentation.sampleCaption",
-            "optional": true
+            "optional": true,
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-ebf08005cd2b97",
@@ -8064,7 +8711,10 @@
             "valueType": "boolean",
             "logicalMeaning": "省略と明示された空を区別する。",
             "sampleValue": true,
-            "sampleKind": "reference"
+            "sampleKind": "reference",
+            "nullable": false,
+            "nullableReason": "表示定義の存在と未指定を区別するための明示的な状態。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-489ca19c33a72b",
@@ -8084,196 +8734,283 @@
             "physicalName": "Concept.presentation.landscapeRelationships[].from",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.presentation.landscapeRelationships[].from"
+            "sourceSchemaPath": "Concept.presentation.landscapeRelationships[].from",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-da22657a98dc03",
             "physicalName": "Concept.presentation.landscapeRelationships[].to",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.presentation.landscapeRelationships[].to"
+            "sourceSchemaPath": "Concept.presentation.landscapeRelationships[].to",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-88d642dad3d62b",
             "physicalName": "Concept.presentation.reviewBoundaries[].from",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].from"
+            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].from",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-2e3bc4744a9d96",
             "physicalName": "Concept.presentation.reviewBoundaries[].to",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].to"
+            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].to",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-9a9846ff4aacd6",
             "physicalName": "Concept.presentation.reviewBoundaries[].label",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].label"
+            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].label",
+            "nullable": null,
+            "nullableReason": "未記録、未決、該当なしのどれを区別する必要があるか、この項目の意味に照らして確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7ab2a2bd886a9f",
             "physicalName": "Concept.presentation.reviewBoundaries[].promise",
             "relationIds": [],
             "valueType": "string",
-            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].promise"
+            "sourceSchemaPath": "Concept.presentation.reviewBoundaries[].promise",
+            "nullable": true,
+            "nullableReason": "境界での受渡し条件が未決の候補を保持し、合意時に確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d960c2305c621c",
             "physicalName": "businessDesigns.schemaVersion",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "0.6"
+            "sampleValue": "0.6",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-a2fb46ff8c8c15",
             "physicalName": "businessDesigns.kind",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "businessDesign"
+            "sampleValue": "businessDesign",
+            "nullable": false,
+            "nullableReason": "文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-9b0df810c60eb0",
             "physicalName": "businessDesigns.preface",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "画面確認用の合成例。点数計算機能を自動主体とする分類は仮定。"
+            "sampleValue": "画面確認用の合成例。点数計算機能を自動主体とする分類は仮定。",
+            "nullable": true,
+            "nullableReason": "前提や補足が未記載の設計書もある。nullは未記録を表し、前提が存在しないと断定しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-32d24ca3a0642d",
             "physicalName": "businessDesigns.scope",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": ""
+            "sampleValue": "",
+            "nullable": true,
+            "nullableReason": "対象範囲を検討中は未決として保持する。合意済みの設計書では範囲を明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-adc18421aa701a",
             "physicalName": "objects.icon",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "user"
+            "sampleValue": "user",
+            "nullable": null,
+            "nullableReason": "表示上の指定がないことと、対象の分類が未決であることは別。表示情報の扱いを検討する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-c5477c2457429c",
             "physicalName": "information.description",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": ""
+            "sampleValue": "",
+            "nullable": true,
+            "nullableReason": "説明が未記録の項目を保持する。説明が不要と確定したこととは区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-f7851e4656568f",
             "physicalName": "activities.where",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "規定なし"
+            "sampleValue": "規定なし",
+            "nullable": null,
+            "nullableReason": "場所が決まっていない場合と、場所を限定しない場合を区別する必要がある。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-79e1f59247290a",
             "physicalName": "activities.problem",
             "relationIds": [],
             "valueType": "string | null",
-            "sampleValue": null
+            "sampleValue": null,
+            "nullable": true,
+            "nullableReason": "課題が未確認・課題なしの場合は内容を持たない。両者は課題の確認状態で区別し、課題ありなら内容が必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-423df2519d7898",
             "physicalName": "activities.painLevel",
             "relationIds": [],
             "valueType": "string | null",
-            "sampleValue": null
+            "sampleValue": null,
+            "nullable": true,
+            "nullableReason": "課題なしの場合は非該当、課題ありで程度が未評価なら未決。課題の確認状態と併せて区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-db0d007e8ba4d3",
             "physicalName": "steps.legacyText",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": null,
+            "nullableReason": "旧形式の記述を保持する用途と、新しい手順に旧記述が存在しない状態を分けて検討する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-325c153e7c0af3",
             "physicalName": "steps.obligation",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "required"
+            "sampleValue": "required",
+            "nullable": true,
+            "nullableReason": "必須・任意が未決の手順を保持し、合意時に必要性を明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d6937d0cbb9486",
             "physicalName": "steps.appliesWhen",
             "relationIds": [],
             "valueType": "string | null",
-            "sampleValue": null
+            "sampleValue": null,
+            "nullable": null,
+            "nullableReason": "適用条件なしと条件未決は別であり、nullだけで両方を表さない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7c34239a2778a4",
             "physicalName": "steps.effect",
             "relationIds": [],
             "valueType": "string | null",
-            "sampleValue": null
+            "sampleValue": null,
+            "nullable": null,
+            "nullableReason": "効果を記録しない手順と効果が未決の手順を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-e53cb54e69e740",
             "physicalName": "decisions.note",
             "relationIds": [],
             "valueType": "string | null",
-            "sampleValue": "1回以上なら各回ごとに判定します。"
+            "sampleValue": "1回以上なら各回ごとに判定します。",
+            "nullable": true,
+            "nullableReason": "注記が未記録でも判定表を表せる。業務上の重要な条件は注記の有無とは別に保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-cb0ff580fce019",
             "physicalName": "axes.unit",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "回"
+            "sampleValue": "回",
+            "nullable": null,
+            "nullableReason": "単位が不要な判定軸と、単位が未決の判定軸を区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-9d0f2986c601ef",
             "physicalName": "axes.trueLabel",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "あり"
+            "sampleValue": "あり",
+            "nullable": null,
+            "nullableReason": "真偽値の表示名が非該当か未決かを、判定軸の種類と合わせて検討する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3ded4095bb9185",
             "physicalName": "axes.falseLabel",
             "relationIds": [],
             "valueType": "string",
-            "sampleValue": "なし"
+            "sampleValue": "なし",
+            "nullable": null,
+            "nullableReason": "真偽値の表示名が非該当か未決かを、判定軸の種類と合わせて検討する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-1443c584c8cbc3",
             "physicalName": "continuities.onInterrupt",
             "relationIds": [],
-            "valueType": "string | null"
+            "valueType": "string | null",
+            "nullable": null,
+            "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3b6b631818c9b6",
             "physicalName": "relations.label",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "関係の補足名が未記録でも、関係の種類と両端の参照は保持する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-3cb2fc6fcef42b",
             "physicalName": "findings.sourceId",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "元になる既存指摘がない新規の確認事項も扱う。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-355de6f886c0ad",
             "physicalName": "findings.kind",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": false,
+            "nullableReason": "未決事項や確認事項の種類を区別し、内容の扱いを判断するために必要。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-1b9826d21acdc9",
             "physicalName": "findings.content",
             "relationIds": [],
-            "valueType": "string"
+            "valueType": "string",
+            "nullable": true,
+            "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-35bce68582d0a4",
             "physicalName": "findings.unresolvedTargets",
             "relationIds": [],
-            "valueType": "string[]"
+            "valueType": "string[]",
+            "nullable": true,
+            "nullableReason": "未確認を許容し、確認して0件だった空の一覧と区別する。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-ece66e4839b029",
@@ -8284,7 +9021,10 @@
               "steps.targetDataState",
               "stepTargetData"
             ],
-            "sampleValue": "あり"
+            "sampleValue": "あり",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-d17f8349434605",
@@ -8295,7 +9035,10 @@
               "steps.dependencyState",
               "dependencies"
             ],
-            "sampleValue": "未決"
+            "sampleValue": "未決",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-4d9f01f0e8739f",
@@ -8306,7 +9049,10 @@
               "stepInteractions.dataState",
               "interactionData"
             ],
-            "sampleValue": "あり"
+            "sampleValue": "あり",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-fe7d8ed39bf915",
@@ -8316,7 +9062,10 @@
             "logicalSourcePaths": [
               "continuities.dataState",
               "continuityData"
-            ]
+            ],
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-fde33f3870ef9f",
@@ -8326,7 +9075,10 @@
             "logicalSourcePaths": [
               "steps.ordinal"
             ],
-            "sampleValue": 1
+            "sampleValue": 1,
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-5d1e7f527404d3",
@@ -8336,7 +9088,10 @@
             "logicalSourcePaths": [
               "State.transitions[].fromId"
             ],
-            "referenceValue": "新規"
+            "referenceValue": "新規",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-7e4981f3bac2be",
@@ -8346,7 +9101,39 @@
             "logicalSourcePaths": [
               "State.transitions[].toId"
             ],
-            "referenceValue": "状態"
+            "referenceValue": "状態",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
+          },
+          {
+            "informationId": "cf-7e9fb3e051ad15",
+            "physicalName": "",
+            "relationIds": [],
+            "valueType": "string（未決／無条件／条件あり）",
+            "logicalSourcePaths": [
+              "dataItems.condition"
+            ],
+            "logicalMeaning": "無条件と条件未決を区別する。条件ありの場合は条件の内容が必要。",
+            "referenceValue": "未決",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
+          },
+          {
+            "informationId": "cf-bed444b46e4cc9",
+            "physicalName": "",
+            "relationIds": [],
+            "valueType": "string（未確認／課題なし／課題あり）",
+            "logicalSourcePaths": [
+              "activities.problem",
+              "activities.painLevel"
+            ],
+            "logicalMeaning": "課題の未確認と課題なしを区別する。課題ありの場合は課題の内容が必要。",
+            "referenceValue": "未確認",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
           }
         ],
         "relationPhysicalFields": [
@@ -12151,7 +12938,8 @@
             "to": "Concept.reviewGroups[].graph.subsystemViews.edges[]"
           }
         ],
-        "schemaVariants": "概念モデル文書は0.1と0.2の両方を含む。サンプルのCheck参照と機能テスト仕様は0.2で追加された。"
+        "schemaVariants": "概念モデル文書は0.1と0.2の両方を含む。サンプルのCheck参照と機能テスト仕様は0.2で追加された。",
+        "nullabilityProposal": "業務設計に基づく未承認の候補。未決、なし、非該当と移行時の元記録を区別する。"
       },
       "presentation": {
         "landscapeRelationships": [],
@@ -12265,6 +13053,10 @@
                 {
                   "name": "課題の程度",
                   "informationId": "cf-423df2519d7898"
+                },
+                {
+                  "name": "課題の確認状態",
+                  "informationId": "cf-bed444b46e4cc9"
                 }
               ]
             },

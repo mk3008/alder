@@ -125,14 +125,17 @@ try{
  assert(!host.querySelector('.structure-heading, .structure-intro, .structure-help'),'the tab already supplies the title and the tree uses the full content area');
  const one=host.querySelector('[data-relation-id="one"][data-relation-direction="owned"] > details'),many=host.querySelector('[data-relation-id="many"][data-relation-direction="owned"] > details');
  assert(one&&!one.open&&many&&!many.open);
- assert.equal(one.querySelector(':scope > summary .structure-condition').textContent,'one','relationship description is shown before expanding');
+ assert.equal(one.querySelector(':scope > summary .structure-condition'),null,'the tree keeps relationship details in the drawer');
+ const detail=w.document.createElement('div');w.Explorer.renderStructureDetails(detail,sample,{kind:'structure',conceptId:'one',fromId:'a',relationId:'one'});assert(detail.textContent.includes('one'),'relationship description stays available in the detail');
  one.open=true;one.dispatchEvent(new w.Event('toggle'));
  assert.equal(one.querySelectorAll(':scope > p.structure-condition').length,0,'expansion does not duplicate the description');
  assert.deepEqual(groups(one),['属性（1）','所有（1）','参照（1）'],'nested views also hide the owner');
  assert.equal(many.open,false,'one branch does not expand another');
  assert(one.querySelector('[data-relation-id="nested"][data-relation-direction="owned"]'),'single-valued ownership exposes its child');
- assert(one.textContent.includes('single.value')&&one.textContent.includes('array・未決可'),'explicit field mapping and type stay visible');
- assert(host.textContent.includes('activities.id')&&host.textContent.includes('未定義'),'missing attribute types are not invented');
+ assert(one.textContent.includes('型：array'),'explicit attribute type stays visible');
+ w.Explorer.renderStructureDetails(detail,sample,{kind:'attribute',conceptId:'one',informationId:'one-id'});assert(detail.textContent.includes('single.value')&&detail.textContent.includes('許容する'),'mapping and explicit nullability remain available');
+ assert(host.textContent.includes('未定義'),'missing attribute types are not invented');
+ w.Explorer.renderStructureDetails(detail,sample,{kind:'attribute',conceptId:'a',informationId:'a-id'});assert(detail.textContent.includes('activities.id'),'full attribute mapping stays available');
  many.open=true;many.dispatchEvent(new w.Event('toggle'));assert(many.querySelector('[data-relation-id="self"] .structure-seen'),'self reference is marked and terminates');
  const self=many.querySelector('[data-relation-id="self"] > details');assert(self&&!self.open,'self reference remains manually expandable');
  self.open=true;self.dispatchEvent(new w.Event('toggle'));assert(self.querySelector('[data-relation-id="self"] > details:not([open])'),'manual expansion reveals a further closed self reference');
@@ -151,12 +154,13 @@ try{
  assert.deepEqual(groups(activity),['属性（5）','所有（5）','参照（1）'],'Activity shows its own attributes and outgoing references only');
  const step=host.querySelector('[data-relation-id="nr-activity-step"][data-relation-direction="owned"] > details');
  const stepRow=step.querySelector(':scope > summary');assert.equal(step.open,false);
- assert.match(stepRow.textContent,/1\.\.N.*手順.*型：Step.*業務内の順序付き手順。/,'description follows the name on the collapsed row');
+ assert.match(stepRow.textContent,/1\.\.N.*手順.*型：Step/,'name, type and multiplicity remain on the row');
+ assert(!stepRow.textContent.includes('業務内の順序付き手順。'));w.Explorer.renderStructureDetails(detail,model,{kind:'structure',conceptId:'n-step',fromId:'n-activity',relationId:'nr-activity-step'});assert(detail.textContent.includes('業務内の順序付き手順。'),'the relationship description moves to the detail');
  assert(!stepRow.textContent.includes('n-step')&&!stepRow.textContent.includes('逆 1'),'internal ID and reverse count are not displayed in the row');
  assert.match(stepRow.title,/移動先 1\.\.N／反対側 1/,'both defined multiplicities remain available');
  assert.equal(activity.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"]').length,0);
  step.open=true;step.dispatchEvent(new w.Event('toggle'));
- const stepFields=node=>[...node.querySelectorAll(':scope > .structure-children > .structure-field > span:first-of-type')].map(value=>value.textContent);
+ const stepFields=node=>[...node.querySelectorAll(':scope > .structure-children > .structure-field > button > span:first-of-type')].map(value=>value.textContent);
  assert.deepEqual(stepFields(step),['識別子','操作','方法','やり取りの種類']);
  assert.deepEqual(direct(step).filter(value=>value.dataset.relationDirection==='reference').map(value=>[value.dataset.relationId,value.querySelector('.structure-count').textContent]),[['nr-step-data','0..N'],['nr-step-decision','0..N'],['nr-step-when','0..1']],'Data and Decision Row are classified from their declared references');
  assert.equal(step.querySelector(':scope > .structure-children > [data-relation-id="nr-step-exchange"][data-relation-direction="owned"] .structure-count').textContent,'0..1','optional ownership is not misclassified as a reference');
@@ -176,7 +180,8 @@ try{
  const relationNode=host.querySelector('[data-relation-id="nr-bd-relation"][data-relation-direction="owned"] > details');
  assert(relationNode&&!relationNode.open);relationNode.open=true;relationNode.dispatchEvent(new w.Event('toggle'));
  const parallel=[...relationNode.querySelectorAll('[data-concept-id="n-activity"][data-relation-direction="reference"] > details > summary')].map(row=>row.textContent);
- assert(parallel.some(value=>value.includes('fromIdがActivityを指す関係の場合。'))&&parallel.some(value=>value.includes('toIdがActivityを指す関係の場合。')),'parallel relationships stay distinguishable before expanding');
+ assert(parallel.some(value=>value.includes('出発点の業務'))&&parallel.some(value=>value.includes('到着点の業務')),'parallel relationships remain distinguishable by their local names');
+ for(const [id,description] of [['nr-relation-from-activity','fromIdがActivityを指す関係の場合。'],['nr-relation-to-activity','toIdがActivityを指す関係の場合。']]){w.Explorer.renderStructureDetails(detail,model,{kind:'structure',conceptId:'n-activity',fromId:'n-relation',relationId:id});assert(detail.textContent.includes(description));}
  host.querySelector('.structure-toolbar button').click();
  const concepts=new Set([...host.querySelectorAll('[data-concept-id]')].map(el=>el.dataset.conceptId));
  const relations=new Set([...host.querySelectorAll('[data-relation-id]')].map(el=>el.dataset.relationId));
@@ -201,7 +206,9 @@ try{
  w.Explorer.renderStructureExplorer(host,formatModel);
  assert.equal(host.querySelector('.structure-root > .structure-item').dataset.conceptId,'fmt-package','the 0.7 package is the actual starting point');
  assert(!host.textContent.includes('JSON全体のルートをこの構造モデルから一意に特定できません'));
- assert(host.textContent.includes('format')&&host.textContent.includes('documents[]'));
+ assert(host.textContent.includes('形式')&&host.textContent.includes('文書一覧'));
+ const packageInfo=formatModel.meta.fieldMappings.find(item=>item.physicalName==='format');w.Explorer.renderStructureDetails(detail,formatModel,{kind:'attribute',conceptId:'fmt-package',informationId:packageInfo.informationId});assert(detail.textContent.includes('format'));
+ const packageRelation=formatModel.relations.find(item=>item.id==='rel-package-bd');w.Explorer.renderStructureDetails(detail,formatModel,{kind:'structure',conceptId:packageRelation.toConceptId,fromId:packageRelation.fromConceptId,relationId:packageRelation.id});assert(detail.textContent.includes('documents[]'));
  const bd=host.querySelector('[data-relation-id="rel-package-bd"][data-relation-direction="owned"] > details');assert(bd&&!bd.open);
  bd.open=true;bd.dispatchEvent(new w.Event('toggle'));assert(bd.querySelector('[data-relation-id="rel-bd-activity"]'),'package can be followed through Business Design to Activity');
  host.querySelector('.structure-toolbar button').click();

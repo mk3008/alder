@@ -2,6 +2,7 @@ import {createHash} from 'node:crypto';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {schema} from '../../tools/document_storage/schema.mjs';
 import {validate} from '../../tools/document_storage/core.mjs';
+import {nullabilityProposal} from './nullability-proposal.mjs';
 
 // This file creates only a review projection. The 0.7 contract, original
 // example, normalizer, Check state and the previous review remain untouched.
@@ -510,6 +511,21 @@ for(const [path,key] of [
 }
 bdCoverage.find(x=>x.path===sp+'.parties').note='当事者が未記録の場合は未決。元JSONにおける省略と明示nullの保持は移行時の別課題。';
 model.meta.schemaCoverage.push(...bdCoverage);
+// The old null does not tell us whether a condition/problem was confirmed
+// absent. Keep the distinction in the review model without migrating data.
+for(const [owner,key,label,type,paths,meaning] of [
+ ['n-dataitem','logical.group-condition-status','条件の確定状態','string（未決／無条件／条件あり）',['dataItems.condition'],'無条件と条件未決を区別する。条件ありの場合は条件の内容が必要。'],
+ ['n-activity','logical.problem-status','課題の確認状態','string（未確認／課題なし／課題あり）',['activities.problem','activities.painLevel'],'課題の未確認と課題なしを区別する。課題ありの場合は課題の内容が必要。']
+]){
+ const id=infoId(key),mapping={informationId:id,physicalName:'',relationIds:[],valueType:type,logicalSourcePaths:paths,logicalMeaning:meaning,referenceValue:key.includes('problem')?'未確認':'未決'};
+ nodes.get(owner).information.push({id,name:label});model.meta.fieldMappings.push(mapping);infoMap.set(id,mapping);
+}
+// These are reviewable proposals about Alder's business concepts. They are
+// deliberately not inferred from the current JSON type or a sample value.
+for(const concept of model.concepts)for(const info of concept.information){
+ const mapping=infoMap.get(info.id);if(mapping&&mapping.representation!=='relationKey')Object.assign(mapping,nullabilityProposal(concept,info,mapping));
+}
+model.meta.nullabilityProposal='業務設計に基づく未承認の候補。未決、なし、非該当と移行時の元記録を区別する。';
 // Refresh the already-authored overview's labels/fields without changing its
 // membership; the structure explorer reads the full model and new package root.
 const byId=new Map(model.concepts.map(c=>[c.id,c]));

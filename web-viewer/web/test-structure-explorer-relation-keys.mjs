@@ -54,7 +54,8 @@ try{
  render(normalized,'n-step');
  assert(!fields().some(value=>value.includes('所属する業務')||value.includes('適用する判定行')));
  assert(row('nr-step-when'));assert(fields().some(value=>value.includes('操作')));
- render(normalized,'n-check');assert(fields().some(value=>value.includes('表示番号')&&value.includes('checkId')),'a Check display ID remains an attribute');
+ render(normalized,'n-check');assert(fields().some(value=>value.includes('表示番号')),'a Check display ID remains an attribute');
+ const detail=w.document.createElement('div'),checkMapping=normalized.meta.fieldMappings.find(item=>item.physicalName.includes('Check.items.checkId'));w.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-check',informationId:checkMapping.informationId});assert(detail.textContent.includes('checkId'),'the code name remains available in the detail');
  covered.push('STRUCTURE-RELKEY-001');
 
  render(normalized,'n-object');assert.match(row('nr-object-information').title,/information\.objectId/);
