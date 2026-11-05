@@ -4,7 +4,8 @@ import type {ConceptModel} from './concept-model';
 type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean};
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
-export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[]};
+type EdgeField={name:string;physicalName:string;valueType?:string};
+export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];fieldDetails:EdgeField[]};
 const visibleDirections:Direction[]=['owned','reference','unknownOut'];
 
 /** Read only declared concepts, mappings and relations; never infer a relation from a label. */
@@ -21,12 +22,13 @@ export function structureGraph(model:ConceptModel){
  for(const relation of model.relations){
   if(!nodes.has(relation.fromConceptId)||!nodes.has(relation.toConceptId))continue;
   const count=(value:unknown)=>typeof value==='string'&&value.trim()?value:'未定義';
-  const fields=(owner:string)=>nodes.get(owner)!.information.flatMap(info=>{const m=byInformation.get(info.id);return m?.relationIds.includes(relation.id)?[m.physicalName]:[];});
+  const fieldDetails=(owner:string):EdgeField[]=>nodes.get(owner)!.information.flatMap(info=>{const m=byInformation.get(info.id);return m?.relationIds.includes(relation.id)?[{name:info.name,physicalName:m.physicalName,valueType:m.valueType}]:[];});
+  const forwardFields=fieldDetails(relation.fromConceptId),reverseFields=fieldDetails(relation.toConceptId);
   const kind=relation.kind as string;
   edges.get(relation.fromConceptId)!.push({relation,from:relation.fromConceptId,to:relation.toConceptId,
-   direction:kind==='down'?'owned':kind==='reference'?'reference':'unknownOut',count:count(relation.toLabel),reverseCount:count(relation.fromLabel),fields:fields(relation.fromConceptId)});
+   direction:kind==='down'?'owned':kind==='reference'?'reference':'unknownOut',count:count(relation.toLabel),reverseCount:count(relation.fromLabel),fields:forwardFields.map(field=>field.physicalName),fieldDetails:forwardFields});
   edges.get(relation.toConceptId)!.push({relation,from:relation.toConceptId,to:relation.fromConceptId,
-   direction:kind==='down'?'owner':kind==='reference'?'referencedBy':'unknownIn',count:count(relation.fromLabel),reverseCount:count(relation.toLabel),fields:fields(relation.toConceptId)});
+   direction:kind==='down'?'owner':kind==='reference'?'referencedBy':'unknownIn',count:count(relation.fromLabel),reverseCount:count(relation.toLabel),fields:reverseFields.map(field=>field.physicalName),fieldDetails:reverseFields});
  }
  // Select a package only when its explicit mappings describe the package and
  // documents relationship. A logical entity root is not a JSON package root.
@@ -47,6 +49,7 @@ export function structureGraph(model:ConceptModel){
 const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'所有先',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
 const icon=(which:typeof Box)=>{const svg=createElement(which,{'aria-hidden':'true','stroke-width':1.8});svg.classList.add('structure-icon');return svg;};
 const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;root.append(el);return el;};
+const shortPhysicalName=(path:string)=>path.split(' / ').map(part=>part.trim().split('.').pop()??part).join(' / ');
 function typeLabel(mapping:Mapping|undefined){
  const value=typeof mapping?.valueType==='string'&&mapping.valueType.trim()?mapping.valueType:'未定義';
  return value+(mapping?.nullable===true?'・未決可':'');
@@ -73,15 +76,20 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
   const concept=graph.nodes.get(id)!;const item=document.createElement('li');item.className='structure-item';item.dataset.conceptId=id;
   const names=concept.information.flatMap(info=>[info.name,graph.mappings.get(info.id)?.physicalName??'']);
-  item.dataset.searchText=[concept.name,concept.id,...names,edge?.relation.condition??''].join(' ').toLocaleLowerCase();
+  item.dataset.searchText=[concept.name,concept.id,...names,...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
   const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
   row.className='structure-node-row';row.append(icon(Box));
   if(edge){text(row,'span',edge.count,'structure-count');row.title=`${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
-  text(row,'strong',concept.name);
+  if(edge){
+   const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
+   fields.forEach((field,index)=>{if(index)text(row,'span','／');const label=document.createElement('span');label.className='structure-element';row.append(label);
+    text(label,'strong',field?.name?.trim()||'名前未定義');text(label,'span',concept.name+(field?.valueType==='array'?'[]':''),'structure-element-type');
+   });
+  }else text(row,'strong',concept.name);
   if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
   if(edge?.relation.condition)text(row,'span',edge.relation.condition,'structure-condition');
-  if(edge?.fields.length)text(row,'span',edge.fields.join('、'),'structure-edge-detail');
+  if(edge?.fields.length){const detail=text(row,'span',edge.fields.map(shortPhysicalName).join('、'),'structure-edge-detail');detail.title=edge.fields.join('、');}
   if(cycle||visited)text(row,'span','既出','structure-seen');
   const details=document.createElement('details');details.className='structure-node';details.append(row);item.append(details);
   let built=false;const nextPath=new Set(path);nextPath.add(id);
@@ -89,7 +97,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
    if(concept.information.length){const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(Folder));text(summary,'span','属性');text(summary,'span',`（${concept.information.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
     const fields=document.createElement('ul');fields.className='structure-fields';folder.append(fields);
-    for(const info of concept.information){const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText));text(field,'span',info.name);if(mapping?.physicalName)text(field,'code',mapping.physicalName);text(field,'span','型：'+typeLabel(mapping),'structure-type');fields.append(field);}
+    for(const info of concept.information){const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText));text(field,'span',info.name);text(field,'span','型：'+typeLabel(mapping),'structure-type');if(mapping?.physicalName)text(field,'code',mapping.physicalName);fields.append(field);}
    }
    for(const direction of visibleDirections){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
     const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(direction==='reference'||direction==='referencedBy'?Link:Folder));text(summary,'span',labels[direction]);text(summary,'span',`（${outgoing.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
