@@ -1,0 +1,98 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+import {structureGraph} from '../src/structure-explorer.ts';
+
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+const authorities={
+ 'verification/structure-explorer-key-display.check-items.json':'ebba5f0f48d97204a7f0e19c3d63fb1c1f481247b1b1a72e7bbd1098b35322d7',
+ 'verification/structure-explorer-sample-values.check-items.json':'6cff19488af3ddd530d0e72a3fa46b213a8f1a3f76989a5726b087ff454b2fba'
+};
+const checks=[];
+for(const [path,digest] of Object.entries(authorities)){
+ const bytes=readFileSync(path);assert.equal(hash(bytes),digest,path+' must remain unchanged');
+ checks.push(...JSON.parse(bytes).checks.map(check=>check.id));
+}
+assert.deepEqual(checks,['STRUCTURE-KEYDISPLAY-001','STRUCTURE-KEYDISPLAY-002','STRUCTURE-KEYDISPLAY-003','STRUCTURE-SAMPLE-001','STRUCTURE-SAMPLE-002','STRUCTURE-SAMPLE-003']);
+const coverage=results=>assert.deepEqual(results.slice().sort(),checks.slice().sort(),'every display guarantee is exercised once');
+assert.throws(()=>coverage(checks.slice(1)),/every display guarantee/);
+assert.throws(()=>coverage([...checks,checks[0]]),/every display guarantee/);
+
+const read=path=>JSON.parse(readFileSync(path,'utf8'));
+const model=read('../business-design/alder/json-normalized-model-review.json').documents.find(doc=>doc.kind==='conceptModel');
+const physical=read('../business-design/alder/json-structure-review.json').documents.find(doc=>doc.kind==='conceptModel');
+const normalizedBytes=readFileSync('../work/normalization-candidate/example-normalized.json');
+const sourceBytes=readFileSync('../work/normalization-candidate/example-source.json');
+const normalized=JSON.parse(normalizedBytes);
+assert.equal(hash(normalizedBytes),'cfb0ee8dd1dd7b0aa99e868abc3844542c3c6881cc7c8315fb8f3a5a6566152a');
+assert.equal(hash(sourceBytes),'fa94aa2098a3a4578648c2403f184bb73bb65e2e40311442f9e7d848743d0b8f');
+const paper=read('../tools/document_storage/examples/paper-manual-v06.json');
+const method=paper.documents.find(doc=>doc.kind==='businessDesign').activities.flatMap(activity=>activity.procedure.steps).find(step=>step.method)?.method;
+assert.equal(method,'目視');
+
+const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
+const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
+const covered=[];
+try{
+ w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');
+ const render=(m,id)=>w.Explorer.renderStructureExplorer(host,m,{rootId:id});
+ const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
+ const attribute=path=>[...host.querySelectorAll('.structure-root > .structure-item > details > .structure-children > .structure-field')].find(node=>node.querySelector('code')?.textContent===path);
+ const sample=path=>attribute(path)?.querySelector('.structure-example')?.textContent;
+ const samples=path=>[...(attribute(path)?.querySelectorAll('.structure-example')??[])].map(node=>node.textContent);
+
+ render(model,'n-activity');
+ for(const [id,label,count] of [
+  ['nr-activity-step','手順','1..N'],['nr-activity-result','業務結果','1..N'],
+  ['nr-activity-decision','判定表','0..N'],['nr-activity-exception','例外','0..N'],
+  ['nr-activity-order','旧順序規則','0..N'],['nr-who-activity','実行主体','0..1']
+ ]){const current=row(id);assert(current);assert(current.textContent.includes(label));assert.equal(current.querySelector('.structure-count').textContent,count);assert.equal(current.querySelector('.structure-edge-detail'),null,id+' has no redundant key suffix');}
+ assert(row('nr-who-activity').textContent.includes('未決はNULL'),'relationship description is retained');
+ render(model,'n-object');assert.equal(row('nr-object-information').querySelector('.structure-edge-detail'),null);
+ covered.push('STRUCTURE-KEYDISPLAY-001');
+
+ assert.match(row('nr-object-information').title,/information\.objectId/);
+ render(model,'n-bd');assert.match(row('nr-bd-object').title,/objects\.documentId/);
+ render(model,'n-activity');assert.match(row('nr-activity-step').title,/steps\.activityId/);assert.match(row('nr-who-activity').title,/activities\.whoId/);
+ const graph=structureGraph(model);assert.deepEqual(graph.edges.get('n-activity').find(edge=>edge.relation.id==='nr-who-activity').fields,['activities.whoId']);
+ render(model,'n-bd');const search=host.querySelector('input[type=search]');search.value='objects.documentId';search.dispatchEvent(new w.Event('input'));
+ assert([...host.querySelectorAll('[data-relation-id="nr-bd-object"]')].some(node=>!node.hidden));
+ covered.push('STRUCTURE-KEYDISPLAY-002');
+
+ render(physical,'fmt-package');assert.equal(row('rel-package-bd').querySelector('.structure-edge-detail').title,'documents[]');assert.equal(host.querySelectorAll('.structure-example').length,0);
+ render(physical,'fmt-order');assert.match(row('rel-order-step').querySelector('.structure-edge-detail').title,/beforeId \/ afterId/);assert.match(row('rel-order-step').querySelector('.structure-edge-detail').title,/stepIds\[\]/);
+ const unmarked=structuredClone(model),who=unmarked.meta.fieldMappings.find(item=>item.physicalName==='activities.whoId');delete who.representation;render(unmarked,'n-activity');
+ assert.equal(row('nr-who-activity').querySelector('.structure-edge-detail').title,'activities.whoId');
+ assert(attribute('activities.whoId'),'an unmarked mapping remains an attribute');
+ covered.push('STRUCTURE-KEYDISPLAY-003');
+
+ const activity=normalized.entities.activities[0],step=normalized.entities.steps[0];
+ render(model,'n-activity');
+ assert.equal(sample('activities.name'),'例：'+activity.name);assert.equal(sample('activities.scope'),'例：true');assert.equal(sample('activities.why'),'例：'+activity.why);
+ assert(attribute('activities.name').textContent.includes('型：未定義'),'examples do not invent a type');
+ render(model,'n-object');assert.equal(sample('objects.scope'),'例：false');
+ render(model,'n-step');assert.equal(sample('steps.action'),'例：'+step.action);assert.equal(sample('steps.method'),'参考例：'+method);
+ covered.push('STRUCTURE-SAMPLE-001');
+ assert.equal(step.method,null,'the reference does not alter the normalized input');
+ assert.equal(model.meta.fieldMappings.find(item=>item.physicalName==='steps.method').sampleKind,'reference');
+ render(model,'n-data');assert.deepEqual(samples('data.name'),['例：'+normalized.entities.data[0].name,'参考例：連絡先（氏名・電話番号）']);
+ render(model,'n-dataitem');assert.deepEqual(samples('dataItems.condition'),['例：null','参考例：電話連絡を希望する場合']);
+ render(model,'n-information');assert.deepEqual(samples('information.name'),['例：'+normalized.entities.information[0].name,'参考例：電話番号']);
+ render(model,'n-dependency');assert.equal(host.querySelectorAll('.structure-example').length,0,'a structure with no sample rows has no invented values');
+ covered.push('STRUCTURE-SAMPLE-002');
+
+ const modified=structuredClone(model),name=modified.meta.fieldMappings.find(item=>item.physicalName==='activities.name');
+ for(const [value,expected] of [[0,'例：0'],[false,'例：false'],[null,'例：null'],['','例：""'],[['a','b'],'例：["a","b"]'],[{x:1},'例：{"x":1}']]){
+  name.sampleValue=value;render(modified,'n-activity');assert.equal(sample('activities.name'),expected);assert(attribute('activities.name').textContent.includes('型：未定義'));
+ }
+ name.sampleValue='<script>example</script>';render(modified,'n-activity');assert.equal(sample('activities.name'),'例：<script>example</script>');assert.equal(attribute('activities.name').querySelector('script'),null,'sample text cannot create DOM elements');
+ delete name.sampleValue;render(modified,'n-activity');assert.equal(sample('activities.name'),undefined);
+ covered.push('STRUCTURE-SAMPLE-003');
+}finally{w.close();}
+coverage(covered);
+for(const [path,digest] of Object.entries(authorities))assert.equal(hash(readFileSync(path)),digest,path+' must remain unchanged');
+assert.deepEqual(readFileSync('../work/normalization-candidate/example-normalized.json'),normalizedBytes);
+assert.deepEqual(readFileSync('../work/normalization-candidate/example-source.json'),sourceBytes);
+console.log('STRUCTURE-KEYDISPLAY-001..003 and STRUCTURE-SAMPLE-001..003: relation keys, explicit values and preservation verified.');

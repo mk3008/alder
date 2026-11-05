@@ -1,12 +1,12 @@
 import {createElement,Box,ExternalLink,FileText,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
-type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean;representation?:string;relationKeyIds?:unknown};
+type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown};
 type RelationField={relationId:string;physicalName:string};
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
 type EdgeField={name:string;physicalName:string;valueType?:string};
-export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];fieldDetails:EdgeField[];roleName?:string};
+export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];visibleFields:string[];fieldDetails:EdgeField[];roleName?:string};
 const visibleDirections:Direction[]=['owned','reference','unknownOut'];
 
 /** Read only declared concepts, mappings and relations; never infer a relation from a label. */
@@ -50,11 +50,20 @@ export function structureGraph(model:ConceptModel){
   const childKeys=kind==='down'?nodes.get(relation.toConceptId)!.information.flatMap(info=>{
    const mapping=byInformation.get(info.id);return relationKeys.has(info.id)&&mapping&&mappedRelations(mapping).includes(relation.id)?[mapping.physicalName]:[];
   }):[];
-  const physicalNames=[...new Set([...forwardFields.map(field=>field.physicalName),...childKeys,...relationFields.filter(field=>field.relationId===relation.id).map(field=>field.physicalName)])];
+  const forwardKeys=nodes.get(relation.fromConceptId)!.information.flatMap(info=>{
+   const mapping=byInformation.get(info.id);return relationKeys.has(info.id)&&mapping&&mappedRelations(mapping).includes(relation.id)?[mapping.physicalName]:[];
+  });
+  const declaredKeys=relationFields.filter(field=>field.relationId===relation.id).map(field=>field.physicalName);
+  const physicalNames=[...new Set([...forwardFields.map(field=>field.physicalName),...childKeys,...declaredKeys])];
+  const keyNames=new Set([...forwardKeys,...childKeys,...declaredKeys]);
+  const unmarkedNames=new Set(nodes.get(relation.fromConceptId)!.information.flatMap(info=>{
+   const mapping=byInformation.get(info.id);return !relationKeys.has(info.id)&&mapping&&mappedRelations(mapping).includes(relation.id)?[mapping.physicalName]:[];
+  }));
+  const visibleFields=physicalNames.filter(name=>!keyNames.has(name)||unmarkedNames.has(name));
   edges.get(relation.fromConceptId)!.push({relation,from:relation.fromConceptId,to:relation.toConceptId,
-   direction:kind==='down'?'owned':kind==='reference'?'reference':'unknownOut',count:count(relation.toLabel),reverseCount:count(relation.fromLabel),fields:physicalNames,fieldDetails:forwardFields,roleName});
+   direction:kind==='down'?'owned':kind==='reference'?'reference':'unknownOut',count:count(relation.toLabel),reverseCount:count(relation.fromLabel),fields:physicalNames,visibleFields,fieldDetails:forwardFields,roleName});
   edges.get(relation.toConceptId)!.push({relation,from:relation.toConceptId,to:relation.fromConceptId,
-   direction:kind==='down'?'owner':kind==='reference'?'referencedBy':'unknownIn',count:count(relation.fromLabel),reverseCount:count(relation.toLabel),fields:reverseFields.map(field=>field.physicalName),fieldDetails:reverseFields});
+   direction:kind==='down'?'owner':kind==='reference'?'referencedBy':'unknownIn',count:count(relation.fromLabel),reverseCount:count(relation.toLabel),fields:reverseFields.map(field=>field.physicalName),visibleFields:reverseFields.map(field=>field.physicalName),fieldDetails:reverseFields});
  }
  // Select a package only when its explicit mappings describe the package and
  // documents relationship. A logical entity root is not a JSON package root.
@@ -79,6 +88,14 @@ const shortPhysicalName=(path:string)=>path.split(' / ').map(part=>part.trim().s
 function typeLabel(mapping:Mapping|undefined){
  const value=typeof mapping?.valueType==='string'&&mapping.valueType.trim()?mapping.valueType:'未定義';
  return value+(mapping?.nullable===true?'・未決可':'');
+}
+function sampleLabels(mapping:Mapping|undefined){
+ if(!mapping)return [];
+ const labels:string[]=[];
+ const add=(value:unknown,prefix:string)=>{const sample=typeof value==='string'?(value||'""'):JSON.stringify(value);if(sample!==undefined)labels.push(prefix+sample);};
+ if(Object.hasOwn(mapping,'sampleValue'))add(mapping.sampleValue,mapping.sampleKind==='reference'?'参考例：':'例：');
+ if(Object.hasOwn(mapping,'referenceValue'))add(mapping.referenceValue,'参考例：');
+ return labels;
 }
 
 /** The DOM is lazy per path. A full expansion visits each concept once. */
@@ -111,7 +128,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
   const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
   row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));
-  if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
+  if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}${edge.fields.length>edge.visibleFields.length?' — 物理項目：'+edge.fields.join('、'):''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
    const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span','型：'+typeName+(field?.valueType==='array'?'[]':''),'structure-element-type');};
@@ -120,13 +137,13 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   }else{ text(row,'strong',typeName);if(logicalName&&logicalName!==typeName)text(row,'span',logicalName,'structure-type'); }
   if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
   if(edge?.relation.condition)text(row,'span',edge.relation.condition,'structure-condition');
-  if(edge?.fields.length){const detail=text(row,'span',edge.fields.map(shortPhysicalName).join('、'),'structure-edge-detail');detail.title=edge.fields.join('、');}
+  if(edge?.visibleFields.length){const detail=text(row,'span',edge.visibleFields.map(shortPhysicalName).join('、'),'structure-edge-detail');detail.title=edge.visibleFields.join('、');}
   if(cycle||visited)text(row,'span','既出','structure-seen');
   const details=document.createElement('details');details.className='structure-node';details.append(row);item.append(details);
   let built=false;const nextPath=new Set(path);nextPath.add(id);
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
-   for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText,'属性'));text(field,'span',info.name);text(field,'span','型：'+typeLabel(mapping),'structure-type');if(mapping?.physicalName)text(field,'code',mapping.physicalName);children.append(field);}
+   for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText,'属性'));text(field,'span',info.name);text(field,'span','型：'+typeLabel(mapping),'structure-type');if(mapping?.physicalName)text(field,'code',mapping.physicalName);for(const sample of sampleLabels(mapping)){const example=text(field,'span',sample,'structure-example');example.title=sample;}children.append(field);}
    for(const direction of visibleDirections){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
     for(const relation of outgoing)children.append(buildNode(relation.to,nextPath,relation,expand));
    }

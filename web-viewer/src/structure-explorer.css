@@ -16,6 +16,7 @@
 .structure-icon{width:15px;height:15px;flex:none;color:#1766a6}.structure-count{display:inline-block;min-width:38px;padding:0 5px;border:1px solid #9ac7ef;border-radius:5px;background:color-mix(in srgb,#8bc0f2 24%,var(--panel));color:#1766a6;text-align:center;font-weight:650;font-size:12px}
 .structure-edge-detail,.structure-type{font-size:12px;color:var(--line)}.structure-edge-detail{max-width:320px;overflow:hidden;text-overflow:ellipsis}.structure-seen{padding:1px 5px;border-radius:4px;background:var(--select);color:var(--line);font-size:11px}
 .structure-tree .structure-field{display:flex;align-items:center;gap:6px;min-height:27px;padding-left:16px;white-space:nowrap}.structure-field code{font-size:12px;color:var(--line)}.structure-field .structure-icon{color:var(--line)}
+.structure-example{max-width:420px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--fg)}
 .structure-condition{color:var(--line);font-size:12px;line-height:1.5}
 .structure-unreachable,.structure-empty{color:var(--line);font-size:13px}.structure-unreachable{margin:0;padding:8px 12px;border-bottom:1px solid var(--subtle)}
 [data-theme=dark] .structure-icon,[data-theme=dark] .structure-count{color:#8fc8ef}[data-theme=dark] .structure-node>summary::before{color:#8fc8ef}

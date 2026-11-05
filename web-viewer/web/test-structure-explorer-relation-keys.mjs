@@ -57,9 +57,9 @@ try{
  render(normalized,'n-check');assert(fields().some(value=>value.includes('表示番号')&&value.includes('checkId')),'a Check display ID remains an attribute');
  covered.push('STRUCTURE-RELKEY-001');
 
- render(normalized,'n-object');assert.equal(row('nr-object-information').querySelector('.structure-edge-detail').title,'information.objectId');
- render(normalized,'n-bd');assert.equal(row('nr-bd-object').querySelector('.structure-edge-detail').title,'objects.documentId');
- render(normalized,'n-activity');assert.equal(row('nr-who-activity').querySelector('.structure-edge-detail').title,'activities.whoId');
+ render(normalized,'n-object');assert.match(row('nr-object-information').title,/information\.objectId/);
+ render(normalized,'n-bd');assert.match(row('nr-bd-object').title,/objects\.documentId/);
+ render(normalized,'n-activity');assert.match(row('nr-who-activity').title,/activities\.whoId/);
  covered.push('STRUCTURE-RELKEY-002');
 
  const missing=structuredClone(normalized);mapping(missing).relationKeyIds=['unknown'];render(missing,'n-information');assert(fields().some(value=>value.includes('所属する対象')));

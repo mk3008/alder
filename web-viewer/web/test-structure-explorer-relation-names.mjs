@@ -53,7 +53,7 @@ try{
  assert(host.querySelectorAll('.structure-item').length<=normalized.relations.length+1,'search stops at repeated structures');
  const different=structuredClone(normalized);different.meta.relationNames['nr-exchange-pair']='概念上の対応手順';render(different,'n-exchange');
  assert.deepEqual(pairs(row('nr-exchange-pair')),[['概念上の対応手順','型：Step']],'an authored conceptual name takes precedence over a different physical field label');
- assert.equal(row('nr-exchange-pair').querySelector('.structure-edge-detail').title,'stepInteractions.pairedStepId','the existing physical mapping remains available');
+ assert.match(row('nr-exchange-pair').title,/stepInteractions\.pairedStepId/,'the existing physical mapping remains available');
  render(normalized,'n-order');
  for(const id of ['nr-order-before','nr-order-after','nr-order-member'])assert.deepEqual(pairs(row(id)),[[names[id],'型：Step']]);
  render(normalized,'n-continuity');

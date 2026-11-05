@@ -50,8 +50,8 @@ try{
  open(host.querySelector('[data-relation-id="nr-step-exchange"] > details'));
  const paired=row('nr-exchange-pair');
  assert.deepEqual(pairs(paired),[['対応する手順','型：Step']]);
- assert.equal(paired.querySelector('.structure-edge-detail').textContent,'pairedStepId');
- assert.equal(paired.querySelector('.structure-edge-detail').title,'stepInteractions.pairedStepId');
+ assert.equal(paired.querySelector('.structure-edge-detail'),null,'relationship keys are not repeated at the end of the row');
+ assert.match(paired.title,/stepInteractions\.pairedStepId/,'the full physical mapping remains available');
  assert.match(paired.textContent,/対応手順。/,'the relation description remains available');
  assert.equal(paired.querySelector('.structure-count').textContent,'0..1');
  assert.deepEqual(pairs(row('nr-step-data')),[['操作対象データ','型：Data']],'the authored conceptual name is shown without inventing an array');

@@ -17,6 +17,30 @@ function activity(id,name,who){return {id,name,scope:true,why:'構造確認用�
 bd.activities.push(activity('score-review-one','点数を確認する',{kind:'role',roleId:'score-reviewer'}),activity('score-review-two','結果を確認する',{kind:'role',roleId:'score-reviewer'}),activity('score-review-undecided','確認方法を整理する',null));
 pkg.revision='normalized-example-source-1';bd.revision='bd-review-1';validate(pkg);
 const normalized=normalizePackage(pkg,{'bd-score-example/calculate-score':{id:'score-system',evidence:'構造確認用の架空例では一つのシステムと明示'}});
+// Examples describe individual values, not inferred types or one shared row.
+// A separate, explicitly marked reference supplies Step.method only when the
+// normalized sample has no nonempty value for that field.
+const paper=read('../../tools/document_storage/examples/paper-manual-v06.json');
+const referenceMethod=paper.documents.filter(d=>d.kind==='businessDesign').flatMap(d=>d.activities.flatMap(a=>a.procedure.steps))
+ .find(step=>typeof step.method==='string'&&step.method.trim())?.method;
+// This separately labelled hypothetical illustrates a multi-item Data group;
+// it is not a record added to or inferred from the normalized sample.
+const illustrativeValues={
+ 'data.name':'連絡先（氏名・電話番号）',
+ 'dataitem.condition':'電話連絡を希望する場合',
+ 'information.name':'電話番号'
+};
+const checkDocuments=normalized.documents.map(entry=>entry.document).filter(document=>document.kind==='checkItems');
+function sampleFor(table,field,key){
+ const rows=table==='source.externalDocuments'?normalized.source.externalDocuments:
+  table==='retained Check document'?checkDocuments:
+  table==='retained Check.items'?checkDocuments.flatMap(document=>document.items):normalized.entities[table];
+ const candidates=Array.isArray(rows)?rows.filter(item=>item&&Object.hasOwn(item,field)):[];
+ const row=candidates.find(item=>item[field]!==null&&item[field]!=='')??candidates[0];
+ if(!row)return {};
+ if(key==='step.method'&&(row[field]===null||row[field]==='')&&referenceMethod!==undefined)return {sampleValue:referenceMethod,sampleKind:'reference'};
+ return {sampleValue:structuredClone(row[field])};
+}
 
 // The following is a logical view of the study above, not the schema of 0.7.
 // Association tables are shown as direct N:N relationships when they have no
@@ -133,7 +157,7 @@ m.meta={sourceFormatVersion:'0.7',modelStatus:'normalized-study',scope:'Business
  // explicit metadata for the conceptual structure view, not a new graph edge.
  const overviewFields={'activity.whoId':['nr-who-activity'],'exchange.objectId':['nr-exchange-object'],'exchange.relationId':['nr-exchange-relation'],'exchange.pairedStepId':['nr-exchange-pair'],'step.whenDecisionRowId':['nr-step-when'],'dependency.whenDecisionRowId':['nr-dependency-when'],'dependency.prerequisiteStepId':['nr-dependency-step'],'decision.appliesWhenRowId':['nr-decision-when'],'condition.axisId':['nr-condition-axis'],'rowcheck.checkId':['nr-checklink-check']};
  const relationKeyIds=fieldRelations[fieldKey]??[];
- return {informationId:`n-${id}-field-${i+1}`,physicalName:table+'.'+physicalName,relationIds:overviewFields[fieldKey]??[],...(relationKeyIds.length?{representation:'relationKey',relationKeyIds}:{})};
+ return {informationId:`n-${id}-field-${i+1}`,physicalName:table+'.'+physicalName,relationIds:overviewFields[fieldKey]??[],...(relationKeyIds.length?{representation:'relationKey',relationKeyIds}:{...sampleFor(table,physicalName,fieldKey),...(Object.hasOwn(illustrativeValues,fieldKey)?{referenceValue:illustrativeValues[fieldKey]}:{})})};
 })),relationPhysicalFields:[
  {relationId:'nr-bd-actor',physicalName:'actors.documentId'},
  {relationId:'nr-bd-activity',physicalName:'activities.documentId'},

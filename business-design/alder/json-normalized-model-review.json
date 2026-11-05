@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "normalized-model-review-4",
+  "revision": "normalized-model-review-5",
   "documents": [
     {
       "id": "alder-design",
@@ -949,7 +949,7 @@
       "id": "alder-normalized-model-study",
       "kind": "conceptModel",
       "schemaVersion": "0.1",
-      "revision": "normalized-study-4",
+      "revision": "normalized-study-5",
       "basedOn": {
         "documentId": "alder-design",
         "revision": "alder-design-1",
@@ -2397,47 +2397,56 @@
           {
             "informationId": "n-bd-field-1",
             "physicalName": "businessDesigns.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "bd-score-example"
           },
           {
             "informationId": "n-bd-field-2",
             "physicalName": "businessDesigns.title",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "モルックの点数計算"
           },
           {
             "informationId": "n-bd-field-3",
             "physicalName": "businessDesigns.revision",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "bd-review-1"
           },
           {
             "informationId": "n-who-field-1",
             "physicalName": "actors.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "score-reviewer"
           },
           {
             "informationId": "n-who-field-2",
             "physicalName": "actors.kind",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "role"
           },
           {
             "informationId": "n-who-field-3",
             "physicalName": "actors.name",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "記録係"
           },
           {
             "informationId": "n-who-field-4",
             "physicalName": "actors.color",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "#8b5cf6"
           },
           {
             "informationId": "n-activity-field-1",
             "physicalName": "activities.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "calculate-score"
           },
           {
             "informationId": "n-activity-field-2",
             "physicalName": "activities.name",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "1回の点数を計算する"
           },
           {
             "informationId": "n-activity-field-3",
@@ -2453,42 +2462,51 @@
           {
             "informationId": "n-activity-field-4",
             "physicalName": "activities.scope",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": true
           },
           {
             "informationId": "n-activity-field-5",
             "physicalName": "activities.why",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "利用者が1回投げた結果の点数を知るため"
           },
           {
             "informationId": "n-activity-field-6",
             "physicalName": "activities.when",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "利用者が計算対象の投擲順と各回に倒れた棒の番号を入力したとき。0回を含む。"
           },
           {
             "informationId": "n-object-field-1",
             "physicalName": "objects.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "player"
           },
           {
             "informationId": "n-object-field-2",
             "physicalName": "objects.name",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "利用者"
           },
           {
             "informationId": "n-object-field-3",
             "physicalName": "objects.scope",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": false
           },
           {
             "informationId": "n-information-field-1",
             "physicalName": "information.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "throws-info"
           },
           {
             "informationId": "n-information-field-2",
             "physicalName": "information.name",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "投擲順・各回の棒の番号",
+            "referenceValue": "電話番号"
           },
           {
             "informationId": "n-information-field-3",
@@ -2502,12 +2520,15 @@
           {
             "informationId": "n-data-field-1",
             "physicalName": "data.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "throws"
           },
           {
             "informationId": "n-data-field-2",
             "physicalName": "data.name",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "投擲順・各回の棒の番号",
+            "referenceValue": "連絡先（氏名・電話番号）"
           },
           {
             "informationId": "n-dataitem-field-1",
@@ -2530,12 +2551,15 @@
           {
             "informationId": "n-dataitem-field-3",
             "physicalName": "dataItems.condition",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": null,
+            "referenceValue": "電話連絡を希望する場合"
           },
           {
             "informationId": "n-step-field-1",
             "physicalName": "steps.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "receive"
           },
           {
             "informationId": "n-step-field-2",
@@ -2549,17 +2573,21 @@
           {
             "informationId": "n-step-field-3",
             "physicalName": "steps.action",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "受け取る"
           },
           {
             "informationId": "n-step-field-4",
             "physicalName": "steps.method",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "目視",
+            "sampleKind": "reference"
           },
           {
             "informationId": "n-step-field-5",
             "physicalName": "steps.exchangeKind",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "interaction"
           },
           {
             "informationId": "n-step-field-6",
@@ -2595,12 +2623,14 @@
           {
             "informationId": "n-exchange-field-3",
             "physicalName": "stepInteractions.direction",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "input"
           },
           {
             "informationId": "n-exchange-field-4",
             "physicalName": "stepInteractions.phase",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "request"
           },
           {
             "informationId": "n-exchange-field-5",
@@ -2718,7 +2748,8 @@
           {
             "informationId": "n-result-field-1",
             "physicalName": "results.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "score-result"
           },
           {
             "informationId": "n-result-field-2",
@@ -2732,12 +2763,14 @@
           {
             "informationId": "n-result-field-3",
             "physicalName": "results.text",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "入力が有効なら投擲順・各回の点数が分かる。0回の場合、1回分の点数はない。"
           },
           {
             "informationId": "n-decision-field-1",
             "physicalName": "decisions.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "input-validation"
           },
           {
             "informationId": "n-decision-field-2",
@@ -2751,12 +2784,14 @@
           {
             "informationId": "n-decision-field-3",
             "physicalName": "decisions.title",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "入力の検査"
           },
           {
             "informationId": "n-decision-field-4",
             "physicalName": "decisions.kind",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "validation"
           },
           {
             "informationId": "n-decision-field-5",
@@ -2772,7 +2807,8 @@
           {
             "informationId": "n-axis-field-1",
             "physicalName": "axes.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "axis-numbers"
           },
           {
             "informationId": "n-axis-field-2",
@@ -2786,12 +2822,14 @@
           {
             "informationId": "n-axis-field-3",
             "physicalName": "axes.name",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "棒の番号"
           },
           {
             "informationId": "n-row-field-1",
             "physicalName": "rows.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "valid"
           },
           {
             "informationId": "n-row-field-2",
@@ -2805,12 +2843,14 @@
           {
             "informationId": "n-row-field-3",
             "physicalName": "rows.resultKind",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "accepted"
           },
           {
             "informationId": "n-row-field-4",
             "physicalName": "rows.resultText",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "有効"
           },
           {
             "informationId": "n-condition-field-1",
@@ -2835,17 +2875,20 @@
           {
             "informationId": "n-condition-field-3",
             "physicalName": "conditions.kind",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "value"
           },
           {
             "informationId": "n-condition-field-4",
             "physicalName": "conditions.operator",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "is"
           },
           {
             "informationId": "n-condition-field-5",
             "physicalName": "conditions.value",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "1〜12の整数"
           },
           {
             "informationId": "n-rowcheck-field-1",
@@ -2870,12 +2913,14 @@
           {
             "informationId": "n-rowcheck-field-3",
             "physicalName": "rowChecks.coverage",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "full"
           },
           {
             "informationId": "n-exception-field-1",
             "physicalName": "exceptions.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "invalid-input"
           },
           {
             "informationId": "n-exception-field-2",
@@ -2889,12 +2934,14 @@
           {
             "informationId": "n-exception-field-3",
             "physicalName": "exceptions.name",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "入力エラー"
           },
           {
             "informationId": "n-exception-field-4",
             "physicalName": "exceptions.description",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "入力に誤りが1回でもあれば計算せず、全体をエラーとし、投擲順・各回の点数・合計点・各回までの合計点の推移を返さない。"
           },
           {
             "informationId": "n-continuity-field-1",
@@ -2928,12 +2975,14 @@
           {
             "informationId": "n-relation-field-1",
             "physicalName": "relations.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "rel-input"
           },
           {
             "informationId": "n-relation-field-2",
             "physicalName": "relations.kind",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "input"
           },
           {
             "informationId": "n-relation-field-3",
@@ -2988,32 +3037,42 @@
           {
             "informationId": "n-checkdoc-field-1",
             "physicalName": "retained Check document.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "checks-score-example"
           },
           {
             "informationId": "n-checkdoc-field-2",
             "physicalName": "retained Check document.revision",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "checks-review-1"
           },
           {
             "informationId": "n-checkdoc-field-3",
             "physicalName": "retained Check document.basedOn",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": {
+              "documentId": "bd-score-example",
+              "revision": "bd-review-1",
+              "verification": "unverified"
+            }
           },
           {
             "informationId": "n-check-field-1",
             "physicalName": "retained Check.items.id",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "check-01"
           },
           {
             "informationId": "n-check-field-2",
             "physicalName": "retained Check.items.checkId",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "MK-01"
           },
           {
             "informationId": "n-check-field-3",
             "physicalName": "retained Check.items.reviewState",
-            "relationIds": []
+            "relationIds": [],
+            "sampleValue": "未レビュー"
           }
         ],
         "relationPhysicalFields": [

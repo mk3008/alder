@@ -28,13 +28,13 @@ assert.throws(()=>coverage(checks.slice(1)),/each requirement/);assert.throws(()
 assert.throws(()=>classCoverage(classChecks.slice(1)),/each class-view requirement/);assert.throws(()=>classCoverage([...classChecks,classChecks[0]]),/class-view requirement|duplicated/);
 
 const source=readFileSync('../business-design/alder/json-normalized-model-review.json');
-// Restore only the explicitly approved relationship-key metadata and revisions
+// Restore only the approved relationship-key/sample metadata and revisions
 // before comparing with the earlier immutable model. Other data must not drift.
 const preserved=JSON.parse(source),preservedModel=preserved.documents.find(d=>d.kind==='conceptModel');
 preserved.revision='normalized-model-review-3';preservedModel.revision='normalized-study-3';
-for(const mapping of preservedModel.meta.fieldMappings){delete mapping.representation;delete mapping.relationKeyIds;}
+for(const mapping of preservedModel.meta.fieldMappings){delete mapping.representation;delete mapping.relationKeyIds;delete mapping.sampleValue;delete mapping.sampleKind;delete mapping.referenceValue;}
 delete preservedModel.meta.relationPhysicalFields;
-assert.equal(hash(JSON.stringify(preserved,null,2)+'\n'),'74cd817a7794b7f5fba82b961deb5b644f11187780ff8b480f82eec90d7273b3','only approved relationship-key metadata and revisions differ from the previous model');
+assert.equal(hash(JSON.stringify(preserved,null,2)+'\n'),'74cd817a7794b7f5fba82b961deb5b644f11187780ff8b480f82eec90d7273b3','only approved relationship-key and sample metadata and revisions differ from the previous model');
 const previous=structuredClone(preserved),previousModel=previous.documents.find(d=>d.kind==='conceptModel');
 delete previousModel.meta.conceptNames;previous.revision='normalized-model-review-2';previousModel.revision='normalized-study-2';
 assert.equal(hash(JSON.stringify(previous)),'01cfdb043ec8182aa24a2495dd60209c19f38afe4193f8a88bca6df07ad50020','only explicitly authorized structure names and revisions differ from the previous model');
