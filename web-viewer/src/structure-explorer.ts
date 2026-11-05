@@ -16,12 +16,6 @@ export function structureGraph(model:ConceptModel){
  for(const mapping of mappings){const list=grouped.get(mapping.informationId)??[];list.push(mapping);grouped.set(mapping.informationId,list);}
  // Duplicate metadata for one information ID is ambiguous; do not select one.
  const byInformation=new Map([...grouped].filter(([,items])=>items.length===1).map(([id,items])=>[id,items[0]]));
- // The candidate explicitly maps the Activity identifier to activities.id.
- // An unrelated name, ID, or a non-unique mapping is not a type declaration.
- const activityMappings=mappings.filter(mapping=>mapping.physicalName==='activities.id');
- const roots=activityMappings.length===1&&grouped.get(activityMappings[0].informationId)?.length===1
-  ?model.concepts.filter(concept=>concept.information.some(info=>info.id===activityMappings[0].informationId)):[];
- const root=roots.length===1?roots[0].id:undefined;
  const edges=new Map<string,StructureEdge[]>();for(const id of nodes.keys())edges.set(id,[]);
  for(const relation of model.relations){
   if(!nodes.has(relation.fromConceptId)||!nodes.has(relation.toConceptId))continue;
@@ -33,8 +27,20 @@ export function structureGraph(model:ConceptModel){
   edges.get(relation.toConceptId)!.push({relation,from:relation.toConceptId,to:relation.fromConceptId,
    direction:kind==='down'?'owner':kind==='reference'?'referencedBy':'unknownIn',count:count(relation.fromLabel),reverseCount:count(relation.toLabel),fields:fields(relation.toConceptId)});
  }
- const reachable=new Set<string>();if(root){const todo=[root];while(todo.length){const id=todo.pop()!;if(reachable.has(id))continue;reachable.add(id);for(const edge of edges.get(id)??[])if(!reachable.has(edge.to))todo.push(edge.to);}}
- return {nodes,edges,mappings:byInformation,root,reachable};
+ // Select a package only when its explicit mappings describe the package and
+ // documents relationship. A logical entity root is not a JSON package root.
+ const owned=new Set(model.relations.filter(r=>r.kind==='down'&&nodes.has(r.fromConceptId)&&nodes.has(r.toConceptId)).map(r=>r.toConceptId));
+ const ownershipRoots=model.concepts.filter(concept=>!owned.has(concept.id));
+ const packages=ownershipRoots.filter(concept=>{
+  const fields=concept.information.map(info=>byInformation.get(info.id)).filter((value):value is Mapping=>!!value);
+  const docs=fields.find(field=>field.physicalName==='documents[]'&&field.valueType==='array');
+  return fields.some(field=>field.physicalName==='format')&&fields.some(field=>/^formatVersion(?:\s*:.*)?$/.test(field.physicalName))&&
+   fields.some(field=>field.physicalName==='revision')&&!!docs&&docs.relationIds.some(id=>model.relations.some(r=>r.id===id&&r.kind==='down'&&r.fromConceptId===concept.id));
+ });
+ const packageRoot=packages.length===1?packages[0].id:undefined;
+ const roots=packageRoot?[packageRoot]:(ownershipRoots.length?ownershipRoots:model.concepts).map(concept=>concept.id);
+ const reachable=new Set<string>(),todo=[...roots];while(todo.length){const id=todo.pop()!;if(reachable.has(id))continue;reachable.add(id);for(const edge of edges.get(id)??[])if(!reachable.has(edge.to))todo.push(edge.to);}
+ return {nodes,edges,mappings:byInformation,packageRoot,roots,hasOwnershipRoots:ownershipRoots.length>0,reachable};
 }
 
 const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'所有先',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
@@ -49,14 +55,14 @@ function typeLabel(mapping:Mapping|undefined){
 /** The DOM is lazy per path. A full expansion visits each concept once. */
 export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
  const graph=structureGraph(model);host.replaceChildren();host.className='structure-explorer';
- if(!graph.root){text(host,'p','Activityの構造を一意に特定できません。明示された対応が必要です。','structure-empty');return;}
- const rootId=graph.root;
+ if(!graph.roots.length){text(host,'p','この構造モデルには概念がありません。','structure-empty');return;}
  const panel=document.createElement('section');panel.className='structure-panel';host.append(panel);
  const toolbar=document.createElement('div');toolbar.className='structure-toolbar';panel.append(toolbar);
  const all=document.createElement('button');all.type='button';all.textContent='すべて展開';toolbar.append(all);
  const collapse=document.createElement('button');collapse.type='button';collapse.textContent='すべて折りたたみ';toolbar.append(collapse);
  const searchLabel=document.createElement('label');searchLabel.className='structure-search';searchLabel.append(icon(Search));
  const search=document.createElement('input');search.type='search';search.placeholder='構造名・項目名で検索';search.setAttribute('aria-label','構造名・項目名で検索');searchLabel.append(search);toolbar.append(searchLabel);
+ if(!graph.packageRoot)text(panel,'p',graph.hasOwnershipRoots?'JSON全体のルートをこの構造モデルから一意に特定できません。所有元が未定義の構造から表示します。':'JSON全体のルートと所有関係の起点を特定できないため、すべての構造を表示します。','structure-unreachable');
  const unreachable=[...graph.nodes.keys()].filter(id=>!graph.reachable.has(id));
  if(unreachable.length)text(panel,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
  const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);
@@ -93,7 +99,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
   if(seen&&!visited){seen.add(id);details.open=true;build(seen);}
   return item;
  };
- const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';ul.append(buildNode(rootId,new Set(),undefined,expand?new Set():undefined));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}};
+ const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';const seen=expand?new Set<string>():undefined;for(const id of graph.roots)ul.append(buildNode(id,new Set(),undefined,seen));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}};
  const filter=()=>{const query=search.value.trim().toLocaleLowerCase();
   if(query&&!savedTree){savedTree=tree.firstChild;render(true);}else if(!query&&savedTree){tree.replaceChildren(savedTree);savedTree=null;return;}
   const items=Array.from(tree.querySelectorAll<HTMLElement>('[data-search-text]')).reverse();
