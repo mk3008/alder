@@ -5,6 +5,7 @@ type Mapping={informationId:string;physicalName:string;relationIds:string[];valu
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
 export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[]};
+const visibleDirections:Direction[]=['owned','reference','unknownOut'];
 
 /** Read only declared concepts, mappings and relations; never infer a relation from a label. */
 export function structureGraph(model:ConceptModel){
@@ -39,12 +40,11 @@ export function structureGraph(model:ConceptModel){
  });
  const packageRoot=packages.length===1?packages[0].id:undefined;
  const roots=packageRoot?[packageRoot]:(ownershipRoots.length?ownershipRoots:model.concepts).map(concept=>concept.id);
- const reachable=new Set<string>(),todo=[...roots];while(todo.length){const id=todo.pop()!;if(reachable.has(id))continue;reachable.add(id);for(const edge of edges.get(id)??[])if(!reachable.has(edge.to))todo.push(edge.to);}
+ const reachable=new Set<string>(),todo=[...roots];while(todo.length){const id=todo.pop()!;if(reachable.has(id))continue;reachable.add(id);for(const edge of edges.get(id)??[])if(visibleDirections.includes(edge.direction)&&!reachable.has(edge.to))todo.push(edge.to);}
  return {nodes,edges,mappings:byInformation,packageRoot,roots,hasOwnershipRoots:ownershipRoots.length>0,reachable};
 }
 
 const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'所有先',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
-const directions:Direction[]=['owned','owner','reference','referencedBy','unknownOut','unknownIn'];
 const icon=(which:typeof Box)=>{const svg=createElement(which,{'aria-hidden':'true','stroke-width':1.8});svg.classList.add('structure-icon');return svg;};
 const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;root.append(el);return el;};
 function typeLabel(mapping:Mapping|undefined){
@@ -89,7 +89,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
     const fields=document.createElement('ul');fields.className='structure-fields';folder.append(fields);
     for(const info of concept.information){const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText));text(field,'span',info.name);if(mapping?.physicalName)text(field,'code',mapping.physicalName);text(field,'span','型：'+typeLabel(mapping),'structure-type');fields.append(field);}
    }
-   for(const direction of directions){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
+   for(const direction of visibleDirections){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
     const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(direction==='reference'||direction==='referencedBy'?Link:Folder));text(summary,'span',labels[direction]);text(summary,'span',`（${outgoing.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
     const targets=document.createElement('ul');targets.className='structure-children';folder.append(targets);
     for(const relation of outgoing)targets.append(buildNode(relation.to,nextPath,relation,expand));

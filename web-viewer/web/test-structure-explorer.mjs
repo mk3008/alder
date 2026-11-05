@@ -7,7 +7,7 @@ import {structureGraph} from '../src/structure-explorer.ts';
 
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const authorities={
- 'verification/structure-explorer.check-items.json':'f2ce7214cbaa5cd114214eb9f38307e7bf56a9a15c74c37f402dff5459b2d3ca',
+ 'verification/structure-explorer.check-items.json':'678a40e2d6036406fc663d4cc09e3140f8441fae9e991de6e8206b4f63c56c5e',
  'verification/concept-full-overview.check-items.json':'b596ec259b2dbfb2f7a7a745f4fd61a380bf3a2df7989c047b1c00e786489190',
  'verification/concept-reference-routing.check-items.json':'43aad9abfc64e4be353963c6c1ace38498ece338730479f833e9621dd1399e4a',
  'verification/concept-json-field-mapping.check-items.json':'45178adb013fb0345749d83148d9b265860a55fa05992bb05525c3ad066ec564',
@@ -71,14 +71,14 @@ const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');w.Explorer.renderStructureExplorer(host,sample);
  const groups=node=>[...node.querySelectorAll(':scope > .structure-children > li > details.structure-group > summary')].map(summary=>summary.textContent);
- assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（1）','所有（2）','参照（1）','参照元（1）','種類未定義（出）（1）'],'folder counts show direct entries and directions');
+ assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（1）','所有（2）','参照（1）','種類未定義（出）（1）'],'only outward directions are shown');
  assert(!host.querySelector('.structure-heading, .structure-intro, .structure-help'),'the tab already supplies the title and the tree uses the full content area');
  const one=host.querySelector('[data-relation-id="one"][data-relation-direction="owned"] > details'),many=host.querySelector('[data-relation-id="many"][data-relation-direction="owned"] > details');
  assert(one&&!one.open&&many&&!many.open);
  assert.equal(one.querySelector(':scope > summary .structure-condition').textContent,'one','relationship description is shown before expanding');
  one.open=true;one.dispatchEvent(new w.Event('toggle'));
  assert.equal(one.querySelectorAll(':scope > p.structure-condition').length,0,'expansion does not duplicate the description');
- assert.deepEqual(groups(one),['属性（1）','所有（1）','所有先（1）','参照（1）'],'nested counts include the owner without reversing its meaning');
+ assert.deepEqual(groups(one),['属性（1）','所有（1）','参照（1）'],'nested views also hide the owner');
  assert.equal(many.open,false,'one branch does not expand another');
  assert(one.querySelector('[data-relation-id="nested"][data-relation-direction="owned"]'),'single-valued ownership exposes its child');
  assert(one.textContent.includes('single.value')&&one.textContent.includes('array・未決可'),'explicit field mapping and type stay visible');
@@ -86,33 +86,43 @@ try{
  many.open=true;many.dispatchEvent(new w.Event('toggle'));assert(many.querySelector('[data-relation-id="self"] .structure-seen'),'self reference is marked and terminates');
  one.open=false;assert.equal(many.open,true,'collapsing one node preserves the other node');
  const shared=one.querySelector('[data-relation-id="shared"] > details');assert(shared,'shared reference is offered in each independent path');
- host.querySelector('.structure-toolbar button').click();assert(host.querySelectorAll('.structure-item').length<=sample.relations.length*2+sg.roots.length,'expand all visits every concept once and stops');
+ host.querySelector('.structure-toolbar button').click();assert(host.querySelectorAll('.structure-item').length<=sample.relations.length+sg.roots.length,'expand all visits every concept once and stops');
  assert(host.querySelector('.structure-seen'),'cycles or shared instances are identified');
+ assert.equal(host.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"],[data-relation-direction="unknownIn"]').length,0,'inverse relations remain in the model but are not rendered');
  host.querySelectorAll('.structure-toolbar button')[1].click();assert([...host.querySelectorAll('.structure-root > .structure-item > details')].every(d=>!d.open),'collapse all closes every root');covered.add('STRUCTURE-003');
  w.Explorer.renderStructureExplorer(host,model);
  assert.match(host.textContent,/JSON全体のルートをこの構造モデルから一意に特定できません/);
  assert.deepEqual([...host.querySelectorAll('.structure-root > .structure-item')].map(el=>el.dataset.conceptId),['n-bd','n-external','n-checkdoc']);
- assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（3）','所有（6）','参照元（1）']);
+ assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（3）','所有（6）']);
  const activity=host.querySelector('[data-relation-id="nr-bd-activity"][data-relation-direction="owned"] > details');
  assert(activity&&!activity.open,'Activity is below Business Design');activity.open=true;activity.dispatchEvent(new w.Event('toggle'));
- assert.deepEqual(groups(activity),['属性（6）','所有（5）','所有先（1）','参照（1）','参照元（3）'],'parallel references count as separate relationships');
+ assert.deepEqual(groups(activity),['属性（6）','所有（5）','参照（1）'],'Activity shows ownership and outgoing references only');
  const step=host.querySelector('[data-relation-id="nr-activity-step"][data-relation-direction="owned"] > details');
  const stepRow=step.querySelector(':scope > summary');assert.equal(step.open,false);
  assert.match(stepRow.textContent,/1\.\.N.*手順行（Step）.*業務内の順序付き手順。/,'description follows the name on the collapsed row');
  assert(!stepRow.textContent.includes('n-step')&&!stepRow.textContent.includes('逆 1'),'internal ID and reverse count are not displayed in the row');
  assert.match(stepRow.title,/移動先 1\.\.N／反対側 1/,'both defined multiplicities remain available');
- const parallel=[...host.querySelectorAll('[data-concept-id="n-relation"][data-relation-direction="referencedBy"] > details > summary')].map(row=>row.textContent);
+ assert.equal(activity.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"]').length,0);
+ const relationNode=host.querySelector('[data-relation-id="nr-bd-relation"][data-relation-direction="owned"] > details');
+ assert(relationNode&&!relationNode.open);relationNode.open=true;relationNode.dispatchEvent(new w.Event('toggle'));
+ const parallel=[...relationNode.querySelectorAll('[data-concept-id="n-activity"][data-relation-direction="reference"] > details > summary')].map(row=>row.textContent);
  assert(parallel.some(value=>value.includes('fromIdがActivityを指す関係の場合。'))&&parallel.some(value=>value.includes('toIdがActivityを指す関係の場合。')),'parallel relationships stay distinguishable before expanding');
  host.querySelector('.structure-toolbar button').click();
  const concepts=new Set([...host.querySelectorAll('[data-concept-id]')].map(el=>el.dataset.conceptId));
  const relations=new Set([...host.querySelectorAll('[data-relation-id]')].map(el=>el.dataset.relationId));
  assert.deepEqual([...concepts].sort(),model.concepts.map(c=>c.id).sort());assert.deepEqual([...relations].sort(),model.relations.map(r=>r.id).sort());
- assert(host.querySelectorAll('.structure-item').length<=model.relations.length*2+graph.roots.length,'complete expansion is bounded');
+ assert(host.querySelectorAll('.structure-item').length<=model.relations.length+graph.roots.length,'complete expansion is bounded');
+ assert.equal(host.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"],[data-relation-direction="unknownIn"]').length,0);
  const search=host.querySelector('input[type=search]');search.value='手順行';search.dispatchEvent(new w.Event('input'));
  assert([...host.querySelectorAll('[data-concept-id="n-step"]')].some(el=>!el.hidden),'search retains matching structure');
  search.value='';search.dispatchEvent(new w.Event('input'));assert(host.querySelector('[data-concept-id="n-activity"]'),'clearing search restores the tree');
  const disconnected=structuredClone(formatModel);disconnected.concepts.push(concept('isolated','未接続'));w.Explorer.renderStructureExplorer(host,disconnected);
  assert.match(host.textContent,/この起点からたどれない構造：1件/,'the missing-structure notice remains available without the side panel');
+ const incomingOnly=structuredClone(formatModel);incomingOnly.concepts.push(concept('outside','外部'));
+ incomingOnly.relations.push(rel('incoming-only','outside','fmt-package','1','1','reference'));
+ const incomingGraph=structureGraph(incomingOnly);assert(!incomingGraph.reachable.has('outside'),'an inverse-only path is not treated as visible');
+ assert(incomingGraph.edges.get('fmt-package').some(edge=>edge.relation.id==='incoming-only'&&edge.direction==='referencedBy'),'the hidden inverse relation remains available internally');
+ w.Explorer.renderStructureExplorer(host,incomingOnly);assert.match(host.textContent,/この起点からたどれない構造：1件/);
  w.Explorer.renderStructureExplorer(host,missing);assert.match(host.textContent,/JSON全体のルートをこの構造モデルから一意に特定できません/);
  w.Explorer.renderStructureExplorer(host,formatModel);
  assert.equal(host.querySelector('.structure-root > .structure-item').dataset.conceptId,'fmt-package','the 0.7 package is the actual starting point');
@@ -123,10 +133,10 @@ try{
  host.querySelector('.structure-toolbar button').click();
  assert.equal(new Set([...host.querySelectorAll('[data-concept-id]')].map(el=>el.dataset.conceptId)).size,24);
  assert.equal(new Set([...host.querySelectorAll('[data-relation-id]')].map(el=>el.dataset.relationId)).size,39);
- assert(host.querySelectorAll('.structure-item').length<=formatModel.relations.length*2+1,'package expansion terminates despite references');
+ assert(host.querySelectorAll('.structure-item').length<=formatModel.relations.length+1,'package expansion terminates despite references');
  const cycle={...structuredClone(sample),concepts:[concept('x','X'),concept('y','Y')],relations:[rel('xy','x','y','1','1','down'),rel('yx','y','x','1','1','down')],meta:{fieldMappings:[]}};
  w.Explorer.renderStructureExplorer(host,cycle);assert.match(host.textContent,/所有関係の起点を特定できない/);host.querySelector('.structure-toolbar button').click();
- assert(host.querySelectorAll('.structure-item').length<=cycle.relations.length*2+2,'a cycle without ownership roots does not expand forever');
+ assert(host.querySelectorAll('.structure-item').length<=cycle.relations.length+2,'a cycle without ownership roots does not expand forever');
  w.Explorer.renderStructureExplorer(host,{...structuredClone(sample),concepts:[],relations:[]});assert.match(host.textContent,/概念がありません/);
 }finally{w.close();}
 coverage([...covered]);for(const path of Object.keys(authorities))verifyAuthority(path,readFileSync(path));assert.equal(hash(readFileSync('../business-design/alder/json-normalized-model-review.json')),hash(source));assert.equal(hash(readFileSync('../business-design/alder/json-structure-review.json')),hash(formatSource));
