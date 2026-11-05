@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "normalized-model-review-5",
+  "revision": "normalized-model-review-6",
   "documents": [
     {
       "id": "alder-design",
@@ -949,7 +949,7 @@
       "id": "alder-normalized-model-study",
       "kind": "conceptModel",
       "schemaVersion": "0.1",
-      "revision": "normalized-study-5",
+      "revision": "normalized-study-6",
       "basedOn": {
         "documentId": "alder-design",
         "revision": "alder-design-1",
@@ -976,7 +976,7 @@
       "concepts": [
         {
           "id": "n-bd",
-          "name": "業務設計書（Business Design）",
+          "name": "業務設計書（BusinessDesign）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1047,7 +1047,7 @@
             },
             {
               "id": "n-activity-field-4",
-              "name": "範囲"
+              "name": "システム化対象"
             },
             {
               "id": "n-activity-field-5",
@@ -1080,7 +1080,7 @@
             },
             {
               "id": "n-object-field-3",
-              "name": "範囲"
+              "name": "システム化対象"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
@@ -1092,7 +1092,7 @@
         },
         {
           "id": "n-information",
-          "name": "情報項目（Information）",
+          "name": "情報項目（InformationItem）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1101,7 +1101,7 @@
             },
             {
               "id": "n-information-field-2",
-              "name": "名前"
+              "name": "項目名"
             },
             {
               "id": "n-information-field-3",
@@ -1117,7 +1117,7 @@
         },
         {
           "id": "n-data",
-          "name": "情報のまとまり（Data）",
+          "name": "情報項目グループ（InformationGroup）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1126,7 +1126,7 @@
             },
             {
               "id": "n-data-field-2",
-              "name": "名前"
+              "name": "グループ名"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
@@ -1138,12 +1138,12 @@
         },
         {
           "id": "n-dataitem",
-          "name": "Data項目（DataItem）",
+          "name": "グループ構成項目（InformationGroupMember）",
           "subsystemId": "format-review",
           "information": [
             {
               "id": "n-dataitem-field-1",
-              "name": "情報のまとまり"
+              "name": "情報項目グループ"
             },
             {
               "id": "n-dataitem-field-2",
@@ -1151,7 +1151,7 @@
             },
             {
               "id": "n-dataitem-field-3",
-              "name": "条件"
+              "name": "含める条件"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
@@ -1200,7 +1200,7 @@
         },
         {
           "id": "n-exchange",
-          "name": "受渡し（Interaction）",
+          "name": "受渡し（StepInteraction）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1237,7 +1237,7 @@
         },
         {
           "id": "n-party",
-          "name": "操作主体・対象（Party）",
+          "name": "手順の当事者（StepParty）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1246,11 +1246,11 @@
             },
             {
               "id": "n-party-field-2",
-              "name": "主体または対象"
+              "name": "From／To"
             },
             {
               "id": "n-party-field-3",
-              "name": "主体の種類"
+              "name": "当事者の種類"
             },
             {
               "id": "n-party-field-4",
@@ -1266,7 +1266,7 @@
         },
         {
           "id": "n-dependency",
-          "name": "手順の前提（Dependency）",
+          "name": "手順の前提（StepDependency）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1291,7 +1291,7 @@
         },
         {
           "id": "n-order",
-          "name": "旧順序規則（OrderRule）",
+          "name": "旧順序規則（StepOrderRule）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1320,7 +1320,7 @@
         },
         {
           "id": "n-result",
-          "name": "業務結果（Activity Result）",
+          "name": "業務結果（ActivityResult）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1345,7 +1345,7 @@
         },
         {
           "id": "n-decision",
-          "name": "判定表（Decision）",
+          "name": "判定表（DecisionTable）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1378,7 +1378,7 @@
         },
         {
           "id": "n-axis",
-          "name": "判定軸（Decision Axis）",
+          "name": "判定軸（DecisionAxis）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1391,7 +1391,7 @@
             },
             {
               "id": "n-axis-field-3",
-              "name": "条件名"
+              "name": "判定軸の名前"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
@@ -1403,7 +1403,7 @@
         },
         {
           "id": "n-row",
-          "name": "判定行（Decision Row）",
+          "name": "判定行（DecisionRow）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1432,7 +1432,7 @@
         },
         {
           "id": "n-condition",
-          "name": "条件セル（Condition）",
+          "name": "判定条件セル（DecisionCondition）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1465,7 +1465,7 @@
         },
         {
           "id": "n-rowcheck",
-          "name": "判定行とCheckの対応",
+          "name": "判定行とチェックの対応（DecisionRowCheck）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1490,7 +1490,7 @@
         },
         {
           "id": "n-exception",
-          "name": "例外（Exception）",
+          "name": "業務の例外（ActivityException）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1519,7 +1519,7 @@
         },
         {
           "id": "n-continuity",
-          "name": "中断・再開（Continuity）",
+          "name": "中断・再開（InterruptionHandling）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1540,7 +1540,7 @@
             },
             {
               "id": "n-continuity-field-5",
-              "name": "再開方法"
+              "name": "再開時の操作"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
@@ -1552,7 +1552,7 @@
         },
         {
           "id": "n-relation",
-          "name": "入出力の関係（Relation）",
+          "name": "業務・対象の関係（BusinessRelation）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1581,7 +1581,7 @@
         },
         {
           "id": "n-finding",
-          "name": "確認事項（Finding）",
+          "name": "設計上の確認事項（DesignFinding）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1610,7 +1610,7 @@
         },
         {
           "id": "n-external",
-          "name": "外部業務設計書目録",
+          "name": "外部業務設計書の目録項目（ExternalBusinessDesignCatalogEntry）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1631,7 +1631,7 @@
         },
         {
           "id": "n-checkdoc",
-          "name": "チェック文書（Check Items）",
+          "name": "チェック文書（CheckDocument）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1656,7 +1656,7 @@
         },
         {
           "id": "n-check",
-          "name": "チェック項目（Check）",
+          "name": "チェック項目（CheckItem）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1713,7 +1713,7 @@
           "toConceptId": "n-who",
           "fromPerTarget": "0..N",
           "toPerSource": "0..1",
-          "condition": "Activity.whoId。未決はNULLであり、主体がいないと確定したことを示さない。",
+          "condition": "未決はNULLであり、主体がいないと確定したことを示さない。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -1739,7 +1739,7 @@
           "toConceptId": "n-information",
           "fromPerTarget": "1",
           "toPerSource": "0..N",
-          "condition": "情報項目の所属。",
+          "condition": "対象が持つ情報項目。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -1752,7 +1752,7 @@
           "toConceptId": "n-data",
           "fromPerTarget": "1",
           "toPerSource": "0..N",
-          "condition": "業務設計書がDataを持つ。",
+          "condition": "業務で扱う情報項目を目的に応じてまとめる。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -1765,7 +1765,7 @@
           "toConceptId": "n-dataitem",
           "fromPerTarget": "1",
           "toPerSource": "1..N",
-          "condition": "Dataを構成する項目。",
+          "condition": "グループに含める情報項目と、必要な条件。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -1778,7 +1778,7 @@
           "toConceptId": "n-information",
           "fromPerTarget": "0..N",
           "toPerSource": "1",
-          "condition": "dataItems.informationId。",
+          "condition": "グループに含める情報項目。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -1869,7 +1869,7 @@
           "toConceptId": "n-party",
           "fromPerTarget": "1",
           "toPerSource": "0..2",
-          "condition": "partiesが指定された場合に、主体側・対象側のうち記録された側を保持する。",
+          "condition": "手順のFrom／Toのうち、記録された側を保持する。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -1895,7 +1895,7 @@
           "toConceptId": "n-object",
           "fromPerTarget": "0..N",
           "toPerSource": "1",
-          "condition": "stepInteractions.objectId。",
+          "condition": "受渡しの相手となる対象。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -1908,7 +1908,7 @@
           "toConceptId": "n-relation",
           "fromPerTarget": "0..N",
           "toPerSource": "0..1",
-          "condition": "stepInteractions.relationId。",
+          "condition": "受渡しに対応する入出力の関係。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -1934,7 +1934,7 @@
           "toConceptId": "n-data",
           "fromPerTarget": "0..N",
           "toPerSource": "0..N",
-          "condition": "stepTargetDataで操作対象のDataを参照する。",
+          "condition": "手順の操作対象として扱う情報項目グループ。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -1947,7 +1947,7 @@
           "toConceptId": "n-data",
           "fromPerTarget": "0..N",
           "toPerSource": "0..N",
-          "condition": "interactionDataで受渡しのDataを参照する。",
+          "condition": "受け渡す情報項目グループ。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -2051,7 +2051,7 @@
           "toConceptId": "n-data",
           "fromPerTarget": "0..N",
           "toPerSource": "0..N",
-          "condition": "axisDataが判定軸と対象Dataを対応付ける。",
+          "condition": "判定軸が参照する情報項目グループ。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -2129,7 +2129,7 @@
           "toConceptId": "n-data",
           "fromPerTarget": "0..N",
           "toPerSource": "0..N",
-          "condition": "resultDataで判定結果のDataを参照する。",
+          "condition": "判定結果に関連する情報項目グループ。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -2194,7 +2194,7 @@
           "toConceptId": "n-data",
           "fromPerTarget": "0..N",
           "toPerSource": "0..N",
-          "condition": "continuityDataは中断時に保持するDataを参照する。",
+          "condition": "中断時に保持する情報項目グループ。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -2246,7 +2246,7 @@
           "toConceptId": "n-relation",
           "fromPerTarget": "1",
           "toPerSource": "0..N",
-          "condition": "入出力等の関係を保持する。",
+          "condition": "入出力や例外に関する業務・対象の関係。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -3107,22 +3107,22 @@
           "nr-who-activity": "実行主体",
           "nr-bd-object": "対象",
           "nr-object-information": "情報項目",
-          "nr-bd-data": "情報のまとまり",
-          "nr-data-dataitem": "構成する項目",
-          "nr-dataitem-information": "構成する情報項目",
+          "nr-bd-data": "情報項目グループ",
+          "nr-data-dataitem": "構成項目",
+          "nr-dataitem-information": "情報項目",
           "nr-activity-step": "手順",
           "nr-activity-result": "業務結果",
           "nr-activity-decision": "判定表",
           "nr-activity-exception": "例外",
           "nr-activity-order": "旧順序規則",
           "nr-step-exchange": "受渡し",
-          "nr-step-party": "操作主体・対象",
+          "nr-step-party": "手順の当事者",
           "nr-party-object": "対象",
           "nr-exchange-object": "受渡しの相手",
           "nr-exchange-relation": "入出力の関係",
           "nr-exchange-pair": "対応する手順",
-          "nr-step-data": "操作対象データ",
-          "nr-exchange-data": "受渡しデータ",
+          "nr-step-data": "操作対象の項目グループ",
+          "nr-exchange-data": "受け渡す項目グループ",
           "nr-step-dependency": "手順の前提",
           "nr-dependency-step": "前提の手順",
           "nr-step-decision": "参照する判定表",
@@ -3130,36 +3130,36 @@
           "nr-dependency-when": "条件となる判定行",
           "nr-decision-when": "適用する判定行",
           "nr-decision-axis": "判定軸",
-          "nr-axis-data": "判定対象データ",
+          "nr-axis-data": "判定対象の項目グループ",
           "nr-decision-row": "判定行",
           "nr-row-condition": "条件セル",
           "nr-condition-axis": "判定軸",
           "nr-row-checklink": "チェック項目との対応",
           "nr-checklink-check": "チェック項目",
-          "nr-row-data": "判定結果のデータ",
+          "nr-row-data": "判定結果の項目グループ",
           "nr-row-exception": "判定結果の例外",
           "nr-exception-continuity": "中断・再開",
           "nr-continuity-interrupted": "中断時の手順",
           "nr-continuity-resume": "再開時の手順",
-          "nr-continuity-data": "保持するデータ",
+          "nr-continuity-data": "保持する項目グループ",
           "nr-order-before": "前の手順",
           "nr-order-after": "後の手順",
           "nr-order-member": "対象手順",
-          "nr-bd-relation": "入出力の関係",
+          "nr-bd-relation": "業務・対象の関係",
           "nr-relation-from-activity": "出発点の業務",
           "nr-relation-to-activity": "到着点の業務",
           "nr-relation-from-object": "出発点の対象",
           "nr-relation-to-object": "到着点の対象",
-          "nr-bd-finding": "確認事項",
+          "nr-bd-finding": "設計上の確認事項",
           "nr-finding-activity": "対象業務",
           "nr-finding-object": "対象オブジェクト",
           "nr-bd-checkdoc": "原典の業務設計書",
-          "nr-external-checkdoc": "原典の外部業務設計書目録",
+          "nr-external-checkdoc": "原典の外部業務設計書の目録項目",
           "nr-checkdoc-check": "チェック項目"
         },
         "conceptNames": {
           "n-bd": {
-            "typeName": "Business Design",
+            "typeName": "BusinessDesign",
             "logicalName": "業務設計書"
           },
           "n-who": {
@@ -3175,87 +3175,87 @@
             "logicalName": "対象"
           },
           "n-information": {
-            "typeName": "Information",
+            "typeName": "InformationItem",
             "logicalName": "情報項目"
           },
           "n-data": {
-            "typeName": "Data",
-            "logicalName": "情報のまとまり"
+            "typeName": "InformationGroup",
+            "logicalName": "情報項目グループ"
           },
           "n-dataitem": {
-            "typeName": "DataItem",
-            "logicalName": "Data項目"
+            "typeName": "InformationGroupMember",
+            "logicalName": "グループ構成項目"
           },
           "n-step": {
             "typeName": "Step",
             "logicalName": "手順行"
           },
           "n-exchange": {
-            "typeName": "Interaction",
+            "typeName": "StepInteraction",
             "logicalName": "受渡し"
           },
           "n-party": {
-            "typeName": "Party",
-            "logicalName": "操作主体・対象"
+            "typeName": "StepParty",
+            "logicalName": "手順の当事者"
           },
           "n-dependency": {
-            "typeName": "Dependency",
+            "typeName": "StepDependency",
             "logicalName": "手順の前提"
           },
           "n-order": {
-            "typeName": "OrderRule",
+            "typeName": "StepOrderRule",
             "logicalName": "旧順序規則"
           },
           "n-result": {
-            "typeName": "Activity Result",
+            "typeName": "ActivityResult",
             "logicalName": "業務結果"
           },
           "n-decision": {
-            "typeName": "Decision",
+            "typeName": "DecisionTable",
             "logicalName": "判定表"
           },
           "n-axis": {
-            "typeName": "Decision Axis",
+            "typeName": "DecisionAxis",
             "logicalName": "判定軸"
           },
           "n-row": {
-            "typeName": "Decision Row",
+            "typeName": "DecisionRow",
             "logicalName": "判定行"
           },
           "n-condition": {
-            "typeName": "Condition",
-            "logicalName": "条件セル"
+            "typeName": "DecisionCondition",
+            "logicalName": "判定条件セル"
           },
           "n-rowcheck": {
-            "typeName": "判定行とCheckの対応",
-            "logicalName": "判定行とCheckの対応"
+            "typeName": "DecisionRowCheck",
+            "logicalName": "判定行とチェックの対応"
           },
           "n-exception": {
-            "typeName": "Exception",
-            "logicalName": "例外"
+            "typeName": "ActivityException",
+            "logicalName": "業務の例外"
           },
           "n-continuity": {
-            "typeName": "Continuity",
+            "typeName": "InterruptionHandling",
             "logicalName": "中断・再開"
           },
           "n-relation": {
-            "typeName": "Relation",
-            "logicalName": "入出力の関係"
+            "typeName": "BusinessRelation",
+            "logicalName": "業務・対象の関係"
           },
           "n-finding": {
-            "typeName": "Finding",
-            "logicalName": "確認事項"
+            "typeName": "DesignFinding",
+            "logicalName": "設計上の確認事項"
           },
           "n-external": {
-            "typeName": "外部業務設計書目録",
-            "logicalName": "外部業務設計書目録"
+            "typeName": "ExternalBusinessDesignCatalogEntry",
+            "logicalName": "外部業務設計書の目録項目"
           },
           "n-checkdoc": {
-            "typeName": "Check Items",
+            "typeName": "CheckDocument",
             "logicalName": "チェック文書"
           },
           "n-check": {
-            "typeName": "Check",
+            "typeName": "CheckItem",
             "logicalName": "チェック項目"
           }
         }
@@ -3269,7 +3269,7 @@
               "id": "overview-n-bd",
               "conceptId": "n-bd",
               "subsystemId": "format-review",
-              "name": "業務設計書（Business Design）",
+              "name": "業務設計書（BusinessDesign）",
               "description": "候補の businessDesigns。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3334,7 +3334,7 @@
                   "informationId": "n-activity-field-3"
                 },
                 {
-                  "name": "範囲",
+                  "name": "システム化対象",
                   "informationId": "n-activity-field-4"
                 },
                 {
@@ -3364,7 +3364,7 @@
                   "informationId": "n-object-field-2"
                 },
                 {
-                  "name": "範囲",
+                  "name": "システム化対象",
                   "informationId": "n-object-field-3"
                 }
               ]
@@ -3373,7 +3373,7 @@
               "id": "overview-n-information",
               "conceptId": "n-information",
               "subsystemId": "format-review",
-              "name": "情報項目（Information）",
+              "name": "情報項目（InformationItem）",
               "description": "候補の information。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3382,7 +3382,7 @@
                   "informationId": "n-information-field-1"
                 },
                 {
-                  "name": "名前",
+                  "name": "項目名",
                   "informationId": "n-information-field-2"
                 },
                 {
@@ -3395,7 +3395,7 @@
               "id": "overview-n-data",
               "conceptId": "n-data",
               "subsystemId": "format-review",
-              "name": "情報のまとまり（Data）",
+              "name": "情報項目グループ（InformationGroup）",
               "description": "候補の data。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3404,7 +3404,7 @@
                   "informationId": "n-data-field-1"
                 },
                 {
-                  "name": "名前",
+                  "name": "グループ名",
                   "informationId": "n-data-field-2"
                 }
               ]
@@ -3447,7 +3447,7 @@
               "id": "overview-n-result",
               "conceptId": "n-result",
               "subsystemId": "format-review",
-              "name": "業務結果（Activity Result）",
+              "name": "業務結果（ActivityResult）",
               "description": "候補の results。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3469,7 +3469,7 @@
               "id": "overview-n-decision",
               "conceptId": "n-decision",
               "subsystemId": "format-review",
-              "name": "判定表（Decision）",
+              "name": "判定表（DecisionTable）",
               "description": "候補の decisions。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3499,7 +3499,7 @@
               "id": "overview-n-row",
               "conceptId": "n-row",
               "subsystemId": "format-review",
-              "name": "判定行（Decision Row）",
+              "name": "判定行（DecisionRow）",
               "description": "候補の rows。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3525,7 +3525,7 @@
               "id": "overview-n-external",
               "conceptId": "n-external",
               "subsystemId": "format-review",
-              "name": "外部業務設計書目録",
+              "name": "外部業務設計書の目録項目（ExternalBusinessDesignCatalogEntry）",
               "description": "候補の source.externalDocuments。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3543,7 +3543,7 @@
               "id": "overview-n-checkdoc",
               "conceptId": "n-checkdoc",
               "subsystemId": "format-review",
-              "name": "チェック文書（Check Items）",
+              "name": "チェック文書（CheckDocument）",
               "description": "候補の retained Check document。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [
@@ -3565,7 +3565,7 @@
               "id": "overview-n-check",
               "conceptId": "n-check",
               "subsystemId": "format-review",
-              "name": "チェック項目（Check）",
+              "name": "チェック項目（CheckItem）",
               "description": "候補の retained Check.items。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [

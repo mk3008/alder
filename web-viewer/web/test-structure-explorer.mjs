@@ -28,9 +28,32 @@ assert.throws(()=>coverage(checks.slice(1)),/each requirement/);assert.throws(()
 assert.throws(()=>classCoverage(classChecks.slice(1)),/each class-view requirement/);assert.throws(()=>classCoverage([...classChecks,classChecks[0]]),/class-view requirement|duplicated/);
 
 const source=readFileSync('../business-design/alder/json-normalized-model-review.json');
+// Reconstruct the last review model using only the previous display names and
+// descriptions. This keeps the earlier full-model hashes as preservation
+// checks, rather than dropping them when reviewing a new naming proposal.
+const namingPreviousBytes=readFileSync('verification/structure-explorer-naming-previous.json');
+assert.equal(hash(namingPreviousBytes),'01939651155a3cb0c9044d2267e548977e39f32ad76adc8e7f86798416806cd1');
+const namingPrevious=JSON.parse(namingPreviousBytes);
+const previousNaming=JSON.parse(source),previousNamingModel=previousNaming.documents.find(d=>d.kind==='conceptModel');
+Object.assign(previousNamingModel.meta.conceptNames,namingPrevious.conceptNames);
+Object.assign(previousNamingModel.meta.relationNames,namingPrevious.relationNames);
+for(const concept of previousNamingModel.concepts){
+ const {typeName,logicalName}=previousNamingModel.meta.conceptNames[concept.id];
+ concept.name=typeName===logicalName?logicalName:`${logicalName}（${typeName}）`;
+ for(const field of concept.information)if(Object.hasOwn(namingPrevious.fields,field.id))field.name=namingPrevious.fields[field.id];
+}
+for(const relation of previousNamingModel.relations)if(Object.hasOwn(namingPrevious.relationConditions,relation.id))relation.condition=namingPrevious.relationConditions[relation.id];
+const priorConcepts=new Map(previousNamingModel.concepts.map(concept=>[concept.id,concept]));
+for(const node of previousNamingModel.presentation.subsystemViews.nodes){
+ const concept=priorConcepts.get(node.conceptId);node.name=concept.name;
+ const fields=new Map(concept.information.map(field=>[field.id,field.name]));
+ for(const field of node.fields)field.name=fields.get(field.informationId);
+}
+previousNaming.revision='normalized-model-review-5';previousNamingModel.revision='normalized-study-5';
+assert.equal(hash(JSON.stringify(previousNaming,null,2)+'\n'),'e6130d9d2cae5644d62c66fcfa1f9902f82445c46635c3fb30130f7f8f1460c5','only the recorded candidate names, field labels, relation descriptions and revisions changed');
 // Restore only the approved relationship-key/sample metadata and revisions
 // before comparing with the earlier immutable model. Other data must not drift.
-const preserved=JSON.parse(source),preservedModel=preserved.documents.find(d=>d.kind==='conceptModel');
+const preserved=structuredClone(previousNaming),preservedModel=preserved.documents.find(d=>d.kind==='conceptModel');
 preserved.revision='normalized-model-review-3';preservedModel.revision='normalized-study-3';
 for(const mapping of preservedModel.meta.fieldMappings){delete mapping.representation;delete mapping.relationKeyIds;delete mapping.sampleValue;delete mapping.sampleKind;delete mapping.referenceValue;}
 delete preservedModel.meta.relationPhysicalFields;

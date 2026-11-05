@@ -30,6 +30,11 @@ for(const concept of normalized.concepts){
  assert.equal(concept.name,typeName===logicalName?logicalName:`${logicalName}（${typeName}）`,'legacy diagram label and authored names agree: '+concept.id);
 }
 assert.deepEqual(declaredNames['n-who'],{typeName:'Who',logicalName:'主体'});
+assert.deepEqual(declaredNames['n-information'],{typeName:'InformationItem',logicalName:'情報項目'});
+assert.deepEqual(declaredNames['n-data'],{typeName:'InformationGroup',logicalName:'情報項目グループ'});
+assert.deepEqual(declaredNames['n-dataitem'],{typeName:'InformationGroupMember',logicalName:'グループ構成項目'});
+assert.deepEqual(declaredNames['n-decision'],{typeName:'DecisionTable',logicalName:'判定表'});
+assert.deepEqual(declaredNames['n-relation'],{typeName:'BusinessRelation',logicalName:'業務・対象の関係'});
 const source=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
 const window=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 const covered=[];
@@ -39,6 +44,15 @@ try{
  const open=details=>{details.open=true;details.dispatchEvent(new window.Event('toggle'));};
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
  const pairs=summary=>[...summary.querySelectorAll(':scope > .structure-element')].map(node=>[node.querySelector('strong').textContent,node.querySelector('.structure-element-type').textContent]);
+
+ render(normalized,'n-data');
+ assert.deepEqual(pairs(row('nr-data-dataitem')),[['構成項目','型：InformationGroupMember']]);
+ assert.match(host.textContent,/グループ名/);
+ render(normalized,'n-dataitem');
+ assert.deepEqual(pairs(row('nr-dataitem-information')),[['情報項目','型：InformationItem']]);
+ assert.match(host.textContent,/含める条件/);
+ render(normalized,'n-party');assert.match(host.textContent,/From／To/);assert.match(host.textContent,/当事者の種類/);
+ render(normalized,'n-activity');assert.match(host.textContent,/システム化対象/);
 
  render(normalized,'n-step');
  const root=host.querySelector('.structure-root > .structure-item > details > summary');
@@ -54,13 +68,13 @@ try{
  assert.match(paired.title,/stepInteractions\.pairedStepId/,'the full physical mapping remains available');
  assert.match(paired.textContent,/対応手順。/,'the relation description remains available');
  assert.equal(paired.querySelector('.structure-count').textContent,'0..1');
- assert.deepEqual(pairs(row('nr-step-data')),[['操作対象データ','型：Data']],'the authored conceptual name is shown without inventing an array');
+ assert.deepEqual(pairs(row('nr-step-data')),[['操作対象の項目グループ','型：InformationGroup']],'the authored conceptual name is shown without inventing an array');
  assert.equal(row('nr-step-data').querySelector('.structure-count').textContent,'0..N');
  const search=host.querySelector('input[type=search]');search.value='対応する手順';search.dispatchEvent(new window.Event('input'));
  assert([...host.querySelectorAll('[data-relation-id="nr-exchange-pair"]')].some(item=>!item.hidden),'search includes the source element name');
  search.value='';search.dispatchEvent(new window.Event('input'));
  const withoutNames=structuredClone(normalized);delete withoutNames.meta.relationNames;render(withoutNames,'n-step');
- assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：Data']],'missing relation names are still not inferred');
+ assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：InformationGroup']],'missing relation names are still not inferred');
  covered.push('STRUCTURE-LABEL-001');
 
  render(physical,'fmt-package');
@@ -86,6 +100,8 @@ try{
  render(normalized,'n-activity');
  assert.deepEqual(pairs(row('nr-who-activity')),[['実行主体','型：Who']],'a different reference to the same type retains its role');
  render(normalized,'n-row');
+ assert.deepEqual(pairs(row('nr-row-checklink')),[['チェック項目との対応','型：DecisionRowCheck']]);
+ const japaneseType=structuredClone(normalized);japaneseType.meta.conceptNames['n-rowcheck']={typeName:'判定行とCheckの対応',logicalName:'判定行とCheckの対応'};render(japaneseType,'n-row');
  assert.deepEqual(pairs(row('nr-row-checklink')),[['チェック項目との対応','型：判定行とCheckの対応']],'a type without an English name keeps its declared name');
  const changed=structuredClone(normalized);changed.meta.conceptNames['n-who']={typeName:'主体（Admin）',logicalName:'共有する主体'};render(changed,'n-bd');
  assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：主体（Admin）']],'the explicitly declared type is used without splitting, even when it contains parentheses');

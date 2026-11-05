@@ -24,13 +24,13 @@ assert.equal(Object.keys(names).length,54);
 for(const relation of normalized.relations)assert.equal(typeof names[relation.id]==='string'&&!!names[relation.id].trim(),true,relation.id);
 for(const concept of normalized.concepts){const siblings=normalized.relations.filter(r=>r.fromConceptId===concept.id).map(r=>names[r.id]);assert.equal(new Set(siblings).size,siblings.length,'different roles from one source remain distinguishable: '+concept.id);}
 const exemplars={
- 'nr-bd-activity':'業務','nr-who-activity':'実行主体','nr-activity-step':'手順','nr-step-data':'操作対象データ',
- 'nr-exchange-data':'受渡しデータ','nr-exchange-pair':'対応する手順','nr-dependency-step':'前提の手順',
+ 'nr-bd-activity':'業務','nr-who-activity':'実行主体','nr-activity-step':'手順','nr-step-data':'操作対象の項目グループ',
+ 'nr-exchange-data':'受け渡す項目グループ','nr-exchange-pair':'対応する手順','nr-dependency-step':'前提の手順',
  'nr-continuity-interrupted':'中断時の手順','nr-continuity-resume':'再開時の手順',
  'nr-order-before':'前の手順','nr-order-after':'後の手順','nr-order-member':'対象手順',
  'nr-relation-from-activity':'出発点の業務','nr-relation-to-activity':'到着点の業務',
  'nr-relation-from-object':'出発点の対象','nr-relation-to-object':'到着点の対象',
- 'nr-bd-checkdoc':'原典の業務設計書','nr-external-checkdoc':'原典の外部業務設計書目録'
+ 'nr-bd-checkdoc':'原典の業務設計書','nr-external-checkdoc':'原典の外部業務設計書の目録項目'
 };
 for(const [id,name] of Object.entries(exemplars))assert.equal(names[id],name,id+' expresses the corresponding role');
 const graph=structureGraph(normalized);
@@ -47,7 +47,7 @@ try{
  const pairs=s=>[...s.querySelectorAll(':scope > .structure-element')].map(n=>[n.querySelector('strong').textContent,n.querySelector('.structure-element-type').textContent]);
  const changed=structuredClone(normalized);changed.meta.relationNames['nr-step-data']='モデルに記録した操作対象';
  render(changed,'n-step');
- assert.deepEqual(pairs(row('nr-step-data')),[['モデルに記録した操作対象','型：Data']],'the loaded model is the source of the name');
+ assert.deepEqual(pairs(row('nr-step-data')),[['モデルに記録した操作対象','型：InformationGroup']],'the loaded model is the source of the name');
  const search=host.querySelector('input[type=search]');search.value='モデルに記録した操作対象';search.dispatchEvent(new w.Event('input'));
  assert([...host.querySelectorAll('[data-relation-id="nr-step-data"]')].some(item=>!item.hidden),'search indexes the conceptual name');
  assert(host.querySelectorAll('.structure-item').length<=normalized.relations.length+1,'search stops at repeated structures');
@@ -65,11 +65,11 @@ try{
  covered.push('STRUCTURE-NAME-002');
 
  const missing=structuredClone(normalized);delete missing.meta.relationNames;
- render(missing,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：Data']]);
+ render(missing,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：InformationGroup']]);
  render(missing,'n-exchange');assert.deepEqual(pairs(row('nr-exchange-pair')),[['対応する手順','型：Step']],'existing explicit field mappings remain a valid fallback');
  const invalid=structuredClone(normalized);invalid.meta.relationNames['nr-exchange-pair']=42;render(invalid,'n-exchange');
  assert.deepEqual(pairs(row('nr-exchange-pair')),[['対応する手順','型：Step']],'a non-string conceptual name does not override a valid field mapping');
- invalid.meta.relationNames['nr-step-data']=' ';render(invalid,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：Data']]);
+ invalid.meta.relationNames['nr-step-data']=' ';render(invalid,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：InformationGroup']]);
  render(physical,'fmt-package');assert.deepEqual(pairs(row('rel-package-bd')),[['文書一覧','型：業務設計書（Business Design）[]']]);
  const multi=structuredClone(physical);multi.meta.relationNames={'rel-order-step':'順序規則の手順'};render(multi,'fmt-order');
  assert.deepEqual(pairs(row('rel-order-step')),[['順序規則の手順','型：手順行（Step）'],['前後の手順','型：手順行（Step）'],['対象手順','型：手順行（Step）[]']],'conceptual names do not erase multiple physical field names or array information');
