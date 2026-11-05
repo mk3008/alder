@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "normalized-model-review-2",
+  "revision": "normalized-model-review-3",
   "documents": [
     {
       "id": "alder-design",
@@ -949,7 +949,7 @@
       "id": "alder-normalized-model-study",
       "kind": "conceptModel",
       "schemaVersion": "0.1",
-      "revision": "normalized-study-2",
+      "revision": "normalized-study-3",
       "basedOn": {
         "documentId": "alder-design",
         "revision": "alder-design-1",
@@ -2945,6 +2945,108 @@
           "nr-bd-checkdoc": "原典の業務設計書",
           "nr-external-checkdoc": "原典の外部業務設計書目録",
           "nr-checkdoc-check": "チェック項目"
+        },
+        "conceptNames": {
+          "n-bd": {
+            "typeName": "Business Design",
+            "logicalName": "業務設計書"
+          },
+          "n-who": {
+            "typeName": "Who",
+            "logicalName": "主体"
+          },
+          "n-activity": {
+            "typeName": "Activity",
+            "logicalName": "業務"
+          },
+          "n-object": {
+            "typeName": "Object",
+            "logicalName": "対象"
+          },
+          "n-information": {
+            "typeName": "Information",
+            "logicalName": "情報項目"
+          },
+          "n-data": {
+            "typeName": "Data",
+            "logicalName": "情報のまとまり"
+          },
+          "n-dataitem": {
+            "typeName": "DataItem",
+            "logicalName": "Data項目"
+          },
+          "n-step": {
+            "typeName": "Step",
+            "logicalName": "手順行"
+          },
+          "n-exchange": {
+            "typeName": "Interaction",
+            "logicalName": "受渡し"
+          },
+          "n-party": {
+            "typeName": "Party",
+            "logicalName": "操作主体・対象"
+          },
+          "n-dependency": {
+            "typeName": "Dependency",
+            "logicalName": "手順の前提"
+          },
+          "n-order": {
+            "typeName": "OrderRule",
+            "logicalName": "旧順序規則"
+          },
+          "n-result": {
+            "typeName": "Activity Result",
+            "logicalName": "業務結果"
+          },
+          "n-decision": {
+            "typeName": "Decision",
+            "logicalName": "判定表"
+          },
+          "n-axis": {
+            "typeName": "Decision Axis",
+            "logicalName": "判定軸"
+          },
+          "n-row": {
+            "typeName": "Decision Row",
+            "logicalName": "判定行"
+          },
+          "n-condition": {
+            "typeName": "Condition",
+            "logicalName": "条件セル"
+          },
+          "n-rowcheck": {
+            "typeName": "判定行とCheckの対応",
+            "logicalName": "判定行とCheckの対応"
+          },
+          "n-exception": {
+            "typeName": "Exception",
+            "logicalName": "例外"
+          },
+          "n-continuity": {
+            "typeName": "Continuity",
+            "logicalName": "中断・再開"
+          },
+          "n-relation": {
+            "typeName": "Relation",
+            "logicalName": "入出力の関係"
+          },
+          "n-finding": {
+            "typeName": "Finding",
+            "logicalName": "確認事項"
+          },
+          "n-external": {
+            "typeName": "外部業務設計書目録",
+            "logicalName": "外部業務設計書目録"
+          },
+          "n-checkdoc": {
+            "typeName": "Check Items",
+            "logicalName": "チェック文書"
+          },
+          "n-check": {
+            "typeName": "Check",
+            "logicalName": "チェック項目"
+          }
         }
       },
       "presentation": {

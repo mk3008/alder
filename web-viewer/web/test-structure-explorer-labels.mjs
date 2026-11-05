@@ -5,8 +5,8 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 
 const hashes={
- 'verification/structure-explorer-labels.check-items.json':'60f3f11c43587a03b03474c7db57a1d010e350544340838282aabfc900268b4c',
- 'verification/structure-explorer.check-items.json':'d519a131dc1d4c2109513a057e4684776a75458df5877bd7c598b8138e5e7d82',
+ 'verification/structure-explorer-labels.check-items.json':'69f406e74f4acd1f96bb659944c213637a1427fd86b9a017f69bb03386d667be',
+ 'verification/structure-explorer.check-items.json':'5a296df09675564f46ea71ea6fdb3847f1324c1fedfb6fd258f1234ed55e1fbd',
  'verification/structure-explorer-tab.check-items.json':'85552428a8e1c1161eda3bd42ba498b87fb227261f152c9d51dee9c39069efa1'
 };
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -22,6 +22,14 @@ assert.throws(()=>coverage([...required,required[0]]),/every label guarantee/);
 const load=path=>JSON.parse(readFileSync(path)).documents.find(document=>document.kind==='conceptModel');
 const normalized=load('../business-design/alder/json-normalized-model-review.json');
 const physical=load('../business-design/alder/json-structure-review.json');
+const declaredNames=normalized.meta.conceptNames;
+assert.deepEqual(Object.keys(declaredNames).sort(),normalized.concepts.map(concept=>concept.id).sort(),'every candidate structure has explicitly declared names');
+assert.equal(Object.keys(declaredNames).length,25);
+for(const concept of normalized.concepts){
+ const {typeName,logicalName}=declaredNames[concept.id];assert(typeName&&logicalName,concept.id);
+ assert.equal(concept.name,typeName===logicalName?logicalName:`${logicalName}（${typeName}）`,'legacy diagram label and authored names agree: '+concept.id);
+}
+assert.deepEqual(declaredNames['n-who'],{typeName:'Who',logicalName:'主体'});
 const source=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
 const window=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 const covered=[];
@@ -34,23 +42,25 @@ try{
 
  render(normalized,'n-step');
  const root=host.querySelector('.structure-root > .structure-item > details > summary');
- assert.equal(root.querySelector(':scope > strong').textContent,'手順行（Step）');assert.equal(root.querySelector('.structure-element'),null,'a root is a type, not a child property');
+ assert.equal(root.querySelector(':scope > strong').textContent,'Step');
+ assert.equal(root.querySelector(':scope > .structure-type').textContent,'手順行','root shows the declared logical name separately');
+ assert.equal(root.querySelector('.structure-element'),null,'a root is a type, not a child property');
  const attribute=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');
  assert.match(attribute.textContent,/識別子.*型：未定義.*steps\.id/,'an attribute shows its name and known or undefined type before the original physical name');
  open(host.querySelector('[data-relation-id="nr-step-exchange"] > details'));
  const paired=row('nr-exchange-pair');
- assert.deepEqual(pairs(paired),[['対応する手順','型：手順行（Step）']]);
+ assert.deepEqual(pairs(paired),[['対応する手順','型：Step']]);
  assert.equal(paired.querySelector('.structure-edge-detail').textContent,'pairedStepId');
  assert.equal(paired.querySelector('.structure-edge-detail').title,'stepInteractions.pairedStepId');
  assert.match(paired.textContent,/対応手順。/,'the relation description remains available');
  assert.equal(paired.querySelector('.structure-count').textContent,'0..1');
- assert.deepEqual(pairs(row('nr-step-data')),[['操作対象データ','型：情報のまとまり（Data）']],'the authored conceptual name is shown without inventing an array');
+ assert.deepEqual(pairs(row('nr-step-data')),[['操作対象データ','型：Data']],'the authored conceptual name is shown without inventing an array');
  assert.equal(row('nr-step-data').querySelector('.structure-count').textContent,'0..N');
  const search=host.querySelector('input[type=search]');search.value='対応する手順';search.dispatchEvent(new window.Event('input'));
  assert([...host.querySelectorAll('[data-relation-id="nr-exchange-pair"]')].some(item=>!item.hidden),'search includes the source element name');
  search.value='';search.dispatchEvent(new window.Event('input'));
  const withoutNames=structuredClone(normalized);delete withoutNames.meta.relationNames;render(withoutNames,'n-step');
- assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：情報のまとまり（Data）']],'missing names are still not inferred for other models');
+ assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：Data']],'missing relation names are still not inferred');
  covered.push('STRUCTURE-LABEL-001');
 
  render(physical,'fmt-package');
@@ -70,19 +80,30 @@ try{
  const first=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');
  assert.match(first.textContent,/形式.*型：string.*format/,'explicit attribute types remain visible');
  render(normalized,'n-bd');
- assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：主体（Who）']],'owned role name and declared type are clearly distinguished');
+ assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：Who']],'owned role name and declared type are clearly distinguished');
+ render(normalized,'n-who');const whoRoot=host.querySelector('.structure-root > .structure-item > details > summary');
+ assert.equal(whoRoot.querySelector(':scope > strong').textContent,'Who');assert.equal(whoRoot.querySelector(':scope > .structure-type').textContent,'主体');
  render(normalized,'n-activity');
- assert.deepEqual(pairs(row('nr-who-activity')),[['実行主体','型：主体（Who）']],'a different reference to the same type retains its role');
+ assert.deepEqual(pairs(row('nr-who-activity')),[['実行主体','型：Who']],'a different reference to the same type retains its role');
  render(normalized,'n-row');
  assert.deepEqual(pairs(row('nr-row-checklink')),[['チェック項目との対応','型：判定行とCheckの対応']],'a type without an English name keeps its declared name');
- const nonEnglish=structuredClone(normalized);nonEnglish.concepts.find(concept=>concept.id==='n-who').name='主体（ロールなど）';render(nonEnglish,'n-bd');
- assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：主体（ロールなど）']],'the declared type name is not translated or shortened');
- nonEnglish.concepts.find(concept=>concept.id==='n-who').name='主体（Admin）';render(nonEnglish,'n-bd');
+ const changed=structuredClone(normalized);changed.meta.conceptNames['n-who']={typeName:'主体（Admin）',logicalName:'共有する主体'};render(changed,'n-bd');
+ assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：主体（Admin）']],'the explicitly declared type is used without splitting, even when it contains parentheses');
+ render(changed,'n-who');const changedRoot=host.querySelector('.structure-root > .structure-item > details > summary');
+ assert.equal(changedRoot.querySelector(':scope > strong').textContent,'主体（Admin）');assert.equal(changedRoot.querySelector(':scope > .structure-type').textContent,'共有する主体');
+ const searchType=host.querySelector('input[type=search]');searchType.value='共有する主体';searchType.dispatchEvent(new window.Event('input'));
+ assert([...host.querySelectorAll('[data-concept-id="n-who"]')].some(item=>!item.hidden),'search includes the declared logical name');
+ const fallback=structuredClone(normalized);delete fallback.meta.conceptNames;fallback.concepts.find(concept=>concept.id==='n-who').name='主体（ロールなど）';render(fallback,'n-bd');
+ assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：主体（ロールなど）']],'models without separate names retain their declared structure label without guessing');
+ fallback.concepts.find(concept=>concept.id==='n-who').name='主体（Admin）';render(fallback,'n-bd');
  assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：主体（Admin）']],'a parenthesized English term is not assumed to be a separate type name');
- const english=structuredClone(normalized);english.concepts.find(concept=>concept.id==='n-who').name='Who';render(english,'n-bd');
- assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：Who']],'an English-only declared type remains unchanged');
- english.meta.relationNames['nr-bd-actor']='Who';render(english,'n-bd');
+ fallback.concepts.find(concept=>concept.id==='n-who').name='Who';fallback.meta.relationNames['nr-bd-actor']='Who';render(fallback,'n-bd');
  assert.deepEqual(pairs(row('nr-bd-actor')),[['Who','型：Who']],'identical property and type names are separated by a type caption');
+ const malformed=structuredClone(normalized);malformed.meta.conceptNames['n-who']={typeName:'',logicalName:'仮の名前'};render(malformed,'n-who');
+ assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > strong').textContent,'主体（Who）','missing types use the declared original label');
+ assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > .structure-type'),null,'a logical name alone does not invent a type association');
+ const declaredInteger=structuredClone(normalized);declaredInteger.meta.fieldMappings.find(item=>item.informationId==='n-who-field-1').valueType='int';render(declaredInteger,'n-who');
+ assert.match(host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field').textContent,/識別子.*型：int.*actors\.id/,'an explicitly declared primitive type is shown as recorded');
  covered.push('STRUCTURE-LABEL-003');
 }finally{window.close();}
 coverage(covered);for(const path of Object.keys(hashes))verify(path,readFileSync(path));

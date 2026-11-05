@@ -47,17 +47,17 @@ try{
  const pairs=s=>[...s.querySelectorAll(':scope > .structure-element')].map(n=>[n.querySelector('strong').textContent,n.querySelector('.structure-element-type').textContent]);
  const changed=structuredClone(normalized);changed.meta.relationNames['nr-step-data']='モデルに記録した操作対象';
  render(changed,'n-step');
- assert.deepEqual(pairs(row('nr-step-data')),[['モデルに記録した操作対象','型：情報のまとまり（Data）']],'the loaded model is the source of the name');
+ assert.deepEqual(pairs(row('nr-step-data')),[['モデルに記録した操作対象','型：Data']],'the loaded model is the source of the name');
  const search=host.querySelector('input[type=search]');search.value='モデルに記録した操作対象';search.dispatchEvent(new w.Event('input'));
  assert([...host.querySelectorAll('[data-relation-id="nr-step-data"]')].some(item=>!item.hidden),'search indexes the conceptual name');
  assert(host.querySelectorAll('.structure-item').length<=normalized.relations.length+1,'search stops at repeated structures');
  const different=structuredClone(normalized);different.meta.relationNames['nr-exchange-pair']='概念上の対応手順';render(different,'n-exchange');
- assert.deepEqual(pairs(row('nr-exchange-pair')),[['概念上の対応手順','型：手順行（Step）']],'an authored conceptual name takes precedence over a different physical field label');
+ assert.deepEqual(pairs(row('nr-exchange-pair')),[['概念上の対応手順','型：Step']],'an authored conceptual name takes precedence over a different physical field label');
  assert.equal(row('nr-exchange-pair').querySelector('.structure-edge-detail').title,'stepInteractions.pairedStepId','the existing physical mapping remains available');
  render(normalized,'n-order');
- for(const id of ['nr-order-before','nr-order-after','nr-order-member'])assert.deepEqual(pairs(row(id)),[[names[id],'型：手順行（Step）']]);
+ for(const id of ['nr-order-before','nr-order-after','nr-order-member'])assert.deepEqual(pairs(row(id)),[[names[id],'型：Step']]);
  render(normalized,'n-continuity');
- for(const id of ['nr-continuity-interrupted','nr-continuity-resume'])assert.deepEqual(pairs(row(id)),[[names[id],'型：手順行（Step）']]);
+ for(const id of ['nr-continuity-interrupted','nr-continuity-resume'])assert.deepEqual(pairs(row(id)),[[names[id],'型：Step']]);
  w.Explorer.renderStructureExplorer(host,normalized);host.querySelector('.structure-toolbar button').click();
  assert.equal(host.querySelectorAll('.structure-item').length<=normalized.relations.length+3,true,'expand all stays bounded');
  assert(!host.textContent.includes('名前未定義'),'authored names are visible throughout the candidate');
@@ -65,11 +65,11 @@ try{
  covered.push('STRUCTURE-NAME-002');
 
  const missing=structuredClone(normalized);delete missing.meta.relationNames;
- render(missing,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：情報のまとまり（Data）']]);
- render(missing,'n-exchange');assert.deepEqual(pairs(row('nr-exchange-pair')),[['対応する手順','型：手順行（Step）']],'existing explicit field mappings remain a valid fallback');
+ render(missing,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：Data']]);
+ render(missing,'n-exchange');assert.deepEqual(pairs(row('nr-exchange-pair')),[['対応する手順','型：Step']],'existing explicit field mappings remain a valid fallback');
  const invalid=structuredClone(normalized);invalid.meta.relationNames['nr-exchange-pair']=42;render(invalid,'n-exchange');
- assert.deepEqual(pairs(row('nr-exchange-pair')),[['対応する手順','型：手順行（Step）']],'a non-string conceptual name does not override a valid field mapping');
- invalid.meta.relationNames['nr-step-data']=' ';render(invalid,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：情報のまとまり（Data）']]);
+ assert.deepEqual(pairs(row('nr-exchange-pair')),[['対応する手順','型：Step']],'a non-string conceptual name does not override a valid field mapping');
+ invalid.meta.relationNames['nr-step-data']=' ';render(invalid,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：Data']]);
  render(physical,'fmt-package');assert.deepEqual(pairs(row('rel-package-bd')),[['文書一覧','型：業務設計書（Business Design）[]']]);
  const multi=structuredClone(physical);multi.meta.relationNames={'rel-order-step':'順序規則の手順'};render(multi,'fmt-order');
  assert.deepEqual(pairs(row('rel-order-step')),[['順序規則の手順','型：手順行（Step）'],['前後の手順','型：手順行（Step）'],['対象手順','型：手順行（Step）[]']],'conceptual names do not erase multiple physical field names or array information');

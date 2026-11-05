@@ -11,8 +11,9 @@ const visibleDirections:Direction[]=['owned','reference','unknownOut'];
 /** Read only declared concepts, mappings and relations; never infer a relation from a label. */
 export function structureGraph(model:ConceptModel){
  const nodes=new Map(model.concepts.map(concept=>[concept.id,concept]));
- const meta=model.meta&&typeof model.meta==='object'?model.meta as {fieldMappings?:unknown;relationNames?:unknown}:{};
+ const meta=model.meta&&typeof model.meta==='object'?model.meta as {fieldMappings?:unknown;relationNames?:unknown;conceptNames?:unknown}:{};
  const relationNames=meta.relationNames&&typeof meta.relationNames==='object'&&!Array.isArray(meta.relationNames)?meta.relationNames as Record<string,unknown>:{};
+ const conceptNames=meta.conceptNames&&typeof meta.conceptNames==='object'&&!Array.isArray(meta.conceptNames)?meta.conceptNames as Record<string,unknown>:{};
  const mappings:Mapping[]=Array.isArray(meta.fieldMappings)?meta.fieldMappings.filter((m):m is Mapping=>
   !!m&&typeof m==='object'&&typeof m.informationId==='string'&&typeof m.physicalName==='string'&&Array.isArray(m.relationIds)&&m.relationIds.every((id:unknown)=>typeof id==='string')):[];
  const grouped=new Map<string,Mapping[]>();
@@ -46,7 +47,7 @@ export function structureGraph(model:ConceptModel){
  const packageRoot=packages.length===1?packages[0].id:undefined;
  const roots=packageRoot?[packageRoot]:(ownershipRoots.length?ownershipRoots:model.concepts).map(concept=>concept.id);
  const reachable=new Set<string>(),todo=[...roots];while(todo.length){const id=todo.pop()!;if(reachable.has(id))continue;reachable.add(id);for(const edge of edges.get(id)??[])if(visibleDirections.includes(edge.direction)&&!reachable.has(edge.to))todo.push(edge.to);}
- return {nodes,edges,mappings:byInformation,packageRoot,roots,hasOwnershipRoots:ownershipRoots.length>0,reachable};
+ return {nodes,edges,mappings:byInformation,conceptNames,packageRoot,roots,hasOwnershipRoots:ownershipRoots.length>0,reachable};
 }
 
 const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'所有先',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
@@ -78,18 +79,23 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
 
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
   const concept=graph.nodes.get(id)!;const item=document.createElement('li');item.className='structure-item';item.dataset.conceptId=id;
+  const authored=Object.hasOwn(graph.conceptNames,id)?graph.conceptNames[id]:undefined;
+  const declared=authored&&typeof authored==='object'&&!Array.isArray(authored)?authored as {typeName?:unknown;logicalName?:unknown}:{};
+  const hasType=typeof declared.typeName==='string'&&!!declared.typeName.trim();
+  const typeName=hasType?declared.typeName as string:concept.name;
+  const logicalName=hasType&&typeof declared.logicalName==='string'&&declared.logicalName.trim()?declared.logicalName:'';
   const names=concept.information.flatMap(info=>[info.name,graph.mappings.get(info.id)?.physicalName??'']);
-  item.dataset.searchText=[concept.name,concept.id,...names,edge?.roleName??'',...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
+  item.dataset.searchText=[concept.name,typeName,logicalName,concept.id,...names,edge?.roleName??'',...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
   const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
   row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));
   if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
-   const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span','型：'+concept.name+(field?.valueType==='array'?'[]':''),'structure-element-type');};
+   const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span','型：'+typeName+(field?.valueType==='array'?'[]':''),'structure-element-type');};
    if(edge.roleName&&fields.length===1)entry(edge.roleName,fields[0]);
    else{if(edge.roleName)entry(edge.roleName,undefined);fields.forEach((field,index)=>{if(index||edge.roleName)text(row,'span','／');entry(field?.name?.trim()||'名前未定義',field);});}
-  }else text(row,'strong',concept.name);
+  }else{ text(row,'strong',typeName);if(logicalName&&logicalName!==typeName)text(row,'span',logicalName,'structure-type'); }
   if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
   if(edge?.relation.condition)text(row,'span',edge.relation.condition,'structure-condition');
   if(edge?.fields.length){const detail=text(row,'span',edge.fields.map(shortPhysicalName).join('、'),'structure-edge-detail');detail.title=edge.fields.join('、');}
