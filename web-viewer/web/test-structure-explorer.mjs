@@ -59,8 +59,12 @@ const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,w
 const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');w.Explorer.renderStructureExplorer(host,sample);
+ const groups=node=>[...node.querySelectorAll(':scope > .structure-children > li > details.structure-group > summary')].map(summary=>summary.textContent);
+ assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（1）','所有（2）','参照（1）','参照元（1）','種類未定義（出）（1）'],'folder counts show direct entries and directions');
+ assert(!host.querySelector('.structure-heading, .structure-intro, .structure-help'),'the tab already supplies the title and the tree uses the full content area');
  const one=host.querySelector('[data-relation-id="one"][data-relation-direction="owned"] > details'),many=host.querySelector('[data-relation-id="many"][data-relation-direction="owned"] > details');
  assert(one&&!one.open&&many&&!many.open);one.open=true;one.dispatchEvent(new w.Event('toggle'));
+ assert.deepEqual(groups(one),['属性（1）','所有（1）','所有先（1）','参照（1）'],'nested counts include the owner without reversing its meaning');
  assert.equal(many.open,false,'one branch does not expand another');
  assert(one.querySelector('[data-relation-id="nested"][data-relation-direction="owned"]'),'single-valued ownership exposes its child');
  assert(one.textContent.includes('single.value')&&one.textContent.includes('array・未決可'),'explicit field mapping and type stay visible');
@@ -71,7 +75,9 @@ try{
  host.querySelector('.structure-toolbar button').click();assert(host.querySelectorAll('.structure-item').length<=sample.relations.length*2+1,'expand all visits every concept once and stops');
  assert(host.querySelector('.structure-seen'),'cycles or shared instances are identified');
  host.querySelectorAll('.structure-toolbar button')[1].click();assert.equal(host.querySelector('.structure-node').open,false,'collapse all closes the root');covered.add('STRUCTURE-003');
- w.Explorer.renderStructureExplorer(host,model);host.querySelector('.structure-toolbar button').click();
+ w.Explorer.renderStructureExplorer(host,model);
+ assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（6）','所有（5）','所有先（1）','参照（1）','参照元（3）'],'parallel references count as separate relationships');
+ host.querySelector('.structure-toolbar button').click();
  const concepts=new Set([...host.querySelectorAll('[data-concept-id]')].map(el=>el.dataset.conceptId));
  const relations=new Set([...host.querySelectorAll('[data-relation-id]')].map(el=>el.dataset.relationId));
  assert.deepEqual([...concepts].sort(),model.concepts.map(c=>c.id).sort());assert.deepEqual([...relations].sort(),model.relations.map(r=>r.id).sort());
@@ -79,6 +85,8 @@ try{
  const search=host.querySelector('input[type=search]');search.value='手順行';search.dispatchEvent(new w.Event('input'));
  assert([...host.querySelectorAll('[data-concept-id="n-step"]')].some(el=>!el.hidden),'search retains matching structure');
  search.value='';search.dispatchEvent(new w.Event('input'));assert(host.querySelector('[data-concept-id="n-activity"]'),'clearing search restores the tree');
+ const disconnected=structuredClone(sample);disconnected.concepts.push(concept('isolated','未接続'));w.Explorer.renderStructureExplorer(host,disconnected);
+ assert.match(host.textContent,/この起点からたどれない構造：1件/,'the missing-structure notice remains available without the side panel');
  w.Explorer.renderStructureExplorer(host,missing);assert.match(host.textContent,/Activityの構造を一意に特定できません/);
 }finally{w.close();}
 coverage([...covered]);for(const path of Object.keys(authorities))verifyAuthority(path,readFileSync(path));assert.equal(hash(readFileSync('../business-design/alder/json-normalized-model-review.json')),hash(source));

@@ -37,8 +37,8 @@ export function structureGraph(model:ConceptModel){
  return {nodes,edges,mappings:byInformation,root,reachable};
 }
 
-const labels:Record<Direction,string>={owned:'所有関係',reference:'参照関係',owner:'所有元',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
-const directions:Direction[]=['owned','reference','owner','referencedBy','unknownOut','unknownIn'];
+const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'所有先',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
+const directions:Direction[]=['owned','owner','reference','referencedBy','unknownOut','unknownIn'];
 const icon=(which:typeof Box)=>{const svg=createElement(which,{'aria-hidden':'true','stroke-width':1.8});svg.classList.add('structure-icon');return svg;};
 const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;root.append(el);return el;};
 function typeLabel(mapping:Mapping|undefined){
@@ -49,25 +49,17 @@ function typeLabel(mapping:Mapping|undefined){
 /** The DOM is lazy per path. A full expansion visits each concept once. */
 export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
  const graph=structureGraph(model);host.replaceChildren();host.className='structure-explorer';
- const heading=document.createElement('div');heading.className='structure-heading';
- const title=document.createElement('div');title.append(icon(Box));text(title,'h2','構造エクスプローラー');heading.append(title);host.append(heading);
- text(host,'p','ツリーの階層は探索経路です。所有・参照と多重度は記録された関係を示します。','structure-intro');
  if(!graph.root){text(host,'p','Activityの構造を一意に特定できません。明示された対応が必要です。','structure-empty');return;}
  const rootId=graph.root;
- const workspace=document.createElement('div');workspace.className='structure-workspace';host.append(workspace);
- const panel=document.createElement('section');panel.className='structure-panel';workspace.append(panel);
+ const panel=document.createElement('section');panel.className='structure-panel';host.append(panel);
  const toolbar=document.createElement('div');toolbar.className='structure-toolbar';panel.append(toolbar);
  const all=document.createElement('button');all.type='button';all.textContent='すべて展開';toolbar.append(all);
  const collapse=document.createElement('button');collapse.type='button';collapse.textContent='すべて折りたたみ';toolbar.append(collapse);
  const searchLabel=document.createElement('label');searchLabel.className='structure-search';searchLabel.append(icon(Search));
  const search=document.createElement('input');search.type='search';search.placeholder='構造名・項目名で検索';search.setAttribute('aria-label','構造名・項目名で検索');searchLabel.append(search);toolbar.append(searchLabel);
- const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);
- const aside=document.createElement('section');aside.className='structure-help';workspace.append(aside);
- const guide=document.createElement('div');guide.className='structure-help-card';aside.append(guide);text(guide,'h3','表示ルール');
- const list=document.createElement('ul');guide.append(list);
- for(const item of ['階層は探索経路です。','所有関係・所有元は包含の両方向です。','参照関係・参照元は参照の両方向です。','件数は移動先、「逆」は反対側です。','既出は同じ構造です。循環はそこで止まります。','記載のない属性の型は「未定義」です。'])text(list,'li',item);
  const unreachable=[...graph.nodes.keys()].filter(id=>!graph.reachable.has(id));
- if(unreachable.length)text(guide,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
+ if(unreachable.length)text(panel,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
+ const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);
  let savedTree:Node|null=null;
 
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
@@ -90,12 +82,12 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
    if(edge?.relation.condition)text(details,'p',edge.relation.condition,'structure-condition');
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
-   if(concept.information.length){const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(Folder));text(summary,'span','属性');folder.append(summary);li.append(folder);children.append(li);
+   if(concept.information.length){const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(Folder));text(summary,'span','属性');text(summary,'span',`（${concept.information.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
     const fields=document.createElement('ul');fields.className='structure-fields';folder.append(fields);
     for(const info of concept.information){const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText));text(field,'span',info.name);if(mapping?.physicalName)text(field,'code',mapping.physicalName);text(field,'span','型：'+typeLabel(mapping),'structure-type');fields.append(field);}
    }
    for(const direction of directions){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
-    const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(direction==='reference'||direction==='referencedBy'?Link:Folder));text(summary,'span',labels[direction]);folder.append(summary);li.append(folder);children.append(li);
+    const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(direction==='reference'||direction==='referencedBy'?Link:Folder));text(summary,'span',labels[direction]);text(summary,'span',`（${outgoing.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
     const targets=document.createElement('ul');targets.className='structure-children';folder.append(targets);
     for(const relation of outgoing)targets.append(buildNode(relation.to,nextPath,relation,expand));
    }
