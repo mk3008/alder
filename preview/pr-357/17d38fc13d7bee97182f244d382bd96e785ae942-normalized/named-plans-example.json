@@ -1,0 +1,750 @@
+{
+  "format": "alder-named-plans",
+  "formatVersion": "1.0",
+  "plans": [
+    {
+      "id": "current",
+      "name": "現行案",
+      "package": {
+        "format": "alder-document-package",
+        "formatVersion": "0.4",
+        "revision": "package-1",
+        "documents": [
+          {
+            "id": "bd",
+            "kind": "businessDesign",
+            "schemaVersion": "0.3",
+            "revision": "bd-1",
+            "title": "現行案の受付",
+            "preface": "架空の業務案。",
+            "scope": "受付の例",
+            "objects": [
+              {
+                "id": "object",
+                "name": "現行案の受付記録",
+                "scope": true,
+                "icon": "file-text",
+                "information": [
+                  "内容"
+                ]
+              }
+            ],
+            "activities": [
+              {
+                "id": "activity",
+                "name": "現行案の受付を行う",
+                "scope": true,
+                "why": "依頼を記録する。",
+                "when": "依頼が届いたとき。",
+                "who": "受付担当",
+                "where": "受付",
+                "procedure": "依頼を受け取り記録する。",
+                "exception": null,
+                "result": "受付記録が作られる。",
+                "problem": null,
+                "painLevel": null,
+                "roleId": "role"
+              }
+            ],
+            "relations": [
+              {
+                "id": "relation",
+                "kind": "output",
+                "fromId": "activity",
+                "toId": "object",
+                "label": "受付記録"
+              }
+            ],
+            "findings": [
+              {
+                "id": "finding",
+                "sourceId": "F01",
+                "kind": "question",
+                "status": "open",
+                "scope": "items",
+                "targetIds": [
+                  "activity"
+                ],
+                "unresolvedTargets": [],
+                "summary": "現行案の未決",
+                "content": "架空の確認事項。"
+              }
+            ],
+            "roles": [
+              {
+                "id": "role",
+                "name": "受付担当",
+                "color": "#2563eb"
+              }
+            ],
+            "exceptions": []
+          },
+          {
+            "id": "state-doc",
+            "kind": "stateTransition",
+            "schemaVersion": "0.2",
+            "revision": "state-1",
+            "title": "現行案の状態",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "objectId": "object",
+            "states": [
+              {
+                "id": "state",
+                "name": "現行案受付済み"
+              }
+            ],
+            "start": "@new",
+            "terminal": "@unknown",
+            "completeness": "partial",
+            "source": "合成例",
+            "transitions": [
+              {
+                "id": "transition",
+                "sourceId": "T1",
+                "fromId": "@new",
+                "activityId": "activity",
+                "event": "受付",
+                "exceptionId": null,
+                "condition": "依頼を受け取る",
+                "toId": "state",
+                "effect": "change",
+                "path": "normal",
+                "evidence": "合成例",
+                "note": "部分定義"
+              }
+            ]
+          },
+          {
+            "id": "check-doc",
+            "kind": "checkItems",
+            "schemaVersion": "0.1",
+            "revision": "check-1",
+            "title": "現行案の確認",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "intro": [],
+            "index": [
+              {
+                "activityId": "activity",
+                "purpose": "",
+                "connections": "",
+                "checkIds": [
+                  "check"
+                ]
+              }
+            ],
+            "sections": [
+              {
+                "id": "section",
+                "activityId": "activity",
+                "title": "受付",
+                "preamble": []
+              }
+            ],
+            "guarantees": [],
+            "examples": [],
+            "items": [
+              {
+                "id": "check",
+                "checkId": "CI-01",
+                "title": "現行案の記録を確認する",
+                "detailSummary": "",
+                "sectionId": "section",
+                "reviewState": "未レビュー",
+                "fields": {
+                  "condition": [
+                    {
+                      "kind": "text",
+                      "value": "依頼が届いたとき"
+                    }
+                  ],
+                  "expectedResult": [
+                    {
+                      "kind": "text",
+                      "value": "現行案の受付記録が作られる"
+                    }
+                  ]
+                }
+              }
+            ],
+            "notes": []
+          },
+          {
+            "id": "concept-doc",
+            "kind": "conceptModel",
+            "schemaVersion": "0.2",
+            "revision": "concept-1",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "relatedStates": [
+              {
+                "documentId": "state-doc",
+                "revision": "state-1",
+                "verification": "unverified"
+              }
+            ],
+            "subsystems": [
+              {
+                "id": "subsystem",
+                "name": "現行案の受付",
+                "purpose": "",
+                "information": [],
+                "reason": "",
+                "activityIds": [
+                  "activity"
+                ],
+                "reviewState": "未レビュー"
+              }
+            ],
+            "concepts": [
+              {
+                "id": "concept",
+                "name": "現行案の受付記録",
+                "subsystemId": "subsystem",
+                "information": [
+                  {
+                    "id": "info",
+                    "name": "内容"
+                  }
+                ],
+                "reason": "",
+                "description": "",
+                "businessObjectIds": [
+                  "object"
+                ],
+                "activityLinks": [
+                  {
+                    "activityId": "activity",
+                    "uses": []
+                  }
+                ],
+                "sourceRefs": [],
+                "reviewState": "未レビュー"
+              }
+            ],
+            "relations": [],
+            "handoffs": [],
+            "reviewGroups": [],
+            "benefits": [],
+            "considerations": [],
+            "reviewPoints": [],
+            "meta": {},
+            "presentation": {
+              "landscapeRelationships": [],
+              "reviewBoundaries": []
+            }
+          }
+        ],
+        "sources": [],
+        "externalDocuments": [],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "improved",
+      "name": "改善案",
+      "package": {
+        "format": "alder-document-package",
+        "formatVersion": "0.4",
+        "revision": "package-1",
+        "documents": [
+          {
+            "id": "bd",
+            "kind": "businessDesign",
+            "schemaVersion": "0.3",
+            "revision": "bd-1",
+            "title": "改善案の受付",
+            "preface": "架空の業務案。",
+            "scope": "受付の例",
+            "objects": [
+              {
+                "id": "object",
+                "name": "改善案の受付記録",
+                "scope": true,
+                "icon": "file-text",
+                "information": [
+                  "内容"
+                ]
+              }
+            ],
+            "activities": [
+              {
+                "id": "activity",
+                "name": "改善案の受付を行う",
+                "scope": true,
+                "why": "依頼を記録する。",
+                "when": "依頼が届いたとき。",
+                "who": "受付担当",
+                "where": "受付",
+                "procedure": "依頼を受け取り記録する。",
+                "exception": null,
+                "result": "受付記録が作られる。",
+                "problem": null,
+                "painLevel": null,
+                "roleId": "role"
+              }
+            ],
+            "relations": [
+              {
+                "id": "relation",
+                "kind": "output",
+                "fromId": "activity",
+                "toId": "object",
+                "label": "受付記録"
+              }
+            ],
+            "findings": [
+              {
+                "id": "finding",
+                "sourceId": "F01",
+                "kind": "question",
+                "status": "open",
+                "scope": "items",
+                "targetIds": [
+                  "activity"
+                ],
+                "unresolvedTargets": [],
+                "summary": "改善案の未決",
+                "content": "架空の確認事項。"
+              }
+            ],
+            "roles": [
+              {
+                "id": "role",
+                "name": "受付担当",
+                "color": "#2563eb"
+              }
+            ],
+            "exceptions": []
+          },
+          {
+            "id": "state-doc",
+            "kind": "stateTransition",
+            "schemaVersion": "0.2",
+            "revision": "state-1",
+            "title": "改善案の状態",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "objectId": "object",
+            "states": [
+              {
+                "id": "state",
+                "name": "改善案受付済み"
+              }
+            ],
+            "start": "@new",
+            "terminal": "@unknown",
+            "completeness": "partial",
+            "source": "合成例",
+            "transitions": [
+              {
+                "id": "transition",
+                "sourceId": "T1",
+                "fromId": "@new",
+                "activityId": "activity",
+                "event": "受付",
+                "exceptionId": null,
+                "condition": "依頼を受け取る",
+                "toId": "state",
+                "effect": "change",
+                "path": "normal",
+                "evidence": "合成例",
+                "note": "部分定義"
+              }
+            ]
+          },
+          {
+            "id": "check-doc",
+            "kind": "checkItems",
+            "schemaVersion": "0.1",
+            "revision": "check-1",
+            "title": "改善案の確認",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "intro": [],
+            "index": [
+              {
+                "activityId": "activity",
+                "purpose": "",
+                "connections": "",
+                "checkIds": [
+                  "check"
+                ]
+              }
+            ],
+            "sections": [
+              {
+                "id": "section",
+                "activityId": "activity",
+                "title": "受付",
+                "preamble": []
+              }
+            ],
+            "guarantees": [],
+            "examples": [],
+            "items": [
+              {
+                "id": "check",
+                "checkId": "CI-01",
+                "title": "改善案の記録を確認する",
+                "detailSummary": "",
+                "sectionId": "section",
+                "reviewState": "未レビュー",
+                "fields": {
+                  "condition": [
+                    {
+                      "kind": "text",
+                      "value": "依頼が届いたとき"
+                    }
+                  ],
+                  "expectedResult": [
+                    {
+                      "kind": "text",
+                      "value": "改善案の受付記録が作られる"
+                    }
+                  ]
+                }
+              }
+            ],
+            "notes": []
+          },
+          {
+            "id": "concept-doc",
+            "kind": "conceptModel",
+            "schemaVersion": "0.2",
+            "revision": "concept-1",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "relatedStates": [
+              {
+                "documentId": "state-doc",
+                "revision": "state-1",
+                "verification": "unverified"
+              }
+            ],
+            "subsystems": [
+              {
+                "id": "subsystem",
+                "name": "改善案の受付",
+                "purpose": "",
+                "information": [],
+                "reason": "",
+                "activityIds": [
+                  "activity"
+                ],
+                "reviewState": "未レビュー"
+              }
+            ],
+            "concepts": [
+              {
+                "id": "concept",
+                "name": "改善案の受付記録",
+                "subsystemId": "subsystem",
+                "information": [
+                  {
+                    "id": "info",
+                    "name": "内容"
+                  }
+                ],
+                "reason": "",
+                "description": "",
+                "businessObjectIds": [
+                  "object"
+                ],
+                "activityLinks": [
+                  {
+                    "activityId": "activity",
+                    "uses": []
+                  }
+                ],
+                "sourceRefs": [],
+                "reviewState": "未レビュー"
+              }
+            ],
+            "relations": [],
+            "handoffs": [],
+            "reviewGroups": [],
+            "benefits": [],
+            "considerations": [],
+            "reviewPoints": [],
+            "meta": {},
+            "presentation": {
+              "landscapeRelationships": [],
+              "reviewBoundaries": []
+            }
+          }
+        ],
+        "sources": [],
+        "externalDocuments": [],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "alternative",
+      "name": "提案A",
+      "package": {
+        "format": "alder-document-package",
+        "formatVersion": "0.4",
+        "revision": "package-1",
+        "documents": [
+          {
+            "id": "bd",
+            "kind": "businessDesign",
+            "schemaVersion": "0.3",
+            "revision": "bd-1",
+            "title": "提案Aの受付",
+            "preface": "架空の業務案。",
+            "scope": "受付の例",
+            "objects": [
+              {
+                "id": "object",
+                "name": "提案Aの受付記録",
+                "scope": true,
+                "icon": "file-text",
+                "information": [
+                  "内容"
+                ]
+              }
+            ],
+            "activities": [
+              {
+                "id": "activity",
+                "name": "提案Aの受付を行う",
+                "scope": true,
+                "why": "依頼を記録する。",
+                "when": "依頼が届いたとき。",
+                "who": "受付担当",
+                "where": "受付",
+                "procedure": "依頼を受け取り記録する。",
+                "exception": null,
+                "result": "受付記録が作られる。",
+                "problem": null,
+                "painLevel": null,
+                "roleId": "role"
+              }
+            ],
+            "relations": [
+              {
+                "id": "relation",
+                "kind": "output",
+                "fromId": "activity",
+                "toId": "object",
+                "label": "受付記録"
+              }
+            ],
+            "findings": [
+              {
+                "id": "finding",
+                "sourceId": "F01",
+                "kind": "question",
+                "status": "open",
+                "scope": "items",
+                "targetIds": [
+                  "activity"
+                ],
+                "unresolvedTargets": [],
+                "summary": "提案Aの未決",
+                "content": "架空の確認事項。"
+              }
+            ],
+            "roles": [
+              {
+                "id": "role",
+                "name": "受付担当",
+                "color": "#2563eb"
+              }
+            ],
+            "exceptions": []
+          },
+          {
+            "id": "state-doc",
+            "kind": "stateTransition",
+            "schemaVersion": "0.2",
+            "revision": "state-1",
+            "title": "提案Aの状態",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "objectId": "object",
+            "states": [
+              {
+                "id": "state",
+                "name": "提案A受付済み"
+              }
+            ],
+            "start": "@new",
+            "terminal": "@unknown",
+            "completeness": "partial",
+            "source": "合成例",
+            "transitions": [
+              {
+                "id": "transition",
+                "sourceId": "T1",
+                "fromId": "@new",
+                "activityId": "activity",
+                "event": "受付",
+                "exceptionId": null,
+                "condition": "依頼を受け取る",
+                "toId": "state",
+                "effect": "change",
+                "path": "normal",
+                "evidence": "合成例",
+                "note": "部分定義"
+              }
+            ]
+          },
+          {
+            "id": "check-doc",
+            "kind": "checkItems",
+            "schemaVersion": "0.1",
+            "revision": "check-1",
+            "title": "提案Aの確認",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "intro": [],
+            "index": [
+              {
+                "activityId": "activity",
+                "purpose": "",
+                "connections": "",
+                "checkIds": [
+                  "check"
+                ]
+              }
+            ],
+            "sections": [
+              {
+                "id": "section",
+                "activityId": "activity",
+                "title": "受付",
+                "preamble": []
+              }
+            ],
+            "guarantees": [],
+            "examples": [],
+            "items": [
+              {
+                "id": "check",
+                "checkId": "CI-01",
+                "title": "提案Aの記録を確認する",
+                "detailSummary": "",
+                "sectionId": "section",
+                "reviewState": "未レビュー",
+                "fields": {
+                  "condition": [
+                    {
+                      "kind": "text",
+                      "value": "依頼が届いたとき"
+                    }
+                  ],
+                  "expectedResult": [
+                    {
+                      "kind": "text",
+                      "value": "提案Aの受付記録が作られる"
+                    }
+                  ]
+                }
+              }
+            ],
+            "notes": []
+          },
+          {
+            "id": "concept-doc",
+            "kind": "conceptModel",
+            "schemaVersion": "0.2",
+            "revision": "concept-1",
+            "basedOn": {
+              "documentId": "bd",
+              "revision": "bd-1",
+              "verification": "unverified"
+            },
+            "relatedStates": [
+              {
+                "documentId": "state-doc",
+                "revision": "state-1",
+                "verification": "unverified"
+              }
+            ],
+            "subsystems": [
+              {
+                "id": "subsystem",
+                "name": "提案Aの受付",
+                "purpose": "",
+                "information": [],
+                "reason": "",
+                "activityIds": [
+                  "activity"
+                ],
+                "reviewState": "未レビュー"
+              }
+            ],
+            "concepts": [
+              {
+                "id": "concept",
+                "name": "提案Aの受付記録",
+                "subsystemId": "subsystem",
+                "information": [
+                  {
+                    "id": "info",
+                    "name": "内容"
+                  }
+                ],
+                "reason": "",
+                "description": "",
+                "businessObjectIds": [
+                  "object"
+                ],
+                "activityLinks": [
+                  {
+                    "activityId": "activity",
+                    "uses": []
+                  }
+                ],
+                "sourceRefs": [],
+                "reviewState": "未レビュー"
+              }
+            ],
+            "relations": [],
+            "handoffs": [],
+            "reviewGroups": [],
+            "benefits": [],
+            "considerations": [],
+            "reviewPoints": [],
+            "meta": {},
+            "presentation": {
+              "landscapeRelationships": [],
+              "reviewBoundaries": []
+            }
+          }
+        ],
+        "sources": [],
+        "externalDocuments": [],
+        "diagnostics": []
+      }
+    }
+  ]
+}
