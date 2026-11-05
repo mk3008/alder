@@ -1,0 +1,918 @@
+{
+  "format": "alder-normalized-business-design-study",
+  "version": "0.1",
+  "source": {
+    "format": "alder-document-package",
+    "formatVersion": "0.7",
+    "revision": "normalized-example-source-1",
+    "sources": [],
+    "externalDocuments": [],
+    "diagnostics": []
+  },
+  "documents": [
+    {
+      "documentOrder": 1,
+      "document": {
+        "id": "checks-score-example",
+        "schemaVersion": "0.1",
+        "kind": "checkItems",
+        "revision": "checks-review-1",
+        "title": "点数計算のCheck",
+        "basedOn": {
+          "documentId": "bd-score-example",
+          "revision": "bd-review-1",
+          "verification": "unverified"
+        },
+        "intro": [],
+        "index": [
+          {
+            "activityId": "calculate-score",
+            "purpose": "",
+            "connections": "",
+            "checkIds": [
+              "check-01",
+              "check-02",
+              "check-03",
+              "check-04",
+              "check-05",
+              "check-10"
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "id": "score-check-section",
+            "activityId": "calculate-score",
+            "title": "点数計算",
+            "preamble": []
+          }
+        ],
+        "guarantees": [],
+        "examples": [],
+        "items": [
+          {
+            "id": "check-01",
+            "checkId": "MK-01",
+            "title": "0本の点数",
+            "detailSummary": "",
+            "sectionId": "score-check-section",
+            "reviewState": "未レビュー",
+            "fields": {
+              "guarantee": [
+                {
+                  "kind": "reference",
+                  "targetId": "zero-pins",
+                  "label": "点数の計算"
+                }
+              ]
+            }
+          },
+          {
+            "id": "check-02",
+            "checkId": "MK-02",
+            "title": "1本の点数",
+            "detailSummary": "",
+            "sectionId": "score-check-section",
+            "reviewState": "未レビュー",
+            "fields": {
+              "guarantee": [
+                {
+                  "kind": "reference",
+                  "targetId": "one-pin",
+                  "label": "点数の計算"
+                }
+              ]
+            }
+          },
+          {
+            "id": "check-03",
+            "checkId": "MK-03",
+            "title": "複数本の点数",
+            "detailSummary": "",
+            "sectionId": "score-check-section",
+            "reviewState": "未レビュー",
+            "fields": {
+              "guarantee": [
+                {
+                  "kind": "reference",
+                  "targetId": "many-pins",
+                  "label": "点数の計算"
+                }
+              ]
+            }
+          },
+          {
+            "id": "check-04",
+            "checkId": "MK-04",
+            "title": "誤入力の扱い",
+            "detailSummary": "",
+            "sectionId": "score-check-section",
+            "reviewState": "未レビュー",
+            "fields": {
+              "guarantee": [
+                {
+                  "kind": "reference",
+                  "targetId": "duplicate",
+                  "label": "同じ回の重複"
+                },
+                {
+                  "kind": "reference",
+                  "targetId": "invalid-number",
+                  "label": "番号の誤り"
+                }
+              ]
+            }
+          },
+          {
+            "id": "check-05",
+            "checkId": "MK-05",
+            "title": "まとめ計算のエラー",
+            "detailSummary": "",
+            "sectionId": "score-check-section",
+            "reviewState": "未レビュー",
+            "fields": {
+              "guarantee": [
+                {
+                  "kind": "reference",
+                  "targetId": "invalid-input",
+                  "label": "入力エラー"
+                }
+              ]
+            }
+          },
+          {
+            "id": "check-10",
+            "checkId": "MK-10",
+            "title": "投擲0回の扱い",
+            "detailSummary": "",
+            "sectionId": "score-check-section",
+            "reviewState": "未レビュー",
+            "fields": {
+              "guarantee": [
+                {
+                  "kind": "reference",
+                  "targetId": "no-throws",
+                  "label": "点数の計算の一部"
+                }
+              ]
+            }
+          }
+        ],
+        "notes": []
+      }
+    }
+  ],
+  "entities": {
+    "businessDesigns": [
+      {
+        "id": "bd-score-example",
+        "schemaVersion": "0.6",
+        "kind": "businessDesign",
+        "revision": "bd-review-1",
+        "title": "モルックの点数計算",
+        "preface": "画面確認用の合成例。点数計算機能を自動主体とする分類は仮定。",
+        "scope": "",
+        "documentOrder": 0
+      }
+    ],
+    "actors": [
+      {
+        "id": "score-reviewer",
+        "documentId": "bd-score-example",
+        "kind": "role",
+        "name": "記録係",
+        "color": "#8b5cf6",
+        "roleOrdinal": 0
+      },
+      {
+        "id": "score-system",
+        "documentId": "bd-score-example",
+        "kind": "system",
+        "name": "点数計算機能"
+      }
+    ],
+    "objects": [
+      {
+        "id": "player",
+        "name": "利用者",
+        "scope": false,
+        "icon": "user",
+        "documentId": "bd-score-example",
+        "ordinal": 0
+      },
+      {
+        "id": "score-object",
+        "name": "投擲ごとの点数",
+        "scope": true,
+        "icon": "file-text",
+        "documentId": "bd-score-example",
+        "ordinal": 1
+      }
+    ],
+    "information": [
+      {
+        "id": "throws-info",
+        "name": "投擲順・各回の棒の番号",
+        "description": "",
+        "objectId": "player",
+        "ordinal": 0
+      },
+      {
+        "id": "scores-info",
+        "name": "投擲順・各回の点数",
+        "description": "",
+        "objectId": "score-object",
+        "ordinal": 0
+      },
+      {
+        "id": "response-info",
+        "name": "各回の点数または入力エラー",
+        "description": "",
+        "objectId": "score-object",
+        "ordinal": 1
+      },
+      {
+        "id": "total-info",
+        "name": "合計点",
+        "description": "",
+        "objectId": "score-object",
+        "ordinal": 2
+      },
+      {
+        "id": "history-info",
+        "name": "各回までの合計点の推移",
+        "description": "",
+        "objectId": "score-object",
+        "ordinal": 3
+      }
+    ],
+    "activities": [
+      {
+        "id": "calculate-score",
+        "name": "1回の点数を計算する",
+        "scope": true,
+        "why": "利用者が1回投げた結果の点数を知るため",
+        "when": "利用者が計算対象の投擲順と各回に倒れた棒の番号を入力したとき。0回を含む。",
+        "where": "規定なし",
+        "problem": null,
+        "painLevel": null,
+        "documentId": "bd-score-example",
+        "ordinal": 0,
+        "whoId": "score-system"
+      },
+      {
+        "id": "score-review-one",
+        "name": "点数を確認する",
+        "scope": true,
+        "why": "構造確認用の架空業務",
+        "when": "確認するとき",
+        "where": "規定なし",
+        "problem": null,
+        "painLevel": null,
+        "documentId": "bd-score-example",
+        "ordinal": 1,
+        "whoId": "score-reviewer"
+      },
+      {
+        "id": "score-review-two",
+        "name": "結果を確認する",
+        "scope": true,
+        "why": "構造確認用の架空業務",
+        "when": "確認するとき",
+        "where": "規定なし",
+        "problem": null,
+        "painLevel": null,
+        "documentId": "bd-score-example",
+        "ordinal": 2,
+        "whoId": "score-reviewer"
+      },
+      {
+        "id": "score-review-undecided",
+        "name": "確認方法を整理する",
+        "scope": true,
+        "why": "構造確認用の架空業務",
+        "when": "確認するとき",
+        "where": "規定なし",
+        "problem": null,
+        "painLevel": null,
+        "documentId": "bd-score-example",
+        "ordinal": 3,
+        "whoId": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "receive",
+        "action": "受け取る",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "calculate-score",
+        "ordinal": 0,
+        "targetDataState": "array",
+        "exchangeKind": "interaction",
+        "partiesPresent": false,
+        "whenDecisionRowId": null,
+        "dependencyState": "absent"
+      },
+      {
+        "id": "validate",
+        "action": "検査する",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "calculate-score",
+        "ordinal": 1,
+        "targetDataState": "array",
+        "exchangeKind": "internal",
+        "partiesPresent": false,
+        "whenDecisionRowId": null,
+        "dependencyState": "absent"
+      },
+      {
+        "id": "calculate",
+        "action": "計算する",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "calculate-score",
+        "ordinal": 2,
+        "targetDataState": "array",
+        "exchangeKind": "internal",
+        "partiesPresent": false,
+        "whenDecisionRowId": "valid",
+        "dependencyState": "absent"
+      },
+      {
+        "id": "pass-scores",
+        "action": "渡す",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "calculate-score",
+        "ordinal": 3,
+        "targetDataState": "array",
+        "exchangeKind": "interaction",
+        "partiesPresent": false,
+        "whenDecisionRowId": "valid",
+        "dependencyState": "absent"
+      },
+      {
+        "id": "reply",
+        "action": "返す",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "calculate-score",
+        "ordinal": 4,
+        "targetDataState": "array",
+        "exchangeKind": "interaction",
+        "partiesPresent": false,
+        "whenDecisionRowId": null,
+        "dependencyState": "absent"
+      },
+      {
+        "id": "score-review-one-step",
+        "action": "確認する",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "score-review-one",
+        "ordinal": 0,
+        "targetDataState": "array",
+        "exchangeKind": "internal",
+        "partiesPresent": false,
+        "whenDecisionRowId": null,
+        "dependencyState": "absent"
+      },
+      {
+        "id": "score-review-two-step",
+        "action": "確認する",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "score-review-two",
+        "ordinal": 0,
+        "targetDataState": "array",
+        "exchangeKind": "internal",
+        "partiesPresent": false,
+        "whenDecisionRowId": null,
+        "dependencyState": "absent"
+      },
+      {
+        "id": "score-review-undecided-step",
+        "action": "確認する",
+        "method": null,
+        "obligation": "required",
+        "appliesWhen": null,
+        "effect": null,
+        "activityId": "score-review-undecided",
+        "ordinal": 0,
+        "targetDataState": "array",
+        "exchangeKind": "internal",
+        "partiesPresent": false,
+        "whenDecisionRowId": null,
+        "dependencyState": "absent"
+      }
+    ],
+    "stepTargetData": [
+      {
+        "stepId": "receive",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "stepId": "validate",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "stepId": "calculate",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "stepId": "pass-scores",
+        "dataId": "scores",
+        "ordinal": 0
+      },
+      {
+        "stepId": "reply",
+        "dataId": "response",
+        "ordinal": 0
+      }
+    ],
+    "stepInteractions": [
+      {
+        "phase": "request",
+        "direction": "input",
+        "objectId": "player",
+        "relationId": "rel-input",
+        "pairedStepId": "reply",
+        "stepId": "receive",
+        "dataState": "array"
+      },
+      {
+        "phase": "not-applicable",
+        "direction": "output",
+        "objectId": "score-object",
+        "relationId": "rel-scores",
+        "pairedStepId": null,
+        "stepId": "pass-scores",
+        "dataState": "array"
+      },
+      {
+        "phase": "response",
+        "direction": "output",
+        "objectId": "player",
+        "relationId": "rel-output",
+        "pairedStepId": "receive",
+        "stepId": "reply",
+        "dataState": "array"
+      }
+    ],
+    "interactionData": [
+      {
+        "stepId": "receive",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "stepId": "pass-scores",
+        "dataId": "scores",
+        "ordinal": 0
+      },
+      {
+        "stepId": "reply",
+        "dataId": "response",
+        "ordinal": 0
+      }
+    ],
+    "stepParties": [],
+    "stepDecisions": [
+      {
+        "stepId": "validate",
+        "decisionId": "input-validation",
+        "ordinal": 0
+      },
+      {
+        "stepId": "calculate",
+        "decisionId": "score-algorithm",
+        "ordinal": 0
+      }
+    ],
+    "dependencies": [],
+    "orderRules": [],
+    "orderRuleSteps": [],
+    "results": [
+      {
+        "id": "score-result",
+        "text": "入力が有効なら投擲順・各回の点数が分かる。0回の場合、1回分の点数はない。",
+        "activityId": "calculate-score",
+        "ordinal": 0
+      },
+      {
+        "id": "score-review-one-result",
+        "text": "確認した",
+        "activityId": "score-review-one",
+        "ordinal": 0
+      },
+      {
+        "id": "score-review-two-result",
+        "text": "確認した",
+        "activityId": "score-review-two",
+        "ordinal": 0
+      },
+      {
+        "id": "score-review-undecided-result",
+        "text": "確認した",
+        "activityId": "score-review-undecided",
+        "ordinal": 0
+      }
+    ],
+    "decisions": [
+      {
+        "id": "input-validation",
+        "title": "入力の検査",
+        "kind": "validation",
+        "note": null,
+        "activityId": "calculate-score",
+        "ordinal": 0,
+        "appliesWhenRowId": null
+      },
+      {
+        "id": "score-algorithm",
+        "title": "点数の計算",
+        "kind": "algorithm",
+        "note": "1回以上なら各回ごとに判定します。",
+        "activityId": "calculate-score",
+        "ordinal": 1,
+        "appliesWhenRowId": "valid"
+      }
+    ],
+    "axes": [
+      {
+        "id": "axis-numbers",
+        "name": "棒の番号",
+        "decisionId": "input-validation",
+        "ordinal": 0
+      },
+      {
+        "id": "axis-duplicate",
+        "name": "同じ回の重複",
+        "trueLabel": "あり",
+        "falseLabel": "なし",
+        "decisionId": "input-validation",
+        "ordinal": 1
+      },
+      {
+        "id": "axis-throws",
+        "name": "投擲回数",
+        "unit": "回",
+        "decisionId": "score-algorithm",
+        "ordinal": 0
+      },
+      {
+        "id": "axis-pins",
+        "name": "倒れた本数",
+        "unit": "本",
+        "decisionId": "score-algorithm",
+        "ordinal": 1
+      }
+    ],
+    "axisData": [
+      {
+        "axisId": "axis-numbers",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "axisId": "axis-duplicate",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "axisId": "axis-throws",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "axisId": "axis-pins",
+        "dataId": "throws",
+        "ordinal": 0
+      }
+    ],
+    "rows": [
+      {
+        "id": "valid",
+        "decisionId": "input-validation",
+        "ordinal": 0,
+        "resultKind": "accepted",
+        "resultText": "有効"
+      },
+      {
+        "id": "duplicate",
+        "decisionId": "input-validation",
+        "ordinal": 1,
+        "resultKind": "error",
+        "resultText": "入力エラー"
+      },
+      {
+        "id": "invalid-number",
+        "decisionId": "input-validation",
+        "ordinal": 2,
+        "resultKind": "error",
+        "resultText": "入力エラー"
+      },
+      {
+        "id": "zero-pins",
+        "decisionId": "score-algorithm",
+        "ordinal": 0,
+        "resultKind": "value",
+        "resultText": "0点"
+      },
+      {
+        "id": "one-pin",
+        "decisionId": "score-algorithm",
+        "ordinal": 1,
+        "resultKind": "value",
+        "resultText": "倒れた棒の番号"
+      },
+      {
+        "id": "many-pins",
+        "decisionId": "score-algorithm",
+        "ordinal": 2,
+        "resultKind": "value",
+        "resultText": "倒れた本数"
+      },
+      {
+        "id": "no-throws",
+        "decisionId": "score-algorithm",
+        "ordinal": 3,
+        "resultKind": "value",
+        "resultText": "1回分の点数なし"
+      }
+    ],
+    "conditions": [
+      {
+        "axisId": "axis-numbers",
+        "kind": "value",
+        "operator": "is",
+        "value": "1〜12の整数",
+        "rowId": "valid"
+      },
+      {
+        "axisId": "axis-duplicate",
+        "kind": "value",
+        "operator": "eq",
+        "value": false,
+        "rowId": "valid"
+      },
+      {
+        "axisId": "axis-numbers",
+        "kind": "value",
+        "operator": "is",
+        "value": "1〜12の整数",
+        "rowId": "duplicate"
+      },
+      {
+        "axisId": "axis-duplicate",
+        "kind": "else",
+        "rowId": "duplicate"
+      },
+      {
+        "axisId": "axis-numbers",
+        "kind": "else",
+        "rowId": "invalid-number"
+      },
+      {
+        "axisId": "axis-duplicate",
+        "kind": "any",
+        "rowId": "invalid-number"
+      },
+      {
+        "axisId": "axis-throws",
+        "kind": "value",
+        "operator": "gte",
+        "value": 1,
+        "rowId": "zero-pins"
+      },
+      {
+        "axisId": "axis-pins",
+        "kind": "value",
+        "operator": "eq",
+        "value": 0,
+        "rowId": "zero-pins"
+      },
+      {
+        "axisId": "axis-throws",
+        "kind": "value",
+        "operator": "gte",
+        "value": 1,
+        "rowId": "one-pin"
+      },
+      {
+        "axisId": "axis-pins",
+        "kind": "value",
+        "operator": "eq",
+        "value": 1,
+        "rowId": "one-pin"
+      },
+      {
+        "axisId": "axis-throws",
+        "kind": "value",
+        "operator": "gte",
+        "value": 1,
+        "rowId": "many-pins"
+      },
+      {
+        "axisId": "axis-pins",
+        "kind": "else",
+        "rowId": "many-pins"
+      },
+      {
+        "axisId": "axis-throws",
+        "kind": "else",
+        "rowId": "no-throws"
+      },
+      {
+        "axisId": "axis-pins",
+        "kind": "any",
+        "rowId": "no-throws"
+      }
+    ],
+    "resultData": [
+      {
+        "rowId": "one-pin",
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "rowId": "many-pins",
+        "dataId": "throws",
+        "ordinal": 0
+      }
+    ],
+    "resultExceptions": [
+      {
+        "rowId": "duplicate",
+        "exceptionId": "invalid-input",
+        "ordinal": 0
+      },
+      {
+        "rowId": "invalid-number",
+        "exceptionId": "invalid-input",
+        "ordinal": 0
+      }
+    ],
+    "rowChecks": [
+      {
+        "checkId": "check-04",
+        "coverage": "full",
+        "rowId": "duplicate",
+        "ordinal": 0
+      },
+      {
+        "checkId": "check-04",
+        "coverage": "full",
+        "rowId": "invalid-number",
+        "ordinal": 0
+      },
+      {
+        "checkId": "check-01",
+        "coverage": "full",
+        "rowId": "zero-pins",
+        "ordinal": 0
+      },
+      {
+        "checkId": "check-02",
+        "coverage": "full",
+        "rowId": "one-pin",
+        "ordinal": 0
+      },
+      {
+        "checkId": "check-03",
+        "coverage": "full",
+        "rowId": "many-pins",
+        "ordinal": 0
+      },
+      {
+        "checkId": "check-10",
+        "coverage": "partial",
+        "rowId": "no-throws",
+        "ordinal": 0
+      }
+    ],
+    "exceptions": [
+      {
+        "id": "invalid-input",
+        "activityId": "calculate-score",
+        "name": "入力エラー",
+        "description": "入力に誤りが1回でもあれば計算せず、全体をエラーとし、投擲順・各回の点数・合計点・各回までの合計点の推移を返さない。",
+        "ordinal": 0
+      }
+    ],
+    "continuities": [],
+    "continuityData": [],
+    "data": [
+      {
+        "id": "throws",
+        "name": "投擲順・各回の棒の番号",
+        "documentId": "bd-score-example",
+        "ordinal": 0
+      },
+      {
+        "id": "scores",
+        "name": "投擲順・各回の点数",
+        "documentId": "bd-score-example",
+        "ordinal": 1
+      },
+      {
+        "id": "response",
+        "name": "各回の点数または入力エラー",
+        "documentId": "bd-score-example",
+        "ordinal": 2
+      },
+      {
+        "id": "total",
+        "name": "合計点",
+        "documentId": "bd-score-example",
+        "ordinal": 3
+      },
+      {
+        "id": "history",
+        "name": "各回までの合計点の推移",
+        "documentId": "bd-score-example",
+        "ordinal": 4
+      }
+    ],
+    "dataItems": [
+      {
+        "informationId": "throws-info",
+        "condition": null,
+        "dataId": "throws",
+        "ordinal": 0
+      },
+      {
+        "informationId": "scores-info",
+        "condition": null,
+        "dataId": "scores",
+        "ordinal": 0
+      },
+      {
+        "informationId": "response-info",
+        "condition": null,
+        "dataId": "response",
+        "ordinal": 0
+      },
+      {
+        "informationId": "total-info",
+        "condition": null,
+        "dataId": "total",
+        "ordinal": 0
+      },
+      {
+        "informationId": "history-info",
+        "condition": null,
+        "dataId": "history",
+        "ordinal": 0
+      }
+    ],
+    "relations": [
+      {
+        "id": "rel-input",
+        "kind": "input",
+        "fromId": "player",
+        "toId": "calculate-score",
+        "documentId": "bd-score-example",
+        "ordinal": 0
+      },
+      {
+        "id": "rel-output",
+        "kind": "output",
+        "fromId": "calculate-score",
+        "toId": "player",
+        "documentId": "bd-score-example",
+        "ordinal": 1
+      },
+      {
+        "id": "rel-scores",
+        "kind": "output",
+        "fromId": "calculate-score",
+        "toId": "score-object",
+        "documentId": "bd-score-example",
+        "ordinal": 2
+      }
+    ],
+    "findings": [],
+    "findingTargets": [],
+    "findingUnresolved": []
+  }
+}
