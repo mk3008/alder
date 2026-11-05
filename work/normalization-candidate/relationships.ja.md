@@ -56,5 +56,5 @@
 | 設計上の確認事項（DesignFinding） | 0..N | 0..N | 業務（Activity） | findingTargetsのうちActivityへの参照。 |
 | 設計上の確認事項（DesignFinding） | 0..N | 0..N | 対象（Object） | findingTargetsのうちObjectへの参照。 |
 | チェック文書（CheckDocument） | 0..N | 0..1 | 業務設計書（BusinessDesign） | 原典がパッケージ内BDの場合。Checkは他に外部BD目録を参照でき、どちらか一方を参照する。 |
-| チェック文書（CheckDocument） | 0..N | 0..1 | 外部業務設計書の目録項目（ExternalBusinessDesignCatalogEntry） | 原典が外部BD目録の場合。Checkはパッケージ内BDまたは外部目録の一方を参照する。 |
+| チェック文書（CheckDocument） | 0..N | 0..1 | 外部業務設計書の目録項目 | 原典が外部BD目録の場合。Checkはパッケージ内BDまたは外部目録の一方を参照する。 |
 | チェック文書（CheckDocument） | 1 | 0..N | チェック項目（CheckItem） | Check文書のチェック項目。 |

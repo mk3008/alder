@@ -1610,7 +1610,7 @@
         },
         {
           "id": "n-external",
-          "name": "外部業務設計書の目録項目（ExternalBusinessDesignCatalogEntry）",
+          "name": "外部業務設計書の目録項目",
           "subsystemId": "format-review",
           "information": [
             {
@@ -3247,7 +3247,7 @@
             "logicalName": "設計上の確認事項"
           },
           "n-external": {
-            "typeName": "ExternalBusinessDesignCatalogEntry",
+            "typeName": "外部業務設計書の目録項目",
             "logicalName": "外部業務設計書の目録項目"
           },
           "n-checkdoc": {
@@ -3525,7 +3525,7 @@
               "id": "overview-n-external",
               "conceptId": "n-external",
               "subsystemId": "format-review",
-              "name": "外部業務設計書の目録項目（ExternalBusinessDesignCatalogEntry）",
+              "name": "外部業務設計書の目録項目",
               "description": "候補の source.externalDocuments。現行0.7の物理構造そのものではない。",
               "sources": [],
               "fields": [

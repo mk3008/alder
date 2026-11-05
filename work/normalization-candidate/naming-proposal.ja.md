@@ -40,11 +40,11 @@
 | Continuity (`continuities`) | `InterruptionHandling` 中断・再開 | 中断条件、中断後の扱い、必要に応じた再開方法。 |
 | Relation (`relations`) | `BusinessRelation` 業務・対象の関係 | 入出力や例外に関する業務・対象間の関係。 |
 | Finding (`findings`) | `DesignFinding` 設計上の確認事項 | 業務設計に対する質問や修正事項。 |
-| 外部業務設計書目録 (`source.externalDocuments`) | `ExternalBusinessDesignCatalogEntry` 外部業務設計書の目録項目 | 外部の業務設計書を参照するための目録の1件。 |
+| 外部業務設計書目録 (`source.externalDocuments`) | 外部業務設計書の目録項目 | 外部の業務設計書を参照するための目録の1件。 |
 | Check Items (`retained Check document`) | `CheckDocument` チェック文書 | チェック項目を収める既存文書。 |
 | Check (`retained Check.items`) | `CheckItem` チェック項目 | 既存チェック文書内の個々のチェック項目。 |
 
-対象とグループの違いを保ち、情報項目とグループに共通の `Information` を用いた。グループの一つの構成要素にも `InformationGroup` を付けて所属関係を明示する。判定表・手順・業務などの中でのみ意味を持つ構造には、その文脈を名前に含める。既に役割が分かる `Who`、`Activity`、`Object`、`Step` は維持する。
+対象とグループの違いを保ち、情報項目とグループに共通の `Information` を用いた。グループの一つの構成要素にも `InformationGroup` を付けて所属関係を明示する。判定表・手順・業務などの中でのみ意味を持つ構造には、その文脈を名前に含める。既に役割が分かる `Who`、`Activity`、`Object`、`Step` は維持する。外部業務設計書の目録項目は日本語の型名のままとし、英語名は決めていない。
 
 ## 属性・関係名
 
