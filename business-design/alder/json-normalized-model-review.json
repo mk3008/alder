@@ -1,7 +1,7 @@
 {
   "format": "alder-document-package",
   "formatVersion": "0.4",
-  "revision": "normalized-model-review-3",
+  "revision": "normalized-model-review-4",
   "documents": [
     {
       "id": "alder-design",
@@ -949,7 +949,7 @@
       "id": "alder-normalized-model-study",
       "kind": "conceptModel",
       "schemaVersion": "0.1",
-      "revision": "normalized-study-3",
+      "revision": "normalized-study-4",
       "basedOn": {
         "documentId": "alder-design",
         "revision": "alder-design-1",
@@ -2444,6 +2444,10 @@
             "physicalName": "activities.whoId",
             "relationIds": [
               "nr-who-activity"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-who-activity"
             ]
           },
           {
@@ -2489,7 +2493,11 @@
           {
             "informationId": "n-information-field-3",
             "physicalName": "information.objectId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-object-information"
+            ]
           },
           {
             "informationId": "n-data-field-1",
@@ -2504,12 +2512,20 @@
           {
             "informationId": "n-dataitem-field-1",
             "physicalName": "dataItems.dataId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-data-dataitem"
+            ]
           },
           {
             "informationId": "n-dataitem-field-2",
             "physicalName": "dataItems.informationId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-dataitem-information"
+            ]
           },
           {
             "informationId": "n-dataitem-field-3",
@@ -2524,7 +2540,11 @@
           {
             "informationId": "n-step-field-2",
             "physicalName": "steps.activityId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-activity-step"
+            ]
           },
           {
             "informationId": "n-step-field-3",
@@ -2546,17 +2566,29 @@
             "physicalName": "steps.whenDecisionRowId",
             "relationIds": [
               "nr-step-when"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-step-when"
             ]
           },
           {
             "informationId": "n-exchange-field-1",
             "physicalName": "stepInteractions.stepId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-step-exchange"
+            ]
           },
           {
             "informationId": "n-exchange-field-2",
             "physicalName": "stepInteractions.objectId",
             "relationIds": [
+              "nr-exchange-object"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
               "nr-exchange-object"
             ]
           },
@@ -2575,6 +2607,10 @@
             "physicalName": "stepInteractions.relationId",
             "relationIds": [
               "nr-exchange-relation"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-exchange-relation"
             ]
           },
           {
@@ -2582,12 +2618,20 @@
             "physicalName": "stepInteractions.pairedStepId",
             "relationIds": [
               "nr-exchange-pair"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-exchange-pair"
             ]
           },
           {
             "informationId": "n-party-field-1",
             "physicalName": "stepParties.stepId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-step-party"
+            ]
           },
           {
             "informationId": "n-party-field-2",
@@ -2602,17 +2646,29 @@
           {
             "informationId": "n-party-field-4",
             "physicalName": "stepParties.objectId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-party-object"
+            ]
           },
           {
             "informationId": "n-dependency-field-1",
             "physicalName": "dependencies.stepId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-step-dependency"
+            ]
           },
           {
             "informationId": "n-dependency-field-2",
             "physicalName": "dependencies.prerequisiteStepId",
             "relationIds": [
+              "nr-dependency-step"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
               "nr-dependency-step"
             ]
           },
@@ -2621,12 +2677,20 @@
             "physicalName": "dependencies.whenDecisionRowId",
             "relationIds": [
               "nr-dependency-when"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-dependency-when"
             ]
           },
           {
             "informationId": "n-order-field-1",
             "physicalName": "orderRules.activityId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-activity-order"
+            ]
           },
           {
             "informationId": "n-order-field-2",
@@ -2636,12 +2700,20 @@
           {
             "informationId": "n-order-field-3",
             "physicalName": "orderRules.beforeId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-order-before"
+            ]
           },
           {
             "informationId": "n-order-field-4",
             "physicalName": "orderRules.afterId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-order-after"
+            ]
           },
           {
             "informationId": "n-result-field-1",
@@ -2651,7 +2723,11 @@
           {
             "informationId": "n-result-field-2",
             "physicalName": "results.activityId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-activity-result"
+            ]
           },
           {
             "informationId": "n-result-field-3",
@@ -2666,7 +2742,11 @@
           {
             "informationId": "n-decision-field-2",
             "physicalName": "decisions.activityId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-activity-decision"
+            ]
           },
           {
             "informationId": "n-decision-field-3",
@@ -2683,6 +2763,10 @@
             "physicalName": "decisions.appliesWhenRowId",
             "relationIds": [
               "nr-decision-when"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-decision-when"
             ]
           },
           {
@@ -2693,7 +2777,11 @@
           {
             "informationId": "n-axis-field-2",
             "physicalName": "axes.decisionId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-decision-axis"
+            ]
           },
           {
             "informationId": "n-axis-field-3",
@@ -2708,7 +2796,11 @@
           {
             "informationId": "n-row-field-2",
             "physicalName": "rows.decisionId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-decision-row"
+            ]
           },
           {
             "informationId": "n-row-field-3",
@@ -2723,12 +2815,20 @@
           {
             "informationId": "n-condition-field-1",
             "physicalName": "conditions.rowId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-row-condition"
+            ]
           },
           {
             "informationId": "n-condition-field-2",
             "physicalName": "conditions.axisId",
             "relationIds": [
+              "nr-condition-axis"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
               "nr-condition-axis"
             ]
           },
@@ -2750,12 +2850,20 @@
           {
             "informationId": "n-rowcheck-field-1",
             "physicalName": "rowChecks.rowId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-row-checklink"
+            ]
           },
           {
             "informationId": "n-rowcheck-field-2",
             "physicalName": "rowChecks.checkId",
             "relationIds": [
+              "nr-checklink-check"
+            ],
+            "representation": "relationKey",
+            "relationKeyIds": [
               "nr-checklink-check"
             ]
           },
@@ -2772,7 +2880,11 @@
           {
             "informationId": "n-exception-field-2",
             "physicalName": "exceptions.activityId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-activity-exception"
+            ]
           },
           {
             "informationId": "n-exception-field-3",
@@ -2787,7 +2899,11 @@
           {
             "informationId": "n-continuity-field-1",
             "physicalName": "continuities.exceptionId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-exception-continuity"
+            ]
           },
           {
             "informationId": "n-continuity-field-2",
@@ -2822,12 +2938,22 @@
           {
             "informationId": "n-relation-field-3",
             "physicalName": "relations.fromId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-relation-from-activity",
+              "nr-relation-from-object"
+            ]
           },
           {
             "informationId": "n-relation-field-4",
             "physicalName": "relations.toId",
-            "relationIds": []
+            "relationIds": [],
+            "representation": "relationKey",
+            "relationKeyIds": [
+              "nr-relation-to-activity",
+              "nr-relation-to-object"
+            ]
           },
           {
             "informationId": "n-finding-field-1",
@@ -2888,6 +3014,32 @@
             "informationId": "n-check-field-3",
             "physicalName": "retained Check.items.reviewState",
             "relationIds": []
+          }
+        ],
+        "relationPhysicalFields": [
+          {
+            "relationId": "nr-bd-actor",
+            "physicalName": "actors.documentId"
+          },
+          {
+            "relationId": "nr-bd-activity",
+            "physicalName": "activities.documentId"
+          },
+          {
+            "relationId": "nr-bd-object",
+            "physicalName": "objects.documentId"
+          },
+          {
+            "relationId": "nr-bd-data",
+            "physicalName": "data.documentId"
+          },
+          {
+            "relationId": "nr-bd-relation",
+            "physicalName": "relations.documentId"
+          },
+          {
+            "relationId": "nr-bd-finding",
+            "physicalName": "findings.documentId"
           }
         ],
         "relationNames": {

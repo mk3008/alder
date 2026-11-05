@@ -28,11 +28,17 @@ assert.throws(()=>coverage(checks.slice(1)),/each requirement/);assert.throws(()
 assert.throws(()=>classCoverage(classChecks.slice(1)),/each class-view requirement/);assert.throws(()=>classCoverage([...classChecks,classChecks[0]]),/class-view requirement|duplicated/);
 
 const source=readFileSync('../business-design/alder/json-normalized-model-review.json');
-assert.equal(hash(source),'74cd817a7794b7f5fba82b961deb5b644f11187780ff8b480f82eec90d7273b3');
-const previous=JSON.parse(source),previousModel=previous.documents.find(d=>d.kind==='conceptModel');
+// Restore only the explicitly approved relationship-key metadata and revisions
+// before comparing with the earlier immutable model. Other data must not drift.
+const preserved=JSON.parse(source),preservedModel=preserved.documents.find(d=>d.kind==='conceptModel');
+preserved.revision='normalized-model-review-3';preservedModel.revision='normalized-study-3';
+for(const mapping of preservedModel.meta.fieldMappings){delete mapping.representation;delete mapping.relationKeyIds;}
+delete preservedModel.meta.relationPhysicalFields;
+assert.equal(hash(JSON.stringify(preserved,null,2)+'\n'),'74cd817a7794b7f5fba82b961deb5b644f11187780ff8b480f82eec90d7273b3','only approved relationship-key metadata and revisions differ from the previous model');
+const previous=structuredClone(preserved),previousModel=previous.documents.find(d=>d.kind==='conceptModel');
 delete previousModel.meta.conceptNames;previous.revision='normalized-model-review-2';previousModel.revision='normalized-study-2';
 assert.equal(hash(JSON.stringify(previous)),'01cfdb043ec8182aa24a2495dd60209c19f38afe4193f8a88bca6df07ad50020','only explicitly authorized structure names and revisions differ from the previous model');
-const baseline=JSON.parse(source),baselineModel=baseline.documents.find(d=>d.kind==='conceptModel');
+const baseline=structuredClone(preserved),baselineModel=baseline.documents.find(d=>d.kind==='conceptModel');
 delete baselineModel.meta.conceptNames;delete baselineModel.meta.relationNames;baseline.revision='normalized-model-review-1';baselineModel.revision='normalized-study-1';
 assert.equal(hash(JSON.stringify(baseline)),'ab344c5e9e01d4e5a7fa01c8daa4b6d3ecc14c090e59849e28a144c5498084a1','only explicitly authorized relation names, type names and revisions differ from the original model');
 const formatSource=readFileSync('../business-design/alder/json-structure-review.json');
@@ -119,7 +125,7 @@ try{
  assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（3）','所有（6）']);
  const activity=host.querySelector('[data-relation-id="nr-bd-activity"][data-relation-direction="owned"] > details');
  assert(activity&&!activity.open,'Activity is below Business Design');activity.open=true;activity.dispatchEvent(new w.Event('toggle'));
- assert.deepEqual(groups(activity),['属性（6）','所有（5）','参照（1）'],'Activity shows ownership and outgoing references only');
+ assert.deepEqual(groups(activity),['属性（5）','所有（5）','参照（1）'],'Activity shows its own attributes and outgoing references only');
  const step=host.querySelector('[data-relation-id="nr-activity-step"][data-relation-direction="owned"] > details');
  const stepRow=step.querySelector(':scope > summary');assert.equal(step.open,false);
  assert.match(stepRow.textContent,/1\.\.N.*手順.*型：Step.*業務内の順序付き手順。/,'description follows the name on the collapsed row');
@@ -128,7 +134,7 @@ try{
  assert.equal(activity.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"]').length,0);
  step.open=true;step.dispatchEvent(new w.Event('toggle'));
  const stepFields=node=>[...node.querySelectorAll(':scope > .structure-children > .structure-field > span:first-of-type')].map(value=>value.textContent);
- assert.deepEqual(stepFields(step),['識別子','所属する業務','操作','方法','やり取りの種類','適用する判定行']);
+ assert.deepEqual(stepFields(step),['識別子','操作','方法','やり取りの種類']);
  assert.deepEqual(direct(step).filter(value=>value.dataset.relationDirection==='reference').map(value=>[value.dataset.relationId,value.querySelector('.structure-count').textContent]),[['nr-step-data','0..N'],['nr-step-decision','0..N'],['nr-step-when','0..1']],'Data and Decision Row are classified from their declared references');
  assert.equal(step.querySelector(':scope > .structure-children > [data-relation-id="nr-step-exchange"][data-relation-direction="owned"] .structure-count').textContent,'0..1','optional ownership is not misclassified as a reference');
  const exchange=step.querySelector(':scope > .structure-children > [data-relation-id="nr-step-exchange"] > details');exchange.open=true;exchange.dispatchEvent(new w.Event('toggle'));

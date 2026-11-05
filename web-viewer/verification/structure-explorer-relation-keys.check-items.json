@@ -1,0 +1,11 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "正規化候補の構造エクスプローラーにおける関係キーの表示",
+  "source": "2026-11-05 本人指示：概念モデルでは所有・参照関係を関係として表示し、同じ関係を表す保存用IDを概念属性として重複表示しない。物理項目との対応は保持する。",
+  "checks": [
+    {"id":"STRUCTURE-RELKEY-001","condition":"正規化候補で関係に対応することが明示されたIDを表示する","guarantee":"対応する関係を表示し、同じIDを属性行として重複表示しない。識別子や名前などの独立した属性は残す。","reason":"概念の性質と関係を分けて確認できるようにする。","verification":"Information.objectId、Activity.whoId、Step.activityIdと参照先、識別子・名前を表示で照合する。"},
+    {"id":"STRUCTURE-RELKEY-002","condition":"所有または参照関係に保存項目の対応が明示されている","guarantee":"順方向の関係行から完全な物理項目名を確認できる。子側に保存された所有元IDとBusiness Design所属IDも保持する。保存データを変更しない。","reason":"概念関係と正規化後の実データを対応付けられるようにする。","verification":"information.objectId、objects.documentId、activities.whoId、および正規化データの復元を確認する。"},
+    {"id":"STRUCTURE-RELKEY-003","condition":"対応が未定義、不正、または曖昧であるか、別の0.7候補を表示する","guarantee":"関係キーと確定できない項目は隠さない。明示フラグのない0.7候補の表示は変えない。","reason":"推測による情報の消失と別候補への意図しない波及を防ぐ。","verification":"関係の欠落、対象外、重複対応、フラグなし、0.7候補で確認する。"},
+    {"id":"STRUCTURE-RELKEY-004","condition":"構造を検索し、個別タブや循環先を展開する","guarantee":"物理名と関係名で検索でき、同じ構造では同じ属性と関係を表示する。関係の方向、名前、多重度、循環制御と全体図を保持する。","reason":"属性の重複をなくしても既存の探索と概念モデルの参照を失わないため。","verification":"検索、個別起点、循環先、既存の構造・関係・全体図の検証を行う。"}
+  ]
+}

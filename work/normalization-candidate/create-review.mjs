@@ -114,9 +114,34 @@ m.relations=relationships.map(([id,from,to,fromLabel,toLabel,kind,condition])=>(
 m.reviewGroups=[];m.handoffs=[];m.benefits=[];m.considerations=[];m.reviewPoints=[];
 m.meta={sourceFormatVersion:'0.7',modelStatus:'normalized-study',scope:'Business Designのみ。Check等の別文書は現行のまま保持。',fieldMappings:definitions.flatMap(([id,table,fields])=>fields.map((value,i)=>{
  const [physicalName]=value.split('|');const fieldKey=id+'.'+physicalName;
- const fieldRelations={'activity.whoId':['nr-who-activity'],'exchange.objectId':['nr-exchange-object'],'exchange.relationId':['nr-exchange-relation'],'exchange.pairedStepId':['nr-exchange-pair'],'step.whenDecisionRowId':['nr-step-when'],'dependency.whenDecisionRowId':['nr-dependency-when'],'dependency.prerequisiteStepId':['nr-dependency-step'],'decision.appliesWhenRowId':['nr-decision-when'],'condition.axisId':['nr-condition-axis'],'rowcheck.checkId':['nr-checklink-check']};
- return {informationId:`n-${id}-field-${i+1}`,physicalName:table+'.'+physicalName,relationIds:fieldRelations[fieldKey]??[]};
-})),relationNames:structuredClone(savedNames),conceptNames:structuredClone(savedConceptNames)};
+ const fieldRelations={
+  'activity.whoId':['nr-who-activity'],'information.objectId':['nr-object-information'],
+  'dataitem.dataId':['nr-data-dataitem'],'dataitem.informationId':['nr-dataitem-information'],
+  'step.activityId':['nr-activity-step'],'step.whenDecisionRowId':['nr-step-when'],
+  'exchange.stepId':['nr-step-exchange'],'exchange.objectId':['nr-exchange-object'],'exchange.relationId':['nr-exchange-relation'],'exchange.pairedStepId':['nr-exchange-pair'],
+  'party.stepId':['nr-step-party'],'party.objectId':['nr-party-object'],
+  'dependency.stepId':['nr-step-dependency'],'dependency.prerequisiteStepId':['nr-dependency-step'],'dependency.whenDecisionRowId':['nr-dependency-when'],
+  'order.activityId':['nr-activity-order'],'order.beforeId':['nr-order-before'],'order.afterId':['nr-order-after'],
+  'result.activityId':['nr-activity-result'],'decision.activityId':['nr-activity-decision'],'decision.appliesWhenRowId':['nr-decision-when'],
+  'axis.decisionId':['nr-decision-axis'],'row.decisionId':['nr-decision-row'],
+  'condition.rowId':['nr-row-condition'],'condition.axisId':['nr-condition-axis'],
+  'rowcheck.rowId':['nr-row-checklink'],'rowcheck.checkId':['nr-checklink-check'],
+  'exception.activityId':['nr-activity-exception'],'continuity.exceptionId':['nr-exception-continuity'],
+  'relation.fromId':['nr-relation-from-activity','nr-relation-from-object'],'relation.toId':['nr-relation-to-activity','nr-relation-to-object']
+ };
+ // Keep the existing overview field links unchanged; the new classification is
+ // explicit metadata for the conceptual structure view, not a new graph edge.
+ const overviewFields={'activity.whoId':['nr-who-activity'],'exchange.objectId':['nr-exchange-object'],'exchange.relationId':['nr-exchange-relation'],'exchange.pairedStepId':['nr-exchange-pair'],'step.whenDecisionRowId':['nr-step-when'],'dependency.whenDecisionRowId':['nr-dependency-when'],'dependency.prerequisiteStepId':['nr-dependency-step'],'decision.appliesWhenRowId':['nr-decision-when'],'condition.axisId':['nr-condition-axis'],'rowcheck.checkId':['nr-checklink-check']};
+ const relationKeyIds=fieldRelations[fieldKey]??[];
+ return {informationId:`n-${id}-field-${i+1}`,physicalName:table+'.'+physicalName,relationIds:overviewFields[fieldKey]??[],...(relationKeyIds.length?{representation:'relationKey',relationKeyIds}:{})};
+})),relationPhysicalFields:[
+ {relationId:'nr-bd-actor',physicalName:'actors.documentId'},
+ {relationId:'nr-bd-activity',physicalName:'activities.documentId'},
+ {relationId:'nr-bd-object',physicalName:'objects.documentId'},
+ {relationId:'nr-bd-data',physicalName:'data.documentId'},
+ {relationId:'nr-bd-relation',physicalName:'relations.documentId'},
+ {relationId:'nr-bd-finding',physicalName:'findings.documentId'}
+],relationNames:structuredClone(savedNames),conceptNames:structuredClone(savedConceptNames)};
 const relationIds=new Set(m.relations.map(relation=>relation.id));
 if(Object.keys(savedNames).length!==relationIds.size||Object.entries(savedNames).some(([id,name])=>!relationIds.has(id)||typeof name!=='string'||!name.trim()))throw Error('Conceptual relation names do not match the review model relations');
 // Preserve the earlier authored 13-concept projection. The Viewer adds all
