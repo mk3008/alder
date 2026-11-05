@@ -1,4 +1,4 @@
-import {createElement,Box,FileText,Folder,Link,Search} from 'lucide';
+import {createElement,Box,ExternalLink,FileText,Folder,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
 type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean};
@@ -53,18 +53,20 @@ function typeLabel(mapping:Mapping|undefined){
 }
 
 /** The DOM is lazy per path. A full expansion visits each concept once. */
-export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
+export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,options:{rootId?:string;openStructure?:(id:string)=>void}={}){
  const graph=structureGraph(model);host.replaceChildren();host.className='structure-explorer';
  if(!graph.roots.length){text(host,'p','この構造モデルには概念がありません。','structure-empty');return;}
+ if(options.rootId&&!graph.nodes.has(options.rootId)){text(host,'p','指定した構造が見つかりません。','structure-empty');return;}
+ const roots=options.rootId?[options.rootId]:graph.roots;
  const panel=document.createElement('section');panel.className='structure-panel';host.append(panel);
  const toolbar=document.createElement('div');toolbar.className='structure-toolbar';panel.append(toolbar);
  const all=document.createElement('button');all.type='button';all.textContent='すべて展開';toolbar.append(all);
  const collapse=document.createElement('button');collapse.type='button';collapse.textContent='すべて折りたたみ';toolbar.append(collapse);
  const searchLabel=document.createElement('label');searchLabel.className='structure-search';searchLabel.append(icon(Search));
  const search=document.createElement('input');search.type='search';search.placeholder='構造名・項目名で検索';search.setAttribute('aria-label','構造名・項目名で検索');searchLabel.append(search);toolbar.append(searchLabel);
- if(!graph.packageRoot)text(panel,'p',graph.hasOwnershipRoots?'JSON全体のルートをこの構造モデルから一意に特定できません。所有元が未定義の構造から表示します。':'JSON全体のルートと所有関係の起点を特定できないため、すべての構造を表示します。','structure-unreachable');
+ if(!options.rootId&&!graph.packageRoot)text(panel,'p',graph.hasOwnershipRoots?'JSON全体のルートをこの構造モデルから一意に特定できません。所有元が未定義の構造から表示します。':'JSON全体のルートと所有関係の起点を特定できないため、すべての構造を表示します。','structure-unreachable');
  const unreachable=[...graph.nodes.keys()].filter(id=>!graph.reachable.has(id));
- if(unreachable.length)text(panel,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
+ if(!options.rootId&&unreachable.length)text(panel,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
  const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);
  let savedTree:Node|null=null;
 
@@ -77,6 +79,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
   row.className='structure-node-row';row.append(icon(Box));
   if(edge){text(row,'span',edge.count,'structure-count');row.title=`${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
   text(row,'strong',concept.name);
+  if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
   if(edge?.relation.condition)text(row,'span',edge.relation.condition,'structure-condition');
   if(edge?.fields.length)text(row,'span',edge.fields.join('、'),'structure-edge-detail');
   if(cycle||visited)text(row,'span','既出','structure-seen');
@@ -99,7 +102,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel){
   if(seen&&!visited){seen.add(id);details.open=true;build(seen);}
   return item;
  };
- const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';const seen=expand?new Set<string>():undefined;for(const id of graph.roots)ul.append(buildNode(id,new Set(),undefined,seen));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}};
+ const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';const seen=expand?new Set<string>():undefined;for(const id of roots)ul.append(buildNode(id,new Set(),undefined,seen));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}};
  const filter=()=>{const query=search.value.trim().toLocaleLowerCase();
   if(query&&!savedTree){savedTree=tree.firstChild;render(true);}else if(!query&&savedTree){tree.replaceChildren(savedTree);savedTree=null;return;}
   const items=Array.from(tree.querySelectorAll<HTMLElement>('[data-search-text]')).reverse();
