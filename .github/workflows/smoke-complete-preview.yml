@@ -1,0 +1,81 @@
+name: Verify complete concept model preview
+on:
+  push:
+    branches:
+      - beta/pr-357-root-smoke-6a363cd9
+    paths:
+      - .github/workflows/smoke-complete-preview.yml
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - run: npm install --prefix "$RUNNER_TEMP/smoke" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Check the published package root in Chrome
+        shell: bash
+        run: |
+          cat > "$RUNNER_TEMP/smoke.cjs" <<'JS'
+          const assert=require('node:assert/strict');
+          const {chromium}=require(process.env.RUNNER_TEMP+'/smoke/node_modules/playwright');
+          const base='https://mk3008.github.io/alder/preview/pr-357/6a363cd9febd222130a804085d3bf910c57d2591-complete/';
+          const source=base+'examples/json-complete-concept-review.json';
+          const url=base+'?preview=1&view=concept&concept=structure-explorer#source='+encodeURIComponent(source);
+          (async()=>{
+            const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
+            try{
+              const page=await browser.newPage({viewport:{width:1280,height:960}});
+              const errors=[];let sourceStatus;
+              page.on('pageerror',e=>errors.push(e.message));
+              page.on('response',response=>{if(response.url()===source)sourceStatus=response.status();});
+              const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:60000});
+              assert(response&&response.ok(),'Viewer did not load');
+              const root=page.locator('.structure-root > [data-concept-id="n-package"] > details > summary');
+              await root.waitFor({state:'visible',timeout:60000});
+              const rootText=await root.innerText();
+              assert(rootText.includes('DocumentPackage')&&rootText.includes('文書パッケージ'),rootText);
+              const top={};
+              for(const [id,label] of [['nr-package-bd','業務設計書'],['nr-package-checkdoc','チェック文書'],['nr-package-state-doc','状態遷移文書'],['nr-package-concept-doc','概念モデル文書']]){
+                const row=page.locator('[data-relation-id="'+id+'"] > details > summary');
+                await row.waitFor({state:'visible'});top[id]=await row.innerText();assert(top[id].includes(label),top[id]);
+              }
+              await page.screenshot({path:process.env.RUNNER_TEMP+'/complete-root.png'});
+              const bd=page.locator('[data-relation-id="nr-package-bd"] > details');
+              await bd.locator(':scope > summary').click();
+              const group=bd.locator('[data-relation-id="nr-bd-data"] > details');
+              await group.locator(':scope > summary').click();
+              const member=group.locator('[data-relation-id="nr-data-dataitem"] > details');
+              const memberText=await member.locator(':scope > summary').innerText();
+              assert(memberText.includes('InformationGroupMember'),memberText);
+              await member.locator(':scope > summary').click();
+              const item=member.locator('[data-relation-id="nr-dataitem-information"] > details > summary');
+              assert((await item.innerText()).includes('InformationItem'));
+              const state=page.locator('[data-relation-id="nr-package-state-doc"] > details');
+              await state.locator(':scope > summary').click();
+              const states=state.locator('[data-relation-id="cr-801f6a69f2d0fc"] > details');
+              await states.locator(':scope > summary').click();
+              assert((await states.innerText()).includes('参考例：受付済'));
+              const check=page.locator('[data-relation-id="nr-package-checkdoc"] > details');
+              await check.locator(':scope > summary').click();
+              const checkItem=check.locator('[data-relation-id="nr-checkdoc-check"] > details');
+              await checkItem.locator(':scope > summary').click();
+              assert(await checkItem.locator('[data-relation-id="cr-1decadea0149d6"]').count());
+              assert(!(await checkItem.innerText()).includes('チェック項目の詳細 型'));
+              assert.equal(sourceStatus,200,'the supplied public JSON was not fetched');
+              assert.deepEqual(errors,[]);
+              console.log(JSON.stringify({status:'ok',browser:browser.version(),viewer:page.url(),sourceStatus,root:rootText,top,member:memberText}));
+            }finally{await browser.close();}
+          })().catch(error=>{console.error(error);process.exitCode=1;});
+          JS
+          node "$RUNNER_TEMP/smoke.cjs"
+      - uses: actions/upload-artifact@v4.6.2
+        if: always()
+        with:
+          name: pr357-complete-root
+          path: ${{ runner.temp }}/complete-root.png
+          if-no-files-found: ignore
+          retention-days: 14
