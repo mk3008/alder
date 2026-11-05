@@ -64,7 +64,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  const collapse=document.createElement('button');collapse.type='button';collapse.textContent='すべて折りたたみ';toolbar.append(collapse);
  const searchLabel=document.createElement('label');searchLabel.className='structure-search';searchLabel.append(icon(Search));
  const search=document.createElement('input');search.type='search';search.placeholder='構造名・項目名で検索';search.setAttribute('aria-label','構造名・項目名で検索');searchLabel.append(search);toolbar.append(searchLabel);
- if(!options.rootId&&!graph.packageRoot)text(panel,'p',graph.hasOwnershipRoots?'JSON全体のルートをこの構造モデルから一意に特定できません。所有元が未定義の構造から表示します。':'JSON全体のルートと所有関係の起点を特定できないため、すべての構造を表示します。','structure-unreachable');
+ if(!options.rootId&&!graph.packageRoot&&!graph.hasOwnershipRoots)text(panel,'p','JSON全体のルートと所有関係の起点を特定できないため、すべての構造を表示します。','structure-unreachable');
  const unreachable=[...graph.nodes.keys()].filter(id=>!graph.reachable.has(id));
  if(!options.rootId&&unreachable.length)text(panel,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
  const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);

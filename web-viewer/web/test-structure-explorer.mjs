@@ -7,7 +7,7 @@ import {structureGraph} from '../src/structure-explorer.ts';
 
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const authorities={
- 'verification/structure-explorer.check-items.json':'678a40e2d6036406fc663d4cc09e3140f8441fae9e991de6e8206b4f63c56c5e',
+ 'verification/structure-explorer.check-items.json':'4f320e7b7f77d800fac07a6186ccbfc33bec0c22a76012d479b10418e4df0b3f',
  'verification/concept-full-overview.check-items.json':'b596ec259b2dbfb2f7a7a745f4fd61a380bf3a2df7989c047b1c00e786489190',
  'verification/concept-reference-routing.check-items.json':'43aad9abfc64e4be353963c6c1ace38498ece338730479f833e9621dd1399e4a',
  'verification/concept-json-field-mapping.check-items.json':'45178adb013fb0345749d83148d9b265860a55fa05992bb05525c3ad066ec564',
@@ -91,7 +91,7 @@ try{
  assert.equal(host.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"],[data-relation-direction="unknownIn"]').length,0,'inverse relations remain in the model but are not rendered');
  host.querySelectorAll('.structure-toolbar button')[1].click();assert([...host.querySelectorAll('.structure-root > .structure-item > details')].every(d=>!d.open),'collapse all closes every root');covered.add('STRUCTURE-003');
  w.Explorer.renderStructureExplorer(host,model);
- assert.match(host.textContent,/JSON全体のルートをこの構造モデルから一意に特定できません/);
+ assert.doesNotMatch(host.textContent,/JSON全体のルートをこの構造モデルから一意に特定できません/,'the root annotation is hidden');
  assert.deepEqual([...host.querySelectorAll('.structure-root > .structure-item')].map(el=>el.dataset.conceptId),['n-bd','n-external','n-checkdoc']);
  assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（3）','所有（6）']);
  const activity=host.querySelector('[data-relation-id="nr-bd-activity"][data-relation-direction="owned"] > details');
@@ -123,7 +123,10 @@ try{
  const incomingGraph=structureGraph(incomingOnly);assert(!incomingGraph.reachable.has('outside'),'an inverse-only path is not treated as visible');
  assert(incomingGraph.edges.get('fmt-package').some(edge=>edge.relation.id==='incoming-only'&&edge.direction==='referencedBy'),'the hidden inverse relation remains available internally');
  w.Explorer.renderStructureExplorer(host,incomingOnly);assert.match(host.textContent,/この起点からたどれない構造：1件/);
- w.Explorer.renderStructureExplorer(host,missing);assert.match(host.textContent,/JSON全体のルートをこの構造モデルから一意に特定できません/);
+ w.Explorer.renderStructureExplorer(host,missing);assert.doesNotMatch(host.textContent,/JSON全体のルートをこの構造モデルから一意に特定できません/);
+ assert.deepEqual([...host.querySelectorAll('.structure-root > .structure-item')].map(el=>el.dataset.conceptId),['fmt-package','fmt-role'],'missing mappings do not invent a package root');
+ w.Explorer.renderStructureExplorer(host,ambiguous);assert.doesNotMatch(host.textContent,/JSON全体のルートをこの構造モデルから一意に特定できません/);
+ assert.deepEqual([...host.querySelectorAll('.structure-root > .structure-item')].map(el=>el.dataset.conceptId),['fmt-package','fmt-role','alternate-package'],'ambiguous packages remain distinct');
  w.Explorer.renderStructureExplorer(host,formatModel);
  assert.equal(host.querySelector('.structure-root > .structure-item').dataset.conceptId,'fmt-package','the 0.7 package is the actual starting point');
  assert(!host.textContent.includes('JSON全体のルートをこの構造モデルから一意に特定できません'));
