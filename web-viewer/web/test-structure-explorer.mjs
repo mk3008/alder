@@ -7,7 +7,7 @@ import {structureGraph} from '../src/structure-explorer.ts';
 
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const authorities={
- 'verification/structure-explorer.check-items.json':'4f320e7b7f77d800fac07a6186ccbfc33bec0c22a76012d479b10418e4df0b3f',
+ 'verification/structure-explorer.check-items.json':'ffbab6ccab3329ea3b9ca0fb5e5e56c2d726b80e723ced8c5171feca573c66fc',
  'verification/concept-full-overview.check-items.json':'b596ec259b2dbfb2f7a7a745f4fd61a380bf3a2df7989c047b1c00e786489190',
  'verification/concept-reference-routing.check-items.json':'43aad9abfc64e4be353963c6c1ace38498ece338730479f833e9621dd1399e4a',
  'verification/concept-json-field-mapping.check-items.json':'45178adb013fb0345749d83148d9b265860a55fa05992bb05525c3ad066ec564',
@@ -84,6 +84,8 @@ try{
  assert(one.textContent.includes('single.value')&&one.textContent.includes('array・未決可'),'explicit field mapping and type stay visible');
  assert(host.textContent.includes('activities.id')&&host.textContent.includes('未定義'),'missing attribute types are not invented');
  many.open=true;many.dispatchEvent(new w.Event('toggle'));assert(many.querySelector('[data-relation-id="self"] .structure-seen'),'self reference is marked and terminates');
+ const self=many.querySelector('[data-relation-id="self"] > details');assert(self&&!self.open,'self reference remains manually expandable');
+ self.open=true;self.dispatchEvent(new w.Event('toggle'));assert(self.querySelector('[data-relation-id="self"] > details:not([open])'),'manual expansion reveals a further closed self reference');
  one.open=false;assert.equal(many.open,true,'collapsing one node preserves the other node');
  const shared=one.querySelector('[data-relation-id="shared"] > details');assert(shared,'shared reference is offered in each independent path');
  host.querySelector('.structure-toolbar button').click();assert(host.querySelectorAll('.structure-item').length<=sample.relations.length+sg.roots.length,'expand all visits every concept once and stops');
@@ -103,6 +105,27 @@ try{
  assert(!stepRow.textContent.includes('n-step')&&!stepRow.textContent.includes('逆 1'),'internal ID and reverse count are not displayed in the row');
  assert.match(stepRow.title,/移動先 1\.\.N／反対側 1/,'both defined multiplicities remain available');
  assert.equal(activity.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"]').length,0);
+ step.open=true;step.dispatchEvent(new w.Event('toggle'));
+ const directGroups=node=>[...node.querySelectorAll(':scope > .structure-children > li > details.structure-group')];
+ const group=(node,label)=>directGroups(node).find(value=>value.querySelector(':scope > summary').textContent.startsWith(label));
+ const stepFields=node=>[...group(node,'属性').querySelectorAll(':scope > .structure-fields > .structure-field > span:first-of-type')].map(value=>value.textContent);
+ assert.deepEqual(stepFields(step),['識別子','所属する業務','操作','方法','やり取りの種類','適用する判定行']);
+ const references=group(step,'参照'),owned=group(step,'所有');
+ assert.deepEqual([...references.querySelectorAll(':scope > .structure-children > .structure-item')].map(value=>[value.dataset.relationId,value.querySelector('.structure-count').textContent]),[['nr-step-data','0..N'],['nr-step-decision','0..N'],['nr-step-when','0..1']],'Data and Decision Row are classified from their declared references');
+ assert.equal(owned.querySelector('[data-relation-id="nr-step-exchange"] .structure-count').textContent,'0..1','optional ownership is not misclassified as a reference');
+ const exchange=owned.querySelector('[data-relation-id="nr-step-exchange"] > details');exchange.open=true;exchange.dispatchEvent(new w.Event('toggle'));
+ const repeated=exchange.querySelector('[data-relation-id="nr-exchange-pair"] > details');
+ assert(repeated&&!repeated.open&&repeated.querySelector(':scope > summary .structure-seen'),'a cyclic reference remains a closed expandable node');
+ repeated.open=true;repeated.dispatchEvent(new w.Event('toggle'));
+ assert.deepEqual(stepFields(repeated),stepFields(step),'a manually expanded repeated structure retains the same attributes');
+ assert.deepEqual(groups(repeated),groups(step),'a repeated structure retains ownership and references');
+ const dependency=owned.querySelector('[data-relation-id="nr-step-dependency"] > details');dependency.open=true;dependency.dispatchEvent(new w.Event('toggle'));
+ const prerequisite=dependency.querySelector('[data-relation-id="nr-dependency-step"] > details');assert(prerequisite&&!prerequisite.open);
+ prerequisite.open=true;prerequisite.dispatchEvent(new w.Event('toggle'));assert.deepEqual(stepFields(prerequisite),stepFields(step),'a second cyclic route can also be explored manually');
+ const originalTree=host.querySelector('.structure-root'),query=host.querySelector('input[type=search]');
+ for(const value of ['識別子','判定行']){query.value=value;query.dispatchEvent(new w.Event('input'));assert(host.querySelectorAll('.structure-item').length<=model.relations.length+graph.roots.length,'search expansion stops at repeated structures');}
+ query.value='';query.dispatchEvent(new w.Event('input'));
+ assert.equal(host.querySelector('.structure-root'),originalTree,'clearing search restores the original tree');assert(repeated.open&&prerequisite.open,'manual expansion survives search');
  const relationNode=host.querySelector('[data-relation-id="nr-bd-relation"][data-relation-direction="owned"] > details');
  assert(relationNode&&!relationNode.open);relationNode.open=true;relationNode.dispatchEvent(new w.Event('toggle'));
  const parallel=[...relationNode.querySelectorAll('[data-concept-id="n-activity"][data-relation-direction="reference"] > details > summary')].map(row=>row.textContent);
