@@ -1,0 +1,57 @@
+name: Verify isolated naming review on Pages
+on:
+  push:
+    branches:
+      - beta/pr-357-smoke-32427915
+    paths:
+      - .github/workflows/smoke-pr357-preview.yml
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - run: npm install --prefix "$RUNNER_TEMP/smoke" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Open published JSON in headless Chrome
+        shell: bash
+        run: |
+          cat > "$RUNNER_TEMP/smoke.cjs" <<'JS'
+          const assert=require('node:assert/strict');
+          const {chromium}=require(process.env.RUNNER_TEMP+'/smoke/node_modules/playwright');
+          const base='https://mk3008.github.io/alder/preview/pr-357/32427915afa4cf6a2c4eb72fbd76541ae94d048e-normalized/';
+          const source=base+'examples/json-normalized-model-review.json';
+          const url=base+'?preview=1&view=concept&concept=structure-explorer%3An-data#source='+encodeURIComponent(source);
+          (async()=>{
+            const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
+            try{
+              const page=await browser.newPage({viewport:{width:1280,height:960}});
+              const errors=[];let sourceStatus;
+              page.on('pageerror',e=>errors.push(e.message));
+              page.on('response',response=>{if(response.url()===source)sourceStatus=response.status();});
+              const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
+              assert(response&&response.ok(),'Viewer did not load');
+              const root=page.locator('.structure-root > [data-concept-id="n-data"] > details > summary');
+              await root.waitFor({state:'visible',timeout:45000});
+              const rootText=await root.innerText();
+              assert(rootText.includes('InformationGroup')&&rootText.includes('情報項目グループ'),rootText);
+              const group=page.locator('[data-relation-id="nr-data-dataitem"] > details > summary');
+              await group.waitFor({state:'visible'});
+              const groupText=await group.innerText();
+              assert(groupText.includes('構成項目')&&groupText.includes('InformationGroupMember'),groupText);
+              await group.click();
+              const item=page.locator('[data-relation-id="nr-dataitem-information"] > details > summary');
+              await item.waitFor({state:'visible'});
+              const itemText=await item.innerText();
+              assert(itemText.includes('情報項目')&&itemText.includes('InformationItem'),itemText);
+              assert((await page.locator('.structure-example').allTextContents()).some(text=>text.includes('連絡先')));
+              assert.equal(sourceStatus,200,'The supplied public JSON was not fetched');
+              assert.deepEqual(errors,[]);
+              console.log(JSON.stringify({status:'ok',browser:browser.version(),viewer:page.url(),sourceStatus,root:rootText,group:groupText,item:itemText}));
+            } finally { await browser.close(); }
+          })().catch(error=>{console.error(error);process.exitCode=1;});
+          JS
+          node "$RUNNER_TEMP/smoke.cjs"
