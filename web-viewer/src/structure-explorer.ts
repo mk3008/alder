@@ -1,4 +1,4 @@
-import {createElement,Box,ExternalLink,FileText,Folder,Link,Search} from 'lucide';
+import {createElement,Box,ExternalLink,FileText,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
 type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean};
@@ -47,7 +47,7 @@ export function structureGraph(model:ConceptModel){
 }
 
 const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'所有先',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
-const icon=(which:typeof Box)=>{const svg=createElement(which,{'aria-hidden':'true','stroke-width':1.8});svg.classList.add('structure-icon');return svg;};
+const icon=(which:typeof Box,label?:string)=>{const svg=createElement(which,{'aria-hidden':'true','stroke-width':1.8});svg.classList.add('structure-icon');if(label){svg.removeAttribute('aria-hidden');svg.setAttribute('role','img');svg.setAttribute('aria-label',label);const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=label;svg.prepend(title);}return svg;};
 const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;root.append(el);return el;};
 const shortPhysicalName=(path:string)=>path.split(' / ').map(part=>part.trim().split('.').pop()??part).join(' / ');
 function typeLabel(mapping:Mapping|undefined){
@@ -79,8 +79,8 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   item.dataset.searchText=[concept.name,concept.id,...names,...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
   const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
-  row.className='structure-node-row';row.append(icon(Box));
-  if(edge){text(row,'span',edge.count,'structure-count');row.title=`${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
+  row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));
+  if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
    fields.forEach((field,index)=>{if(index)text(row,'span','／');const label=document.createElement('span');label.className='structure-element';row.append(label);
@@ -95,14 +95,9 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   let built=false;const nextPath=new Set(path);nextPath.add(id);
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
-   if(concept.information.length){const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(Folder));text(summary,'span','属性');text(summary,'span',`（${concept.information.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
-    const fields=document.createElement('ul');fields.className='structure-fields';folder.append(fields);
-    for(const info of concept.information){const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText));text(field,'span',info.name);text(field,'span','型：'+typeLabel(mapping),'structure-type');if(mapping?.physicalName)text(field,'code',mapping.physicalName);fields.append(field);}
-   }
+   for(const info of concept.information){const field=document.createElement('li'),mapping=graph.mappings.get(info.id);field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();field.append(icon(FileText,'属性'));text(field,'span',info.name);text(field,'span','型：'+typeLabel(mapping),'structure-type');if(mapping?.physicalName)text(field,'code',mapping.physicalName);children.append(field);}
    for(const direction of visibleDirections){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
-    const li=document.createElement('li'),folder=document.createElement('details'),summary=document.createElement('summary');folder.className='structure-group';folder.open=true;summary.append(icon(direction==='reference'||direction==='referencedBy'?Link:Folder));text(summary,'span',labels[direction]);text(summary,'span',`（${outgoing.length}）`,'structure-folder-count');folder.append(summary);li.append(folder);children.append(li);
-    const targets=document.createElement('ul');targets.className='structure-children';folder.append(targets);
-    for(const relation of outgoing)targets.append(buildNode(relation.to,nextPath,relation,expand));
+    for(const relation of outgoing)children.append(buildNode(relation.to,nextPath,relation,expand));
    }
   };
   details.addEventListener('toggle',()=>{if(details.open)build();});

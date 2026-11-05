@@ -35,7 +35,7 @@ try{
  render(normalized,'n-step');
  const root=host.querySelector('.structure-root > .structure-item > details > summary');
  assert.equal(root.querySelector(':scope > strong').textContent,'手順行（Step）');assert.equal(root.querySelector('.structure-element'),null,'a root is a type, not a child property');
- const attribute=host.querySelector('.structure-fields > .structure-field');
+ const attribute=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');
  assert.match(attribute.textContent,/識別子.*型：未定義.*steps\.id/,'an attribute shows its name and known or undefined type before the original physical name');
  open(host.querySelector('[data-relation-id="nr-step-exchange"] > details'));
  const paired=row('nr-exchange-pair');
@@ -65,7 +65,7 @@ try{
  assert.deepEqual(pairs(row('rel-package-bd')),[['名前未定義','業務設計書（Business Design）']],'conflicting mappings do not select a name or array status');
  const explicit=structuredClone(physical),mapping=explicit.meta.fieldMappings.find(item=>item.informationId==='fmt-package-field-1');
  mapping.valueType='string';render(explicit,'fmt-package');
- const first=host.querySelector('.structure-fields > .structure-field');
+ const first=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');
  assert.match(first.textContent,/形式.*型：string.*format/,'explicit attribute types remain visible');
  covered.push('STRUCTURE-LABEL-003');
 }finally{window.close();}

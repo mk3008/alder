@@ -8,6 +8,7 @@ import {structureGraph} from '../src/structure-explorer.ts';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const authorities={
  'verification/structure-explorer.check-items.json':'ffbab6ccab3329ea3b9ca0fb5e5e56c2d726b80e723ced8c5171feca573c66fc',
+ 'verification/structure-explorer-class-view.check-items.json':'3b1fdec884105214f4b025a83ca62a29d6b792d7bb372a0936457f60671ebc46',
  'verification/concept-full-overview.check-items.json':'b596ec259b2dbfb2f7a7a745f4fd61a380bf3a2df7989c047b1c00e786489190',
  'verification/concept-reference-routing.check-items.json':'43aad9abfc64e4be353963c6c1ace38498ece338730479f833e9621dd1399e4a',
  'verification/concept-json-field-mapping.check-items.json':'45178adb013fb0345749d83148d9b265860a55fa05992bb05525c3ad066ec564',
@@ -19,8 +20,12 @@ for(const path of Object.keys(authorities))verifyAuthority(path,readFileSync(pat
 assert.throws(()=>verifyAuthority('verification/structure-explorer.check-items.json',Buffer.from('{}')),/authority must remain unchanged/);
 const checks=JSON.parse(readFileSync('verification/structure-explorer.check-items.json','utf8')).checks.map(c=>c.id);
 assert.deepEqual(checks,['STRUCTURE-001','STRUCTURE-002','STRUCTURE-003','STRUCTURE-004']);
+const classChecks=JSON.parse(readFileSync('verification/structure-explorer-class-view.check-items.json','utf8')).checks.map(c=>c.id);
+assert.deepEqual(classChecks,['STRUCTURE-CLASS-001','STRUCTURE-CLASS-002','STRUCTURE-CLASS-003']);
 const covered=new Set();function coverage(actual){assert.deepEqual([...actual].sort(),checks.slice().sort(),'each requirement is exercised exactly once');assert.equal(actual.length,new Set(actual).size,'no duplicated result');}
+const classCovered=new Set();function classCoverage(actual){assert.deepEqual([...actual].sort(),classChecks.slice().sort(),'each class-view requirement is exercised');assert.equal(actual.length,new Set(actual).size,'no duplicated class-view result');}
 assert.throws(()=>coverage(checks.slice(1)),/each requirement/);assert.throws(()=>coverage([...checks,checks[0]]),/each requirement|duplicated/);
+assert.throws(()=>classCoverage(classChecks.slice(1)),/each class-view requirement/);assert.throws(()=>classCoverage([...classChecks,classChecks[0]]),/class-view requirement|duplicated/);
 
 const source=readFileSync('../business-design/alder/json-normalized-model-review.json');
 assert.equal(hash(source),'7bcf873a2bc0c3fa7fc3e25404bf7334d1751e28570666c81619ad9adf7c5590');
@@ -70,8 +75,18 @@ const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,w
 const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');w.Explorer.renderStructureExplorer(host,sample);
- const groups=node=>[...node.querySelectorAll(':scope > .structure-children > li > details.structure-group > summary')].map(summary=>summary.textContent);
+ const direct=node=>[...node.querySelectorAll(':scope > .structure-children > li')];
+ const groups=node=>[['属性',direct(node).filter(item=>item.dataset.entryKind==='attribute').length],['所有',direct(node).filter(item=>item.dataset.relationDirection==='owned').length],['参照',direct(node).filter(item=>item.dataset.relationDirection==='reference').length],['種類未定義（出）',direct(node).filter(item=>item.dataset.relationDirection==='unknownOut').length]].filter(([,count])=>count).map(([name,count])=>`${name}（${count}）`);
  assert.deepEqual(groups(host.querySelector('.structure-node')),['属性（1）','所有（2）','参照（1）','種類未定義（出）（1）'],'only outward directions are shown');
+ assert.deepEqual(direct(host.querySelector('.structure-node')).map(item=>item.dataset.entryKind||item.dataset.relationDirection),['attribute','owned','owned','reference','unknownOut'],'entries remain direct and ordered by kind');
+ assert(!host.querySelector('.structure-group'),'attributes and relations have no intermediate folders');
+ assert.equal(host.querySelector('.structure-field svg').getAttribute('aria-label'),'属性');
+ assert.equal(host.querySelector('[data-relation-id="one"] > details > summary svg').getAttribute('aria-label'),'所有');
+ assert.equal(host.querySelector('[data-relation-id="who"] > details > summary svg').getAttribute('aria-label'),'参照');
+ const iconShape=selector=>[...host.querySelector(selector).children].filter(node=>node.localName!=='title').map(node=>node.outerHTML).join('');
+ assert.notEqual(iconShape('[data-relation-id="one"] > details > summary svg'),iconShape('[data-relation-id="who"] > details > summary svg'),'ownership and reference use distinct icon shapes');
+ assert.match(host.querySelector('[data-relation-id="unknown"] > details > summary').textContent,/種類未定義/);
+ classCovered.add('STRUCTURE-CLASS-001');
  assert(!host.querySelector('.structure-heading, .structure-intro, .structure-help'),'the tab already supplies the title and the tree uses the full content area');
  const one=host.querySelector('[data-relation-id="one"][data-relation-direction="owned"] > details'),many=host.querySelector('[data-relation-id="many"][data-relation-direction="owned"] > details');
  assert(one&&!one.open&&many&&!many.open);
@@ -106,20 +121,17 @@ try{
  assert.match(stepRow.title,/移動先 1\.\.N／反対側 1/,'both defined multiplicities remain available');
  assert.equal(activity.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"]').length,0);
  step.open=true;step.dispatchEvent(new w.Event('toggle'));
- const directGroups=node=>[...node.querySelectorAll(':scope > .structure-children > li > details.structure-group')];
- const group=(node,label)=>directGroups(node).find(value=>value.querySelector(':scope > summary').textContent.startsWith(label));
- const stepFields=node=>[...group(node,'属性').querySelectorAll(':scope > .structure-fields > .structure-field > span:first-of-type')].map(value=>value.textContent);
+ const stepFields=node=>[...node.querySelectorAll(':scope > .structure-children > .structure-field > span:first-of-type')].map(value=>value.textContent);
  assert.deepEqual(stepFields(step),['識別子','所属する業務','操作','方法','やり取りの種類','適用する判定行']);
- const references=group(step,'参照'),owned=group(step,'所有');
- assert.deepEqual([...references.querySelectorAll(':scope > .structure-children > .structure-item')].map(value=>[value.dataset.relationId,value.querySelector('.structure-count').textContent]),[['nr-step-data','0..N'],['nr-step-decision','0..N'],['nr-step-when','0..1']],'Data and Decision Row are classified from their declared references');
- assert.equal(owned.querySelector('[data-relation-id="nr-step-exchange"] .structure-count').textContent,'0..1','optional ownership is not misclassified as a reference');
- const exchange=owned.querySelector('[data-relation-id="nr-step-exchange"] > details');exchange.open=true;exchange.dispatchEvent(new w.Event('toggle'));
+ assert.deepEqual(direct(step).filter(value=>value.dataset.relationDirection==='reference').map(value=>[value.dataset.relationId,value.querySelector('.structure-count').textContent]),[['nr-step-data','0..N'],['nr-step-decision','0..N'],['nr-step-when','0..1']],'Data and Decision Row are classified from their declared references');
+ assert.equal(step.querySelector(':scope > .structure-children > [data-relation-id="nr-step-exchange"][data-relation-direction="owned"] .structure-count').textContent,'0..1','optional ownership is not misclassified as a reference');
+ const exchange=step.querySelector(':scope > .structure-children > [data-relation-id="nr-step-exchange"] > details');exchange.open=true;exchange.dispatchEvent(new w.Event('toggle'));
  const repeated=exchange.querySelector('[data-relation-id="nr-exchange-pair"] > details');
  assert(repeated&&!repeated.open&&repeated.querySelector(':scope > summary .structure-seen'),'a cyclic reference remains a closed expandable node');
  repeated.open=true;repeated.dispatchEvent(new w.Event('toggle'));
  assert.deepEqual(stepFields(repeated),stepFields(step),'a manually expanded repeated structure retains the same attributes');
  assert.deepEqual(groups(repeated),groups(step),'a repeated structure retains ownership and references');
- const dependency=owned.querySelector('[data-relation-id="nr-step-dependency"] > details');dependency.open=true;dependency.dispatchEvent(new w.Event('toggle'));
+ const dependency=step.querySelector(':scope > .structure-children > [data-relation-id="nr-step-dependency"] > details');dependency.open=true;dependency.dispatchEvent(new w.Event('toggle'));
  const prerequisite=dependency.querySelector('[data-relation-id="nr-dependency-step"] > details');assert(prerequisite&&!prerequisite.open);
  prerequisite.open=true;prerequisite.dispatchEvent(new w.Event('toggle'));assert.deepEqual(stepFields(prerequisite),stepFields(step),'a second cyclic route can also be explored manually');
  const originalTree=host.querySelector('.structure-root'),query=host.querySelector('input[type=search]');
@@ -139,6 +151,7 @@ try{
  const search=host.querySelector('input[type=search]');search.value='手順行';search.dispatchEvent(new w.Event('input'));
  assert([...host.querySelectorAll('[data-concept-id="n-step"]')].some(el=>!el.hidden),'search retains matching structure');
  search.value='';search.dispatchEvent(new w.Event('input'));assert(host.querySelector('[data-concept-id="n-activity"]'),'clearing search restores the tree');
+ classCovered.add('STRUCTURE-CLASS-002');
  const disconnected=structuredClone(formatModel);disconnected.concepts.push(concept('isolated','未接続'));w.Explorer.renderStructureExplorer(host,disconnected);
  assert.match(host.textContent,/この起点からたどれない構造：1件/,'the missing-structure notice remains available without the side panel');
  const incomingOnly=structuredClone(formatModel);incomingOnly.concepts.push(concept('outside','外部'));
@@ -165,5 +178,5 @@ try{
  assert(host.querySelectorAll('.structure-item').length<=cycle.relations.length+2,'a cycle without ownership roots does not expand forever');
  w.Explorer.renderStructureExplorer(host,{...structuredClone(sample),concepts:[],relations:[]});assert.match(host.textContent,/概念がありません/);
 }finally{w.close();}
-coverage([...covered]);for(const path of Object.keys(authorities))verifyAuthority(path,readFileSync(path));assert.equal(hash(readFileSync('../business-design/alder/json-normalized-model-review.json')),hash(source));assert.equal(hash(readFileSync('../business-design/alder/json-structure-review.json')),hash(formatSource));
-console.log('STRUCTURE-001..004: explicit root, full relation coverage, ownership/reference directions, recursion, cycles and independent authorities verified.');
+coverage([...covered]);for(const path of Object.keys(authorities))verifyAuthority(path,readFileSync(path));assert.equal(hash(readFileSync('../business-design/alder/json-normalized-model-review.json')),hash(source));assert.equal(hash(readFileSync('../business-design/alder/json-structure-review.json')),hash(formatSource));classCovered.add('STRUCTURE-CLASS-003');classCoverage([...classCovered]);
+console.log('STRUCTURE-001..004 and STRUCTURE-CLASS-001..003: roots, flat entries, full relation coverage, ownership/reference directions, recursion and authorities verified.');
