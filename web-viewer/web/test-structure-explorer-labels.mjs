@@ -5,8 +5,8 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 
 const hashes={
- 'verification/structure-explorer-labels.check-items.json':'fbb91d652356995c54bad10572ff783b2074ae896b4bbf9e6bb492c576fbd9e9',
- 'verification/structure-explorer.check-items.json':'ffbab6ccab3329ea3b9ca0fb5e5e56c2d726b80e723ced8c5171feca573c66fc',
+ 'verification/structure-explorer-labels.check-items.json':'60f3f11c43587a03b03474c7db57a1d010e350544340838282aabfc900268b4c',
+ 'verification/structure-explorer.check-items.json':'d519a131dc1d4c2109513a057e4684776a75458df5877bd7c598b8138e5e7d82',
  'verification/structure-explorer-tab.check-items.json':'85552428a8e1c1161eda3bd42ba498b87fb227261f152c9d51dee9c39069efa1'
 };
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -44,11 +44,13 @@ try{
  assert.equal(paired.querySelector('.structure-edge-detail').title,'stepInteractions.pairedStepId');
  assert.match(paired.textContent,/対応手順。/,'the relation description remains available');
  assert.equal(paired.querySelector('.structure-count').textContent,'0..1');
- assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','情報のまとまり（Data）']],'many-to-many without a declared element is not invented as an array');
+ assert.deepEqual(pairs(row('nr-step-data')),[['操作対象データ','情報のまとまり（Data）']],'the authored conceptual name is shown without inventing an array');
  assert.equal(row('nr-step-data').querySelector('.structure-count').textContent,'0..N');
  const search=host.querySelector('input[type=search]');search.value='対応する手順';search.dispatchEvent(new window.Event('input'));
  assert([...host.querySelectorAll('[data-relation-id="nr-exchange-pair"]')].some(item=>!item.hidden),'search includes the source element name');
  search.value='';search.dispatchEvent(new window.Event('input'));
+ const withoutNames=structuredClone(normalized);delete withoutNames.meta.relationNames;render(withoutNames,'n-step');
+ assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','情報のまとまり（Data）']],'missing names are still not inferred for other models');
  covered.push('STRUCTURE-LABEL-001');
 
  render(physical,'fmt-package');

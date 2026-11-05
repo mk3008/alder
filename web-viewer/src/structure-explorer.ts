@@ -5,13 +5,14 @@ type Mapping={informationId:string;physicalName:string;relationIds:string[];valu
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
 type EdgeField={name:string;physicalName:string;valueType?:string};
-export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];fieldDetails:EdgeField[]};
+export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];fieldDetails:EdgeField[];roleName?:string};
 const visibleDirections:Direction[]=['owned','reference','unknownOut'];
 
 /** Read only declared concepts, mappings and relations; never infer a relation from a label. */
 export function structureGraph(model:ConceptModel){
  const nodes=new Map(model.concepts.map(concept=>[concept.id,concept]));
- const meta=model.meta&&typeof model.meta==='object'?model.meta as {fieldMappings?:unknown}:{};
+ const meta=model.meta&&typeof model.meta==='object'?model.meta as {fieldMappings?:unknown;relationNames?:unknown}:{};
+ const relationNames=meta.relationNames&&typeof meta.relationNames==='object'&&!Array.isArray(meta.relationNames)?meta.relationNames as Record<string,unknown>:{};
  const mappings:Mapping[]=Array.isArray(meta.fieldMappings)?meta.fieldMappings.filter((m):m is Mapping=>
   !!m&&typeof m==='object'&&typeof m.informationId==='string'&&typeof m.physicalName==='string'&&Array.isArray(m.relationIds)&&m.relationIds.every((id:unknown)=>typeof id==='string')):[];
  const grouped=new Map<string,Mapping[]>();
@@ -24,9 +25,11 @@ export function structureGraph(model:ConceptModel){
   const count=(value:unknown)=>typeof value==='string'&&value.trim()?value:'未定義';
   const fieldDetails=(owner:string):EdgeField[]=>nodes.get(owner)!.information.flatMap(info=>{const m=byInformation.get(info.id);return m?.relationIds.includes(relation.id)?[{name:info.name,physicalName:m.physicalName,valueType:m.valueType}]:[];});
   const forwardFields=fieldDetails(relation.fromConceptId),reverseFields=fieldDetails(relation.toConceptId);
+  const authored=Object.hasOwn(relationNames,relation.id)?relationNames[relation.id]:undefined;
+  const roleName=typeof authored==='string'&&authored.trim()?authored.trim():undefined;
   const kind=relation.kind as string;
   edges.get(relation.fromConceptId)!.push({relation,from:relation.fromConceptId,to:relation.toConceptId,
-   direction:kind==='down'?'owned':kind==='reference'?'reference':'unknownOut',count:count(relation.toLabel),reverseCount:count(relation.fromLabel),fields:forwardFields.map(field=>field.physicalName),fieldDetails:forwardFields});
+   direction:kind==='down'?'owned':kind==='reference'?'reference':'unknownOut',count:count(relation.toLabel),reverseCount:count(relation.fromLabel),fields:forwardFields.map(field=>field.physicalName),fieldDetails:forwardFields,roleName});
   edges.get(relation.toConceptId)!.push({relation,from:relation.toConceptId,to:relation.fromConceptId,
    direction:kind==='down'?'owner':kind==='reference'?'referencedBy':'unknownIn',count:count(relation.fromLabel),reverseCount:count(relation.toLabel),fields:reverseFields.map(field=>field.physicalName),fieldDetails:reverseFields});
  }
@@ -76,16 +79,16 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
   const concept=graph.nodes.get(id)!;const item=document.createElement('li');item.className='structure-item';item.dataset.conceptId=id;
   const names=concept.information.flatMap(info=>[info.name,graph.mappings.get(info.id)?.physicalName??'']);
-  item.dataset.searchText=[concept.name,concept.id,...names,...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
+  item.dataset.searchText=[concept.name,concept.id,...names,edge?.roleName??'',...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
   const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
   row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));
   if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
-   fields.forEach((field,index)=>{if(index)text(row,'span','／');const label=document.createElement('span');label.className='structure-element';row.append(label);
-    text(label,'strong',field?.name?.trim()||'名前未定義');text(label,'span',concept.name+(field?.valueType==='array'?'[]':''),'structure-element-type');
-   });
+   const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span',concept.name+(field?.valueType==='array'?'[]':''),'structure-element-type');};
+   if(edge.roleName&&fields.length===1)entry(edge.roleName,fields[0]);
+   else{if(edge.roleName)entry(edge.roleName,undefined);fields.forEach((field,index)=>{if(index||edge.roleName)text(row,'span','／');entry(field?.name?.trim()||'名前未定義',field);});}
   }else text(row,'strong',concept.name);
   if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
   if(edge?.relation.condition)text(row,'span',edge.relation.condition,'structure-condition');

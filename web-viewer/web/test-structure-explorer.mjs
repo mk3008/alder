@@ -7,8 +7,8 @@ import {structureGraph} from '../src/structure-explorer.ts';
 
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const authorities={
- 'verification/structure-explorer.check-items.json':'ffbab6ccab3329ea3b9ca0fb5e5e56c2d726b80e723ced8c5171feca573c66fc',
- 'verification/structure-explorer-class-view.check-items.json':'3b1fdec884105214f4b025a83ca62a29d6b792d7bb372a0936457f60671ebc46',
+ 'verification/structure-explorer.check-items.json':'d519a131dc1d4c2109513a057e4684776a75458df5877bd7c598b8138e5e7d82',
+ 'verification/structure-explorer-class-view.check-items.json':'f0534ee07855f29f04f03b458685a429971de914b2058b783a26f32a2195cdb7',
  'verification/concept-full-overview.check-items.json':'b596ec259b2dbfb2f7a7a745f4fd61a380bf3a2df7989c047b1c00e786489190',
  'verification/concept-reference-routing.check-items.json':'43aad9abfc64e4be353963c6c1ace38498ece338730479f833e9621dd1399e4a',
  'verification/concept-json-field-mapping.check-items.json':'45178adb013fb0345749d83148d9b265860a55fa05992bb05525c3ad066ec564',
@@ -28,7 +28,10 @@ assert.throws(()=>coverage(checks.slice(1)),/each requirement/);assert.throws(()
 assert.throws(()=>classCoverage(classChecks.slice(1)),/each class-view requirement/);assert.throws(()=>classCoverage([...classChecks,classChecks[0]]),/class-view requirement|duplicated/);
 
 const source=readFileSync('../business-design/alder/json-normalized-model-review.json');
-assert.equal(hash(source),'7bcf873a2bc0c3fa7fc3e25404bf7334d1751e28570666c81619ad9adf7c5590');
+assert.equal(hash(source),'c3af7dbb66c6980e52f6395bbf0539dbc4d6a20486cbef07e43f6c45f3aefd75');
+const baseline=JSON.parse(source),baselineModel=baseline.documents.find(d=>d.kind==='conceptModel');
+delete baselineModel.meta.relationNames;baseline.revision='normalized-model-review-1';baselineModel.revision='normalized-study-1';
+assert.equal(hash(JSON.stringify(baseline)),'ab344c5e9e01d4e5a7fa01c8daa4b6d3ecc14c090e59849e28a144c5498084a1','only explicitly authorized relation names and revisions differ from the original model');
 const formatSource=readFileSync('../business-design/alder/json-structure-review.json');
 assert.equal(hash(formatSource),'feaadc66c694764fe1e22d2c7b38441b4e284113513cf5ccd94fef570d35a70c');
 const formatModel=JSON.parse(formatSource).documents.find(d=>d.kind==='conceptModel'),formatGraph=structureGraph(formatModel);

@@ -1,7 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdtempSync,mkdirSync,cpSync,rmSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {spawnSync} from 'node:child_process';
 import {validate,validateShape,validateReferences} from '../../tools/document_storage/core.mjs';
 import {normalizePackage,restorePackage} from './normalize.mjs';
 
@@ -11,6 +14,26 @@ const inputPath=new URL('../../tools/document_storage/examples/molkky-decisions-
 const inputBytes=readFileSync(inputPath),source=JSON.parse(inputBytes);
 const copy=()=>structuredClone(source),bd=p=>p.documents.find(d=>d.kind==='businessDesign');
 const binding={'bd-score-example/calculate-score':{id:'score-system',evidence:'合成例の単一自動主体'}};
+
+test('regeneration preserves authored conceptual relation names and rejects incomplete names',()=>{
+ const temp=mkdtempSync(join(tmpdir(),'alder-concept-names-'));
+ try{
+  const folder=(path)=>mkdirSync(join(temp,path),{recursive:true});folder('tools');folder('work/normalization-candidate');folder('business-design/alder');
+  cpSync(new URL('../../tools/document_storage',import.meta.url),join(temp,'tools/document_storage'),{recursive:true});
+  for(const name of ['create-review.mjs','normalize.mjs'])cpSync(new URL('./'+name,import.meta.url),join(temp,'work/normalization-candidate',name));
+  for(const name of ['json-structure-review.json','json-normalized-model-review.json'])cpSync(new URL('../../business-design/alder/'+name,import.meta.url),join(temp,'business-design/alder',name));
+  const path=join(temp,'business-design/alder/json-normalized-model-review.json'),candidate=JSON.parse(readFileSync(path,'utf8'));
+  const model=candidate.documents.find(d=>d.kind==='conceptModel');model.meta.relationNames['nr-exchange-pair']='人が記録した対応手順';
+  writeFileSync(path,JSON.stringify(candidate,null,2)+'\n');
+  const run=()=>spawnSync(process.execPath,[join(temp,'work/normalization-candidate/create-review.mjs')],{encoding:'utf8'});
+  let result=run();assert.equal(result.status,0,result.stderr);
+  let after=JSON.parse(readFileSync(path,'utf8'));assert.deepEqual(after.documents.find(d=>d.kind==='conceptModel').meta.relationNames,model.meta.relationNames,'regeneration reads names from the authored model');
+  delete model.meta.relationNames['nr-exchange-pair'];writeFileSync(path,JSON.stringify(candidate,null,2)+'\n');const before=readFileSync(path);
+  rmSync(join(temp,'work/normalization-candidate/example-source.json'));rmSync(join(temp,'work/normalization-candidate/example-normalized.json'));
+  result=run();assert.notEqual(result.status,0);assert.match(result.stderr,/relation names do not match/);assert.deepEqual(readFileSync(path),before,'incomplete names do not overwrite the source model');
+  assert(!existsSync(join(temp,'work/normalization-candidate/example-source.json'))&&!existsSync(join(temp,'work/normalization-candidate/example-normalized.json')),'a failed regeneration writes no examples');
+ }finally{rmSync(temp,{recursive:true,force:true});}
+});
 
 test('acceptance is fixed before the implementation and all guarantees are present',()=>{
  assert.equal(createHash('sha256').update(acceptance).digest('hex'),acceptanceHash);

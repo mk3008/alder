@@ -3,14 +3,18 @@ import {normalizePackage} from './normalize.mjs';
 import {validate} from '../../tools/document_storage/core.mjs';
 
 const here=new URL('./',import.meta.url),read=path=>JSON.parse(readFileSync(new URL(path,here),'utf8'));
+// Relation role names are authored in the review model. Regeneration must not
+// infer them from physical fields or silently overwrite the reviewed names.
+const savedReview=read('../../business-design/alder/json-normalized-model-review.json');
+const savedModel=savedReview.documents.find(d=>d.kind==='conceptModel'&&d.id==='alder-normalized-model-study');
+const savedNames=savedModel?.meta?.relationNames;
+if(!savedNames||typeof savedNames!=='object'||Array.isArray(savedNames))throw Error('Conceptual relation names are missing from the review model');
 const pkg=read('../../tools/document_storage/examples/molkky-decisions-v07.json'),bd=pkg.documents.find(d=>d.kind==='businessDesign');
 bd.roles.push({id:'score-reviewer',name:'記録係',color:'#8b5cf6'});
 function activity(id,name,who){return {id,name,scope:true,why:'構造確認用の架空業務',when:'確認するとき',where:'規定なし',who,procedure:{steps:[{id:id+'-step',action:'確認する',method:null,whatDataIds:[],obligation:'required',appliesWhen:null,effect:null,exchange:{kind:'internal'},decisionIds:[],whenDecision:null}],orderRules:[]},decisions:[],results:[{id:id+'-result',text:'確認した'}],problem:null,painLevel:null};}
 bd.activities.push(activity('score-review-one','点数を確認する',{kind:'role',roleId:'score-reviewer'}),activity('score-review-two','結果を確認する',{kind:'role',roleId:'score-reviewer'}),activity('score-review-undecided','確認方法を整理する',null));
 pkg.revision='normalized-example-source-1';bd.revision='bd-review-1';validate(pkg);
 const normalized=normalizePackage(pkg,{'bd-score-example/calculate-score':{id:'score-system',evidence:'構造確認用の架空例では一つのシステムと明示'}});
-writeFileSync(new URL('example-source.json',here),JSON.stringify(pkg,null,2)+'\n');
-writeFileSync(new URL('example-normalized.json',here),JSON.stringify(normalized,null,2)+'\n');
 
 // The following is a logical view of the study above, not the schema of 0.7.
 // Association tables are shown as direct N:N relationships when they have no
@@ -99,7 +103,7 @@ const relationships=[
  ['checkdoc-check','checkdoc','check','1','0..N','down','Check文書のチェック項目。']
 ];
 const base=read('../../business-design/alder/json-structure-review.json'),original=base.documents.find(d=>d.kind==='conceptModel');
-const m=structuredClone(original);m.id='alder-normalized-model-study';m.revision='normalized-study-1';m.schemaVersion='0.1';
+const m=structuredClone(original);m.id='alder-normalized-model-study';m.revision=savedModel.revision;m.schemaVersion='0.1';
 m.subsystems[0].name='JSON正規化候補（全概念）';m.subsystems[0].purpose='実際の0.7保存構造から作る正規化候補を検討する。';
 m.concepts=definitions.map(([id,name,table,fields])=>({id:'n-'+id,name,subsystemId:'format-review',information:fields.map((value,i)=>({id:`n-${id}-field-${i+1}`,name:value.split('|')[1]})),reason:'正規化候補の構造レビュー。',description:`候補の ${table}。現行0.7の物理構造そのものではない。`,businessObjectIds:[],activityLinks:[],sourceRefs:[],reviewState:'未レビュー'}));
 m.relations=relationships.map(([id,from,to,fromLabel,toLabel,kind,condition])=>({id:'nr-'+id,fromConceptId:'n-'+from,toConceptId:'n-'+to,fromPerTarget:fromLabel,toPerSource:toLabel,condition,reviewState:'未レビュー',sourceRefs:[],fromLabel,toLabel,kind}));
@@ -108,7 +112,9 @@ m.meta={sourceFormatVersion:'0.7',modelStatus:'normalized-study',scope:'Business
  const [physicalName]=value.split('|');const fieldKey=id+'.'+physicalName;
  const fieldRelations={'activity.whoId':['nr-who-activity'],'exchange.objectId':['nr-exchange-object'],'exchange.relationId':['nr-exchange-relation'],'exchange.pairedStepId':['nr-exchange-pair'],'step.whenDecisionRowId':['nr-step-when'],'dependency.whenDecisionRowId':['nr-dependency-when'],'dependency.prerequisiteStepId':['nr-dependency-step'],'decision.appliesWhenRowId':['nr-decision-when'],'condition.axisId':['nr-condition-axis'],'rowcheck.checkId':['nr-checklink-check']};
  return {informationId:`n-${id}-field-${i+1}`,physicalName:table+'.'+physicalName,relationIds:fieldRelations[fieldKey]??[]};
-}))};
+})),relationNames:structuredClone(savedNames)};
+const relationIds=new Set(m.relations.map(relation=>relation.id));
+if(Object.keys(savedNames).length!==relationIds.size||Object.entries(savedNames).some(([id,name])=>!relationIds.has(id)||typeof name!=='string'||!name.trim()))throw Error('Conceptual relation names do not match the review model relations');
 // Preserve the earlier authored 13-concept projection. The Viewer adds all
 // missing concepts and explicit relations when constructing the overview.
 const overviewIds=['bd','who','activity','object','information','data','step','result','decision','row','external','checkdoc','check'];
@@ -118,8 +124,11 @@ const nodes=selectedConcepts.map(c=>({id:'overview-'+c.id,conceptId:c.id,subsyst
 const byConcept=new Map(nodes.map(n=>[n.conceptId,n.id]));
 const edges=m.relations.filter(r=>overviewRelations.includes(r.id.slice(3))).map(r=>({id:'overview-'+r.id,fromViewId:byConcept.get(r.fromConceptId),toViewId:byConcept.get(r.toConceptId),relationIds:[r.id],fromLabel:r.fromLabel,toLabel:r.toLabel,kind:r.kind}));
 m.presentation={landscapeRelationships:[],reviewBoundaries:[],subsystemViews:{nodes,edges,handoffIds:[]}};
-base.documents=base.documents.filter(d=>d.kind!=='conceptModel');base.documents.push(m);base.revision='normalized-model-review-1';
-validate(base);writeFileSync(new URL('../../business-design/alder/json-normalized-model-review.json',here),JSON.stringify(base,null,2)+'\n');
+base.documents=base.documents.filter(d=>d.kind!=='conceptModel');base.documents.push(m);base.revision=savedReview.revision;
+validate(base);
+writeFileSync(new URL('example-source.json',here),JSON.stringify(pkg,null,2)+'\n');
+writeFileSync(new URL('example-normalized.json',here),JSON.stringify(normalized,null,2)+'\n');
+writeFileSync(new URL('../../business-design/alder/json-normalized-model-review.json',here),JSON.stringify(base,null,2)+'\n');
 const labels=new Map(definitions.map(([id,name])=>[id,name]));
 const lines=['# 正規化候補の関係一覧','','全体図は全概念と全関係を対象にする。指定の形で配線できない関係は画面の警告とこの一覧で確認する。多重度は、それぞれ反対側の一件に対する最大・最小件数。','', '| 出発側 | 出発側の件数 | 到着側の件数 | 到着側 | 意味 |','| --- | --- | --- | --- | --- |',...relationships.map(([,from,to,fromLabel,toLabel,,condition])=>`| ${labels.get(from)} | ${fromLabel} | ${toLabel} | ${labels.get(to)} | ${condition} |`)];
 writeFileSync(new URL('relationships.ja.md',here),lines.join('\n')+'\n');
