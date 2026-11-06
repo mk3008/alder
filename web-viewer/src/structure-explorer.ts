@@ -117,15 +117,13 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   add('説明',typeof data.description==='string'&&data.description?data.description:mapping?.logicalMeaning);
   add('サンプル',mapping?sampleLabels(mapping):undefined);
   if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
-  add('情報項目のID',info.id);
-  if(mapping?.physicalName)add('対応する項目',mapping.physicalName);
   if(mapping?.sourceSchemaPath)add('定義元',mapping.sourceSchemaPath);
   if(mapping?.nullableStatus==='proposal'&&mapping.valueType)add('参照元の型表記',mapping.valueType);
   if(mapping?.logicalSourcePaths?.length)add('対応する定義',mapping.logicalSourcePaths);
   if(typeof mapping?.optional==='boolean')add('項目の省略',mapping.optional?'可能':'不可');
   if(mapping?.representation)add('対応の種類',mapping.representation);
   if(info.responsibilityStatus)add('責任の確認状態',info.responsibilityStatus);
-  if(info.responsibleSubsystemId)add('責任を持つサブシステム',info.responsibleSubsystemId);
+  if(info.responsibleSubsystemId)add('責任を持つサブシステム',model.subsystems.find(item=>item.id===info.responsibleSubsystemId)?.name);
   return;
  }
  const edge=selection.relationId?graph.edges.get(selection.fromId??'')?.find(item=>item.relation.id===selection.relationId&&item.to===concept.id):undefined;
@@ -136,10 +134,14 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type);add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
  add('所属',parent?parent.local+'（'+parent.type+'）':owners.length?owners:undefined);add('参照',edge?.direction==='reference'?[n.local+'（'+n.type+'）']:outgoing);
  add('説明',edge?.relation.condition||concept.description||undefined);add('サンプル',undefined);
- if(edge){add('関係の種類',labels[edge.direction]);add('多重度',edge.count);add('反対側の多重度',edge.reverseCount);add('関係のID',edge.relation.id);if(edge.fields.length)add('対応する項目',edge.fields);if(edge.relation.reviewState)add('関係の確認状態',edge.relation.reviewState);if(edge.relation.sourceRefs.length)add('関係の出所',edge.relation.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));if(edge.relation.condition&&concept.description)add('構造の説明',concept.description);}
- add('構造のID',concept.id);
- if(concept.reason)add('理由',concept.reason);if(concept.reviewState)add('確認状態',concept.reviewState);
- if(concept.subsystemId){const subsystem=model.subsystems.find(item=>item.id===concept.subsystemId);add('サブシステム',subsystem?subsystem.name+'（'+concept.subsystemId+'）':concept.subsystemId);}
+ if(edge){add('関係の種類',labels[edge.direction]);add('多重度',edge.count);add('反対側の多重度',edge.reverseCount);if(edge.relation.sourceRefs.length)add('関係の出所',edge.relation.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));if(edge.relation.condition&&concept.description)add('構造の説明',concept.description);}
+ // These two study models use a synthetic subsystem and the same task note on
+ // every concept. Other authored reasons and subsystem names remain visible.
+ const meta=model.meta&&typeof model.meta==='object'?model.meta as {modelStatus?:unknown}:{};
+ const study=meta.modelStatus==='normalized-study'||meta.modelStatus==='complete-package-study';
+ const studyReason=study&&(concept.reason==='正規化候補の構造レビュー。'||concept.reason==='Alder JSON概念モデルのレビュー候補。');
+ if(concept.reason&&!studyReason)add('理由',concept.reason);
+ if(concept.subsystemId){const subsystem=model.subsystems.find(item=>item.id===concept.subsystemId);if(!(study&&subsystem?.id==='format-review'))add('サブシステム',subsystem?.name);}
  const referencedBy=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='referencedBy').map(item=>names(item.to).local);if(referencedBy.length)add('参照元',referencedBy);
  if(concept.businessObjectIds.length)add('関連する対象',concept.businessObjectIds);
  if(concept.activityLinks.length)add('関連する業務',concept.activityLinks.map(link=>link.activityId+(link.uses.length?'：'+link.uses.join('、'):'')));
@@ -190,7 +192,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));
   const selectedStructure:StructureSelection={kind:'structure',conceptId:id,...(edge?{fromId:edge.from,relationId:edge.relation.id}:{})};row.dataset.structureSelection=keyOf(selectedStructure);
   row.addEventListener('click',()=>select(selectedStructure,row));
-  if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：${edge.relation.id}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}${edge.fields.length>edge.visibleFields.length?' — 物理項目：'+edge.fields.join('、'):''}`;}
+  if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}${edge.fields.length>edge.visibleFields.length?' — 物理項目：'+edge.fields.join('、'):''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
    const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span','型：'+typeName+(field?.valueType==='array'?'[]':''),'structure-element-type');};

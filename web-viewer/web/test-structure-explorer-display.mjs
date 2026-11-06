@@ -67,7 +67,7 @@ try{
  render(physical,'fmt-package');assert.equal(row('rel-package-bd').querySelector('.structure-edge-detail'),null);showRelation('fmt-bd','fmt-package','rel-package-bd');assert(detail.textContent.includes('documents[]'));assert.equal(host.querySelectorAll('.structure-example').length,0);
  render(physical,'fmt-order');const order=shown.relations.find(item=>item.id==='rel-order-step');showRelation(order.toConceptId,order.fromConceptId,order.id);assert.match(detail.textContent,/beforeId \/ afterId/);assert.match(detail.textContent,/stepIds\[\]/);
  const unmarked=structuredClone(model),who=unmarked.meta.fieldMappings.find(item=>item.physicalName==='activities.whoId');delete who.representation;render(unmarked,'n-activity');
- assert.equal(row('nr-who-activity').querySelector('.structure-edge-detail'),null);showRelation('n-who','n-activity','nr-who-activity');assert(detail.textContent.includes('activities.whoId'));
+ assert.equal(row('nr-who-activity').querySelector('.structure-edge-detail'),null);showRelation('n-who','n-activity','nr-who-activity');assert(values('論理名').includes('whoId'));assert.deepEqual(structureGraph(unmarked).edges.get('n-activity').find(edge=>edge.relation.id==='nr-who-activity').fields,['activities.whoId']);
  assert(attribute('activities.whoId'),'an unmarked mapping remains an attribute');
  covered.push('STRUCTURE-KEYDISPLAY-003');
 

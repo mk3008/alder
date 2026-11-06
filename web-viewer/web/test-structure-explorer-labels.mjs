@@ -61,7 +61,7 @@ try{
  assert.equal(root.querySelector('.structure-element'),null,'a root is a type, not a child property');
  const attribute=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');
  assert.match(attribute.textContent,/識別子.*型：未定義/,'an attribute shows its name and known or undefined type');
- const detail=window.document.createElement('div');window.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-step',informationId:attribute.dataset.informationId});assert.match(detail.textContent,/steps\.id/,'the physical mapping remains in the detail');
+ const detail=window.document.createElement('div');window.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-step',informationId:attribute.dataset.informationId});assert.match(detail.textContent,/論理名id/);assert.equal(normalized.meta.fieldMappings.find(item=>item.informationId===attribute.dataset.informationId).physicalName,'steps.id','the full mapping remains in the model');
  open(host.querySelector('[data-relation-id="nr-step-exchange"] > details'));
  const paired=row('nr-exchange-pair');
  assert.deepEqual(pairs(paired),[['対応する手順','型：Step']]);
@@ -120,7 +120,7 @@ try{
  assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > strong').textContent,'主体（Who）','missing types use the declared original label');
  assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > .structure-type'),null,'a logical name alone does not invent a type association');
  const declaredInteger=structuredClone(normalized);declaredInteger.meta.fieldMappings.find(item=>item.informationId==='n-who-field-1').valueType='int';render(declaredInteger,'n-who');
- const integerField=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');assert.match(integerField.textContent,/識別子.*型：int/,'an explicitly declared primitive type is shown as recorded');window.Explorer.renderStructureDetails(detail,declaredInteger,{kind:'attribute',conceptId:'n-who',informationId:integerField.dataset.informationId});assert.match(detail.textContent,/actors\.id/);
+ const integerField=host.querySelector('.structure-root > .structure-item > details > .structure-children > .structure-field');assert.match(integerField.textContent,/識別子.*型：int/,'an explicitly declared primitive type is shown as recorded');window.Explorer.renderStructureDetails(detail,declaredInteger,{kind:'attribute',conceptId:'n-who',informationId:integerField.dataset.informationId});assert.match(detail.textContent,/論理名id/);assert.equal(declaredInteger.meta.fieldMappings.find(item=>item.informationId===integerField.dataset.informationId).physicalName,'actors.id');
  covered.push('STRUCTURE-LABEL-003');
 }finally{window.close();}
 coverage(covered);for(const path of Object.keys(hashes))verify(path,readFileSync(path));

@@ -37,6 +37,8 @@ function boot(url,initial=normal,key='candidate',saved){
 const livePage=d=>d.querySelector('.structure-explorer:not([hidden])');
 const firstRoot=page=>page?.querySelector('.structure-root > .structure-item');
 const structureTab=(d,name)=>[...d.querySelectorAll('.concept-tabs button')].find(button=>button.getAttribute('aria-label')==='データ構造：'+name);
+const detailValue=(d,label)=>[...d.querySelectorAll('.concept-related-content dt')].find(dt=>dt.textContent===label)?.nextElementSibling?.textContent;
+const selectedField=(d,local,owner)=>{assert.equal(detailValue(d,'ローカル名'),local);assert.match(detailValue(d,'所属'),owner);};
 const test=boot('https://viewer.test/?view=concept&concept=structure-explorer');
 let saved;
 try{
@@ -54,8 +56,8 @@ try{
  const activityPage=livePage(d),activityRoot=firstRoot(activityPage);
  assert.equal(activityRoot.dataset.conceptId,'n-activity');
  assert(activityRoot.textContent.includes('識別子'));
- activityRoot.querySelector('.structure-field button').click();d.querySelector('#drawer').click();assert(d.querySelector('.concept-related-content').textContent.includes('activities.id'),'the identifier mapping appears in the detail');
- const search=activityPage.querySelector('input[type=search]');search.value='名前';search.dispatchEvent(new w.Event('input'));activityPage.querySelector('[data-information-id="n-activity-field-2"] button').click();search.value='';search.dispatchEvent(new w.Event('input'));assert(activityPage.querySelector('[data-information-id="n-activity-field-2"] button').classList.contains('structure-selected'),'selection follows the restored tree after search');assert(d.querySelector('.concept-related-content').textContent.includes('activities.name'));
+ activityRoot.querySelector('.structure-field button').click();d.querySelector('#drawer').click();selectedField(d,'識別子',/業務/);
+ const search=activityPage.querySelector('input[type=search]');search.value='名前';search.dispatchEvent(new w.Event('input'));activityPage.querySelector('[data-information-id="n-activity-field-2"] button').click();search.value='';search.dispatchEvent(new w.Event('input'));assert(activityPage.querySelector('[data-information-id="n-activity-field-2"] button').classList.contains('structure-selected'),'selection follows the restored tree after search');selectedField(d,'名前',/業務/);
  assert(activityRoot.querySelector('[data-relation-id="nr-activity-step"]'));
  assert(activityRoot.querySelector('[data-relation-id="nr-who-activity"]'));
  assert(!activityRoot.querySelector(':scope > details > summary > button.structure-open'),'current root has no self-link');
@@ -70,13 +72,13 @@ try{
  const stepPage=livePage(d);assert.equal(firstRoot(stepPage).dataset.conceptId,'n-step');
  assert.equal(structureTab(d,'手順行（Step）・構造').getAttribute('aria-current'),'true');
  structureTab(d,'業務（Activity）・構造').click();assert.equal(livePage(d),activityPage);
- assert(d.querySelector('.concept-related-content').textContent.includes('activities.name'),'each tab restores its selection');
+ selectedField(d,'名前',/業務/);
  structureTab(d,'構造エクスプローラー').click();assert.equal(livePage(d),rootPage);assert(activity.open);
- assert(d.querySelector('.concept-related-content').textContent.includes('businessDesigns.id'),'returning to the root restores its selection');
+ selectedField(d,'識別子',/業務設計書/);
  const count=d.querySelectorAll('.concept-tabs .tab').length;openActivity.click();
  assert.equal(d.querySelectorAll('.concept-tabs .tab').length,count,'opening an existing structure reuses its tab');
  assert.equal(livePage(d),activityPage);
- assert(d.querySelector('.concept-related-content').textContent.includes('activities.name'));
+ selectedField(d,'名前',/業務/);
  covered.push('STRUCTURE-TAB-001');
 
  activityPage.querySelector('.structure-toolbar button').click();

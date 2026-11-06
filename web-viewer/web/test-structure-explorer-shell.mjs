@@ -25,7 +25,7 @@ try{
  assert.equal(select('#concept-tab-structure-explorer').getAttribute('aria-current'),'true');assert.equal(overview.hidden,true);
  assert.equal(select('#drawer').disabled,false,'the structure view has a usable detail drawer');
  select('.structure-root > [data-concept-id="n-bd"] .structure-field button').click();assert(select('#concept-related-panel').hidden,'selecting a field does not open a closed drawer');
- select('#drawer').click();assert(!select('#concept-related-panel').hidden);assert.match(select('.concept-related-content').textContent,/businessDesigns\.id/,'the selected attribute opens in the common drawer');
+ select('#drawer').click();assert(!select('#concept-related-panel').hidden);assert.match(select('.concept-related-content').textContent,/ローカル名識別子/,'the selected attribute opens in the common drawer');assert.match(select('.concept-related-content').textContent,/所属業務設計書/);
  select('[data-explorer-key="concept:overview"]').click();assert.equal(overview.hidden,false);assert.equal(overview.getAttribute('src'),originalSrc,'existing graph and its iframe are retained');
  assert.equal(select('.structure-explorer').hidden,true);assert.equal(select('#drawer').disabled,false);
  select('[data-explorer-key="concept:structure-explorer"]').click();
@@ -35,7 +35,7 @@ try{
  current=physicalContext;key='other';shell.syncDocument();
  select('[data-explorer-key="concept:structure-explorer"]').click();assert(select('.structure-root > [data-concept-id="fmt-package"]'),'changing documents renders the new package root');
  assert(!select('.structure-explorer [data-concept-id="n-bd"]'),'changing documents does not retain the old tree');
- assert(!select('.concept-related-content').textContent.includes('businessDesigns.id'),'changing documents clears the old selection');
+ assert(!select('.concept-related-content').textContent.includes('ローカル名識別子'),'changing documents clears the old selection');
 }finally{w.close();}
 const direct=new JSDOM('<div id="app"><header><button id="node-list-toggle"></button><button id="drawer"></button></header><div class="tab-strip"><nav id="tabs"></nav></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main></main></div></div>',{url:'https://viewer.test/?view=concept&concept=structure-explorer',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{

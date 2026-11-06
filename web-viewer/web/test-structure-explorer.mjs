@@ -133,9 +133,9 @@ try{
  assert.equal(many.open,false,'one branch does not expand another');
  assert(one.querySelector('[data-relation-id="nested"][data-relation-direction="owned"]'),'single-valued ownership exposes its child');
  assert(one.textContent.includes('型：array'),'explicit attribute type stays visible');
- w.Explorer.renderStructureDetails(detail,sample,{kind:'attribute',conceptId:'one',informationId:'one-id'});assert(detail.textContent.includes('single.value')&&detail.textContent.includes('許容する'),'mapping and explicit nullability remain available');
+ w.Explorer.renderStructureDetails(detail,sample,{kind:'attribute',conceptId:'one',informationId:'one-id'});assert(detail.textContent.includes('許容する'),'explicit nullability remains available');assert.equal(sg.mappings.get('one-id').physicalName,'single.value','mapping remains in the model');
  assert(host.textContent.includes('未定義'),'missing attribute types are not invented');
- w.Explorer.renderStructureDetails(detail,sample,{kind:'attribute',conceptId:'a',informationId:'a-id'});assert(detail.textContent.includes('activities.id'),'full attribute mapping stays available');
+ w.Explorer.renderStructureDetails(detail,sample,{kind:'attribute',conceptId:'a',informationId:'a-id'});assert(detail.textContent.includes('識別子'));assert.equal(sg.mappings.get('a-id').physicalName,'activities.id','full attribute mapping stays in the model');
  many.open=true;many.dispatchEvent(new w.Event('toggle'));assert(many.querySelector('[data-relation-id="self"] .structure-seen'),'self reference is marked and terminates');
  const self=many.querySelector('[data-relation-id="self"] > details');assert(self&&!self.open,'self reference remains manually expandable');
  self.open=true;self.dispatchEvent(new w.Event('toggle'));assert(self.querySelector('[data-relation-id="self"] > details:not([open])'),'manual expansion reveals a further closed self reference');
