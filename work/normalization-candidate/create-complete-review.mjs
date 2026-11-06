@@ -546,6 +546,37 @@ for(const [path,value] of Object.entries(actualReferences)){
  const mapping=model.meta.fieldMappings.find(item=>item.physicalName===path);
  if(mapping&&value!==undefined&&!Object.hasOwn(mapping,'referenceValue')){mapping.referenceValue=structuredClone(value);mapping.referenceSource='Alder自身の業務設計書（旧0.4形式）';}
 }
+// Review annotations are explicit and do not change the original mappings.
+// See compatibility-inventory.ja.md for evidence and unresolved distinctions.
+const markedFields={
+ 'steps.legacyText':['legacy','旧形式の手順文章を移行時に保持する。'],
+ 'State.transitions[].event':['legacy','旧形式の状態遷移の発生事象を保持する。'],
+ 'steps.obligation':['needs-review','現行候補にはあるが、手順に必須・任意を独立して持つ必要があるか確認する。'],
+ 'steps.appliesWhen':['needs-review','文章の適用条件と判定行の参照の役割・重複を確認する。'],
+ 'Check.items[].detailSummary':['needs-review','旧形式の詳細見出しを保持する。現行のチェックにも独立した概要が必要か確認する。'],
+ 'retained Check.items.reviewState':['needs-review','旧データの確認状態を保持し、現在の運用で必要な状態を確認する。'],
+ 'Concept.subsystems[].reviewState':['needs-review','旧データの確認状態を保持し、現在の運用で必要な状態を確認する。'],
+ 'Concept.concepts[].reviewState':['needs-review','旧データの確認状態を保持し、現在の運用で必要な状態を確認する。'],
+ 'Concept.relations[].reviewState':['needs-review','旧データの確認状態を保持し、現在の運用で必要な状態を確認する。'],
+ 'Concept.handoffs[].reviewState':['needs-review','旧データの確認状態を保持し、現在の運用で必要な状態を確認する。']
+};
+const fieldMarks={};for(const [path,[kind,reason]] of Object.entries(markedFields)){
+ const matches=model.meta.fieldMappings.filter(mapping=>mapping.physicalName===path);
+ if(matches.length!==1)throw Error('Expected one compatibility field: '+path);
+ fieldMarks[matches[0].informationId]={kind,reason};
+}
+const conceptMarks={
+ 'n-external':{kind:'legacy',reason:'別保存の旧業務設計書を参照するための目録。'},
+ 'c-f6845a968ec2f3':{kind:'legacy',reason:'旧業務設計書の外部目録に含む業務。'},
+ 'n-order':{kind:'needs-review',reason:'旧順序規則を引き継いだ構造。手順の前提との重複や順不同の扱いを確認する。'}
+};
+for(const id of Object.keys(conceptMarks))if(!nodes.has(id))throw Error('Missing compatibility concept: '+id);
+const relationMarks={};for(const relation of model.relations){
+ const marks=[conceptMarks[relation.fromConceptId],conceptMarks[relation.toConceptId]].filter(Boolean);
+ const mark=marks.find(item=>item.kind==='legacy')??marks.find(item=>item.kind==='needs-review');
+ if(mark)relationMarks[relation.id]=mark;
+}
+model.meta.compatibilityReview={fields:fieldMarks,concepts:conceptMarks,relations:relationMarks};
 // Refresh the already-authored overview's labels/fields without changing its
 // membership; the structure explorer reads the full model and new package root.
 const byId=new Map(model.concepts.map(c=>[c.id,c]));

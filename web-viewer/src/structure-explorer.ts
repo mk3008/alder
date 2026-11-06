@@ -5,10 +5,26 @@ type Mapping={informationId:string;physicalName:string;relationIds:string[];valu
 type RelationField={relationId:string;physicalName:string};
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
+type ReviewMark={kind:'legacy'|'needs-review';reason:string};
 type EdgeField={name:string;physicalName:string;valueType?:string};
 export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];visibleFields:string[];fieldDetails:EdgeField[];roleName?:string};
 export type StructureSelection={kind:'structure';conceptId:string;fromId?:string;relationId?:string}|{kind:'attribute';conceptId:string;informationId:string};
 const visibleDirections:Direction[]=['owned','reference','unknownOut'];
+
+// Only model-authored classifications are used. A name, version or missing
+// classification cannot establish that an item is current or legacy.
+function reviewMarks(model:ConceptModel){
+ const meta=model.meta&&typeof model.meta==='object'&&!Array.isArray(model.meta)?model.meta as {compatibilityReview?:unknown}:{};
+ const catalog=meta.compatibilityReview&&typeof meta.compatibilityReview==='object'&&!Array.isArray(meta.compatibilityReview)?meta.compatibilityReview as Record<string,unknown>:{};
+ const get=(group:string,id:string):ReviewMark|undefined=>{
+  const entries=catalog[group];if(!entries||typeof entries!=='object'||Array.isArray(entries))return;
+  const value=(entries as Record<string,unknown>)[id];if(!value||typeof value!=='object'||Array.isArray(value))return;
+  const mark=value as {kind?:unknown;reason?:unknown};
+  return (mark.kind==='legacy'||mark.kind==='needs-review')&&typeof mark.reason==='string'&&!!mark.reason.trim()?{kind:mark.kind,reason:mark.reason}:undefined;
+ };
+ return {concept:(id:string)=>get('concepts',id),field:(id:string,owner:string)=>get('fields',id)??get('concepts',owner),relation:(id:string,target:string)=>get('relations',id)??get('concepts',target)};
+}
+const reviewLabel=(mark:ReviewMark)=>mark.kind==='legacy'?'互換・移行用':'要確認';
 
 /** Read only declared concepts, mappings and relations; never infer a relation from a label. */
 export function structureGraph(model:ConceptModel){
@@ -85,6 +101,7 @@ export function structureGraph(model:ConceptModel){
 const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'所有先',referencedBy:'参照元',unknownOut:'種類未定義（出）',unknownIn:'種類未定義（入）'};
 const icon=(which:typeof Box,label?:string)=>{const svg=createElement(which,{'aria-hidden':'true','stroke-width':1.8});svg.classList.add('structure-icon');if(label){svg.removeAttribute('aria-hidden');svg.setAttribute('role','img');svg.setAttribute('aria-label',label);const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=label;svg.prepend(title);}return svg;};
 const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;root.append(el);return el;};
+const markReview=(row:HTMLElement,mark:ReviewMark|undefined)=>{if(!mark)return;row.classList.add('structure-review-'+mark.kind);text(row,'span',reviewLabel(mark),'structure-review-badge');};
 const shortPhysicalName=(path:string)=>path.split(' / ').map(part=>part.trim().split('.').pop()??part).join(' / ');
 function typeLabel(mapping:Mapping|undefined){
  const value=typeof mapping?.valueType==='string'&&mapping.valueType.trim()?mapping.valueType:'未定義';
@@ -102,7 +119,7 @@ function nullableLabel(mapping:Mapping|undefined){
 export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selection?:StructureSelection){
  root.replaceChildren();
  if(!selection){text(root,'p','ツリーの項目を選択すると詳細を確認できます。');return;}
- const graph=structureGraph(model),concept=graph.nodes.get(selection.conceptId);if(!concept){text(root,'p','項目が見つかりません。');return;}
+ const graph=structureGraph(model),marks=reviewMarks(model),concept=graph.nodes.get(selection.conceptId);if(!concept){text(root,'p','項目が見つかりません。');return;}
  const meta=model.meta&&typeof model.meta==='object'?model.meta as {modelStatus?:unknown}:{};
  const study=meta.modelStatus==='normalized-study'||meta.modelStatus==='complete-package-study';
  const names=(id:string)=>{const node=graph.nodes.get(id),authored=graph.conceptNames[id] as {typeName?:unknown;logicalName?:unknown}|undefined;
@@ -120,6 +137,7 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   // An automatically supplied nullability reason is not an explanation of
   // the field. Only display an authored meaning, and make gaps explicit.
   add('説明',typeof description==='string'&&description.trim()?description:'この項目の説明はまだ記載されていません。');
+  const review=marks.field(info.id,concept.id);if(review)add('位置づけ',reviewLabel(review)+'：'+review.reason);
   add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
   if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
   if(mapping?.logicalSourcePaths?.length)add('対応する定義',mapping.logicalSourcePaths);
@@ -139,6 +157,7 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type);add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
  add('所属',parent?parent.local+'（'+parent.type+'）':owners.length?owners:undefined);add('参照',edge?.direction==='reference'?[n.local+'（'+n.type+'）']:outgoing);
  add('説明',edge?.relation.condition||concept.description||undefined);add('サンプル',undefined);
+ const review=edge?marks.relation(edge.relation.id,concept.id):marks.concept(concept.id);if(review)add('位置づけ',reviewLabel(review)+'：'+review.reason);
  if(edge){add('関係の種類',labels[edge.direction]);add('多重度',edge.count);add('反対側の多重度',edge.reverseCount);if(edge.relation.sourceRefs.length)add('関係の出所',edge.relation.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));if(edge.relation.condition&&concept.description)add('構造の説明',concept.description);}
  // These two study models use a synthetic subsystem and the same task note on
  // every concept. Other authored reasons and subsystem names remain visible.
@@ -160,8 +179,8 @@ function sampleLabels(mapping:Mapping|undefined){
 }
 
 /** The DOM is lazy per path. A full expansion visits each concept once. */
-export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,options:{rootId?:string;openStructure?:(id:string)=>void;select?:(selection:StructureSelection)=>void}={}){
- const graph=structureGraph(model);host.replaceChildren();host.className='structure-explorer';
+export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,options:{rootId?:string;openStructure?:(id:string)=>void;select?:(selection:StructureSelection)=>void;clearSelection?:()=>void}={}){
+ const graph=structureGraph(model),marks=reviewMarks(model);host.replaceChildren();host.className='structure-explorer';
  if(!graph.roots.length){text(host,'p','この構造モデルには概念がありません。','structure-empty');return;}
  if(options.rootId&&!graph.nodes.has(options.rootId)){text(host,'p','指定した構造が見つかりません。','structure-empty');return;}
  const roots=options.rootId?[options.rootId]:graph.roots;
@@ -169,12 +188,16 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  const toolbar=document.createElement('div');toolbar.className='structure-toolbar';panel.append(toolbar);
  const all=document.createElement('button');all.type='button';all.textContent='すべて展開';toolbar.append(all);
  const collapse=document.createElement('button');collapse.type='button';collapse.textContent='すべて折りたたみ';toolbar.append(collapse);
+ const compatibility=document.createElement('label');compatibility.className='structure-compatibility-filter';
+ const hideLegacy=document.createElement('input');hideLegacy.type='checkbox';hideLegacy.checked=true;
+ compatibility.append(hideLegacy,document.createTextNode('互換・移行用を非表示'));compatibility.title='互換・移行用と明示された項目を非表示にします。';toolbar.append(compatibility);
  const searchLabel=document.createElement('label');searchLabel.className='structure-search';searchLabel.append(icon(Search));
  const search=document.createElement('input');search.type='search';search.placeholder='構造名・項目名で検索';search.setAttribute('aria-label','構造名・項目名で検索');searchLabel.append(search);toolbar.append(searchLabel);
  if(!options.rootId&&!graph.packageRoot&&!graph.hasOwnershipRoots)text(panel,'p','JSON全体のルートと所有関係の起点を特定できないため、すべての構造を表示します。','structure-unreachable');
  const unreachable=[...graph.nodes.keys()].filter(id=>!graph.reachable.has(id));
  if(!options.rootId&&unreachable.length)text(panel,'p',`この起点からたどれない構造：${unreachable.length}件`,'structure-unreachable');
  const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);
+ const empty=document.createElement('p');empty.className='structure-filter-empty';empty.hidden=true;empty.textContent='互換・移行用の構造は非表示です。表示するにはフィルターをOFFにしてください。';tree.before(empty);
  let savedTree:Node|null=null,selectedKey:string|undefined;
  const keyOf=(selection:StructureSelection)=>JSON.stringify(selection.kind==='attribute'?['attribute',selection.conceptId,selection.informationId]:['structure',selection.conceptId,selection.fromId??'',selection.relationId??'']);
  const mark=(row:HTMLElement)=>{row.classList.add('structure-selected');row.setAttribute('aria-current','true');};
@@ -183,16 +206,18 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
 
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
   const concept=graph.nodes.get(id)!;const item=document.createElement('li');item.className='structure-item';item.dataset.conceptId=id;
+  const review=edge?marks.relation(edge.relation.id,id):marks.concept(id);if(review)item.dataset.compatibility=review.kind;
   const authored=Object.hasOwn(graph.conceptNames,id)?graph.conceptNames[id]:undefined;
   const declared=authored&&typeof authored==='object'&&!Array.isArray(authored)?authored as {typeName?:unknown;logicalName?:unknown}:{};
   const hasType=typeof declared.typeName==='string'&&!!declared.typeName.trim();
   const typeName=hasType?declared.typeName as string:concept.name;
   const logicalName=hasType&&typeof declared.logicalName==='string'&&declared.logicalName.trim()?declared.logicalName:'';
-  const names=concept.information.flatMap(info=>[info.name,graph.mappings.get(info.id)?.physicalName??'']);
-  item.dataset.searchText=[concept.name,typeName,logicalName,concept.id,...names,edge?.roleName??'',...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),...(edge?.fields??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
+  const names=(includeLegacy:boolean)=>concept.information.filter(info=>includeLegacy||marks.field(info.id,id)?.kind!=='legacy').flatMap(info=>[info.name,graph.mappings.get(info.id)?.physicalName??'']);
+  const searchText=(includeLegacy:boolean)=>[concept.name,typeName,logicalName,concept.id,...names(includeLegacy),edge?.roleName??'',...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),...(edge?.fields??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
+  item.dataset.searchText=searchText(true);item.dataset.searchVisibleText=searchText(false);
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
   const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
-  row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));
+  row.className='structure-node-row';row.append(icon(edge?.direction==='reference'?Link:Box,edge?labels[edge.direction]:'構造'));markReview(row,review);
   const selectedStructure:StructureSelection={kind:'structure',conceptId:id,...(edge?{fromId:edge.from,relationId:edge.relation.id}:{})};row.dataset.structureSelection=keyOf(selectedStructure);
   row.addEventListener('click',()=>select(selectedStructure,row));
   if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}${edge.fields.length>edge.visibleFields.length?' — 物理項目：'+edge.fields.join('、'):''}`;}
@@ -208,10 +233,10 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   let built=false;const nextPath=new Set(path);nextPath.add(id);
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
-   for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id),button=document.createElement('button'),selection:StructureSelection={kind:'attribute',conceptId:id,informationId:info.id};field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.informationId=info.id;field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();button.type='button';button.className='structure-field-button';button.dataset.structureSelection=keyOf(selection);button.append(icon(FileText,'属性'));text(button,'span',info.name);text(button,'span','型：'+typeLabel(mapping),'structure-type');button.onclick=()=>select(selection,button);field.append(button);children.append(field);}
+   for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id),button=document.createElement('button'),selection:StructureSelection={kind:'attribute',conceptId:id,informationId:info.id},fieldReview=marks.field(info.id,id);field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.informationId=info.id;field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();if(fieldReview)field.dataset.compatibility=fieldReview.kind;button.type='button';button.className='structure-field-button';button.dataset.structureSelection=keyOf(selection);button.append(icon(FileText,'属性'));markReview(button,fieldReview);text(button,'span',info.name);text(button,'span','型：'+typeLabel(mapping),'structure-type');button.onclick=()=>select(selection,button);field.append(button);children.append(field);}
    for(const direction of visibleDirections){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction);if(!outgoing.length)continue;
     for(const relation of outgoing)children.append(buildNode(relation.to,nextPath,relation,expand));
-   }if(tree.contains(details))restoreSelection();
+   }if(tree.contains(details)){restoreSelection();filter();}
   };
   details.addEventListener('toggle',()=>{if(details.open)build();});
   if(seen&&!visited&&!cycle){seen.add(id);details.open=true;build(seen);}
@@ -219,10 +244,16 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  };
  const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';const seen=expand?new Set<string>():undefined;for(const id of roots)ul.append(buildNode(id,new Set(),undefined,seen));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}restoreSelection();};
  const filter=()=>{const query=search.value.trim().toLocaleLowerCase();
-  if(query&&!savedTree){savedTree=tree.firstChild;render(true);}else if(!query&&savedTree){tree.replaceChildren(savedTree);savedTree=null;restoreSelection();return;}
+  if(query&&!savedTree){savedTree=tree.firstChild;render(true);}else if(!query&&savedTree){tree.replaceChildren(savedTree);savedTree=null;restoreSelection();}
   const items=Array.from(tree.querySelectorAll<HTMLElement>('[data-search-text]')).reverse();
-  for(const item of items){const own=(item.dataset.searchText??'').includes(query),descendant=Array.from(item.querySelectorAll<HTMLElement>('[data-search-text]')).some(child=>!child.hidden);item.hidden=!!query&&!own&&!descendant;}
+  for(const item of items){
+   const own=(hideLegacy.checked?item.dataset.searchVisibleText??item.dataset.searchText:item.dataset.searchText)?.includes(query)??false;
+   const descendant=Array.from(item.querySelectorAll<HTMLElement>('[data-search-text]')).some(child=>child.parentElement?.closest('[data-search-text]')===item&&!child.hidden);
+   item.hidden=(hideLegacy.checked&&item.dataset.compatibility==='legacy')||(!!query&&!own&&!descendant);
+  }
+  empty.hidden=!!query||!hideLegacy.checked||!roots.every(id=>marks.concept(id)?.kind==='legacy');
  };
- all.onclick=()=>{savedTree=null;search.value='';render(true);};collapse.onclick=()=>{savedTree=null;search.value='';render(false);const first=tree.querySelector<HTMLDetailsElement>('.structure-node');if(first)first.open=false;};search.oninput=filter;
+ hideLegacy.onchange=()=>{const selected=tree.querySelector<HTMLElement>('.structure-selected');if(hideLegacy.checked&&selected?.closest('[data-compatibility="legacy"]')){selectedKey=undefined;options.clearSelection?.();}filter();restoreSelection();};
+ all.onclick=()=>{savedTree=null;search.value='';render(true);filter();};collapse.onclick=()=>{savedTree=null;search.value='';render(false);const first=tree.querySelector<HTMLDetailsElement>('.structure-node');if(first)first.open=false;filter();};search.oninput=filter;
  render(false);
 }

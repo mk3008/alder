@@ -13212,7 +13212,107 @@
           }
         ],
         "schemaVariants": "概念モデル文書は0.1と0.2の両方を含む。サンプルのCheck参照と機能テスト仕様は0.2で追加された。",
-        "nullabilityProposal": "業務設計に基づく未承認の候補。未決、なし、非該当と移行時の元記録を区別する。"
+        "nullabilityProposal": "業務設計に基づく未承認の候補。未決、なし、非該当と移行時の元記録を区別する。",
+        "compatibilityReview": {
+          "fields": {
+            "cf-db0d007e8ba4d3": {
+              "kind": "legacy",
+              "reason": "旧形式の手順文章を移行時に保持する。"
+            },
+            "cf-12d3ee506e635b": {
+              "kind": "legacy",
+              "reason": "旧形式の状態遷移の発生事象を保持する。"
+            },
+            "cf-325c153e7c0af3": {
+              "kind": "needs-review",
+              "reason": "現行候補にはあるが、手順に必須・任意を独立して持つ必要があるか確認する。"
+            },
+            "cf-d6937d0cbb9486": {
+              "kind": "needs-review",
+              "reason": "文章の適用条件と判定行の参照の役割・重複を確認する。"
+            },
+            "cf-c9266f8766647e": {
+              "kind": "needs-review",
+              "reason": "旧形式の詳細見出しを保持する。現行のチェックにも独立した概要が必要か確認する。"
+            },
+            "n-check-field-3": {
+              "kind": "needs-review",
+              "reason": "旧データの確認状態を保持し、現在の運用で必要な状態を確認する。"
+            },
+            "cf-012d8473a1a69a": {
+              "kind": "needs-review",
+              "reason": "旧データの確認状態を保持し、現在の運用で必要な状態を確認する。"
+            },
+            "cf-d2c0cd0cfdbdca": {
+              "kind": "needs-review",
+              "reason": "旧データの確認状態を保持し、現在の運用で必要な状態を確認する。"
+            },
+            "cf-6adc11eb0279bd": {
+              "kind": "needs-review",
+              "reason": "旧データの確認状態を保持し、現在の運用で必要な状態を確認する。"
+            },
+            "cf-8b35f69146b6ae": {
+              "kind": "needs-review",
+              "reason": "旧データの確認状態を保持し、現在の運用で必要な状態を確認する。"
+            }
+          },
+          "concepts": {
+            "n-external": {
+              "kind": "legacy",
+              "reason": "別保存の旧業務設計書を参照するための目録。"
+            },
+            "c-f6845a968ec2f3": {
+              "kind": "legacy",
+              "reason": "旧業務設計書の外部目録に含む業務。"
+            },
+            "n-order": {
+              "kind": "needs-review",
+              "reason": "旧順序規則を引き継いだ構造。手順の前提との重複や順不同の扱いを確認する。"
+            }
+          },
+          "relations": {
+            "nr-activity-order": {
+              "kind": "needs-review",
+              "reason": "旧順序規則を引き継いだ構造。手順の前提との重複や順不同の扱いを確認する。"
+            },
+            "nr-order-before": {
+              "kind": "needs-review",
+              "reason": "旧順序規則を引き継いだ構造。手順の前提との重複や順不同の扱いを確認する。"
+            },
+            "nr-order-after": {
+              "kind": "needs-review",
+              "reason": "旧順序規則を引き継いだ構造。手順の前提との重複や順不同の扱いを確認する。"
+            },
+            "nr-order-member": {
+              "kind": "needs-review",
+              "reason": "旧順序規則を引き継いだ構造。手順の前提との重複や順不同の扱いを確認する。"
+            },
+            "nr-external-checkdoc": {
+              "kind": "legacy",
+              "reason": "別保存の旧業務設計書を参照するための目録。"
+            },
+            "cr-8bc1ce25115f46": {
+              "kind": "legacy",
+              "reason": "別保存の旧業務設計書を参照するための目録。"
+            },
+            "cr-0fdca48edef71f": {
+              "kind": "legacy",
+              "reason": "別保存の旧業務設計書を参照するための目録。"
+            },
+            "cr-1f8a50dfc6d8dc": {
+              "kind": "legacy",
+              "reason": "旧業務設計書の外部目録に含む業務。"
+            },
+            "cr-552b1325cba7f7": {
+              "kind": "legacy",
+              "reason": "旧業務設計書の外部目録に含む業務。"
+            },
+            "cr-6be09cb6892e2c": {
+              "kind": "legacy",
+              "reason": "別保存の旧業務設計書を参照するための目録。"
+            }
+          }
+        }
       },
       "presentation": {
         "landscapeRelationships": [],
