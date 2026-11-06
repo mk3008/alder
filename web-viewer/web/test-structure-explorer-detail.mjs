@@ -30,10 +30,10 @@ try{
  name.click();assertFields({'論理名':'name','ローカル名':'名前','型名':'string','所属':'業務（Activity）','参照':'なし'});assert(value('サンプル').startsWith('例：'));assert(value('サンプル').includes('参考例：業務設計'));assert.match(value('参考例の出所'),/Alder自身の業務設計書/);assert.match(value('説明'),/他の業務と区別/);assert.equal(value('対応する項目'),undefined);assert.equal(mapping('activities.name').physicalName,'activities.name');assert(name.getAttribute('aria-current')==='true');
  step.dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(value('ローカル名'),'手順');assert.match(value('所属'),/業務/);assert.match(value('説明'),/順序付き手順/);assert.equal(value('多重度'),'1..N');
  render(model,'n-activity');const who=tree.querySelector('[data-relation-id="nr-who-activity"] > details > summary');who.dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.match(value('参照'),/主体/);assert.equal(value('対応する項目'),undefined);assert(mapping('activities.whoId'));covered.push('STRUCTURE-DETAIL-002');
- render(model,'n-activity');field('activities.scope').click();assert.equal(value('null許容'),'許容する');assert.match(value('説明'),/null許容の理由：.*未決.*対象外/);assert.equal(value('参照元の型表記'),undefined);assert.equal(mapping('activities.scope').valueType,'boolean | null');
- field('activities.id').click();assert.equal(value('null許容'),'許容しない');assert.match(value('説明'),/null許容の理由：.*識別子/);
- field('activities.problem').click();assert.equal(value('null許容'),'許容する');assert.match(value('説明'),/null許容の理由：.*課題の確認状態/);
- render(model,'n-dataitem');field('dataItems.condition').click();assert.equal(value('null許容'),'許容する');assert.match(value('説明'),/null許容の理由：.*条件の確定状態/);
+ render(model,'n-activity');field('activities.scope').click();assert.equal(value('null許容'),'許容する');assert.match(value('説明'),/未決.*対象外/);assert.equal(value('参照元の型表記'),undefined);assert.equal(mapping('activities.scope').valueType,'boolean | null');
+ field('activities.id').click();assert.equal(value('null許容'),'許容しない');assert.match(value('説明'),/識別/);
+ field('activities.problem').click();assert.equal(value('null許容'),'許容する');assert.match(value('説明'),/未確認.*課題なし/);
+ render(model,'n-dataitem');field('dataItems.condition').click();assert.equal(value('null許容'),'許容する');assert.match(value('説明'),/無条件.*条件未決/);
  covered.push('STRUCTURE-DETAIL-003','STRUCTURE-NULL-001');
  const changed=structuredClone(model),target=changed.meta.fieldMappings.find(item=>item.physicalName==='activities.name');delete target.nullable;delete target.nullableReason;delete target.nullableStatus;delete target.referenceValue;delete target.referenceSource;target.valueType='string | null';target.optional=true;target.sampleValue=null;
  render(changed,'n-activity');field('activities.name',changed).click();assert.equal(value('null許容'),'未定義','source type, optional and sample are not a proposed business decision');assert.equal(value('項目の省略'),'可能');assert.equal(value('サンプル'),'例：null');

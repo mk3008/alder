@@ -33,11 +33,11 @@ try{
  const undecided=structuredClone(model),u=field(undecided,'activities.name').mapping;u.nullable=null;show(undecided,'activities.name');assert.equal(value('null許容'),'未決');
  delete u.nullable;delete u.nullableStatus;u.valueType='string | null';u.sampleValue=null;show(undecided,'activities.name');assert.equal(value('null許容'),'未定義');covered.push('STRUCTURE-ORDER-002');
  const cases=structuredClone(model),f=field(cases,'activities.name');
- f.info.description='項目の意味。';f.mapping.nullableReason='未入力を区別する。';show(cases,'activities.name');assert.deepEqual(lines('説明'),['項目の意味。','null許容の理由：未入力を区別する。']);assert.equal(value('判定理由'),undefined);
+ f.info.description='項目の意味。';f.mapping.nullableReason='未入力を区別する。';show(cases,'activities.name');assert.deepEqual(lines('説明'),['項目の意味。']);assert.equal(value('判定理由'),undefined);
  delete f.mapping.nullableReason;show(cases,'activities.name');assert.deepEqual(lines('説明'),['項目の意味。']);
- delete f.info.description;delete f.mapping.logicalMeaning;f.mapping.nullableReason='理由のみ。';show(cases,'activities.name');assert.deepEqual(lines('説明'),['未定義','null許容の理由：理由のみ。']);
- delete f.mapping.nullableReason;show(cases,'activities.name');assert.deepEqual(lines('説明'),['未定義']);covered.push('STRUCTURE-ORDER-003');
+ delete f.info.description;delete f.mapping.logicalMeaning;f.mapping.nullableReason='理由のみ。';show(cases,'activities.name');assert.deepEqual(lines('説明'),['この項目の説明はまだ記載されていません。']);
+ delete f.mapping.nullableReason;show(cases,'activities.name');assert.deepEqual(lines('説明'),['この項目の説明はまだ記載されていません。']);covered.push('STRUCTURE-ORDER-003');
  show(model,'activities.name');assert.equal(value('所属'),'業務（Activity）');assert.equal(value('参照'),'なし');assert.equal(JSON.stringify(model),modelBefore);assert.deepEqual(readFileSync(source),bytes);assert.deepEqual(readFileSync(real),realBytes);covered.push('STRUCTURE-ORDER-004');
 }finally{w.close();}
 coverage(covered);assert.equal(hash(readFileSync(authority)),digest);
-console.log(JSON.stringify({checks:covered,scope:'attribute detail order, nullability and combined explanation'}));
+console.log(JSON.stringify({checks:covered,scope:'attribute detail order, nullability and meaningful explanation'}));

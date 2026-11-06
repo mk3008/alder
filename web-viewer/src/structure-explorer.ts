@@ -116,8 +116,10 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   add('論理名',mapping?.physicalName?shortPhysicalName(mapping.physicalName):undefined);add('ローカル名',info.name);add('型名',typeLabel(mapping));
   add('サンプル',mapping?sampleLabels(mapping):undefined);
   add('null許容',nullableLabel(mapping));
-  const description=typeof data.description==='string'&&data.description?data.description:mapping?.logicalMeaning;
-  const explanation=[description||'未定義'];if(mapping?.nullableReason)explanation.push('null許容の理由：'+mapping.nullableReason);add('説明',explanation);
+  const description=typeof data.description==='string'&&data.description.trim()?data.description:mapping?.logicalMeaning;
+  // An automatically supplied nullability reason is not an explanation of
+  // the field. Only display an authored meaning, and make gaps explicit.
+  add('説明',typeof description==='string'&&description.trim()?description:'この項目の説明はまだ記載されていません。');
   add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
   if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
   if(mapping?.logicalSourcePaths?.length)add('対応する定義',mapping.logicalSourcePaths);

@@ -22,7 +22,7 @@ try{
  const show=(m,path)=>{const f=field(m,path);w.Explorer.renderStructureDetails(detail,m,{kind:'attribute',conceptId:f.owner.id,informationId:f.info.id});return f.mapping;};
  const value=label=>[...detail.querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling?.textContent;
  const diagnostics=show(model,'Package.diagnostics');assert.equal(value('定義元'),undefined);assert.equal(value('参照元の型表記'),undefined);
- assert.equal(value('論理名'),'diagnostics');assert.equal(value('型名'),'string[]');assert.equal(value('null許容'),'許容する');assert(value('説明').includes('null許容の理由：'));assert.equal(value('サンプル'),'例：[]');assert(!detail.textContent.includes('Package.diagnostics'));
+ assert.equal(value('論理名'),'diagnostics');assert.equal(value('型名'),'string[]');assert.equal(value('null許容'),'許容する');assert(value('説明').includes('文書に残す補足'));assert(!value('説明').includes('null許容の理由：'));assert.equal(value('サンプル'),'例：[]');assert(!detail.textContent.includes('Package.diagnostics'));
  assert.equal(diagnostics.sourceSchemaPath,'Package.diagnostics');assert.equal(diagnostics.valueType,'string[]');
  const scope=show(model,'activities.scope');assert.equal(value('定義元'),undefined);assert.equal(value('参照元の型表記'),undefined);assert.equal(value('型名'),'boolean');assert.equal(value('null許容'),'許容する');assert.equal(scope.valueType,'boolean | null');covered.push('STRUCTURE-SOURCE-001');
  w.Explorer.renderStructureExplorer(tree,model,{rootId:'n-package'});const search=tree.querySelector('input[type="search"]');search.value='Package.diagnostics';search.dispatchEvent(new w.Event('input',{bubbles:true}));assert([...tree.querySelectorAll('[data-information-id="cf-2afe02557bfa91"]')].some(item=>!item.hidden),'the retained source path remains searchable');
