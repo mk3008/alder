@@ -29,7 +29,7 @@ try{
  for(const [item,expected] of [[null,'例：null'],['','例：""'],[0,'例：0']]){sample.sampleValue=item;show(examples,'activities.name');assert.equal(value('サンプル'),expected);}
  delete sample.sampleValue;show(examples,'activities.name');assert.equal(value('サンプル'),'なし');covered.push('STRUCTURE-ORDER-001');
  show(model,'activities.id');assert.equal(value('null許容'),'許容しない');assert.equal(value('null許容（候補）'),undefined);
- show(model,'activities.scope');assert.equal(value('null許容'),'許容する');assert.equal(value('参照元の型表記'),'boolean | null');
+ show(model,'activities.scope');assert.equal(value('null許容'),'許容する');assert.equal(value('参照元の型表記'),undefined);assert.equal(field(model,'activities.scope').mapping.valueType,'boolean | null');
  const undecided=structuredClone(model),u=field(undecided,'activities.name').mapping;u.nullable=null;show(undecided,'activities.name');assert.equal(value('null許容'),'未決');
  delete u.nullable;delete u.nullableStatus;u.valueType='string | null';u.sampleValue=null;show(undecided,'activities.name');assert.equal(value('null許容'),'未定義');covered.push('STRUCTURE-ORDER-002');
  const cases=structuredClone(model),f=field(cases,'activities.name');

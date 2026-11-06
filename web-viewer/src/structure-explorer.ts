@@ -120,8 +120,6 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   const explanation=[description||'未定義'];if(mapping?.nullableReason)explanation.push('null許容の理由：'+mapping.nullableReason);add('説明',explanation);
   add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
   if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
-  if(mapping?.sourceSchemaPath)add('定義元',mapping.sourceSchemaPath);
-  if(mapping?.nullableStatus==='proposal'&&mapping.valueType)add('参照元の型表記',mapping.valueType);
   if(mapping?.logicalSourcePaths?.length)add('対応する定義',mapping.logicalSourcePaths);
   if(typeof mapping?.optional==='boolean')add('項目の省略',mapping.optional?'可能':'不可');
   if(mapping?.representation)add('対応の種類',mapping.representation);
