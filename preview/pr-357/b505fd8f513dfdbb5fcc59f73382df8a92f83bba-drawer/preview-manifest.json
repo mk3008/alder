@@ -1,0 +1,19 @@
+{
+  "source": "b505fd8f513dfdbb5fcc59f73382df8a92f83bba",
+  "sourceTree": "b0dd857bda1c0eca18369a831207e3c22a60b5fb",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-BcoRC_3F.js": "fdac6ef82ef028619d5119e4907aab4c02199bb384f2dfed3e4fe38e20ccdf75",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/concept-BbK6bi35.css": "05729326dbd29afe38b3dd93c372cb30a9484a5462489f8f8de76e8be76c96ac",
+    "assets/concept-rT2PhUpE.js": "83b00d57ff72361ad41deb5905fac226ab120d4fdc0ba0b50fad54ab30b7e9a2",
+    "assets/main-B9tT9hIC.css": "645477d243f3665d740ea839395fe37dafa7a0b4d9f8afd4fb8d4dc6db467368",
+    "assets/main-CP8VZoNp.js": "8f27eb9239a546363f5e1f667c4a319e170e077e6bfcb2fcc5d0ac4887c7d685",
+    "concept.html": "1c4c9935e12d92ba761f443a57063a9cad9f0335bed332ced634ef576fd35286",
+    "examples/concept-self-reference.json": "59df576b90da3a152f66a59233534cf2c7591a61cdbd42b806d43991ba3e4744",
+    "examples/json-complete-concept-review.json": "9506506e78cee47facdd0153d12baf1da18d5e3f47544bb447324e8a51e99d38",
+    "index.html": "e41d32bfebc071c286d7c1e1e8c077524332336a9fecd124f9c8b0640ba6b9b1",
+    "named-plans-example.json": "4f14c3bfb776a62d984703390ca8abc8fc173aea41ff8d3d54f4d7581409ba9b"
+  }
+}
