@@ -86,7 +86,7 @@ jobs:
                 await page.locator('#drawer').click();
                 const when=page.locator('[data-concept-id="n-activity"] [data-information-id="n-activity-field-6"] button').first();await when.click();await page.locator('#drawer').click();data=await read();assert(data['サンプル'].includes('0回を含む'));
                 const fit=await page.locator('.structure-detail-list').evaluate(el=>[...el.querySelectorAll('dd')].every(dd=>dd.scrollWidth<=dd.clientWidth+1));assert(fit,'drawer values must wrap rather than be clipped');
-                const bd=page.locator('[data-relation-id="nr-package-bd"] > details > summary').first();await bd.click();data=await read();
+                await page.locator('#drawer').click();const bd=page.locator('[data-relation-id="nr-package-bd"] > details > summary').first();await bd.click();await page.locator('#drawer').click();data=await read();
                 assert.equal(data['ローカル名'],'業務設計書');assert.equal(data['型名'],'BusinessDesign');assert.equal(data['多重度'],'0..N');
                 for(const key of ['関係のID','構造のID','対応する項目','関係の確認状態','確認状態','理由','サブシステム'])assert.equal(data[key],undefined,key+' should not appear');
                 await page.screenshot({path:process.env.RUNNER_TEMP+'/structure-policy-'+label+'.png'});
