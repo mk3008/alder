@@ -49,8 +49,8 @@ try{
  const hit=tree.querySelector('[data-relation-id="nr-who-activity"]');assert(hit&&!hit.hidden,'source mapping remains searchable');
  assert.equal(JSON.stringify(model),before);assert.deepEqual(readFileSync(file),bytes);covered.push('STRUCTURE-POLICY-004');
  const id=model.meta.fieldMappings.find(item=>item.physicalName==='activities.id');
- show(model,{kind:'attribute',conceptId:'n-activity',informationId:id.informationId});assert.equal(value('論理名'),'id');assert.equal(value('ローカル名'),'識別子');assert.equal(value('null許容（候補）'),'許容しない');assert.match(value('判定理由'),/識別子/);
- const undecided=structuredClone(model),pending=undecided.meta.fieldMappings.find(item=>item.physicalName==='activities.name');pending.nullable=null;pending.nullableReason='未決の意味を確認する。';show(undecided,{kind:'attribute',conceptId:'n-activity',informationId:pending.informationId});assert.equal(value('null許容（候補）'),'未決');assert.equal(value('判定理由'),'未決の意味を確認する。');assert.equal(JSON.stringify(model),before);covered.push('STRUCTURE-POLICY-005');
+ show(model,{kind:'attribute',conceptId:'n-activity',informationId:id.informationId});assert.equal(value('論理名'),'id');assert.equal(value('ローカル名'),'識別子');assert.equal(value('null許容'),'許容しない');assert.match(value('説明'),/null許容の理由：.*識別子/);
+ const undecided=structuredClone(model),pending=undecided.meta.fieldMappings.find(item=>item.physicalName==='activities.name');pending.nullable=null;pending.nullableReason='未決の意味を確認する。';show(undecided,{kind:'attribute',conceptId:'n-activity',informationId:pending.informationId});assert.equal(value('null許容'),'未決');assert.match(value('説明'),/null許容の理由：未決の意味を確認する。/);assert.equal(JSON.stringify(model),before);covered.push('STRUCTURE-POLICY-005');
 }finally{w.close();}
 coverage(covered);assert.equal(hash(readFileSync(authority)),digest);
 console.log(JSON.stringify({checks:covered,scope:'structure details, preserved source mappings and search'}));

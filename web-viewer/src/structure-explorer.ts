@@ -114,10 +114,11 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   const mapping=graph.mappings.get(info.id),data=info as typeof info&{description?:unknown};
   const references=mapping?.relationIds.flatMap(id=>{const edges=(graph.edges.get(concept.id)??[]).filter(edge=>edge.relation.id===id);return edges.length?edges.map(edge=>names(edge.to).local+'（'+labels[edge.direction]+'）'):[id+'（未定義）'];});
   add('論理名',mapping?.physicalName?shortPhysicalName(mapping.physicalName):undefined);add('ローカル名',info.name);add('型名',typeLabel(mapping));
-  add(mapping?.nullableStatus==='proposal'?'null許容（候補）':'null許容',nullableLabel(mapping));if(mapping?.nullableReason)add('判定理由',mapping.nullableReason);
-  add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
-  add('説明',typeof data.description==='string'&&data.description?data.description:mapping?.logicalMeaning);
   add('サンプル',mapping?sampleLabels(mapping):undefined);
+  add('null許容',nullableLabel(mapping));
+  const description=typeof data.description==='string'&&data.description?data.description:mapping?.logicalMeaning;
+  const explanation=[description||'未定義'];if(mapping?.nullableReason)explanation.push('null許容の理由：'+mapping.nullableReason);add('説明',explanation);
+  add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
   if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
   if(mapping?.sourceSchemaPath)add('定義元',mapping.sourceSchemaPath);
   if(mapping?.nullableStatus==='proposal'&&mapping.valueType)add('参照元の型表記',mapping.valueType);
