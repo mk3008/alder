@@ -5886,7 +5886,7 @@
             "nullable": true,
             "nullableReason": "手順のやり取りの有無・種類が未決の場合を保持し、やり取りなしの確定と区別する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "手順で受渡しを行うか、そのやり取りをどう扱うかの区分。"
+            "logicalMeaning": "手順が相手との受渡しか、内部処理か、未決かを区別する。"
           },
           {
             "informationId": "n-step-field-6",
@@ -5939,7 +5939,7 @@
             "nullable": true,
             "nullableReason": "要求か応答かが未決の受渡しを保持し、応答がない場合と混同しない。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "相手への要求か、その要求に対する応答かを区別する。"
+            "logicalMeaning": "相手への要求、その要求に対する応答、または該当なしを区別する。"
           },
           {
             "informationId": "n-exchange-field-5",
@@ -6461,7 +6461,7 @@
             "nullable": true,
             "nullableReason": "判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "設計上の確認事項が未確認・確認済みなど、どの状態にあるか。"
+            "logicalMeaning": "設計上の確認事項が未解決か解決済みかを示す。"
           },
           {
             "informationId": "n-finding-field-3",
@@ -9172,7 +9172,7 @@
             "nullable": null,
             "nullableReason": "効果を記録しない手順と効果が未決の手順を区別する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "手順の操作によって成立する効果。"
+            "logicalMeaning": "手順が対象に対して行う作成・参照・更新・削除など。該当なしと未決を区別する。"
           },
           {
             "informationId": "cf-e53cb54e69e740",

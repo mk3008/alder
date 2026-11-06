@@ -25,7 +25,7 @@ try{
   show(model,byName(name));assert.match(value('説明'),expected,name);assert(!value('説明').includes('未定義'));assert(!value('説明').includes('null許容の理由：'));
  }
  covered.push('STRUCTURE-MEANING-001');
- for(const [name,expected] of [['activities.scope',/未決.*対象外/],['activities.problem',/未確認.*課題なし/],['data.name',/情報項目.*まとめ/],['State.transitions[].condition',/遷移.*条件/],['retained Check.items.id',/チェック項目.*識別/]]){
+ for(const [name,expected] of [['activities.scope',/未決.*対象外/],['activities.problem',/未確認.*課題なし/],['data.name',/情報項目.*まとめ/],['steps.exchangeKind',/受渡し.*内部処理.*未決/],['stepInteractions.phase',/要求.*応答.*該当なし/],['findings.status',/未解決.*解決済み/],['State.transitions[].condition',/遷移.*条件/],['retained Check.items.id',/チェック項目.*識別/]]){
   show(model,byName(name));assert.match(value('説明'),expected,name);
  }
  show(model,item=>item.logicalSourcePaths?.includes('steps.dependencyState'));assert.match(value('説明'),/未決.*なし.*あり/);

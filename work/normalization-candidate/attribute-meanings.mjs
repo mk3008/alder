@@ -29,12 +29,12 @@ const meanings={
  'steps.id':'一つの業務内の手順を識別し、前提や判定との対応を追跡する。',
  'steps.action':'手順で主体が行う操作や、相手に対する働きかけ。',
  'steps.method':'その操作をどのように行うか。方法の違いが業務やシステム化に影響する場合に表す。',
- 'steps.exchangeKind':'手順で受渡しを行うか、そのやり取りをどう扱うかの区分。',
+ 'steps.exchangeKind':'手順が相手との受渡しか、内部処理か、未決かを区別する。',
  'steps.obligation':'手順が必須か任意かを表す。適用条件とは区別する。',
  'steps.appliesWhen':'その手順を適用する条件。条件が未決の場合と、条件なしと確定した場合は区別する。',
- 'steps.effect':'手順の操作によって成立する効果。',
+ 'steps.effect':'手順が対象に対して行う作成・参照・更新・削除など。該当なしと未決を区別する。',
  'stepInteractions.direction':'主体から相手へ、または相手から主体への受渡しの方向。',
- 'stepInteractions.phase':'相手への要求か、その要求に対する応答かを区別する。',
+ 'stepInteractions.phase':'相手への要求、その要求に対する応答、または該当なしを区別する。',
  'stepParties.side':'手順のやり取りにおける送る側（From）か受ける側（To）か。',
  'stepParties.kind':'その手順の当事者がどの種類の主体・対象かを区別する。',
  'results.id':'一つの業務から成立する結果を識別する。',
@@ -48,7 +48,7 @@ const meanings={
  'continuities.trigger':'中断・再開の扱いが必要になる条件。',
  'continuities.resumeCondition':'中断した業務を再開できる条件。',
  'relations.kind':'業務と対象の間の入出力や例外などの関係の種類。',
- 'findings.status':'設計上の確認事項が未確認・確認済みなど、どの状態にあるか。'
+ 'findings.status':'設計上の確認事項が未解決か解決済みかを示す。'
 };
 
 // These definitions describe the information in the review model. They are
