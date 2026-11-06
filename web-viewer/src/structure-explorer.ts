@@ -103,6 +103,8 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  root.replaceChildren();
  if(!selection){text(root,'p','ツリーの項目を選択すると詳細を確認できます。');return;}
  const graph=structureGraph(model),concept=graph.nodes.get(selection.conceptId);if(!concept){text(root,'p','項目が見つかりません。');return;}
+ const meta=model.meta&&typeof model.meta==='object'?model.meta as {modelStatus?:unknown}:{};
+ const study=meta.modelStatus==='normalized-study'||meta.modelStatus==='complete-package-study';
  const names=(id:string)=>{const node=graph.nodes.get(id),authored=graph.conceptNames[id] as {typeName?:unknown;logicalName?:unknown}|undefined;
   return {local:typeof authored?.logicalName==='string'&&authored.logicalName?authored.logicalName:node?.name??id,type:typeof authored?.typeName==='string'&&authored.typeName?authored.typeName:node?.name??'未定義'};};
  const list=document.createElement('dl');list.className='structure-detail-list';root.append(list);
@@ -130,15 +132,15 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  const n=names(concept.id),parent=edge?names(edge.from):undefined;
  const owners=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='owner').map(item=>names(item.to).local);
  const outgoing=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='reference').map(item=>(item.roleName??'参照')+'：'+names(item.to).local);
- const relationNames=edge?.fieldDetails.map(field=>field.physicalName).filter(Boolean).map(shortPhysicalName);
+ // A single source array can represent several concept relationships. Its
+ // name is not the logical name of each of those relationships.
+ const relationNames=edge?.fieldDetails.filter(field=>!study||![...graph.mappings.values()].some(mapping=>mapping.physicalName===field.physicalName&&mapping.relationIds.length>1)).map(field=>field.physicalName).filter(Boolean).map(shortPhysicalName);
  add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type);add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
  add('所属',parent?parent.local+'（'+parent.type+'）':owners.length?owners:undefined);add('参照',edge?.direction==='reference'?[n.local+'（'+n.type+'）']:outgoing);
  add('説明',edge?.relation.condition||concept.description||undefined);add('サンプル',undefined);
  if(edge){add('関係の種類',labels[edge.direction]);add('多重度',edge.count);add('反対側の多重度',edge.reverseCount);if(edge.relation.sourceRefs.length)add('関係の出所',edge.relation.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));if(edge.relation.condition&&concept.description)add('構造の説明',concept.description);}
  // These two study models use a synthetic subsystem and the same task note on
  // every concept. Other authored reasons and subsystem names remain visible.
- const meta=model.meta&&typeof model.meta==='object'?model.meta as {modelStatus?:unknown}:{};
- const study=meta.modelStatus==='normalized-study'||meta.modelStatus==='complete-package-study';
  const studyReason=study&&(concept.reason==='正規化候補の構造レビュー。'||concept.reason==='Alder JSON概念モデルのレビュー候補。');
  if(concept.reason&&!studyReason)add('理由',concept.reason);
  if(concept.subsystemId){const subsystem=model.subsystems.find(item=>item.id===concept.subsystemId);if(!(study&&subsystem?.id==='format-review'))add('サブシステム',subsystem?.name);}

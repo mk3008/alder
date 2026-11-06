@@ -26,7 +26,7 @@ try{
  const hidden=['構造のID','関係のID','情報項目のID','対応する項目','確認状態','関係の確認状態'];
  const assertHidden=()=>{for(const label of hidden)assert.equal(value(label),undefined,label);};
  show(model,{kind:'structure',conceptId:'n-bd',fromId:'n-package',relationId:'nr-package-bd'});
- assertHidden();assert.equal(value('ローカル名'),'業務設計書');assert.equal(value('型名'),'BusinessDesign');assert.equal(value('関係の種類'),'所有');assert.equal(value('多重度'),'0..N');assert.equal(value('反対側の多重度'),'1');assert(value('所属').includes('文書パッケージ'));
+ assertHidden();assert.equal(value('論理名'),'未定義','a shared source array is not a logical name for just this relationship');assert(!detail.textContent.includes('documents[]'));assert.equal(value('ローカル名'),'業務設計書');assert.equal(value('型名'),'BusinessDesign');assert.equal(value('関係の種類'),'所有');assert.equal(value('多重度'),'0..N');assert.equal(value('反対側の多重度'),'1');assert(value('所属').includes('文書パッケージ'));
  assert.equal(value('理由'),undefined);assert.equal(value('サブシステム'),undefined);
  show(model,{kind:'structure',conceptId:'n-who',fromId:'n-activity',relationId:'nr-who-activity'});assertHidden();assert.equal(value('関係の種類'),'参照');assert(value('参照').includes('主体'));assert.equal(value('多重度'),'0..1');
  show(model,{kind:'structure',conceptId:'n-activity'});assertHidden();assert.equal(value('型名'),'Activity');assert.equal(value('理由'),undefined);
