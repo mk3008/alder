@@ -1,0 +1,115 @@
+name: Build and verify structure drawer preview
+on:
+  push:
+    branches:
+      - beta/pr-357-drawer-preview-7679db79
+    paths:
+      - .github/workflows/build-pr357-drawer.yml
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web-viewer
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          ref: 7679db798cdd918ea1adfeeb6347f856bf9d6ed3
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - name: Verify source revision
+        run: |
+          test "$(git rev-parse HEAD)" = 7679db798cdd918ea1adfeeb6347f856bf9d6ed3
+          test "$(git rev-parse 'HEAD^{tree}')" = 8d5da97e2c2917b25cc02cee264aafd006b5b585
+          git diff --quiet HEAD
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run test:structure-explorer
+      - run: npm run test:normalization-candidate
+      - run: npm run test:complete-concept-review
+      - run: node --experimental-strip-types web/test-global-right-drawer.mjs
+      - run: npm run build
+      - name: Package pinned public review JSON
+        run: |
+          mkdir -p dist/examples
+          cp ../business-design/alder/json-complete-concept-review.json dist/examples/json-complete-concept-review.json
+          echo 'a38b47d3f6638a2e5551a3c74c2c8dacbc87ab8fa21f7da85c7f5931367a94d4  dist/examples/json-complete-concept-review.json' | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('dist')
+          files={str(path.relative_to(root)):hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(root.rglob('*')) if path.is_file()}
+          assert 'index.html' in files and 'concept.html' in files
+          assert 'examples/json-complete-concept-review.json' in files
+          manifest={'source':'7679db798cdd918ea1adfeeb6347f856bf9d6ed3','sourceTree':'8d5da97e2c2917b25cc02cee264aafd006b5b585','files':files}
+          (root/'preview-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: Prepare Chrome and Japanese fonts
+        run: |
+          npm install --prefix "$RUNNER_TEMP/smoke" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk > /dev/null
+      - name: Inspect the actual viewer at mobile and desktop widths
+        run: |
+          cat > "$RUNNER_TEMP/drawer-smoke.cjs" <<'JS'
+          const assert=require('node:assert/strict');
+          const {chromium}=require(process.env.RUNNER_TEMP+'/smoke/node_modules/playwright');
+          const source='https://raw.githubusercontent.com/mk3008/alder/7679db798cdd918ea1adfeeb6347f856bf9d6ed3/business-design/alder/json-complete-concept-review.json';
+          const url='http://127.0.0.1:4173/?preview=1&view=concept&concept=structure-explorer#source='+encodeURIComponent(source);
+          (async()=>{
+            const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
+            try{
+              for(const [label,width,height] of [['mobile',393,852],['desktop',1280,900]]){
+                const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
+                const page=await context.newPage(),errors=[];
+                page.on('pageerror',error=>errors.push(error.message));
+                const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:60000});assert(response?.ok());
+                await page.locator('.structure-root > [data-concept-id="n-package"] > details > summary').waitFor({state:'visible',timeout:60000});
+                const drawer=page.locator('#concept-related-panel');
+                if(await drawer.isVisible())await page.locator('#drawer').click();
+                assert(await drawer.isHidden(),'drawer is closed before choosing an item');
+                const expand=async id=>page.locator('[data-relation-id="'+id+'"] > details > summary').first().click({position:{x:5,y:15}});
+                await expand('nr-package-bd');await expand('nr-bd-activity');
+                const name=page.locator('[data-concept-id="n-activity"] [data-information-id="n-activity-field-2"] button').first();
+                await name.click();assert(await drawer.isHidden(),'selection must not force open a closed drawer');
+                assert(!(await name.innerText()).includes('例：'),'sample should not crowd the tree');
+                await page.locator('#drawer').click();await drawer.waitFor({state:'visible'});
+                const read=()=>page.locator('.structure-detail-list').evaluate(el=>Object.fromEntries([...el.querySelectorAll('dt')].map(dt=>[dt.textContent,dt.nextElementSibling.textContent])));
+                let data=await read();assert.equal(data['論理名'],'name');assert.equal(data['ローカル名'],'名前');assert.equal(data['null許容（候補）'],'許容しない');assert(data['サンプル'].includes('1回の点数を計算する'));
+                await page.screenshot({path:process.env.RUNNER_TEMP+'/structure-detail-'+label+'.png'});
+                await page.locator('#drawer').click();
+                const scope=page.locator('[data-concept-id="n-activity"] [data-information-id="n-activity-field-4"] button').first();await scope.click();assert(await drawer.isHidden());
+                await page.locator('#drawer').click();data=await read();assert.equal(data['null許容（候補）'],'許容する');assert(data['判定理由'].includes('対象外'));
+                await page.locator('#drawer').click();
+                const when=page.locator('[data-concept-id="n-activity"] [data-information-id="n-activity-field-6"] button').first();await when.click();await page.locator('#drawer').click();data=await read();assert(data['サンプル'].includes('0回を含む'));
+                const fit=await page.locator('.structure-detail-list').evaluate(el=>[...el.querySelectorAll('dd')].every(dd=>dd.scrollWidth<=dd.clientWidth+1));assert(fit,'drawer values must wrap rather than be clipped');
+                const bd=page.locator('[data-relation-id="nr-package-bd"] > details > summary').first();await bd.click();data=await read();
+                assert.equal(data['ローカル名'],'業務設計書');assert.equal(data['型名'],'BusinessDesign');assert.equal(data['多重度'],'0..N');
+                for(const key of ['関係のID','構造のID','対応する項目','関係の確認状態','確認状態','理由','サブシステム'])assert.equal(data[key],undefined,key+' should not appear');
+                await page.screenshot({path:process.env.RUNNER_TEMP+'/structure-policy-'+label+'.png'});
+                assert.deepEqual(errors,[]);console.log(JSON.stringify({screen:label,width,source,selection:data['ローカル名'],type:data['型名'],fits:fit}));
+                await context.close();
+              }
+            }finally{await browser.close();}
+          })().catch(error=>{console.error(error);process.exitCode=1;});
+          JS
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > "$RUNNER_TEMP/preview-server.log" 2>&1 &
+          server=$!
+          trap 'kill "$server" || true' EXIT
+          node "$RUNNER_TEMP/drawer-smoke.cjs"
+      - uses: actions/upload-artifact@v4.6.2
+        if: always()
+        with:
+          name: pr357-drawer-review-screens
+          path: ${{ runner.temp }}/structure-*.png
+          if-no-files-found: ignore
+          retention-days: 14
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          name: pr357-drawer-preview-7679db79
+          path: web-viewer/dist
+          if-no-files-found: error
+          retention-days: 14
