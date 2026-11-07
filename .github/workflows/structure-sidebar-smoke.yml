@@ -1,4 +1,4 @@
-name: Structure sidebar browser check
+name: Verify published explorer preview
 on:
   push:
     branches:
@@ -6,51 +6,18 @@ on:
 permissions:
   contents: read
 jobs:
-  browser:
+  published-preview:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
-    defaults:
-      run:
-        working-directory: web-viewer
+    timeout-minutes: 4
     steps:
-      - uses: actions/checkout@v4.4.0
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: '24.22.1'
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm run build
-      - run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
-      - name: Install Japanese review-image font
+      - name: Verify delivered HTML, assets and JSON
         run: |
-          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
-            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
-            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf --output "$FONT_FILE"
-            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
-            mkdir -p "$HOME/.local/share/fonts"
-            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
-            fc-cache -f "$HOME/.local/share/fonts"
-          fi
-          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
-      - name: Check structure sidebar at desktop and mobile widths
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
-          SERVER_PID=$!
-          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
-            sleep 1
-          done
-          export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
-          node web/test-browser.mjs --cases structureSampleHeader,explorerResizeScroll
-      - name: Save screenshots
-        if: always()
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: structure-sidebar-screenshots
-          path: |
-            web-viewer/web/evidence/structure-explorer-sidebar/*.png
-            web-viewer/web/evidence/explorer-resize-scroll/*.png
-          if-no-files-found: ignore
-          retention-days: 7
+          base='https://mk3008.github.io/alder/preview/pr-357/ca7c1af7857132242f2a9422e65932a977fa61d9-resizable-explorer'
+          verify() {
+            curl --fail --location --silent --show-error --retry 8 --retry-all-errors --retry-delay 3 "$base/$1" --output "$RUNNER_TEMP/viewer-content"
+            test "$(sha256sum "$RUNNER_TEMP/viewer-content" | cut -d' ' -f1)" = "$2"
+          }
+          verify index.html 189d3efb79dfe99750b8b996ef13356cb8bbeedfdf7dbf1733f40b65fee6c5ae
+          verify assets/main-Dmfp9eiA.js 795541c4c25e9f14ab7c669372b2d1d0752a089cb36188b288a9019e89c59447
+          verify assets/main-Dp94TowD.css 8ab5f05912e7a9dde7c128c994523125eda61f583b9e377aba778c84f1f36cf4
+          verify examples/json-complete-concept-review.json 1f8abc11ad3ff741acb6e4e26ce7c47ac1a02327e6a6fa99941a6e54acf5bec7
