@@ -1,0 +1,56 @@
+name: Stage fixed structure review preview
+on:
+  push:
+    branches:
+      - 'work/357-feedback-validation-20261107'
+permissions:
+  contents: write
+jobs:
+  stage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          ref: 887c0f60a191d06e1db0ed50567844cca2ec1950
+          path: source
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - name: Build the reviewed commit
+        working-directory: source/web-viewer
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+          mkdir -p dist/examples
+          cp ../business-design/alder/json-complete-concept-review.json dist/examples/json-complete-concept-review.json
+      - name: Create file manifest
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+          import {readdirSync,readFileSync,writeFileSync} from 'node:fs';
+          import {join,relative} from 'node:path';
+          const root='source/web-viewer/dist',files={};
+          function walk(dir){for(const entry of readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))){const path=join(dir,entry.name);if(entry.isDirectory())walk(path);else if(entry.isFile())files[relative(root,path)]=createHash('sha256').update(readFileSync(path)).digest('hex');else throw Error('Unexpected preview asset type: '+path);}}
+          walk(root);
+          writeFileSync(join(root,'preview-manifest.json'),JSON.stringify({source:'887c0f60a191d06e1db0ed50567844cca2ec1950',sourceTree:'ac53b13a5664e8870b65a88b355fe0ac1f5fb9c3',files},null,2)+'\n');
+          NODE
+      - uses: actions/checkout@v4.4.0
+        with:
+          ref: gh-pages-web-viewer
+          path: published
+      - name: Stage preview without changing the published branch
+        run: |
+          set -eu
+          target='preview/pr-357/887c0f60a191d06e1db0ed50567844cca2ec1950-review-feedback'
+          test ! -e "published/$target"
+          mkdir -p "published/$target"
+          cp -R source/web-viewer/dist/. "published/$target/"
+          cd published
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$target"
+          git commit -m 'Stage PR 357 fixed review preview'
+          git push origin HEAD:refs/heads/beta/pr-357-review-feedback-887c0f60
+          git rev-parse HEAD
