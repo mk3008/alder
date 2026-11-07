@@ -65,6 +65,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
  const specName=(key:string)=>{const target=functionFor(key);return target?(target.capability.testSpecification?functionName(target)+'・'+(key.startsWith('decision:')?'可否':'結果'):target.name):(key==='@unassigned'?'未割当':key.startsWith('remaining:')?options.business().activities.find(item=>item.id===key.slice(10))?.name:key.startsWith('checks:')?options.business().activities.find(item=>item.id===key.slice(7))?.name:key==='@overview'?'テスト仕様':undefined)??key;};
  const businessRelated=business.querySelector<HTMLElement>('#formattedMarkdownDrawer');
  if(businessRelated)workbench.append(businessRelated);workbench.append(related,specRelated);
+ installDrawerResize(explorer,workbench,storage+':explorer-width','left');
  installDrawerResize(related,workbench,storage+':drawer-width');
  installDrawerResize(specRelated,workbench,storage+':test-drawer-width');
  let fallbackRightOpen=false;
