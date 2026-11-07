@@ -94,7 +94,7 @@ try{
  render(model,'n-exception');const continuity=tree.querySelector('[data-relation-id="nr-exception-continuity"] > details > summary');assert(continuity);continuity.click();assert.match(value('説明'),/別業務.*配線が複雑.*例外に含める/);assert.equal(value('構造の説明'),undefined,'the rationale appears once as a complete explanation');
  render(model,'n-flow-step');assert(tree.querySelector('[data-relation-id="nr-flow-step-exception"]'));
  render(model,'n-axis');expand();const item=tree.querySelector('[data-relation-id="nr-dataitem-information"][data-relation-direction="reference"]');assert(item,'decision axis reaches the same information item through the group');
- item.querySelector(':scope > details > summary').click();assert.equal(value('所属'),'情報項目（InformationItem）は対象（Object）に所属');
+ item.querySelector(':scope > details > summary').click();assert.equal(value('所属'),'対象（Object）');
  const owner=item.querySelector(':scope > details > ul > [data-relation-id="nr-object-information"][data-relation-direction="owner"]');assert(owner,'reverse view of the existing ownership');
  assert.match(owner.textContent,/所属する対象.*型：Object/);assert.match(owner.textContent,/既出/);
  assert(tree.querySelectorAll('.structure-item').length<model.relations.length+model.concepts.length+15,'expand all terminates with a reverse ownership cycle');

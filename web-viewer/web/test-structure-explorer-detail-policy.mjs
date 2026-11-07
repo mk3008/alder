@@ -31,7 +31,7 @@ try{
  show(model,{kind:'structure',conceptId:'n-who',fromId:'n-activity',relationId:'nr-who-activity'});assertHidden();assert.equal(value('関係の種類'),'参照');assert(value('参照').includes('主体'));assert.equal(value('多重度'),'0..1');
  show(model,{kind:'structure',conceptId:'n-activity'});assertHidden();assert.equal(value('型名'),'Activity');assert.equal(value('理由'),undefined);
  const name=model.meta.fieldMappings.find(item=>item.physicalName==='activities.name');
- show(model,{kind:'attribute',conceptId:'n-activity',informationId:name.informationId});assertHidden();assert.equal(value('論理名'),'name');assert.equal(value('ローカル名'),'名前');assert.equal(value('型名'),'string');assert(value('サンプル').includes('業務設計'));covered.push('STRUCTURE-POLICY-001');
+ show(model,{kind:'attribute',conceptId:'n-activity',informationId:name.informationId});assertHidden();assert.equal(value('論理名'),'name');assert.equal(value('ローカル名'),'名前');assert.equal(value('型名'),'string');assert.equal(value('サンプル'),name.sampleValue);assert.equal(name.referenceValue,'業務設計');covered.push('STRUCTURE-POLICY-001');
  const authored=structuredClone(model),concept=authored.concepts.find(item=>item.id==='n-bd');
  concept.reason='業務の目的と結果を同じ設計書で説明するため。';
  show(authored,{kind:'structure',conceptId:'n-bd'});assert.equal(value('理由'),concept.reason);covered.push('STRUCTURE-POLICY-002');

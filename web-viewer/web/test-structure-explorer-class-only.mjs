@@ -47,7 +47,7 @@ try{
  const ref=mapping(variants,'activities.id');ref.referenceValue='参照値';ref.referenceSource='設計資料';
  render(variants,'n-activity');root().click();const expected=['0','false','null','""',values[4]];
  for(let i=0;i<paths.length;i++){const cell=row(variants,paths[i]).querySelector('td');const first=cell.querySelector('.structure-attribute-sample');assert.equal(first.textContent,expected[i]);assert(!first.textContent.startsWith('例：'));row(variants,paths[i]).querySelector('button').click();assert(field('サンプル').startsWith(expected[i]));detail.querySelector('.structure-attribute-back').click();}
- assert.match(row(variants,'activities.id').textContent,/参考：参照値.*参考の出所：設計資料/);assert(!row(variants,'activities.id').textContent.includes('例：'));
+ assert(!row(variants,'activities.id').textContent.includes('参照値'));assert(!row(variants,'activities.id').textContent.includes('設計資料'));assert.equal(ref.referenceValue,'参照値');assert.equal(ref.referenceSource,'設計資料');assert(!row(variants,'activities.id').textContent.includes('例：'));
  const absent=mapping(variants,'activities.when');delete absent.sampleValue;root().click();assert.match(row(variants,'activities.when').textContent,/未記載/);
  covered.push('STRUCTURE-CLASS-ONLY-003');
 
@@ -55,7 +55,7 @@ try{
  detail.querySelector('.structure-attribute-back').click();assert.equal(w.document.activeElement.textContent,'名前');assert(row(model,'activities.name'));assert(tree.querySelector('.structure-selected'));
  covered.push('STRUCTURE-CLASS-ONLY-004');
 
- render(model,'n-object');tree.querySelector('[data-relation-id="nr-object-information"] > details > summary').click();assert.match(field('所属'),/情報項目.*対象.*所属/);
+ render(model,'n-object');tree.querySelector('[data-relation-id="nr-object-information"] > details > summary').click();assert.equal(field('所属'),'対象（Object）');
  render(model,'n-dataitem');const reference=tree.querySelector('[data-relation-id="nr-dataitem-information"] > details');reference.open=true;reference.dispatchEvent(new w.Event('toggle'));assert(reference.querySelector('[data-relation-id="nr-object-information"][data-relation-direction="owner"]'));
  tree.querySelector('.structure-toolbar button').click();assert(tree.querySelectorAll('.structure-item').length<model.relations.length+model.concepts.length+10);assert(!tree.querySelector('[data-information-id]'));
  assert.equal(JSON.stringify(model),before);verify();covered.push('STRUCTURE-CLASS-ONLY-005');

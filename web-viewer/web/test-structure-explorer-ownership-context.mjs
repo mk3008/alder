@@ -28,11 +28,11 @@ try{
  const open=li=>{assert(li);const d=li.querySelector(':scope > details');assert(d);d.open=true;d.dispatchEvent(new w.Event('toggle'));return d;};
  const direct=(parent,id,direction)=>parent.querySelector(`:scope > ul > [data-relation-id="${id}"][data-relation-direction="${direction}"]`);
  const summary=li=>li.querySelector(':scope > details > summary');
- const ownerText='情報項目（InformationItem）は対象（Object）に所属';
+ const ownerText='対象（Object）',childText='情報項目（InformationItem）';
 
  render(model,'n-object');const root=tree.querySelector('.structure-root > li'),rootDetails=root.querySelector(':scope > details');summary(root).click();
- assert.deepEqual(lines('所属'),['対象（Object）は業務設計書（BusinessDesign）に所属']);
- assert(lines('含む構造').includes(ownerText),'the object names what belongs to it');
+ assert.deepEqual(lines('所属'),['業務設計書（BusinessDesign）']);
+ assert(lines('含む構造').includes(childText),'the object names what belongs to it');
  covered.push('STRUCTURE-OWNER-CONTEXT-001');
 
  const owned=direct(rootDetails,'nr-object-information','owned');const ownedDetails=open(owned);
@@ -55,9 +55,8 @@ try{
 
  render(model,'n-information');const infoRoot=tree.querySelector('.structure-root > li > details');
  const rootOwner=direct(infoRoot,'nr-object-information','owner');assert(rootOwner);summary(rootOwner).click();
- assert(lines('所属').includes(ownerText),'the reverse relation names both endpoints');
- assert(lines('所属').includes('対象（Object）は業務設計書（BusinessDesign）に所属'));
- assert(!lines('含む構造').includes(ownerText),'the selected relation is not repeated in the same drawer');
+ assert.deepEqual(lines('所属'),['業務設計書（BusinessDesign）'],'the selected object names its actual owner');
+ assert(lines('含む構造').includes(childText),'the reverse relation is shown as a child of the selected object');
  covered.push('STRUCTURE-OWNER-CONTEXT-004');
 
  render(model,'n-bd');const query=tree.querySelector('input[type="search"]');query.value='所属する対象';query.dispatchEvent(new w.Event('input',{bubbles:true}));

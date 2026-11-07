@@ -33,7 +33,7 @@ try{
  assert.deepEqual([...table.querySelectorAll('thead th')].map(item=>item.textContent),['項目','サンプル','説明']);
  for(const path of ['activities.id','activities.name','activities.scope','activities.why','activities.when'])assert(row(model,path),path+' immediate attribute');
  assert.match(row(model,'activities.id').textContent,/識別子.*論理名：id.*型：string.*calculate-score/);
- assert.match(row(model,'activities.name').textContent,/名前.*1回の点数を計算する.*参考：業務設計.*他の業務と区別/);
+ assert.match(row(model,'activities.name').textContent,/名前.*1回の点数を計算する.*他の業務と区別/);
  assert.match(row(model,'activities.scope').textContent,/システム化対象.*boolean.*true/);
  assert.match(row(model,'activities.why').textContent,/目的.*点数を知るため/);
  assert.match(row(model,'activities.when').textContent,/開始条件.*入力したとき/);
@@ -48,8 +48,8 @@ try{
  show(changed,{kind:'structure',conceptId:'n-activity'});
  for(const [path,expected] of [['activities.id','0'],['activities.name','false'],['activities.why','""'],['activities.when','null']])assert(row(changed,path).textContent.includes(expected),path);
  assert.match(row(changed,'activities.scope').textContent,/未記載/);assert(!row(changed,'activities.scope').textContent.includes('参照値のない出所'));
- assert.match(detail.textContent,/サンプルは項目ごとの例.*同じデータの組とは限りません/);
- show(model,{kind:'structure',conceptId:'n-activity'});const originalName=row(model,'activities.name');assert.match(originalName.textContent,/1回の点数を計算する.*参考：業務設計.*参考の出所：Alder自身の業務設計書/);
+ assert(!detail.textContent.includes('サンプルは項目ごとの例'));
+ show(model,{kind:'structure',conceptId:'n-activity'});const originalName=row(model,'activities.name');assert.match(originalName.textContent,/1回の点数を計算する/);assert(!originalName.textContent.includes('参考：'));assert(!originalName.textContent.includes('Alder自身の業務設計書'));assert.equal(mapping(model,'activities.name').referenceValue,'業務設計');
  covered.push('STRUCTURE-CLASS-ATTR-002');
 
  render(model,'n-step');selectRoot();const legacy=mapping(model,'steps.legacyText');assert(!detail.querySelector(`tr[data-information-id="${legacy.informationId}"]`));
@@ -61,13 +61,13 @@ try{
 
  render(model,'n-activity');selectRoot();const nameField=mapping(model,'activities.name');const button=detail.querySelector(`[data-information-id="${nameField.informationId}"] button`);assert(button);assert(!tree.querySelector('[data-information-id]'));button.click();
  assert.equal(detail.querySelector('table.structure-attribute-table'),null);assert.equal(value('ローカル名'),'名前');assert.equal(value('所属'),'業務（Activity）');assert.match(value('サンプル'),/1回の点数を計算する/);assert.match(value('説明'),/他の業務と区別/);detail.querySelector('.structure-attribute-back').click();assert(row(model,'activities.name'));
- show(model,{kind:'structure',conceptId:'n-activity'});assert.match(value('所属'),/業務.*業務設計書.*所属/);assert(value('含む構造').includes('標準手順'));
+ show(model,{kind:'structure',conceptId:'n-activity'});assert.equal(value('所属'),'業務設計書（BusinessDesign）');assert(value('含む構造').includes('標準手順'));
  assert.equal(JSON.stringify(model),before);verify();covered.push('STRUCTURE-CLASS-ATTR-004');
 
  const long=structuredClone(model),x=mapping(long,'activities.name'),unsafe='<script>alert(1)</script>'+('非常に長い名前'.repeat(100));x.sampleValue=unsafe;x.referenceValue='参考の値';x.referenceSource='サンプル出所';
- show(long,{kind:'structure',conceptId:'n-activity'});const current=row(long,'activities.name');assert(current.textContent.includes(unsafe));assert(current.textContent.includes('参考：参考の値'));assert(current.textContent.includes('参考の出所：サンプル出所'));assert.equal(detail.querySelector('script'),null);
+ show(long,{kind:'structure',conceptId:'n-activity'});const current=row(long,'activities.name');assert(current.textContent.includes(unsafe));assert(!current.textContent.includes('参考の値'));assert(!current.textContent.includes('サンプル出所'));assert.equal(x.referenceValue,'参考の値');assert.equal(x.referenceSource,'サンプル出所');assert.equal(detail.querySelector('script'),null);
  assert([...detail.querySelectorAll('thead th')].every(th=>th.getAttribute('scope')==='col'));assert([...detail.querySelectorAll('tbody th')].every(th=>th.getAttribute('scope')==='row'));
- const css=readFileSync('src/structure-explorer.css','utf8');assert.match(css,/\.structure-attribute-wrap\{[^}]*overflow-x:auto/);assert.match(css,/\.structure-attribute-table th,\.structure-attribute-table td\{[^}]*overflow-wrap:anywhere/);
+ const css=readFileSync('src/structure-explorer.css','utf8');assert.match(css,/\.structure-attribute-table thead th\{[^}]*position:sticky;top:0/);assert.doesNotMatch(css,/\.structure-attribute-wrap\{[^}]*overflow-x:auto/);assert.match(css,/\.structure-attribute-table th,\.structure-attribute-table td\{[^}]*overflow-wrap:anywhere/);
  covered.push('STRUCTURE-CLASS-ATTR-005');
 }finally{w.close();}
 coverage(covered);verify();console.log(JSON.stringify({checks:covered,scope:'class attribute table, samples, compatibility and individual detail'}));

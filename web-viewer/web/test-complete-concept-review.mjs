@@ -110,7 +110,7 @@ try{
  for(const id of ['nr-package-bd','nr-package-checkdoc','nr-package-state-doc','nr-package-concept-doc'])assert(host.querySelector(`[data-relation-id="${id}"]`),id);
  assert(!host.textContent.includes('この起点からたどれない構造'));
  [...host.querySelectorAll('button')].find(x=>x.textContent==='すべて展開').click();
- assert(host.textContent.includes('情報項目グループ'));assert(host.textContent.includes('状態遷移文書'));const owner=model.concepts.find(c=>c.information.some(i=>i.id===reference.informationId));assert(owner);const ownerRow=host.querySelector(`[data-concept-id="${owner.id}"] > details > summary`);assert(ownerRow);ownerRow.click();const sampleField=detail.querySelector(`[data-information-id="${reference.informationId}"] button`);assert(sampleField);sampleField.click();assert(detail.textContent.includes('参考：受付済'));
+ assert(host.textContent.includes('情報項目グループ'));assert(host.textContent.includes('状態遷移文書'));const owner=model.concepts.find(c=>c.information.some(i=>i.id===reference.informationId));assert(owner);const ownerRow=host.querySelector(`[data-concept-id="${owner.id}"] > details > summary`);assert(ownerRow);ownerRow.click();const sampleField=detail.querySelector(`[data-information-id="${reference.informationId}"] button`);assert(sampleField);sampleField.click();assert(detail.textContent.includes('受付済'));
  assert(host.querySelectorAll('.structure-item').length<model.relations.length+model.concepts.length+10,'expand all terminates');
 }finally{w.close();}
 coverage(covered);for(const [path,digest] of Object.entries(required))assert.equal(hash(readFileSync(path)),digest,path+' changed after verification');
