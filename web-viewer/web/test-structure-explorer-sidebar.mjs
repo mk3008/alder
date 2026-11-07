@@ -9,7 +9,7 @@ registerHooks({resolve(s,c,n){if((s.startsWith('./')||s.startsWith('../'))&&!/\.
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const authority='verification/structure-explorer-sidebar.check-items.json',authorityHash='ead6853f99cefb181ffcad88f5d8ffcdb632c56b864bc4548c3a495729933269';
 const fixed={
- '../business-design/alder/json-complete-concept-review.json':'5eacaf2d16da2a2dbc86d071526c1570a9c2085f1ac6ed3ea86f6d208c1f4fa7',
+ '../business-design/alder/json-complete-concept-review.json':'e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181',
  '../business-design/alder/business-design.json':'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9',
  '../tools/document_storage/schema.mjs':'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2'
 };

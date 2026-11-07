@@ -5,9 +5,10 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const authority='../work/normalization-candidate/procedure-goal-acceptance.json';
-const authorityHash='dcee0d7830a08fa1869dc07b791533db990f7d1c5223ba05eef8dc149238b087';
+const authority='../work/normalization-candidate/procedure-goal-acceptance-v2.json';
+const authorityHash='3c0c4abd5cb81e8470c5b0eefc117459939ba1f2fc35ec200e62f33ac12e3240';
 const sourceHashes={
+ '../work/normalization-candidate/procedure-goal-acceptance.json':'dcee0d7830a08fa1869dc07b791533db990f7d1c5223ba05eef8dc149238b087',
  '../work/normalization-candidate/complete-review-acceptance.json':'074aa8cc645368d73846fbc25abb96f5f6eee047132e19d42df26269b8dbf0f8',
  '../work/normalization-candidate/complete-review-identity-checks.json':'52206635d478c99ea4f8bc2a258ca48d75de50116f0b9eb186a74bfa1e7d63a7',
  'verification/structure-explorer-compatibility.check-items.json':'7b0cc06903c9bde5b1e449e4d5edf2a4a7bff67dcb4e5ae83ba0960f4931b2c0',
@@ -45,7 +46,7 @@ edge('nr-continuity-interrupted','n-continuity','n-step','reference','0..N','0..
 edge('nr-continuity-resume','n-continuity','n-step','reference','0..N','0..1');
 edge('nr-continuity-data','n-continuity','n-data','reference','0..N','0..N');
 const order=byName('n-flow-step','手順の順序');assert.equal(order.valueType,'number');assert.match(order.logicalMeaning,/フロー.*順序/);
-assert.match(concept('n-flow-step').description,/順序と実施条件.*複数の流れ/);
+assert.match(concept('n-flow-step').description,/順序と参照する判定行.*複数の流れ/);
 // Different flow entries can point to the same response Step while retaining
 // different positions and conditions; the reference's reverse side is 0..N.
 assert.equal(relation('nr-flow-step-definition').fromLabel,'0..N');
@@ -55,13 +56,13 @@ covered.push('PROCEDURE-GOAL-02');
 const obligation=mapping('steps.obligation'),condition=mapping('steps.appliesWhen');
 assert.equal(owner(obligation.informationId).id,'n-flow-step');
 assert.equal(model.meta.compatibilityReview.fields[obligation.informationId].kind,'legacy');
-assert.equal(model.meta.compatibilityReview.fields[condition.informationId],undefined);
-assert.equal(owner(condition.informationId).id,'n-flow-step');assert.match(condition.logicalMeaning,/重ねて記載せず.*別の条件/);
-assert.equal(byName('n-flow-step','実施条件の確定状態').valueType,'string（未決／無条件／条件あり）');
+assert.equal(model.meta.compatibilityReview.fields[condition.informationId].kind,'legacy');
+assert.equal(owner(condition.informationId).id,'n-flow-step');assert.match(condition.logicalMeaning,/旧形式.*元の記録/);
+assert(!concept('n-flow-step').information.some(item=>item.name==='実施条件の確定状態'));assert.match(concept('n-flow-step').description,/バリデーション.*例外/);
 edge('nr-step-when','n-flow-step','n-row','reference','0..N','0..1');
 const oldOptional=model.meta.schemaCoverage.find(item=>item.path==='BD.activities[].procedure.steps[].obligation');
 assert.match(oldOptional.note,/optional.*必須手順に変換しない/);
-assert.equal(model.meta.schemaCoverage.find(item=>item.path==='BD.activities[].procedure.steps[].appliesWhen').stateInformationId,byName('n-flow-step','実施条件の確定状態').informationId);
+assert.equal(model.meta.schemaCoverage.find(item=>item.path==='BD.activities[].procedure.steps[].appliesWhen').stateInformationId,undefined);
 covered.push('PROCEDURE-GOAL-03');
 
 const conditionExample=byName('n-exception','発生条件'),outcomeExample=byName('n-exception','例外時の結果');
@@ -76,8 +77,8 @@ try{
  render('n-exception');assert(tree.querySelector('[data-relation-id="nr-exception-step"]'));assert(tree.querySelector('[data-relation-id="nr-exception-continuity"]'));
  tree.querySelector('.structure-root > li > details > summary').click();const field=detail.querySelector(`[data-information-id="${conditionExample.informationId}"] button`);assert(field);field.click();assert(detail.textContent.includes('編集の途中で下書き保存を選択した場合'));assert(!detail.textContent.includes('参考：'));assert(!detail.textContent.includes('架空の編集業務'));assert(conditionExample.referenceSource.includes('架空の編集業務'));
  render('n-flow-step');tree.querySelector('.structure-root > li > details > summary').click();const old=()=>detail.querySelector(`[data-information-id="${obligation.informationId}"]`),current=()=>detail.querySelector(`[data-information-id="${condition.informationId}"]`);
- assert(!old());assert(current());assert(tree.querySelector('[data-relation-id="nr-flow-step-definition"]'));
- const toggle=tree.querySelector('.structure-compatibility-filter input');toggle.checked=false;toggle.dispatchEvent(new w.Event('change',{bubbles:true}));assert(old());assert.match(old().textContent,/互換・移行用/);
+ assert(!old());assert(!current());assert(tree.querySelector('[data-relation-id="nr-flow-step-definition"]'));
+ const toggle=tree.querySelector('.structure-compatibility-filter input');toggle.checked=false;toggle.dispatchEvent(new w.Event('change',{bubbles:true}));assert(old());assert(current());assert.match(old().textContent,/互換・移行用/);assert.match(current().textContent,/互換・移行用/);
 }finally{w.close();}
 covered.push('PROCEDURE-GOAL-04');
 

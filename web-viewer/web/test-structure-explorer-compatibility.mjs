@@ -5,8 +5,10 @@ import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 
 const hash=value=>createHash('sha256').update(value).digest('hex');
-const authority='verification/structure-explorer-compatibility.check-items.json';
-const authorityHash='7b0cc06903c9bde5b1e449e4d5edf2a4a7bff67dcb4e5ae83ba0960f4931b2c0';
+const authority='verification/structure-explorer-compatibility-v2.check-items.json';
+const previousAuthority='verification/structure-explorer-compatibility.check-items.json';
+const previousHash='7b0cc06903c9bde5b1e449e4d5edf2a4a7bff67dcb4e5ae83ba0960f4931b2c0';assert.equal(hash(readFileSync(previousAuthority)),previousHash);
+const authorityHash='b3882414dca81504221acd67745a07203d827349c5fecaed65217ae6931f5c02';
 const authorityBytes=readFileSync(authority);assert.equal(hash(authorityBytes),authorityHash);
 const checks=JSON.parse(authorityBytes).checks.map(item=>item.id),covered=[];
 const coverage=ids=>{assert.equal(ids.length,checks.length);assert.equal(new Set(ids).size,ids.length);assert.deepEqual(new Set(ids),new Set(checks));};
@@ -25,7 +27,7 @@ assert.equal(catalog.concepts['n-order']?.kind,'needs-review');assert.equal(Obje
 for(const relation of model.relations){const boundary=['n-external','c-f6845a968ec2f3'].some(id=>relation.fromConceptId===id||relation.toConceptId===id);const order=relation.fromConceptId==='n-order'||relation.toConceptId==='n-order';assert.equal(catalog.relations[relation.id]?.kind,boundary?'legacy':order?'needs-review':undefined,relation.id);}
 assert.equal(catalog.fields[field(model,'Check.basedOn.verification').mapping.informationId],undefined);
 assert.equal(catalog.fields[field(model,'activities.name').mapping.informationId],undefined);
-assert.equal(catalog.fields[field(model,'steps.appliesWhen').mapping.informationId],undefined,'a distinct normal-flow condition remains a current concept');
+assert.equal(catalog.fields[field(model,'steps.appliesWhen').mapping.informationId].kind,'legacy');
 covered.push('STRUCTURE-COMPAT-001');
 const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
 const w=new JSDOM('<div id="tree"></div><div id="detail"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
@@ -42,14 +44,14 @@ try{
  toggle(false);assert(visible(host.querySelector('.structure-root > .structure-item')));assert(visible(item('steps.legacyText')));toggle(true);assert(!item('steps.legacyText'));toggle(false);query('');
  assert(visible(item('steps.legacyText')));item('steps.legacyText').querySelector('button').click();assert(detail.textContent.includes('互換・移行用'));
  toggle(true);assert(!item('steps.legacyText'));assert(detail.querySelector('.structure-attribute-table'),'filter restores the selected class and hides legacy details');
- render(model,'n-flow-step');assert(!item('steps.obligation'));assert(visible(item('steps.appliesWhen')));item('steps.appliesWhen').querySelector('button').click();toggle(false);toggle(true);assert(item('steps.appliesWhen'));assert.equal(clearCount,0);
+ render(model,'n-flow-step');assert(!item('steps.obligation'));assert(!item('steps.appliesWhen'));toggle(false);assert(visible(item('steps.appliesWhen')));toggle(true);assert(!item('steps.appliesWhen'));assert.equal(clearCount,0);
  render(model,'n-activity');host.querySelector('.structure-toolbar button').click();const order=host.querySelector('[data-relation-id="nr-activity-order"]');assert(visible(order));assert.match(order.textContent,/要確認/);
  render(model,'n-external');assert.equal(checkbox().checked,true);assert(host.querySelector('.structure-root > li').hidden);assert(!host.querySelector('.structure-filter-empty').hidden);toggle(false);assert(visible(host.querySelector('.structure-root > li')));assert(host.querySelector('.structure-filter-empty').hidden);
  const unrelated=structuredClone(model);delete unrelated.meta.compatibilityReview;render(unrelated,'n-step');assert(checkbox().checked);assert(visible(item('steps.legacyText')));assert(!item('steps.legacyText').querySelector('.structure-review-badge'));
  covered.push('STRUCTURE-COMPAT-002');
  render(model,'n-step');assert(!item('steps.action').querySelector('.structure-review-badge'));
  toggle(false);const old=item('steps.legacyText');assert.match(old.textContent,/互換・移行用/);assert(old.querySelector('.structure-review-legacy'));old.querySelector('button').click();assert(detail.textContent.includes('旧形式の手順文章を移行時に保持する'));
- render(model,'n-flow-step');assert(!item('steps.obligation'));assert(!item('steps.appliesWhen').querySelector('.structure-review-badge'));toggle(false);item('steps.obligation').querySelector('button').click();assert(detail.textContent.includes('互換・移行用'));assert(detail.textContent.includes('選択可能だった意味'));
+ render(model,'n-flow-step');assert(!item('steps.obligation'));assert(!item('steps.appliesWhen'));toggle(false);assert.match(item('steps.appliesWhen').textContent,/互換・移行用/);item('steps.obligation').querySelector('button').click();assert(detail.textContent.includes('互換・移行用'));assert(detail.textContent.includes('選択可能だった意味'));
  render(model,'n-activity');host.querySelector('.structure-toolbar button').click();host.querySelector('[data-relation-id="nr-activity-order"] > details > summary').click();assert(detail.textContent.includes('手順の前提との重複'));
  covered.push('STRUCTURE-COMPAT-003');
 }finally{w.close();}
@@ -58,8 +60,8 @@ const unchanged=structuredClone(pkg),unchangedMeta=unchanged.documents.find(d=>d
 for(const mapping of unchangedMeta.fieldMappings){delete mapping.valueDomain;if(mapping.physicalName==='continuities.outcome')delete mapping.sampleValue;}
 // The approved procedure, exception-origin and ownership revisions change the
 // model itself; retain the lock with only compatibility notes removed.
-assert.equal(hash(JSON.stringify(unchanged)),'b3d45152143a03dc377c5ab57c5d383ef282692ac274568ba9d50b19975ccea5');
+assert.equal(hash(JSON.stringify(unchanged)),'5334e630fd80a7c51cf489c406bd84078e55a41b051ffce1ee29bdaa08d24856');
 assert.equal(hash(readFileSync('../business-design/alder/business-design.json')),'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9');
 assert.equal(hash(readFileSync('../tools/document_storage/schema.mjs')),'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2');
-covered.push('STRUCTURE-COMPAT-004');coverage(covered);assert.equal(hash(readFileSync(authority)),authorityHash);
+covered.push('STRUCTURE-COMPAT-004');coverage(covered);assert.equal(hash(readFileSync(authority)),authorityHash);assert.equal(hash(readFileSync(previousAuthority)),previousHash);
 console.log(JSON.stringify({checks:covered,scope:'legacy classification, toggle, search, details and source preservation'}));

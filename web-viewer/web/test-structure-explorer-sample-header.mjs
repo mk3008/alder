@@ -7,7 +7,7 @@ import {JSDOM} from 'jsdom';
 const digest=value=>createHash('sha256').update(value).digest('hex');
 const authority='verification/structure-explorer-sample-header.check-items.json',authorityHash='b4970da4bfc47efd27a7739f706f551d41a066a48952e4264663e858e9882629';
 const fixed={
- '../business-design/alder/json-complete-concept-review.json':'5eacaf2d16da2a2dbc86d071526c1570a9c2085f1ac6ed3ea86f6d208c1f4fa7',
+ '../business-design/alder/json-complete-concept-review.json':'e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181',
  '../business-design/alder/business-design.json':'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9',
  '../tools/document_storage/schema.mjs':'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2'
 };
@@ -34,7 +34,7 @@ try{
  for(const [actual,expected] of [[0,'0'],[false,'false'],[null,'null'],['','""'],[['a','b'],'["a","b"]'],[{x:1},'{"x":1}']]){field.sampleValue=actual;show(changed);assert.equal(sample(changed,'businessDesigns.revision'),expected);row(changed,'businessDesigns.revision').querySelector('button').click();assert.equal(value('サンプル'),expected);}
  field.sampleValue='<img src=x onerror=alert(1)>'+('長い値'.repeat(100));show(changed);assert.equal(sample(changed,'businessDesigns.revision'),field.sampleValue);assert.equal(detail.querySelector('img'),null);
  delete field.sampleValue;delete field.referenceValue;show(changed);assert.equal(sample(changed,'businessDesigns.revision'),'未記載');row(changed,'businessDesigns.revision').querySelector('button').click();assert.equal(value('サンプル'),'未記載');covered.push('STRUCTURE-SAMPLE-HEADER-002');
- show(model);const headers=[...detail.querySelectorAll('.structure-attribute-table thead th')];assert.deepEqual(headers.map(x=>x.textContent),['項目','サンプル','説明']);for(const th of headers){const css=w.getComputedStyle(th);assert.equal(css.position,'sticky');assert(['0','0px'].includes(css.top));assert.equal(css.zIndex,'1');}assert.match(style.textContent,/\.structure-attribute-table thead th\{[^}]*background:var\(--bg\)/);
+ show(model);const headers=[...detail.querySelectorAll('.structure-attribute-table thead th')];assert.deepEqual(headers.map(x=>x.textContent),['項目','サンプル','説明','用途']);for(const th of headers){const css=w.getComputedStyle(th);assert.equal(css.position,'sticky');assert(['0','0px'].includes(css.top));assert.equal(css.zIndex,'1');}assert.match(style.textContent,/\.structure-attribute-table thead th\{[^}]*background:var\(--bg\)/);
  const wrap=detail.querySelector('.structure-attribute-wrap'),wrapStyle=w.getComputedStyle(wrap);assert(!['auto','scroll','hidden'].includes(wrapStyle.overflowX));assert(!['auto','scroll','hidden'].includes(wrapStyle.overflow));assert.equal(w.getComputedStyle(w.document.querySelector('.structure-detail-page')).overflow,'auto');covered.push('STRUCTURE-SAMPLE-HEADER-003');
  const table=detail.querySelector('.structure-attribute-table'),cell=table.querySelector('td');assert.equal(w.getComputedStyle(table).tableLayout,'fixed');assert.equal(w.getComputedStyle(table).width,'100%');assert.equal(w.getComputedStyle(cell).overflowWrap,'anywhere');assert.equal(JSON.stringify(model),before);verify();covered.push('STRUCTURE-SAMPLE-HEADER-004');
 }finally{w.close();}

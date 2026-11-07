@@ -383,7 +383,7 @@ for(const [path,ids] of [
 ])Object.assign(model.meta.schemaCoverage.find(x=>x.path===path),{relationIds:ids});
 // Add business facts present in the source schema but omitted from the earlier
 // 25-structure projection. Existing field IDs remain stable in this candidate.
-addNode('n-flow-step','FlowStep','フロー内の手順','一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。');
+addNode('n-flow-step','FlowStep','フロー内の手順',"一つの標準フローか一つの例外フローと手順の対応。順序と参照する判定行はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。入力誤りや人数不足など、バリデーションで検出する問題は該当手順の例外に記述する。検査を通過した後の処理は通常の流れに記述する。倒れたものを立て直すように、対象がなければ何もしないだけの場合は、独立した条件を設けず手順に記述する。");
 const extras={
  'n-bd':[['schemaVersion','文書の版','string'],['kind','文書の種類','string'],['preface','前書き','string'],['scope','対象範囲の説明','string']],
  'n-object':[['icon','アイコン','string']],
@@ -429,12 +429,7 @@ const orderField=infoId('logical.step-order'),firstStep=normalized.entities.step
 nodes.get('n-flow-step').information.push({id:orderField,name:'手順の順序'});
 const orderMapping={informationId:orderField,physicalName:'',relationIds:[],valueType:'number',logicalSourcePaths:['steps.ordinal'],logicalMeaning:'標準フローまたは一つの例外フローの中での手順の順序。表示例は1番から数える。',...(firstStep?{sampleValue:firstStep.ordinal+1}:{})};
 model.meta.fieldMappings.push(orderMapping);infoMap.set(orderField,orderMapping);
-// Conditions are business information even when the specific representation
-// is an existing decision row. A source null alone cannot settle the status.
-const stepConditionStatus=infoId('logical.step-condition-status');
-nodes.get('n-flow-step').information.push({id:stepConditionStatus,name:'実施条件の確定状態'});
-const stepConditionMapping={informationId:stepConditionStatus,physicalName:'',relationIds:[],valueType:'string（未決／無条件／条件あり）',logicalMeaning:'この手順を行う条件が未決、無条件、条件ありのどれか。条件ありには判定行による条件も含む。',referenceValue:'条件あり'};
-model.meta.fieldMappings.push(stepConditionMapping);infoMap.set(stepConditionStatus,stepConditionMapping);
+// Legacy condition text is retained for migration, without an additional per-step status.
 // An exception belongs to an activity independently of where it can arise.
 // Missing source information must not be mistaken for an activity-wide origin.
 const exceptionOrigin=infoId('logical.exception-origin');
@@ -504,7 +499,7 @@ nodes.get('n-axis').description='判定表で条件を整理する観点。情�
 model.relations.find(x=>x.id==='nr-dataitem-information').condition='グループに含める情報項目。対象が持つ同じ項目を参照し、グループごとに項目の複製を作らない。';
 model.relations.find(x=>x.id==='nr-axis-data').condition='判定軸が参照する情報項目グループ。グループに含まれる項目とその所属先をたどれる。未記録の場合に参照先を推測しない。';
 const stepWhen=model.relations.find(x=>x.id==='nr-step-when');stepWhen.fromConceptId='n-flow-step';
-stepWhen.condition='この流れで手順を実行する条件を判定表の行として表す場合の参照。別の実施条件があれば併せて保持する。';
+stepWhen.condition='この流れで手順を実行する判定行への参照。バリデーションの失敗は該当手順の例外として扱う。';
 // The old ordering construct captures a logical constraint. Its relation to
 // conditional prerequisites remains a review question, not a table decision.
 model.meta.conceptNames['n-order'].logicalName='順序制約';
@@ -545,7 +540,7 @@ bdRelation('BD.activities[].procedure.steps','nr-activity-step');
 bdCoverage.find(x=>x.path==='BD.activities[].procedure.steps').orderInformationId=orderField;
 bdCoverage.find(x=>x.path==='BD.activities[].procedure.steps').note='旧JSONの手順を標準・例外に自動分類しない。旧手順の順序・条件と元の記録を保持して移行時に対応を確認する。';
 const sp='BD.activities[].procedure.steps[]';bdFields(sp,'steps','id action method legacyText obligation appliesWhen effect');
-bdCoverage.find(x=>x.path===sp+'.appliesWhen').stateInformationId=stepConditionStatus;
+bdCoverage.find(x=>x.path===sp+'.appliesWhen').note='旧形式の条件文は原本を保持し、例外・判定・手順との対応を確認する。nullを無条件または未決に自動確定しない。';
 bdCoverage.find(x=>x.path===sp+'.obligation').note='旧optionalを無条件の必須手順に変換しない。実施を選べた意味と元の値を保持し、条件・フローへの対応を確認する。';
 bdRelation(sp+'.whatDataIds','nr-step-data');bdRelation(sp+'.exchange','nr-step-exchange');bdField(sp+'.exchange.kind','steps.exchangeKind');
 bdFields(sp+'.exchange','stepInteractions','phase direction objectId relationId pairedStepId');bdRelation(sp+'.exchange.dataIds','nr-exchange-data');
@@ -599,6 +594,7 @@ for(const [owner,key,label,type,paths,meaning] of [
 for(const concept of model.concepts)for(const info of concept.information){
  const mapping=infoMap.get(info.id);if(mapping&&mapping.representation!=='relationKey')Object.assign(mapping,nullabilityProposal(concept,info,mapping));
  if(mapping&&!mapping.logicalMeaning){const meaning=attributeMeaning(mapping);if(meaning)mapping.logicalMeaning=meaning;}
+ if(mapping?.physicalName==='activities.problem')mapping.logicalPurpose='業務改善を検討する際、解決したい困りごとを把握する。';
 }
 model.meta.nullabilityProposal='業務設計に基づく未承認の候補。未決、なし、非該当と移行時の元記録を区別する。';
 // Real Alder business records are additional, labelled references. Scope is
@@ -634,6 +630,7 @@ const markedFields={
  'steps.legacyText':['legacy','旧形式の手順文章を移行時に保持する。'],
  'State.transitions[].event':['legacy','旧形式の状態遷移の発生事象を保持する。'],
  'steps.obligation':['legacy','既存JSONの必須・任意。概念候補では独立項目とせず、変換時に選択可能だった意味を条件やフローと照合する。'],
+ 'steps.appliesWhen':['legacy','旧形式の条件文。元の記録を保持し、例外・判定・手順への対応を移行時に確認する。'],
  'continuities.trigger':['legacy','既存の中断条件。例外の発生条件と照合し、元の記述を失わずに引き継ぐ。'],
  'continuities.onInterrupt':['legacy','既存の中断時の扱い。例外時の手順と照合し、元の記述を失わずに引き継ぐ。'],
  'Check.items[].detailSummary':['needs-review','旧形式の詳細見出しを保持する。現行のチェックにも独立した概要が必要か確認する。'],

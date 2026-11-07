@@ -26,7 +26,7 @@ const specific={
  'steps.exchangeKind':[true,'手順のやり取りの有無・種類が未決の場合を保持し、やり取りなしの確定と区別する。'],
  'steps.legacyText':[null,'旧形式の記述を保持する用途と、新しい手順に旧記述が存在しない状態を分けて検討する。'],
  'steps.obligation':[null,'既存の必須・任意の記録を移行時に照合する。新しい手順の独立した属性とはしない。'],
- 'steps.appliesWhen':[true,'判定行だけで条件を表す場合や無条件の場合は文章を持たない。条件未決と無条件は確定状態で区別する。'],
+ 'steps.appliesWhen':[true,'旧形式の条件文を保持する。nullから無条件や未決を推測しない。'],
  'steps.effect':[null,'効果を記録しない手順と効果が未決の手順を区別する。'],
  'stepInteractions.direction':[true,'受渡しの向きが未決の草案を保持し、合意時に方向を確認する。'],
  'stepInteractions.phase':[true,'要求か応答かが未決の受渡しを保持し、応答がない場合と混同しない。'],
@@ -85,7 +85,7 @@ export function nullabilityProposal(concept,info,mapping){
  if(!decision&&['名前','項目名','グループ名','表題','判定軸の名前'].includes(info.name))decision=[false,'この項目を他と区別し、業務の言葉で確認するための名前を持つ。'];
  if(!decision&&['改訂','原典の改訂','文書の版','形式の版','文書の種類','形式'].includes(info.name))decision=[false,'文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。'];
  if(!decision&&['確認状態','原典の確認状態','責任の状態','必須・任意'].includes(info.name))decision=[true,'判断が未決の状態を記録できるようにし、未決を承認や非該当と混同しない。'];
- if(!decision&&['対象項目の確定状態','前提手順の確定状態','受渡し項目の確定状態','保持項目の確定状態','変更前の状態の種類','変更後の状態の種類','条件の確定状態','実施条件の確定状態','課題の確認状態','手順の順序'].includes(info.name))decision=[false,'未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。'];
+ if(!decision&&['対象項目の確定状態','前提手順の確定状態','受渡し項目の確定状態','保持項目の確定状態','変更前の状態の種類','変更後の状態の種類','条件の確定状態','課題の確認状態','手順の順序'].includes(info.name))decision=[false,'未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。'];
  if(!decision&&/^(?:種類|関係の種類|規則の種類|結果の種類|条件の種類|当事者の種類|From／To|入出力の向き|要求／応答)$/.test(info.name))decision=[true,'種類や方向が未決の草案を保持する。合意時には必要な区別を確認する。'];
  if(!decision&&/^(?:説明|理由|目的|概要|内容)$/.test(info.name))decision=[true,'未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。'];
  if(!decision&&/\[\]$/.test(mapping.valueType??''))decision=[true,'未確認を許容し、確認して0件だった空の一覧と区別する。'];
