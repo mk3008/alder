@@ -8,7 +8,7 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const authority='verification/structure-explorer-class-attributes.check-items.json';
 const authorityHash='910329aa83b5697b4b5f576ec59aa4668f025737cea87124556b0418c41a0de5';
 const fixed={
- '../business-design/alder/json-complete-concept-review.json':'1f8abc11ad3ff741acb6e4e26ce7c47ac1a02327e6a6fa99941a6e54acf5bec7',
+ '../business-design/alder/json-complete-concept-review.json':'5eacaf2d16da2a2dbc86d071526c1570a9c2085f1ac6ed3ea86f6d208c1f4fa7',
  '../business-design/alder/business-design.json':'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9',
  '../tools/document_storage/schema.mjs':'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2'
 };
@@ -32,7 +32,7 @@ try{
  const table=detail.querySelector('table.structure-attribute-table');assert(table);assert.equal(table.getAttribute('aria-label'),'業務の項目とサンプル');
  assert.deepEqual([...table.querySelectorAll('thead th')].map(item=>item.textContent),['項目','サンプル','説明']);
  for(const path of ['activities.id','activities.name','activities.scope','activities.why','activities.when'])assert(row(model,path),path+' immediate attribute');
- assert.match(row(model,'activities.id').textContent,/識別子.*論理名：id.*型：string.*calculate-score/);
+ assert.match(row(model,'activities.id').textContent,/識別子.*論理名：id.*型：識別子.*calculate-score/);
  assert.match(row(model,'activities.name').textContent,/名前.*1回の点数を計算する.*他の業務と区別/);
  assert.match(row(model,'activities.scope').textContent,/システム化対象.*boolean.*true/);
  assert.match(row(model,'activities.why').textContent,/目的.*点数を知るため/);

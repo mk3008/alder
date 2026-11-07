@@ -4,6 +4,7 @@ import {schema} from '../../tools/document_storage/schema.mjs';
 import {validate} from '../../tools/document_storage/core.mjs';
 import {nullabilityProposal} from './nullability-proposal.mjs';
 import {attributeMeaning} from './attribute-meanings.mjs';
+import {applyValueDomains} from './value-domains.mjs';
 
 // This file creates only a review projection. The 0.7 contract, original
 // example, normalizer, Check state and the previous review remain untouched.
@@ -670,6 +671,8 @@ overview.edges.push({id:'overview-nr-flow-step-definition',fromViewId:'overview-
 // Refresh the already-authored overview's labels and fields from the model.
 const byId=new Map(model.concepts.map(c=>[c.id,c]));
 for(const n of model.presentation.subsystemViews.nodes){const c=byId.get(n.conceptId);n.name=c.name;n.fields=c.information.map(f=>({name:f.name,informationId:f.id}));if(['n-activity','n-step','n-exception','n-continuity','n-flow-step','n-information','n-axis'].includes(n.conceptId))n.description=c.description;}
+const valueDomainInventory=applyValueDomains(model);
 validate(pkg);
 writeFileSync(new URL('../../business-design/alder/json-complete-concept-review.json',here),JSON.stringify(pkg,null,2)+'\n');
+writeFileSync(new URL('./value-domain-inventory.json',here),JSON.stringify(valueDomainInventory,null,2)+'\n');
 console.log(JSON.stringify({concepts:model.concepts.length,relations:model.relations.length,coverage:model.meta.schemaCoverage.length,aliases:model.meta.schemaAliases.length}));

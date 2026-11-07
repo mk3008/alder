@@ -1,7 +1,8 @@
 import {createElement,Box,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
-type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown;referenceSource?:string};
+type ValueDomain={kind?:unknown;values?:unknown;note?:unknown};
+type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;valueDomain?:ValueDomain;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown;referenceSource?:string};
 type RelationField={relationId:string;physicalName:string};
 type Relation=ConceptModel['relations'][number];
 type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownIn';
@@ -109,9 +110,21 @@ const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const 
 const markReview=(row:HTMLElement,mark:ReviewMark|undefined)=>{if(!mark)return;row.classList.add('structure-review-'+mark.kind);text(row,'span',reviewLabel(mark),'structure-review-badge');};
 const shortPhysicalName=(path:string)=>path.split(' / ').map(part=>part.trim().split('.').pop()??part).join(' / ');
 function typeLabel(mapping:Mapping|undefined){
+ const domain=mapping?.valueDomain,kind=domain?.kind;
+ if((kind==='enum'||kind==='fixed')&&domainValues(mapping).length)return kind==='enum'?'列挙':'固定値';
+ const semanticTypes:Record<string,string>={identifier:'識別子',version:'版・改訂',reference:'参照',referenceType:'参照先の種類',hash:'SHA-256',uri:'URI',cardinality:'多重度'};
+ if(typeof kind==='string'&&semanticTypes[kind])return semanticTypes[kind];
  const value=typeof mapping?.valueType==='string'&&mapping.valueType.trim()?mapping.valueType:'未定義';
  return mapping?.nullableStatus==='proposal'?value.split('|').map(part=>part.trim()).filter(part=>part!=='null').join(' | ')||'未定義':value;
 }
+function domainValues(mapping:Mapping|undefined){
+ const domain=mapping?.valueDomain;if(!domain||!['enum','fixed'].includes(String(domain.kind))||!Array.isArray(domain.values))return [];
+ const values:{value:string;label?:string}[]=[];
+ for(const item of domain.values){if(!item||typeof item!=='object'||!['string','number','boolean'].includes(typeof item.value))return [];const value=typeof item.value==='string'?(item.value||'""'):String(item.value);values.push({value,...(typeof item.label==='string'&&item.label.trim()?{label:item.label.trim()}:{})});}
+ return values;
+}
+function domainValueText(item:{value:string;label?:string}){return item.label?item.value+'：'+item.label:item.value;}
+function domainNote(mapping:Mapping|undefined){const note=mapping?.valueDomain?.note;return typeof note==='string'&&note.trim()?note.trim():undefined;}
 
 // The proposed business constraint is separate from an example, the source
 // format's type notation, and whether a property may be omitted.
@@ -148,6 +161,8 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   // An automatically supplied nullability reason is not an explanation of
   // the field. Only display an authored meaning, and make gaps explicit.
   add('説明',attributeDescription(data,mapping));
+  const values=domainValues(mapping);if(values.length)add(mapping?.valueDomain?.kind==='fixed'?'値':'選択肢',values.map(domainValueText));
+  const constraint=domainNote(mapping);if(constraint)add('制約',constraint);
   const review=marks.field(info.id,concept.id);if(review)add('位置づけ',reviewLabel(review)+'：'+review.reason);
   add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
   if(mapping?.logicalSourcePaths?.length)add('対応する定義',mapping.logicalSourcePaths);
@@ -185,6 +200,8 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
    const review=marks.field(info.id,concept.id);if(review)markReview(name,review);
    if(mapping?.physicalName)text(name,'span','論理名：'+shortPhysicalName(mapping.physicalName),'structure-attribute-meta');
    text(name,'span','型：'+typeLabel(mapping),'structure-attribute-meta');text(name,'span','null許容：'+nullableLabel(mapping),'structure-attribute-meta');
+   const values=domainValues(mapping);if(values.length){text(name,'span',mapping?.valueDomain?.kind==='fixed'?'値：':'選択肢：','structure-attribute-meta');const options=document.createElement('ul');options.className='structure-domain-values';for(const value of values)text(options,'li',domainValueText(value));name.append(options);}
+   const constraint=domainNote(mapping);if(constraint)text(name,'span','制約：'+constraint,'structure-attribute-meta');
    const example=sampleValue(mapping);if(example!==undefined)text(samples,'span',example,'structure-attribute-sample');
    else text(samples,'span','未記載','structure-attribute-missing');
    description.textContent=attributeDescription(data,mapping);tr.append(name,samples,description);tbody.append(tr);

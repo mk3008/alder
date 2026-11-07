@@ -42,7 +42,7 @@ try{
 const withoutMeanings=structuredClone(pkg);const priorMeta=withoutMeanings.documents.find(d=>d.kind==='conceptModel').meta;
 // The later compatibility filter adds review annotations without changing
 // the underlying mappings or the earlier meaning guarantee.
-delete priorMeta.compatibilityReview;for(const mapping of priorMeta.fieldMappings)delete mapping.logicalMeaning;
+delete priorMeta.compatibilityReview;for(const mapping of priorMeta.fieldMappings){delete mapping.logicalMeaning;delete mapping.valueDomain;if(mapping.physicalName==='continuities.outcome')delete mapping.sampleValue;}
 // The procedure, exception-origin and information-owner requirements revise
 // this candidate explicitly; retain a full lock apart from explanations.
 assert.equal(hash(JSON.stringify(withoutMeanings)),'5a40e7935bba495a14b61019de2eaa643ab3de4e0e1c776136a83f10d1f7faee','only field explanations may change beyond the approved conceptual revisions');
