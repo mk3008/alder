@@ -118,6 +118,11 @@ function nullableLabel(mapping:Mapping|undefined){
  return mapping&&Object.hasOwn(mapping,'nullable')?'未決':'未定義';
 }
 
+function attributeDescription(info:{description?:unknown},mapping:Mapping|undefined){
+ const value=typeof info.description==='string'&&info.description.trim()?info.description:mapping?.logicalMeaning;
+ return typeof value==='string'&&value.trim()?value:'この項目の説明はまだ記載されていません。';
+}
+
 /** Present only information declared on the selected concept, field or relation. */
 export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selection?:StructureSelection){
  root.replaceChildren();
@@ -136,10 +141,9 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   add('論理名',mapping?.physicalName?shortPhysicalName(mapping.physicalName):undefined);add('ローカル名',info.name);add('型名',typeLabel(mapping));
   add('サンプル',mapping?sampleLabels(mapping):undefined);
   add('null許容',nullableLabel(mapping));
-  const description=typeof data.description==='string'&&data.description.trim()?data.description:mapping?.logicalMeaning;
   // An automatically supplied nullability reason is not an explanation of
   // the field. Only display an authored meaning, and make gaps explicit.
-  add('説明',typeof description==='string'&&description.trim()?description:'この項目の説明はまだ記載されていません。');
+  add('説明',attributeDescription(data,mapping));
   const review=marks.field(info.id,concept.id);if(review)add('位置づけ',reviewLabel(review)+'：'+review.reason);
   add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
   if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
@@ -166,8 +170,29 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  // name is not the logical name of each of those relationships.
  const relationNames=edge?.fieldDetails.filter(field=>!study||![...graph.mappings.values()].some(mapping=>mapping.physicalName===field.physicalName&&mapping.relationIds.length>1)).map(field=>field.physicalName).filter(Boolean).map(shortPhysicalName);
  add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type);add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
+ // A class selection summarizes its own attributes, never those of children.
+ // Samples are authored per field and may come from different source records.
+ const attributes=concept.information.filter(info=>!graph.relationKeys.has(info.id)&&(selection.hideLegacy===false||marks.field(info.id,concept.id)?.kind!=='legacy'));
+ const title=document.createElement('dt'),contents=document.createElement('dd');title.textContent='項目とサンプル';list.append(title,contents);
+ if(!attributes.length)text(contents,'p','表示する属性はありません。','structure-attribute-empty');
+ else{
+  text(contents,'p','サンプルは項目ごとの例で、同じデータの組とは限りません。','structure-attribute-note');
+  const wrap=document.createElement('div'),table=document.createElement('table'),thead=document.createElement('thead'),head=document.createElement('tr'),tbody=document.createElement('tbody');
+  wrap.className='structure-attribute-wrap';table.className='structure-attribute-table';table.setAttribute('aria-label',n.local+'の項目とサンプル');
+  for(const label of ['項目','サンプル','説明']){const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);}thead.append(head);table.append(thead,tbody);wrap.append(table);contents.append(wrap);
+  for(const info of attributes){
+   const mapping=graph.mappings.get(info.id),data=info as typeof info&{description?:unknown},tr=document.createElement('tr'),name=document.createElement('th'),samples=document.createElement('td'),description=document.createElement('td');
+   tr.dataset.informationId=info.id;name.scope='row';text(name,'span',info.name,'structure-attribute-name');
+   const review=marks.field(info.id,concept.id);if(review)markReview(name,review);
+   if(mapping?.physicalName)text(name,'span','論理名：'+shortPhysicalName(mapping.physicalName),'structure-attribute-meta');
+   text(name,'span','型：'+typeLabel(mapping),'structure-attribute-meta');text(name,'span','null許容：'+nullableLabel(mapping),'structure-attribute-meta');
+   const examples=sampleLabels(mapping);if(examples.length){for(const example of examples)text(samples,'span',example,'structure-attribute-sample');if(mapping?.referenceSource&&examples.some(example=>example.startsWith('参考例：')))text(samples,'span','参考例の出所：'+mapping.referenceSource,'structure-attribute-source');}
+   else text(samples,'span','未記載','structure-attribute-missing');
+   description.textContent=attributeDescription(data,mapping);tr.append(name,samples,description);tbody.append(tr);
+  }
+ }
  add('所属',ownership.length?[...new Set(ownership)]:undefined);if(owned.length)add('含む構造',[...new Set(owned)]);add('参照',edge?.direction==='reference'?[n.local+'（'+n.type+'）']:outgoing);
- add('説明',edge?.relation.condition||concept.description||undefined);add('サンプル',undefined);
+ add('説明',edge?.relation.condition||concept.description||undefined);
  const review=edge?marks.relation(edge.relation.id,concept.id):marks.concept(concept.id);if(review)add('位置づけ',reviewLabel(review)+'：'+review.reason);
  if(edge){add('関係の種類',labels[edge.direction]);add('多重度',edge.count);add('反対側の多重度',edge.reverseCount);if(edge.relation.sourceRefs.length)add('関係の出所',edge.relation.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));if(edge.relation.condition&&concept.description)add('構造の説明',concept.description);}
  // These two study models use a synthetic subsystem and the same task note on

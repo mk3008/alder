@@ -76,6 +76,8 @@ Viewerの詳細には、どの構造がどこに所属し、どの構造を含�
 
 右ドロワーの説明には項目の意味を記し、未決となしの区別など、理解に必要な内容を文章に含める。項目ごとに作られた定型のnull許容理由をそのまま説明に連結しない。理由の元データは保持する。根拠を確認できなかった項目は説明が未記載であることを示し、推測で埋めない。
 
+構造を選択すると、その構造の直近の属性について、名前、型、null許容、サンプル、説明を右ドロワーの表で確認できる。参考例には出所を示す。サンプルは属性ごとに記録された値であり、同じ実体の組合せとは限らない。ツリーの属性行と個別の詳細は引き続き利用でき、互換・移行用のフィルターは表にも反映する。
+
 根拠として、[業務設計書の構造](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/docs/business-design-structure.ja.md)の目的・開始条件・手順・結果、および識別・入出力の考え方と、実際の[購買申請](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/business-design/purchase-request/README.md)、[会議室予約](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/business-design/meeting-room/README.md)、[設備保守](https://github.com/mk3008/alder/blob/8f75179ac8f2d51b9250d621e70e31a0e36509d8/business-design/facilities-maintenance/README.md)を参照した。Scopeは後の本人判断で「システム化対象」として扱う。
 
 主要な業務・対象・情報項目・手順の属性には、これらの設計上の意味に基づく説明を候補として付ける。属性詳細では、既存の表示用サンプルに加えて、Alder自身の業務設計書にある「業務設計」「業務上の意味と保証の合意」などを出所付きの参考例として示す。旧Scopeの値は定義が異なるため新Scopeの参考例に流用しない。
