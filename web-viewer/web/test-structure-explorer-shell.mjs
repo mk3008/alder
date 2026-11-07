@@ -24,8 +24,8 @@ try{
  assert.equal(select('.structure-explorer').hidden,false);assert(select('.structure-root > [data-concept-id="n-bd"]'));assert(select('[data-concept-id="n-activity"]'));
  assert.equal(select('#concept-tab-structure-explorer').getAttribute('aria-current'),'true');assert.equal(overview.hidden,true);
  assert.equal(select('#drawer').disabled,false,'the structure view has a usable detail drawer');
- select('.structure-root > [data-concept-id="n-bd"] .structure-field button').click();assert(select('#concept-related-panel').hidden,'selecting a field does not open a closed drawer');
- select('#drawer').click();assert(!select('#concept-related-panel').hidden);assert.match(select('.concept-related-content').textContent,/ローカル名識別子/,'the selected attribute opens in the common drawer');assert.match(select('.concept-related-content').textContent,/所属業務設計書/);
+ select('.structure-root > [data-concept-id="n-bd"] > details > summary').click();assert(select('#concept-related-panel').hidden,'selecting a structure does not open a closed drawer');
+ select('#drawer').click();assert(!select('#concept-related-panel').hidden);select('.concept-related-content .structure-attribute-select').click();assert.match(select('.concept-related-content').textContent,/ローカル名識別子/,'the selected attribute opens in the common drawer');assert.match(select('.concept-related-content').textContent,/所属業務設計書/);
  select('[data-explorer-key="concept:overview"]').click();assert.equal(overview.hidden,false);assert.equal(overview.getAttribute('src'),originalSrc,'existing graph and its iframe are retained');
  assert.equal(select('.structure-explorer').hidden,true);assert.equal(select('#drawer').disabled,false);
  select('[data-explorer-key="concept:structure-explorer"]').click();

@@ -40,9 +40,9 @@ const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,w
 const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 const covered=[];
 try{
- w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');
- const render=(model,id)=>w.Explorer.renderStructureExplorer(host,model,{rootId:id});
- const fields=()=>[...host.querySelectorAll('.structure-root > .structure-item > details > .structure-children > .structure-field')].map(element=>element.textContent);
+ w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host'),detail=w.document.createElement('div');
+ const render=(model,id)=>{w.Explorer.renderStructureExplorer(host,model,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,model,selection)});host.querySelector('.structure-root > li > details > summary').click();};
+ const fields=()=>[...detail.querySelectorAll('.structure-attribute-table tbody tr')].map(element=>element.textContent);
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
  const mapping=model=>model.meta.fieldMappings.find(field=>field.informationId==='n-information-field-3');
 
@@ -55,7 +55,7 @@ try{
  assert(!fields().some(value=>value.includes('所属する業務')||value.includes('適用する判定行')));
  assert(row('nr-step-when'));assert(fields().some(value=>value.includes('操作')));
  render(normalized,'n-check');assert(fields().some(value=>value.includes('表示番号')),'a Check display ID remains an attribute');
- const detail=w.document.createElement('div'),checkMapping=normalized.meta.fieldMappings.find(item=>item.physicalName.includes('Check.items.checkId'));w.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-check',informationId:checkMapping.informationId});assert(detail.textContent.includes('checkId'),'the code name remains available in the detail');
+ const checkMapping=normalized.meta.fieldMappings.find(item=>item.physicalName.includes('Check.items.checkId'));w.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-check',informationId:checkMapping.informationId});assert(detail.textContent.includes('checkId'),'the code name remains available in the detail');
  covered.push('STRUCTURE-RELKEY-001');
 
  render(normalized,'n-object');assert.match(row('nr-object-information').title,/information\.objectId/);
@@ -77,7 +77,7 @@ try{
  render(normalized,'n-step');const expected=fields();
  const exchange=host.querySelector('[data-relation-id="nr-step-exchange"] > details');exchange.open=true;exchange.dispatchEvent(new w.Event('toggle'));
  const repeated=host.querySelector('[data-relation-id="nr-exchange-pair"] > details');repeated.open=true;repeated.dispatchEvent(new w.Event('toggle'));
- const repeatedFields=[...repeated.querySelectorAll(':scope > .structure-children > .structure-field')].map(element=>element.textContent);
+ repeated.querySelector(':scope > summary').click();const repeatedFields=fields();
  assert.deepEqual(repeatedFields,expected,'a repeated Step and its individual root use the same conceptual attributes');
  assert.equal(row('nr-step-when').querySelector('.structure-count').textContent,'0..1');
  covered.push('STRUCTURE-RELKEY-004');

@@ -23,10 +23,10 @@ try{
  const value=label=>[...detail.querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling?.textContent;
  const lines=label=>{const dd=[...detail.querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling;return dd?[...dd.childNodes].filter(node=>node.nodeType===w.Node.TEXT_NODE).map(node=>node.textContent):[];};
  show(model,'format');const labels=[...detail.querySelectorAll('dt')].map(item=>item.textContent);
- assert.deepEqual(labels.slice(0,6),['論理名','ローカル名','型名','サンプル','null許容','説明']);assert.equal(value('サンプル'),'例：alder-document-package');
- show(model,'activities.name');assert(value('サンプル').includes('例：1回の点数を計算する'));assert(value('サンプル').includes('参考例：業務設計'));
+ assert.deepEqual(labels.slice(0,6),['論理名','ローカル名','型名','サンプル','null許容','説明']);assert.equal(value('サンプル'),'alder-document-package');
+ show(model,'activities.name');assert(value('サンプル').includes('1回の点数を計算する'));assert(value('サンプル').includes('参考：業務設計'));
  const examples=structuredClone(model),sample=field(examples,'activities.name').mapping;delete sample.referenceValue;
- for(const [item,expected] of [[null,'例：null'],['','例：""'],[0,'例：0']]){sample.sampleValue=item;show(examples,'activities.name');assert.equal(value('サンプル'),expected);}
+ for(const [item,expected] of [[null,'null'],['','""'],[0,'0']]){sample.sampleValue=item;show(examples,'activities.name');assert.equal(value('サンプル'),expected);}
  delete sample.sampleValue;show(examples,'activities.name');assert.equal(value('サンプル'),'なし');covered.push('STRUCTURE-ORDER-001');
  show(model,'activities.id');assert.equal(value('null許容'),'許容しない');assert.equal(value('null許容（候補）'),undefined);
  show(model,'activities.scope');assert.equal(value('null許容'),'許容する');assert.equal(value('参照元の型表記'),undefined);assert.equal(field(model,'activities.scope').mapping.valueType,'boolean | null');

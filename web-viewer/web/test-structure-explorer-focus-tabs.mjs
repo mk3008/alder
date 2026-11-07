@@ -44,7 +44,7 @@ let saved;
 try{
  const {w,d}=test,rootPage=livePage(d),root=firstRoot(rootPage);
  assert.equal(root.dataset.conceptId,'n-bd');
- rootPage.querySelector('.structure-field button').click();assert(d.querySelector('#concept-related-panel').hidden,'selection preserves a closed drawer');
+ root.querySelector(':scope > details > summary').click();assert(d.querySelector('#concept-related-panel').hidden,'selection preserves a closed drawer');d.querySelector('#drawer').click();d.querySelector('.concept-related-content .structure-attribute-select').click();selectedField(d,'識別子',/業務設計書/);d.querySelector('#drawer').click();
  const activity=rootPage.querySelector('[data-relation-id="nr-bd-activity"][data-relation-direction="owned"] > details');
  const openActivity=activity.querySelector(':scope > summary > button.structure-open');
  assert(openActivity?.querySelector('svg'),'each structure has an external-link icon');
@@ -55,9 +55,9 @@ try{
  assert(rootPage.hidden,'original tree remains available in its own tab');
  const activityPage=livePage(d),activityRoot=firstRoot(activityPage);
  assert.equal(activityRoot.dataset.conceptId,'n-activity');
- assert(activityRoot.textContent.includes('識別子'));
- activityRoot.querySelector('.structure-field button').click();d.querySelector('#drawer').click();selectedField(d,'識別子',/業務/);
- const search=activityPage.querySelector('input[type=search]');search.value='名前';search.dispatchEvent(new w.Event('input'));activityPage.querySelector('[data-information-id="n-activity-field-2"] button').click();search.value='';search.dispatchEvent(new w.Event('input'));assert(activityPage.querySelector('[data-information-id="n-activity-field-2"] button').classList.contains('structure-selected'),'selection follows the restored tree after search');selectedField(d,'名前',/業務/);
+ assert(!activityRoot.querySelector('.structure-field'));
+ activityRoot.querySelector(':scope > details > summary').click();assert(d.querySelector('#concept-related-panel').hidden);d.querySelector('#drawer').click();d.querySelector('.concept-related-content .structure-attribute-select').click();selectedField(d,'識別子',/業務/);
+ const search=activityPage.querySelector('input[type=search]');search.value='名前';search.dispatchEvent(new w.Event('input'));d.querySelector('.concept-related-content .structure-attribute-back').click();d.querySelector('.concept-related-content [data-information-id="n-activity-field-2"] button').click();search.value='';search.dispatchEvent(new w.Event('input'));assert(activityPage.querySelector('.structure-selected'),'structure selection follows the restored tree after search');selectedField(d,'名前',/業務/);
  assert(activityRoot.querySelector('[data-relation-id="nr-activity-step"]'));
  assert(activityRoot.querySelector('[data-relation-id="nr-who-activity"]'));
  assert(!activityRoot.querySelector(':scope > details > summary > button.structure-open'),'current root has no self-link');

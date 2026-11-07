@@ -31,25 +31,25 @@ const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,w
 const w=new JSDOM('<div id="tree"></div><div id="detail"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.querySelector('#tree'),detail=w.document.querySelector('#detail');let clearCount=0;
- const render=(m,id)=>w.Explorer.renderStructureExplorer(host,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection),clearSelection:()=>{clearCount++;w.Explorer.renderStructureDetails(detail,m);}});
+ const render=(m,id)=>{w.Explorer.renderStructureExplorer(host,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection),clearSelection:()=>{clearCount++;w.Explorer.renderStructureDetails(detail,m);}});host.querySelector('.structure-root > li > details > summary').click();};
  const checkbox=()=>host.querySelector('.structure-compatibility-filter input');const search=()=>host.querySelector('input[type="search"]');
- const item=path=>host.querySelector(`[data-information-id="${field(model,path).mapping.informationId}"]`);
+ const item=path=>detail.querySelector(`[data-information-id="${field(model,path).mapping.informationId}"]`);
  const toggle=checked=>{checkbox().checked=checked;checkbox().dispatchEvent(new w.Event('change',{bubbles:true}));};
  const query=value=>{search().value=value;search().dispatchEvent(new w.Event('input',{bubbles:true}));};
  const visible=element=>!!element&&!element.closest('[hidden]');
- render(model,'n-step');assert.equal(checkbox().checked,true);assert(item('steps.legacyText').hidden);assert(visible(item('steps.action')));
- query('旧手順の記述');assert(!visible(item('steps.legacyText')));assert(!visible(host.querySelector('.structure-root > .structure-item')),'hidden field must not produce a phantom search hit');
- toggle(false);assert(visible(item('steps.legacyText')));toggle(true);assert(!visible(item('steps.legacyText')));toggle(false);query('');
+ render(model,'n-step');assert.equal(checkbox().checked,true);assert(!item('steps.legacyText'));assert(visible(item('steps.action')));
+ query('旧手順の記述');assert(!visible(host.querySelector('.structure-root > .structure-item')),'hidden field must not produce a phantom search hit');
+ toggle(false);assert(visible(host.querySelector('.structure-root > .structure-item')));assert(visible(item('steps.legacyText')));toggle(true);assert(!item('steps.legacyText'));toggle(false);query('');
  assert(visible(item('steps.legacyText')));item('steps.legacyText').querySelector('button').click();assert(detail.textContent.includes('互換・移行用'));
- toggle(true);assert(item('steps.legacyText').hidden);assert.equal(clearCount,1);assert(detail.textContent.includes('項目を選択'));
- render(model,'n-flow-step');assert(item('steps.obligation').hidden);assert(visible(item('steps.appliesWhen')));item('steps.appliesWhen').querySelector('button').click();toggle(false);toggle(true);assert(item('steps.appliesWhen').querySelector('button').classList.contains('structure-selected'));assert.equal(clearCount,1);
+ toggle(true);assert(!item('steps.legacyText'));assert(detail.querySelector('.structure-attribute-table'),'filter restores the selected class and hides legacy details');
+ render(model,'n-flow-step');assert(!item('steps.obligation'));assert(visible(item('steps.appliesWhen')));item('steps.appliesWhen').querySelector('button').click();toggle(false);toggle(true);assert(item('steps.appliesWhen'));assert.equal(clearCount,0);
  render(model,'n-activity');host.querySelector('.structure-toolbar button').click();const order=host.querySelector('[data-relation-id="nr-activity-order"]');assert(visible(order));assert.match(order.textContent,/要確認/);
  render(model,'n-external');assert.equal(checkbox().checked,true);assert(host.querySelector('.structure-root > li').hidden);assert(!host.querySelector('.structure-filter-empty').hidden);toggle(false);assert(visible(host.querySelector('.structure-root > li')));assert(host.querySelector('.structure-filter-empty').hidden);
  const unrelated=structuredClone(model);delete unrelated.meta.compatibilityReview;render(unrelated,'n-step');assert(checkbox().checked);assert(visible(item('steps.legacyText')));assert(!item('steps.legacyText').querySelector('.structure-review-badge'));
  covered.push('STRUCTURE-COMPAT-002');
  render(model,'n-step');assert(!item('steps.action').querySelector('.structure-review-badge'));
  toggle(false);const old=item('steps.legacyText');assert.match(old.textContent,/互換・移行用/);assert(old.querySelector('.structure-review-legacy'));old.querySelector('button').click();assert(detail.textContent.includes('旧形式の手順文章を移行時に保持する'));
- render(model,'n-flow-step');assert(item('steps.obligation').hidden);assert(!item('steps.appliesWhen').querySelector('.structure-review-badge'));toggle(false);item('steps.obligation').querySelector('button').click();assert(detail.textContent.includes('互換・移行用'));assert(detail.textContent.includes('選択可能だった意味'));
+ render(model,'n-flow-step');assert(!item('steps.obligation'));assert(!item('steps.appliesWhen').querySelector('.structure-review-badge'));toggle(false);item('steps.obligation').querySelector('button').click();assert(detail.textContent.includes('互換・移行用'));assert(detail.textContent.includes('選択可能だった意味'));
  render(model,'n-activity');host.querySelector('.structure-toolbar button').click();host.querySelector('[data-relation-id="nr-activity-order"] > details > summary').click();assert(detail.textContent.includes('手順の前提との重複'));
  covered.push('STRUCTURE-COMPAT-003');
 }finally{w.close();}

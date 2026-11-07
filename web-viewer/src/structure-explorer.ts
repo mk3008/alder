@@ -1,4 +1,4 @@
-import {createElement,Box,ExternalLink,FileText,Link,Search} from 'lucide';
+import {createElement,Box,ExternalLink,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
 type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown;referenceSource?:string};
@@ -8,7 +8,9 @@ type Direction='owned'|'reference'|'owner'|'referencedBy'|'unknownOut'|'unknownI
 type ReviewMark={kind:'legacy'|'needs-review';reason:string};
 type EdgeField={name:string;physicalName:string;valueType?:string};
 export type StructureEdge={relation:Relation;from:string;to:string;direction:Direction;count:string;reverseCount:string;fields:string[];visibleFields:string[];fieldDetails:EdgeField[];roleName?:string};
-export type StructureSelection=({kind:'structure';conceptId:string;fromId?:string;relationId?:string}|{kind:'attribute';conceptId:string;informationId:string})&{hideLegacy?:boolean};
+type StructureClassSelection={kind:'structure';conceptId:string;fromId?:string;relationId?:string;hideLegacy?:boolean};
+type StructureAttributeSelection={kind:'attribute';conceptId:string;informationId:string;hideLegacy?:boolean;returnTo?:StructureClassSelection};
+export type StructureSelection=StructureClassSelection|StructureAttributeSelection;
 const visibleDirections:Direction[]=['owned','reference','unknownOut'];
 
 // Only model-authored classifications are used. A name, version or missing
@@ -124,7 +126,7 @@ function attributeDescription(info:{description?:unknown},mapping:Mapping|undefi
 }
 
 /** Present only information declared on the selected concept, field or relation. */
-export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selection?:StructureSelection){
+export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selection?:StructureSelection,onSelect?:(next:StructureSelection)=>void){
  root.replaceChildren();
  if(!selection){text(root,'p','ツリーの項目を選択すると詳細を確認できます。');return;}
  const graph=structureGraph(model),marks=reviewMarks(model),concept=graph.nodes.get(selection.conceptId);if(!concept){text(root,'p','項目が見つかりません。');return;}
@@ -133,8 +135,10 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  const names=(id:string)=>{const node=graph.nodes.get(id),authored=graph.conceptNames[id] as {typeName?:unknown;logicalName?:unknown}|undefined;
   return {local:typeof authored?.logicalName==='string'&&authored.logicalName?authored.logicalName:node?.name??id,type:typeof authored?.typeName==='string'&&authored.typeName?authored.typeName:node?.name??'未定義'};};
  const list=document.createElement('dl');list.className='structure-detail-list';root.append(list);
+ const select=(next:StructureSelection)=>{if(onSelect)onSelect(next);else renderStructureDetails(root,model,next);if(next.kind==='attribute')root.querySelector<HTMLButtonElement>('.structure-attribute-back')?.focus();else if(selection.kind==='attribute')Array.from(root.querySelectorAll<HTMLTableRowElement>('.structure-attribute-table tbody tr')).find(row=>row.dataset.informationId===selection.informationId)?.querySelector<HTMLButtonElement>('.structure-attribute-select')?.focus();};
  const add=(label:string,value:string|string[]|undefined)=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;const values=Array.isArray(value)?value:[value??'未定義'];if(!values.length)dd.textContent='なし';else for(const [index,item]of values.entries()){if(index)dd.append(document.createElement('br'));dd.append(document.createTextNode(item));}list.append(dt,dd);};
  if(selection.kind==='attribute'){
+  if(selection.returnTo){const back=document.createElement('button');back.type='button';back.className='structure-attribute-back';back.textContent='項目一覧に戻る';back.onclick=()=>select(selection.returnTo!);root.insertBefore(back,list);}
   const info=concept.information.find(item=>item.id===selection.informationId);if(!info){list.remove();text(root,'p','項目が見つかりません。');return;}
   const mapping=graph.mappings.get(info.id),data=info as typeof info&{description?:unknown};
   const references=mapping?.relationIds.flatMap(id=>{const edges=(graph.edges.get(concept.id)??[]).filter(edge=>edge.relation.id===id);return edges.length?edges.map(edge=>names(edge.to).local+'（'+labels[edge.direction]+'）'):[id+'（未定義）'];});
@@ -146,7 +150,7 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   add('説明',attributeDescription(data,mapping));
   const review=marks.field(info.id,concept.id);if(review)add('位置づけ',reviewLabel(review)+'：'+review.reason);
   add('所属',names(concept.id).local+'（'+names(concept.id).type+'）');add('参照',references);
-  if(mapping?.referenceSource)add('参考例の出所',mapping.referenceSource);
+  if(mapping?.referenceSource)add('参考の出所',mapping.referenceSource);
   if(mapping?.logicalSourcePaths?.length)add('対応する定義',mapping.logicalSourcePaths);
   if(typeof mapping?.optional==='boolean')add('項目の省略',mapping.optional?'可能':'不可');
   if(mapping?.representation)add('対応の種類',mapping.representation);
@@ -182,11 +186,11 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   for(const label of ['項目','サンプル','説明']){const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);}thead.append(head);table.append(thead,tbody);wrap.append(table);contents.append(wrap);
   for(const info of attributes){
    const mapping=graph.mappings.get(info.id),data=info as typeof info&{description?:unknown},tr=document.createElement('tr'),name=document.createElement('th'),samples=document.createElement('td'),description=document.createElement('td');
-   tr.dataset.informationId=info.id;name.scope='row';text(name,'span',info.name,'structure-attribute-name');
+   tr.dataset.informationId=info.id;name.scope='row';const choose=document.createElement('button');choose.type='button';choose.className='structure-attribute-name structure-attribute-select';choose.textContent=info.name;choose.onclick=()=>select({kind:'attribute',conceptId:concept.id,informationId:info.id,hideLegacy:selection.hideLegacy,returnTo:selection});name.append(choose);
    const review=marks.field(info.id,concept.id);if(review)markReview(name,review);
    if(mapping?.physicalName)text(name,'span','論理名：'+shortPhysicalName(mapping.physicalName),'structure-attribute-meta');
    text(name,'span','型：'+typeLabel(mapping),'structure-attribute-meta');text(name,'span','null許容：'+nullableLabel(mapping),'structure-attribute-meta');
-   const examples=sampleLabels(mapping);if(examples.length){for(const example of examples)text(samples,'span',example,'structure-attribute-sample');if(mapping?.referenceSource&&examples.some(example=>example.startsWith('参考例：')))text(samples,'span','参考例の出所：'+mapping.referenceSource,'structure-attribute-source');}
+   const examples=sampleLabels(mapping);if(examples.length){for(const example of examples)text(samples,'span',example,'structure-attribute-sample');if(mapping?.referenceSource&&examples.some(example=>example.startsWith('参考：')))text(samples,'span','参考の出所：'+mapping.referenceSource,'structure-attribute-source');}
    else text(samples,'span','未記載','structure-attribute-missing');
    description.textContent=attributeDescription(data,mapping);tr.append(name,samples,description);tbody.append(tr);
   }
@@ -209,8 +213,8 @@ function sampleLabels(mapping:Mapping|undefined){
  if(!mapping)return [];
  const labels:string[]=[];
  const add=(value:unknown,prefix:string)=>{const sample=typeof value==='string'?(value||'""'):JSON.stringify(value);if(sample!==undefined)labels.push(prefix+sample);};
- if(Object.hasOwn(mapping,'sampleValue'))add(mapping.sampleValue,mapping.sampleKind==='reference'?'参考例：':'例：');
- if(Object.hasOwn(mapping,'referenceValue'))add(mapping.referenceValue,'参考例：');
+ if(Object.hasOwn(mapping,'sampleValue'))add(mapping.sampleValue,mapping.sampleKind==='reference'?'参考：':'');
+ if(Object.hasOwn(mapping,'referenceValue'))add(mapping.referenceValue,'参考：');
  return labels;
 }
 
@@ -269,11 +273,11 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   }else{ text(row,'strong',typeName);if(logicalName&&logicalName!==typeName)text(row,'span',logicalName,'structure-type'); }
   if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
   if(cycle||previouslySeen)text(row,'span','既出','structure-seen');
-  const details=document.createElement('details');details.className='structure-node';details.append(row);item.append(details);
+  const hasChildren=(graph.edges.get(id)??[]).some(rel=>visibleDirections.includes(rel.direction)||rel.direction==='owner'&&!!rel.roleName&&!(edge?.direction==='owned'&&edge.relation.id===rel.relation.id&&edge.from===rel.to));
+  const details=document.createElement('details');details.className='structure-node'+(hasChildren?'':' structure-leaf');details.append(row);item.append(details);
   let built=false;const nextPath=new Set(path);nextPath.add(id);
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
    const children=document.createElement('ul');children.className='structure-children';details.append(children);
-   for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id),button=document.createElement('button'),selection:StructureSelection={kind:'attribute',conceptId:id,informationId:info.id},fieldReview=marks.field(info.id,id);field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.informationId=info.id;field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();if(fieldReview)field.dataset.compatibility=fieldReview.kind;button.type='button';button.className='structure-field-button';button.dataset.structureSelection=keyOf(selection);button.append(icon(FileText,'属性'));markReview(button,fieldReview);text(button,'span',info.name);text(button,'span','型：'+typeLabel(mapping),'structure-type');button.onclick=()=>select(selection,button);field.append(button);children.append(field);}
    // Reverse ownership is opt-in display metadata on an existing relation;
    // it does not invent a second model relationship.
    for(const direction of [...visibleDirections,'owner'] as Direction[]){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction&&(direction!=='owner'||!!rel.roleName&&!(edge?.direction==='owned'&&edge.relation.id===rel.relation.id&&edge.from===rel.to)));if(!outgoing.length)continue;

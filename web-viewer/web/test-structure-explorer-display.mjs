@@ -38,11 +38,11 @@ const covered=[];
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');
  const detail=w.document.createElement('div');let shown;
- const render=(m,id)=>{shown=m;w.Explorer.renderStructureExplorer(host,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection)});};
+ const render=(m,id)=>{shown=m;w.Explorer.renderStructureExplorer(host,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection)});host.querySelector('.structure-root > li > details > summary').click();};
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
- const attribute=path=>{const id=shown.meta.fieldMappings.find(item=>item.physicalName===path)?.informationId;return [...host.querySelectorAll('.structure-root > .structure-item > details > .structure-children > .structure-field')].find(node=>node.dataset.informationId===id);};
+ const attribute=path=>{const id=shown.meta.fieldMappings.find(item=>item.physicalName===path)?.informationId;if(!detail.querySelector('.structure-attribute-table'))host.querySelector('.structure-root > li > details > summary').click();return detail.querySelector(`.structure-attribute-table [data-information-id="${id}"]`);};
  const values=label=>{const dt=[...detail.querySelectorAll('dt')].find(node=>node.textContent===label),dd=dt?.nextElementSibling;return dd?[...dd.childNodes].filter(node=>node.nodeType===w.Node.TEXT_NODE).map(node=>node.textContent):[];};
- const samples=path=>{attribute(path)?.querySelector('button').click();const result=values('サンプル');return result.length===1&&['なし','未定義'].includes(result[0])?[]:result;};
+ const samples=path=>{attribute(path)?.querySelector('button').click();const result=values('サンプル');detail.querySelector('.structure-attribute-back')?.click();return result.length===1&&['なし','未定義'].includes(result[0])?[]:result;};
  const sample=path=>samples(path)[0];
  const showRelation=(conceptId,fromId,relationId)=>w.Explorer.renderStructureDetails(detail,shown,{kind:'structure',conceptId,fromId,relationId});
 
@@ -68,29 +68,29 @@ try{
  render(physical,'fmt-order');const order=shown.relations.find(item=>item.id==='rel-order-step');showRelation(order.toConceptId,order.fromConceptId,order.id);assert.match(detail.textContent,/beforeId \/ afterId/);assert.match(detail.textContent,/stepIds\[\]/);
  const unmarked=structuredClone(model),who=unmarked.meta.fieldMappings.find(item=>item.physicalName==='activities.whoId');delete who.representation;render(unmarked,'n-activity');
  assert.equal(row('nr-who-activity').querySelector('.structure-edge-detail'),null);showRelation('n-who','n-activity','nr-who-activity');assert(values('論理名').includes('whoId'));assert.deepEqual(structureGraph(unmarked).edges.get('n-activity').find(edge=>edge.relation.id==='nr-who-activity').fields,['activities.whoId']);
- assert(attribute('activities.whoId'),'an unmarked mapping remains an attribute');
+ host.querySelector('.structure-root > li > details > summary').click();assert(attribute('activities.whoId'),'an unmarked mapping remains an attribute');
  covered.push('STRUCTURE-KEYDISPLAY-003');
 
  const activity=normalized.entities.activities[0],step=normalized.entities.steps[0];
  render(model,'n-activity');
- assert.equal(sample('activities.name'),'例：'+activity.name);assert.equal(sample('activities.scope'),'例：true');assert.equal(sample('activities.why'),'例：'+activity.why);
+ assert.equal(sample('activities.name'),''+activity.name);assert.equal(sample('activities.scope'),'true');assert.equal(sample('activities.why'),''+activity.why);
  assert(attribute('activities.name').textContent.includes('型：未定義'),'examples do not invent a type');
- render(model,'n-object');assert.equal(sample('objects.scope'),'例：false');
- render(model,'n-step');assert.equal(sample('steps.action'),'例：'+step.action);assert.equal(sample('steps.method'),'参考例：'+method);
+ render(model,'n-object');assert.equal(sample('objects.scope'),'false');
+ render(model,'n-step');assert.equal(sample('steps.action'),''+step.action);assert.equal(sample('steps.method'),'参考：'+method);
  covered.push('STRUCTURE-SAMPLE-001');
  assert.equal(step.method,null,'the reference does not alter the normalized input');
  assert.equal(model.meta.fieldMappings.find(item=>item.physicalName==='steps.method').sampleKind,'reference');
- render(model,'n-data');assert.deepEqual(samples('data.name'),['例：'+normalized.entities.data[0].name,'参考例：連絡先（氏名・電話番号）']);
- render(model,'n-dataitem');assert.deepEqual(samples('dataItems.condition'),['例：null','参考例：電話連絡を希望する場合']);
- render(model,'n-information');assert.deepEqual(samples('information.name'),['例：'+normalized.entities.information[0].name,'参考例：電話番号']);
- render(model,'n-dependency');for(const button of host.querySelectorAll('.structure-field button')){button.click();assert.deepEqual(values('サンプル'),['なし'],'a structure with no sample rows has no invented values');}
+ render(model,'n-data');assert.deepEqual(samples('data.name'),[''+normalized.entities.data[0].name,'参考：連絡先（氏名・電話番号）']);
+ render(model,'n-dataitem');assert.deepEqual(samples('dataItems.condition'),['null','参考：電話連絡を希望する場合']);
+ render(model,'n-information');assert.deepEqual(samples('information.name'),[''+normalized.entities.information[0].name,'参考：電話番号']);
+ render(model,'n-dependency');const emptyIds=[...detail.querySelectorAll('.structure-attribute-table tbody tr')].map(row=>row.dataset.informationId);if(!emptyIds.length)assert.match(detail.textContent,/表示する属性はありません/);for(const id of emptyIds){detail.querySelector(`[data-information-id="${id}"] button`).click();assert.deepEqual(values('サンプル'),['なし'],'a structure with no sample rows has no invented values');detail.querySelector('.structure-attribute-back').click();}
  covered.push('STRUCTURE-SAMPLE-002');
 
  const modified=structuredClone(model),name=modified.meta.fieldMappings.find(item=>item.physicalName==='activities.name');
- for(const [value,expected] of [[0,'例：0'],[false,'例：false'],[null,'例：null'],['','例：""'],[['a','b'],'例：["a","b"]'],[{x:1},'例：{"x":1}']]){
+ for(const [value,expected] of [[0,'0'],[false,'false'],[null,'null'],['','""'],[['a','b'],'["a","b"]'],[{x:1},'{"x":1}']]){
   name.sampleValue=value;render(modified,'n-activity');assert.equal(sample('activities.name'),expected);assert(attribute('activities.name').textContent.includes('型：未定義'));
  }
- name.sampleValue='<script>example</script>';render(modified,'n-activity');assert.equal(sample('activities.name'),'例：<script>example</script>');assert.equal(detail.querySelector('script'),null,'sample text cannot create DOM elements');
+ name.sampleValue='<script>example</script>';render(modified,'n-activity');assert.equal(sample('activities.name'),'<script>example</script>');assert.equal(detail.querySelector('script'),null,'sample text cannot create DOM elements');
  delete name.sampleValue;render(modified,'n-activity');assert.equal(sample('activities.name'),undefined);
  covered.push('STRUCTURE-SAMPLE-003');
 }finally{w.close();}
