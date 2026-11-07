@@ -1,4 +1,4 @@
-name: Structure sidebar browser check
+name: Verify published conceptual model preview
 on:
   push:
     branches:
@@ -6,54 +6,17 @@ on:
 permissions:
   contents: read
 jobs:
-  browser:
+  verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
-    defaults:
-      run:
-        working-directory: web-viewer
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4.4.0
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: '24.22.1'
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm run test:complete-concept-review
-      - run: npm run test:structure-explorer
-      - run: npm run build
-      - run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
-      - name: Install Japanese review-image font
+      - name: Verify publicly served files against fixed build
         run: |
-          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
-            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
-            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf --output "$FONT_FILE"
-            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
-            mkdir -p "$HOME/.local/share/fonts"
-            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
-            fc-cache -f "$HOME/.local/share/fonts"
-          fi
-          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
-      - name: Check structure sidebar at desktop and mobile widths
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
-          SERVER_PID=$!
-          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
-            sleep 1
-          done
-          export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
-          node web/test-browser.mjs --cases structureSampleHeader,explorerResizeScroll,conceptValueDomains
-      - name: Save screenshots
-        if: always()
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: structure-sidebar-screenshots
-          path: |
-            web-viewer/web/evidence/structure-explorer-sidebar/*.png
-            web-viewer/web/evidence/explorer-resize-scroll/*.png
-            web-viewer/web/evidence/concept-value-domains/*.png
-          if-no-files-found: ignore
-          retention-days: 7
+          curl --fail --location --silent --show-error --retry 12 --retry-delay 5 --retry-all-errors 'https://mk3008.github.io/alder/preview/pr-357/41da11e35d7d77d8f568d2351f191e144e29a5a8-value-domains/index.html' --output "$RUNNER_TEMP/item0"
+          printf '%s  %s\n' '0fb0151097e6297f5aed26c457415444977d117b57526ba2da8fda5bd5ca29d0' "$RUNNER_TEMP/item0" | sha256sum --check
+          curl --fail --location --silent --show-error --retry 12 --retry-delay 5 --retry-all-errors 'https://mk3008.github.io/alder/preview/pr-357/41da11e35d7d77d8f568d2351f191e144e29a5a8-value-domains/assets/main-B3ohjT-w.js' --output "$RUNNER_TEMP/item1"
+          printf '%s  %s\n' '9bb9d1de7d9cdbb5da5984dcdc2772e1bad90bc4fddc9f7caf1e78dec2faaa4e' "$RUNNER_TEMP/item1" | sha256sum --check
+          curl --fail --location --silent --show-error --retry 12 --retry-delay 5 --retry-all-errors 'https://mk3008.github.io/alder/preview/pr-357/41da11e35d7d77d8f568d2351f191e144e29a5a8-value-domains/assets/main-1x1OWUjf.css' --output "$RUNNER_TEMP/item2"
+          printf '%s  %s\n' '46c368fa8b06c91fd7b630992a48a31178178c079cabeaef0e603a624fbb6d00' "$RUNNER_TEMP/item2" | sha256sum --check
+          curl --fail --location --silent --show-error --retry 12 --retry-delay 5 --retry-all-errors 'https://mk3008.github.io/alder/preview/pr-357/41da11e35d7d77d8f568d2351f191e144e29a5a8-value-domains/examples/json-complete-concept-review.json' --output "$RUNNER_TEMP/item3"
+          printf '%s  %s\n' '5eacaf2d16da2a2dbc86d071526c1570a9c2085f1ac6ed3ea86f6d208c1f4fa7' "$RUNNER_TEMP/item3" | sha256sum --check
