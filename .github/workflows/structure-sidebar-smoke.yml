@@ -44,6 +44,12 @@ jobs:
           done
           export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
           node web/test-browser.mjs --cases structureSampleHeader
+      - name: Verify public preview and source
+        run: |
+          curl --fail --location --silent --show-error --retry 5 --retry-delay 3 'https://mk3008.github.io/alder/preview/pr-357/cca3bb1e2ba15819d619ac6d4b314a8e64a89ea3-sidebar/index.html' --output "$RUNNER_TEMP/sidebar-index.html"
+          test "$(sha256sum "$RUNNER_TEMP/sidebar-index.html" | cut -d' ' -f1)" = 36d4746f45bf349adf4fed994e7e52af549054523c689aaa52ca66ada6a5932b
+          curl --fail --location --silent --show-error --retry 5 --retry-delay 3 'https://mk3008.github.io/alder/preview/pr-357/cca3bb1e2ba15819d619ac6d4b314a8e64a89ea3-sidebar/examples/json-complete-concept-review.json' --output "$RUNNER_TEMP/sidebar-source.json"
+          cmp "$RUNNER_TEMP/sidebar-source.json" ../business-design/alder/json-complete-concept-review.json
       - name: Save screenshots
         if: always()
         uses: actions/upload-artifact@v4.6.2
