@@ -6,6 +6,9 @@ import {verifyJSONStates} from './test-json-states-browser.mjs';
 import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {verifyJSONDocuments} from './test-json-document-browser.mjs';
+import {verifyStructureSampleHeader} from './test-structure-explorer-sample-header-browser.mjs';
+import {verifyExplorerResizeScroll} from './test-explorer-resize-scroll-browser.mjs';
+import {verifyConceptValueDomains} from './test-concept-value-domains-browser.mjs';
 import {verifyNamedPlans} from './test-named-plans-browser.mjs';
 import {verifyJSON05Reintegration} from './test-json-05-reintegration-browser.mjs';
 import {verifyProcedureContinuity} from './test-procedure-continuity-browser.mjs';
@@ -68,6 +71,9 @@ const cases=[
    {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
    {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
+   {name:'structureSampleHeader',run:()=>verifyStructureSampleHeader(browser)},
+   {name:'explorerResizeScroll',run:()=>verifyExplorerResizeScroll(browser)},
+   {name:'conceptValueDomains',run:()=>verifyConceptValueDomains(browser)},
    {name:'namedPlans',run:()=>verifyNamedPlans(browser)},
    {name:'json05Reintegration',run:()=>verifyJSON05Reintegration(browser)},
    {name:'procedureContinuity',run:()=>verifyProcedureContinuity(browser)},
