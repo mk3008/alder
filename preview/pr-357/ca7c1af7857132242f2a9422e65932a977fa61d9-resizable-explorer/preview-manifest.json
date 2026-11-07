@@ -1,0 +1,19 @@
+{
+  "source": "ca7c1af7857132242f2a9422e65932a977fa61d9",
+  "sourceTree": "cc65606552e569345f657f767ccda1e32a8a8b13",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/concept-BbK6bi35.css": "05729326dbd29afe38b3dd93c372cb30a9484a5462489f8f8de76e8be76c96ac",
+    "concept.html": "0d80dbeb8be7dd0e711cf5bc1c08468f621ec9079b386613f1002579414f4597",
+    "examples/concept-self-reference.json": "59df576b90da3a152f66a59233534cf2c7591a61cdbd42b806d43991ba3e4744",
+    "examples/json-complete-concept-review.json": "1f8abc11ad3ff741acb6e4e26ce7c47ac1a02327e6a6fa99941a6e54acf5bec7",
+    "index.html": "189d3efb79dfe99750b8b996ef13356cb8bbeedfdf7dbf1733f40b65fee6c5ae",
+    "named-plans-example.json": "4f14c3bfb776a62d984703390ca8abc8fc173aea41ff8d3d54f4d7581409ba9b",
+    "assets/canvas-toolbar-BDaTsWgR.js": "615b5db71796f1a0fa174b4ab638d0be97dab0d3138b3c6eb68b6bff677c3ec5",
+    "assets/concept-DJ3bQi7g.js": "b906c13ee821ec5124e8a56d7a3f8f14ae239708afc30cadb82367e3dae28d79",
+    "assets/main-Dmfp9eiA.js": "795541c4c25e9f14ab7c669372b2d1d0752a089cb36188b288a9019e89c59447",
+    "assets/main-Dp94TowD.css": "8ab5f05912e7a9dde7c128c994523125eda61f583b9e377aba778c84f1f36cf4"
+  }
+}
