@@ -148,7 +148,11 @@ function addCopyActions(root:HTMLElement,list:HTMLElement,identity:string,source
    if(item.tagName!=='DT')continue;
    const details=item.nextElementSibling;if(!details)continue;
    const table=details.querySelector('table');
-   const value=table?Array.from(table.querySelectorAll('tr')).map(row=>Array.from(row.children).map(cell=>cell.textContent?.trim()??'').join(' | ')).join('\n'):
+   const cellText=(cell:Element)=>Array.from(cell.childNodes).map(node=>{
+    if(node.nodeName==='UL'||node.nodeName==='OL')return Array.from(node.childNodes).map(item=>item.textContent?.trim()??'').filter(Boolean).join('、');
+    return node.textContent?.trim()??'';
+   }).filter(Boolean).join(' / ');
+   const value=table?Array.from(table.querySelectorAll('tr')).map(row=>Array.from(row.children).map(cellText).join(' | ')).join('\n'):
     Array.from(details.childNodes).map(node=>node.nodeName==='BR'?'\n':node.textContent??'').join('');
    lines.push((item.textContent??'')+'：'+value);
   }

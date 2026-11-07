@@ -52,6 +52,9 @@ try{
  const full=writes.at(-1);assert(full.includes(short));assert(full.includes('用途：業務改善を検討'));assert(full.includes('元の定義：'));assert(detail.querySelector('[role="status"]').textContent.includes('全文'));
  detail.querySelector('.structure-copy-id').dispatchEvent(new w.MouseEvent('click',{bubbles:true,shiftKey:true}));await new Promise(resolve=>setTimeout(resolve,0));assert.equal(writes.at(-1),full);
  show(model,'n-who');detail.querySelector('.structure-copy-id').click();await new Promise(resolve=>setTimeout(resolve,0));assert(writes.at(-1).includes('n-who'));assert.notEqual(writes.at(-1),short);
+ detail.querySelector('.structure-copy-full').click();await new Promise(resolve=>setTimeout(resolve,0));
+ assert.match(writes.at(-1),/論理名：kind \/ 型：/);assert(writes.at(-1).includes('role：人が担う役割、system：自動実行するシステム'));
+
  Object.defineProperty(w.navigator,'clipboard',{configurable:true,value:{writeText:async()=>{throw Error('denied');}}});detail.querySelector('.structure-copy-full').click();await new Promise(resolve=>setTimeout(resolve,0));assert.match(detail.querySelector('[role="status"]').textContent,/コピーできませんでした/);
  covered.push('STRUCTURE-FEEDBACK-003');
 
