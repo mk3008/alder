@@ -151,14 +151,22 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   return;
  }
  const edge=selection.relationId?graph.edges.get(selection.fromId??'')?.find(item=>item.relation.id===selection.relationId&&item.to===concept.id):undefined;
- const n=names(concept.id),parent=edge?names(edge.from):undefined;
- const owners=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='owner').map(item=>{const owner=names(item.to);return owner.local+'（'+owner.type+'）';});
+ const n=names(concept.id);
+ const named=(id:string)=>{const value=names(id);return value.local+'（'+value.type+'）';};
+ const belongs=(child:string,owner:string)=>named(child)+'は'+named(owner)+'に所属';
+ const owners=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='owner').map(item=>belongs(concept.id,item.to));
+ // For a reverse row, the selected relationship describes the previous
+ // structure's owner, while the selected structure can itself have an owner.
+ const ownership=edge?.direction==='owned'?[belongs(concept.id,edge.from)]:edge?.direction==='owner'?[belongs(edge.from,concept.id),...owners]:owners;
+ const owned=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='owned'&&marks.relation(item.relation.id,item.to)?.kind!=='legacy'&&!(edge?.direction==='owner'&&edge.relation.id===item.relation.id)).map(item=>{
+  const child=names(item.to),review=marks.relation(item.relation.id,item.to);return (review?reviewLabel(review)+'：':'')+(item.roleName??child.local)+'（'+child.type+'）は'+named(concept.id)+'に所属';
+ });
  const outgoing=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='reference').map(item=>(item.roleName??'参照')+'：'+names(item.to).local);
  // A single source array can represent several concept relationships. Its
  // name is not the logical name of each of those relationships.
  const relationNames=edge?.fieldDetails.filter(field=>!study||![...graph.mappings.values()].some(mapping=>mapping.physicalName===field.physicalName&&mapping.relationIds.length>1)).map(field=>field.physicalName).filter(Boolean).map(shortPhysicalName);
  add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type);add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
- add('所属',edge?.direction==='owned'&&parent?parent.local+'（'+parent.type+'）':owners.length?owners:undefined);add('参照',edge?.direction==='reference'?[n.local+'（'+n.type+'）']:outgoing);
+ add('所属',ownership.length?[...new Set(ownership)]:undefined);if(owned.length)add('含む構造',[...new Set(owned)]);add('参照',edge?.direction==='reference'?[n.local+'（'+n.type+'）']:outgoing);
  add('説明',edge?.relation.condition||concept.description||undefined);add('サンプル',undefined);
  const review=edge?marks.relation(edge.relation.id,concept.id):marks.concept(concept.id);if(review)add('位置づけ',reviewLabel(review)+'：'+review.reason);
  if(edge){add('関係の種類',labels[edge.direction]);add('多重度',edge.count);add('反対側の多重度',edge.reverseCount);if(edge.relation.sourceRefs.length)add('関係の出所',edge.relation.sourceRefs.map(ref=>[ref.documentId,ref.revision,ref.targetType,ref.targetId,ref.section].filter(Boolean).join(' / ')));if(edge.relation.condition&&concept.description)add('構造の説明',concept.description);}
@@ -219,7 +227,11 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   const searchText=(includeLegacy:boolean)=>[concept.name,typeName,logicalName,concept.id,...names(includeLegacy),edge?.roleName??'',...(edge?.fieldDetails.flatMap(field=>[field.name,field.physicalName])??[]),...(edge?.fields??[]),edge?.relation.condition??''].join(' ').toLocaleLowerCase();
   item.dataset.searchText=searchText(true);item.dataset.searchVisibleText=searchText(false);
   if(edge){item.dataset.relationId=edge.relation.id;item.dataset.relationDirection=edge.direction;}
-  const cycle=path.has(id),visited=!!seen?.has(id),row=document.createElement('summary');
+  // A repeated reference can need an owner link that the direct ownership
+  // path intentionally hides. Expand each such context at most once.
+  const hasNamedOwner=(graph.edges.get(id)??[]).some(item=>item.direction==='owner'&&!!item.roleName);
+  const referenceVisit=hasNamedOwner&&edge?.direction==='reference',visitKey=referenceVisit?id+'\u0000reference':id;
+  const cycle=path.has(id),visited=!!seen?.has(visitKey),previouslySeen=visited||!!seen?.has(referenceVisit?id:id+'\u0000reference'),row=document.createElement('summary');
   row.className='structure-node-row';row.append(icon(edge?.direction==='reference'||edge?.direction==='owner'?Link:Box,edge?labels[edge.direction]:'構造'));markReview(row,review);
   const selectedStructure:StructureSelection={kind:'structure',conceptId:id,...(edge?{fromId:edge.from,relationId:edge.relation.id}:{})};row.dataset.structureSelection=keyOf(selectedStructure);
   row.addEventListener('click',()=>select(selectedStructure,row));
@@ -231,7 +243,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
    else{if(edge.roleName)entry(edge.roleName,undefined);fields.forEach((field,index)=>{if(index||edge.roleName)text(row,'span','／');entry(field?.name?.trim()||'名前未定義',field);});}
   }else{ text(row,'strong',typeName);if(logicalName&&logicalName!==typeName)text(row,'span',logicalName,'structure-type'); }
   if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
-  if(cycle||visited)text(row,'span','既出','structure-seen');
+  if(cycle||previouslySeen)text(row,'span','既出','structure-seen');
   const details=document.createElement('details');details.className='structure-node';details.append(row);item.append(details);
   let built=false;const nextPath=new Set(path);nextPath.add(id);
   const build=(expand?:Set<string>)=>{if(built)return;built=true;
@@ -239,12 +251,12 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
    for(const info of concept.information){if(graph.relationKeys.has(info.id))continue;const field=document.createElement('li'),mapping=graph.mappings.get(info.id),button=document.createElement('button'),selection:StructureSelection={kind:'attribute',conceptId:id,informationId:info.id},fieldReview=marks.field(info.id,id);field.className='structure-field';field.dataset.entryKind='attribute';field.dataset.informationId=info.id;field.dataset.searchText=[info.name,info.id,mapping?.physicalName??''].join(' ').toLocaleLowerCase();if(fieldReview)field.dataset.compatibility=fieldReview.kind;button.type='button';button.className='structure-field-button';button.dataset.structureSelection=keyOf(selection);button.append(icon(FileText,'属性'));markReview(button,fieldReview);text(button,'span',info.name);text(button,'span','型：'+typeLabel(mapping),'structure-type');button.onclick=()=>select(selection,button);field.append(button);children.append(field);}
    // Reverse ownership is opt-in display metadata on an existing relation;
    // it does not invent a second model relationship.
-   for(const direction of [...visibleDirections,'owner'] as Direction[]){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction&&(direction!=='owner'||!!rel.roleName));if(!outgoing.length)continue;
+   for(const direction of [...visibleDirections,'owner'] as Direction[]){const outgoing=(graph.edges.get(id)??[]).filter(rel=>rel.direction===direction&&(direction!=='owner'||!!rel.roleName&&!(edge?.direction==='owned'&&edge.relation.id===rel.relation.id&&edge.from===rel.to)));if(!outgoing.length)continue;
     for(const relation of outgoing)children.append(buildNode(relation.to,nextPath,relation,expand));
    }if(tree.contains(details)){restoreSelection();filter();}
   };
   details.addEventListener('toggle',()=>{if(details.open)build();});
-  if(seen&&!visited&&!cycle){seen.add(id);details.open=true;build(seen);}
+  if(seen&&!visited&&!cycle){seen.add(visitKey);details.open=true;build(seen);}
   return item;
  };
  const render=(expand:boolean)=>{const ul=document.createElement('ul');ul.className='structure-root';const seen=expand?new Set<string>():undefined;for(const id of roots)ul.append(buildNode(id,new Set(),undefined,seen));tree.replaceChildren(ul);if(!expand){const first=ul.querySelector<HTMLDetailsElement>('.structure-node')!;first.open=true;first.dispatchEvent(new Event('toggle'));}restoreSelection();};
