@@ -65,6 +65,10 @@ try{
  assert(visible.length>0,'search finds owner navigation through a reference even if the owned item was visited first');
  assert(tree.querySelectorAll('.structure-item').length<model.relations.length+model.concepts.length+25,'cycles and repeated contexts remain bounded');
  render(model,'n-activity');summary(tree.querySelector('.structure-root > li')).click();assert(lines('含む構造').some(line=>line.startsWith('要確認：順序制約')),'a review marker is not lost in the drawer summary');
+ render(model,'n-package');summary(tree.querySelector('.structure-root > li')).click();const checkbox=tree.querySelector('.structure-compatibility-filter input');
+ assert(!lines('含む構造').some(line=>line.includes('外部業務設計書の目録')),'legacy ownership is hidden with the default filter');
+ checkbox.checked=false;checkbox.dispatchEvent(new w.Event('change',{bubbles:true}));assert(lines('含む構造').some(line=>line.startsWith('互換・移行用：外部業務設計書の目録')),'turning the filter off also updates the drawer');
+ checkbox.checked=true;checkbox.dispatchEvent(new w.Event('change',{bubbles:true}));assert(!lines('含む構造').some(line=>line.includes('外部業務設計書の目録')),'turning the filter back on hides the drawer entry');
  const without=structuredClone(model);delete without.meta.reverseRelationNames;render(without,'n-information');assert(!tree.querySelector('[data-relation-direction="owner"]'),'do not invent an unannotated inverse link');
  assert.equal(JSON.stringify(model),before);verify();covered.push('STRUCTURE-OWNER-CONTEXT-005');coverage(covered);
 }finally{w.close();}
