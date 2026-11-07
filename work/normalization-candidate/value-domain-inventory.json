@@ -1,0 +1,3117 @@
+[
+  {
+    "conceptId": "n-bd",
+    "concept": "業務設計書（BusinessDesign）",
+    "informationId": "n-bd-field-1",
+    "item": "識別子",
+    "physicalName": "businessDesigns.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-bd",
+    "concept": "業務設計書（BusinessDesign）",
+    "informationId": "n-bd-field-2",
+    "item": "名前",
+    "physicalName": "businessDesigns.title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-bd",
+    "concept": "業務設計書（BusinessDesign）",
+    "informationId": "n-bd-field-3",
+    "item": "改訂",
+    "physicalName": "businessDesigns.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-bd",
+    "concept": "業務設計書（BusinessDesign）",
+    "informationId": "cf-d960c2305c621c",
+    "item": "文書の版",
+    "physicalName": "businessDesigns.schemaVersion",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-bd",
+    "concept": "業務設計書（BusinessDesign）",
+    "informationId": "cf-a2fb46ff8c8c15",
+    "item": "文書の種類",
+    "physicalName": "businessDesigns.kind",
+    "category": "fixed",
+    "reason": "この文書または形式を識別する固定値。",
+    "basis": "BD.kind"
+  },
+  {
+    "conceptId": "n-bd",
+    "concept": "業務設計書（BusinessDesign）",
+    "informationId": "cf-9b0df810c60eb0",
+    "item": "前書き",
+    "physicalName": "businessDesigns.preface",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-bd",
+    "concept": "業務設計書（BusinessDesign）",
+    "informationId": "cf-32d24ca3a0642d",
+    "item": "対象範囲の説明",
+    "physicalName": "businessDesigns.scope",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-who",
+    "concept": "主体（Who）",
+    "informationId": "n-who-field-1",
+    "item": "識別子",
+    "physicalName": "actors.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-who",
+    "concept": "主体（Who）",
+    "informationId": "n-who-field-2",
+    "item": "主体の種類",
+    "physicalName": "actors.kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].who.kind"
+  },
+  {
+    "conceptId": "n-who",
+    "concept": "主体（Who）",
+    "informationId": "n-who-field-3",
+    "item": "名前",
+    "physicalName": "actors.name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-who",
+    "concept": "主体（Who）",
+    "informationId": "n-who-field-4",
+    "item": "表示色（Roleのみ）",
+    "physicalName": "actors.color",
+    "category": "presentation",
+    "reason": "画面表示の情報。業務上の値域として表示用パレットを固定しない。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "n-activity-field-1",
+    "item": "識別子",
+    "physicalName": "activities.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "n-activity-field-2",
+    "item": "名前",
+    "physicalName": "activities.name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "n-activity-field-3",
+    "item": "実行主体（未決可）",
+    "physicalName": "activities.whoId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "n-activity-field-4",
+    "item": "システム化対象",
+    "physicalName": "activities.scope",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "n-activity-field-5",
+    "item": "目的",
+    "physicalName": "activities.why",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "n-activity-field-6",
+    "item": "開始条件",
+    "physicalName": "activities.when",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "cf-f7851e4656568f",
+    "item": "場所",
+    "physicalName": "activities.where",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "cf-79e1f59247290a",
+    "item": "課題",
+    "physicalName": "activities.problem",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "cf-423df2519d7898",
+    "item": "課題の程度",
+    "physicalName": "activities.painLevel",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].painLevel"
+  },
+  {
+    "conceptId": "n-activity",
+    "concept": "業務（Activity）",
+    "informationId": "cf-bed444b46e4cc9",
+    "item": "課題の確認状態",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "n-object",
+    "concept": "対象（Object）",
+    "informationId": "n-object-field-1",
+    "item": "識別子",
+    "physicalName": "objects.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-object",
+    "concept": "対象（Object）",
+    "informationId": "n-object-field-2",
+    "item": "名前",
+    "physicalName": "objects.name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-object",
+    "concept": "対象（Object）",
+    "informationId": "n-object-field-3",
+    "item": "システム化対象",
+    "physicalName": "objects.scope",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "n-object",
+    "concept": "対象（Object）",
+    "informationId": "cf-adc18421aa701a",
+    "item": "アイコン",
+    "physicalName": "objects.icon",
+    "category": "presentation",
+    "reason": "画面表示の情報。業務上の値域として表示用パレットを固定しない。"
+  },
+  {
+    "conceptId": "n-information",
+    "concept": "情報項目（InformationItem）",
+    "informationId": "n-information-field-1",
+    "item": "識別子",
+    "physicalName": "information.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-information",
+    "concept": "情報項目（InformationItem）",
+    "informationId": "n-information-field-2",
+    "item": "項目名",
+    "physicalName": "information.name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-information",
+    "concept": "情報項目（InformationItem）",
+    "informationId": "n-information-field-3",
+    "item": "所属する対象",
+    "physicalName": "information.objectId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-information",
+    "concept": "情報項目（InformationItem）",
+    "informationId": "cf-c5477c2457429c",
+    "item": "説明",
+    "physicalName": "information.description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-data",
+    "concept": "情報項目グループ（InformationGroup）",
+    "informationId": "n-data-field-1",
+    "item": "識別子",
+    "physicalName": "data.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-data",
+    "concept": "情報項目グループ（InformationGroup）",
+    "informationId": "n-data-field-2",
+    "item": "グループ名",
+    "physicalName": "data.name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-dataitem",
+    "concept": "グループ構成項目（InformationGroupMember）",
+    "informationId": "n-dataitem-field-1",
+    "item": "情報項目グループ",
+    "physicalName": "dataItems.dataId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-dataitem",
+    "concept": "グループ構成項目（InformationGroupMember）",
+    "informationId": "n-dataitem-field-2",
+    "item": "情報項目",
+    "physicalName": "dataItems.informationId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-dataitem",
+    "concept": "グループ構成項目（InformationGroupMember）",
+    "informationId": "n-dataitem-field-3",
+    "item": "含める条件",
+    "physicalName": "dataItems.condition",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-dataitem",
+    "concept": "グループ構成項目（InformationGroupMember）",
+    "informationId": "cf-7e9fb3e051ad15",
+    "item": "条件の確定状態",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "n-step-field-1",
+    "item": "識別子",
+    "physicalName": "steps.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "n-step-field-3",
+    "item": "操作",
+    "physicalName": "steps.action",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "n-step-field-4",
+    "item": "方法",
+    "physicalName": "steps.method",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "n-step-field-5",
+    "item": "やり取りの種類",
+    "physicalName": "steps.exchangeKind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].procedure.steps[].exchange.kind"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "cf-db0d007e8ba4d3",
+    "item": "旧手順の記述",
+    "physicalName": "steps.legacyText",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "legacy"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "cf-7c34239a2778a4",
+    "item": "操作の効果",
+    "physicalName": "steps.effect",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].procedure.steps[].effect"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "cf-ece66e4839b029",
+    "item": "対象項目の確定状態",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "n-step",
+    "concept": "手順行（Step）",
+    "informationId": "cf-d17f8349434605",
+    "item": "前提手順の確定状態",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "n-exchange",
+    "concept": "受渡し（StepInteraction）",
+    "informationId": "n-exchange-field-1",
+    "item": "手順行",
+    "physicalName": "stepInteractions.stepId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-exchange",
+    "concept": "受渡し（StepInteraction）",
+    "informationId": "n-exchange-field-2",
+    "item": "対象",
+    "physicalName": "stepInteractions.objectId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-exchange",
+    "concept": "受渡し（StepInteraction）",
+    "informationId": "n-exchange-field-3",
+    "item": "入出力の向き",
+    "physicalName": "stepInteractions.direction",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].procedure.steps[].exchange.direction"
+  },
+  {
+    "conceptId": "n-exchange",
+    "concept": "受渡し（StepInteraction）",
+    "informationId": "n-exchange-field-4",
+    "item": "要求／応答",
+    "physicalName": "stepInteractions.phase",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].procedure.steps[].exchange.phase"
+  },
+  {
+    "conceptId": "n-exchange",
+    "concept": "受渡し（StepInteraction）",
+    "informationId": "n-exchange-field-5",
+    "item": "入出力の関係",
+    "physicalName": "stepInteractions.relationId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-exchange",
+    "concept": "受渡し（StepInteraction）",
+    "informationId": "n-exchange-field-6",
+    "item": "対応する手順",
+    "physicalName": "stepInteractions.pairedStepId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-exchange",
+    "concept": "受渡し（StepInteraction）",
+    "informationId": "cf-4d9f01f0e8739f",
+    "item": "受渡し項目の確定状態",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "n-party",
+    "concept": "手順の当事者（StepParty）",
+    "informationId": "n-party-field-1",
+    "item": "手順行",
+    "physicalName": "stepParties.stepId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-party",
+    "concept": "手順の当事者（StepParty）",
+    "informationId": "n-party-field-2",
+    "item": "From／To",
+    "physicalName": "stepParties.side",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "手順の当事者のFrom／To"
+  },
+  {
+    "conceptId": "n-party",
+    "concept": "手順の当事者（StepParty）",
+    "informationId": "n-party-field-3",
+    "item": "当事者の種類",
+    "physicalName": "stepParties.kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].procedure.steps[].parties.from.kind"
+  },
+  {
+    "conceptId": "n-party",
+    "concept": "手順の当事者（StepParty）",
+    "informationId": "n-party-field-4",
+    "item": "対象",
+    "physicalName": "stepParties.objectId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-dependency",
+    "concept": "手順の前提（StepDependency）",
+    "informationId": "n-dependency-field-1",
+    "item": "対象手順",
+    "physicalName": "dependencies.stepId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-dependency",
+    "concept": "手順の前提（StepDependency）",
+    "informationId": "n-dependency-field-2",
+    "item": "前提の手順",
+    "physicalName": "dependencies.prerequisiteStepId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-dependency",
+    "concept": "手順の前提（StepDependency）",
+    "informationId": "n-dependency-field-3",
+    "item": "条件となる判定行",
+    "physicalName": "dependencies.whenDecisionRowId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-order",
+    "concept": "順序制約（StepOrderRule）",
+    "informationId": "n-order-field-1",
+    "item": "対象業務",
+    "physicalName": "orderRules.activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-order",
+    "concept": "順序制約（StepOrderRule）",
+    "informationId": "n-order-field-2",
+    "item": "規則の種類",
+    "physicalName": "orderRules.kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].procedure.orderRules[].kind"
+  },
+  {
+    "conceptId": "n-order",
+    "concept": "順序制約（StepOrderRule）",
+    "informationId": "n-order-field-3",
+    "item": "前の手順",
+    "physicalName": "orderRules.beforeId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-order",
+    "concept": "順序制約（StepOrderRule）",
+    "informationId": "n-order-field-4",
+    "item": "後の手順",
+    "physicalName": "orderRules.afterId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-result",
+    "concept": "業務結果（ActivityResult）",
+    "informationId": "n-result-field-1",
+    "item": "識別子",
+    "physicalName": "results.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-result",
+    "concept": "業務結果（ActivityResult）",
+    "informationId": "n-result-field-2",
+    "item": "対象業務",
+    "physicalName": "results.activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-result",
+    "concept": "業務結果（ActivityResult）",
+    "informationId": "n-result-field-3",
+    "item": "成立した結果",
+    "physicalName": "results.text",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-decision",
+    "concept": "判定表（DecisionTable）",
+    "informationId": "n-decision-field-1",
+    "item": "識別子",
+    "physicalName": "decisions.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-decision",
+    "concept": "判定表（DecisionTable）",
+    "informationId": "n-decision-field-2",
+    "item": "対象業務",
+    "physicalName": "decisions.activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-decision",
+    "concept": "判定表（DecisionTable）",
+    "informationId": "n-decision-field-3",
+    "item": "表題",
+    "physicalName": "decisions.title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-decision",
+    "concept": "判定表（DecisionTable）",
+    "informationId": "n-decision-field-4",
+    "item": "種類",
+    "physicalName": "decisions.kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].decisions[].kind"
+  },
+  {
+    "conceptId": "n-decision",
+    "concept": "判定表（DecisionTable）",
+    "informationId": "n-decision-field-5",
+    "item": "適用する判定行",
+    "physicalName": "decisions.appliesWhenRowId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-decision",
+    "concept": "判定表（DecisionTable）",
+    "informationId": "cf-e53cb54e69e740",
+    "item": "注記",
+    "physicalName": "decisions.note",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-axis",
+    "concept": "判定軸（DecisionAxis）",
+    "informationId": "n-axis-field-1",
+    "item": "識別子",
+    "physicalName": "axes.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-axis",
+    "concept": "判定軸（DecisionAxis）",
+    "informationId": "n-axis-field-2",
+    "item": "判定表",
+    "physicalName": "axes.decisionId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-axis",
+    "concept": "判定軸（DecisionAxis）",
+    "informationId": "n-axis-field-3",
+    "item": "判定軸の名前",
+    "physicalName": "axes.name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-axis",
+    "concept": "判定軸（DecisionAxis）",
+    "informationId": "cf-cb0ff580fce019",
+    "item": "単位",
+    "physicalName": "axes.unit",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-axis",
+    "concept": "判定軸（DecisionAxis）",
+    "informationId": "cf-9d0f2986c601ef",
+    "item": "真の場合の表示",
+    "physicalName": "axes.trueLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-axis",
+    "concept": "判定軸（DecisionAxis）",
+    "informationId": "cf-3ded4095bb9185",
+    "item": "偽の場合の表示",
+    "physicalName": "axes.falseLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-row",
+    "concept": "判定行（DecisionRow）",
+    "informationId": "n-row-field-1",
+    "item": "識別子",
+    "physicalName": "rows.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-row",
+    "concept": "判定行（DecisionRow）",
+    "informationId": "n-row-field-2",
+    "item": "判定表",
+    "physicalName": "rows.decisionId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-row",
+    "concept": "判定行（DecisionRow）",
+    "informationId": "n-row-field-3",
+    "item": "結果の種類",
+    "physicalName": "rows.resultKind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].decisions[].rows[].result.kind"
+  },
+  {
+    "conceptId": "n-row",
+    "concept": "判定行（DecisionRow）",
+    "informationId": "n-row-field-4",
+    "item": "結果",
+    "physicalName": "rows.resultText",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-condition",
+    "concept": "判定条件セル（DecisionCondition）",
+    "informationId": "n-condition-field-1",
+    "item": "判定行",
+    "physicalName": "conditions.rowId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-condition",
+    "concept": "判定条件セル（DecisionCondition）",
+    "informationId": "n-condition-field-2",
+    "item": "判定軸",
+    "physicalName": "conditions.axisId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-condition",
+    "concept": "判定条件セル（DecisionCondition）",
+    "informationId": "n-condition-field-3",
+    "item": "条件の種類",
+    "physicalName": "conditions.kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].decisions[].rows[].conditions[].kind"
+  },
+  {
+    "conceptId": "n-condition",
+    "concept": "判定条件セル（DecisionCondition）",
+    "informationId": "n-condition-field-4",
+    "item": "比較",
+    "physicalName": "conditions.operator",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].decisions[].rows[].conditions[].operator"
+  },
+  {
+    "conceptId": "n-condition",
+    "concept": "判定条件セル（DecisionCondition）",
+    "informationId": "n-condition-field-5",
+    "item": "値",
+    "physicalName": "conditions.value",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "n-rowcheck",
+    "concept": "判定行とチェックの対応（DecisionRowCheck）",
+    "informationId": "n-rowcheck-field-1",
+    "item": "判定行",
+    "physicalName": "rowChecks.rowId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-rowcheck",
+    "concept": "判定行とチェックの対応（DecisionRowCheck）",
+    "informationId": "n-rowcheck-field-2",
+    "item": "チェック項目",
+    "physicalName": "rowChecks.checkId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-rowcheck",
+    "concept": "判定行とチェックの対応（DecisionRowCheck）",
+    "informationId": "n-rowcheck-field-3",
+    "item": "対応範囲",
+    "physicalName": "rowChecks.coverage",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.activities[].decisions[].rows[].checkRefs[].coverage"
+  },
+  {
+    "conceptId": "n-exception",
+    "concept": "業務の例外（ActivityException）",
+    "informationId": "n-exception-field-1",
+    "item": "識別子",
+    "physicalName": "exceptions.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-exception",
+    "concept": "業務の例外（ActivityException）",
+    "informationId": "n-exception-field-2",
+    "item": "対象業務",
+    "physicalName": "exceptions.activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-exception",
+    "concept": "業務の例外（ActivityException）",
+    "informationId": "n-exception-field-3",
+    "item": "名前",
+    "physicalName": "exceptions.name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-exception",
+    "concept": "業務の例外（ActivityException）",
+    "informationId": "n-exception-field-4",
+    "item": "説明",
+    "physicalName": "exceptions.description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-exception",
+    "concept": "業務の例外（ActivityException）",
+    "informationId": "cf-b1693377ad86be",
+    "item": "発生箇所",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "n-exception",
+    "concept": "業務の例外（ActivityException）",
+    "informationId": "cf-72bb8e0364abb4",
+    "item": "発生条件",
+    "physicalName": "",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-exception",
+    "concept": "業務の例外（ActivityException）",
+    "informationId": "cf-fc923775ebb84a",
+    "item": "例外時の結果",
+    "physicalName": "",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-continuity",
+    "concept": "中断・再開の扱い（InterruptionHandling）",
+    "informationId": "n-continuity-field-1",
+    "item": "対象例外",
+    "physicalName": "continuities.exceptionId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-continuity",
+    "concept": "中断・再開の扱い（InterruptionHandling）",
+    "informationId": "n-continuity-field-2",
+    "item": "中断条件",
+    "physicalName": "continuities.trigger",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "legacy"
+  },
+  {
+    "conceptId": "n-continuity",
+    "concept": "中断・再開の扱い（InterruptionHandling）",
+    "informationId": "n-continuity-field-3",
+    "item": "中断後の扱い",
+    "physicalName": "continuities.outcome",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.exceptions[].continuity.outcome"
+  },
+  {
+    "conceptId": "n-continuity",
+    "concept": "中断・再開の扱い（InterruptionHandling）",
+    "informationId": "n-continuity-field-4",
+    "item": "再開条件",
+    "physicalName": "continuities.resumeCondition",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-continuity",
+    "concept": "中断・再開の扱い（InterruptionHandling）",
+    "informationId": "n-continuity-field-5",
+    "item": "再開時の操作",
+    "physicalName": "continuities.resumeAction",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-continuity",
+    "concept": "中断・再開の扱い（InterruptionHandling）",
+    "informationId": "cf-1443c584c8cbc3",
+    "item": "中断時の扱い",
+    "physicalName": "continuities.onInterrupt",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "legacy"
+  },
+  {
+    "conceptId": "n-continuity",
+    "concept": "中断・再開の扱い（InterruptionHandling）",
+    "informationId": "cf-fe7d8ed39bf915",
+    "item": "保持項目の確定状態",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "n-relation",
+    "concept": "業務・対象の関係（BusinessRelation）",
+    "informationId": "n-relation-field-1",
+    "item": "識別子",
+    "physicalName": "relations.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-relation",
+    "concept": "業務・対象の関係（BusinessRelation）",
+    "informationId": "n-relation-field-2",
+    "item": "関係の種類",
+    "physicalName": "relations.kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.relations[].kind"
+  },
+  {
+    "conceptId": "n-relation",
+    "concept": "業務・対象の関係（BusinessRelation）",
+    "informationId": "n-relation-field-3",
+    "item": "出発点",
+    "physicalName": "relations.fromId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-relation",
+    "concept": "業務・対象の関係（BusinessRelation）",
+    "informationId": "n-relation-field-4",
+    "item": "到着点",
+    "physicalName": "relations.toId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-relation",
+    "concept": "業務・対象の関係（BusinessRelation）",
+    "informationId": "cf-3b6b631818c9b6",
+    "item": "関係の表示名",
+    "physicalName": "relations.label",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "n-finding-field-1",
+    "item": "識別子",
+    "physicalName": "findings.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "n-finding-field-2",
+    "item": "確認状態",
+    "physicalName": "findings.status",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.findings[].status"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "n-finding-field-3",
+    "item": "対象範囲",
+    "physicalName": "findings.scope",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.findings[].scope"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "n-finding-field-4",
+    "item": "概要",
+    "physicalName": "findings.summary",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "cf-3cb2fc6fcef42b",
+    "item": "元の識別子",
+    "physicalName": "findings.sourceId",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "cf-355de6f886c0ad",
+    "item": "確認事項の種類",
+    "physicalName": "findings.kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "BD.findings[].kind"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "cf-1b9826d21acdc9",
+    "item": "内容",
+    "physicalName": "findings.content",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-finding",
+    "concept": "設計上の確認事項（DesignFinding）",
+    "informationId": "cf-35bce68582d0a4",
+    "item": "未決の対象",
+    "physicalName": "findings.unresolvedTargets",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-external",
+    "concept": "外部業務設計書の目録項目",
+    "informationId": "n-external-field-1",
+    "item": "識別子",
+    "physicalName": "source.externalDocuments.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-external",
+    "concept": "外部業務設計書の目録項目",
+    "informationId": "n-external-field-2",
+    "item": "改訂",
+    "physicalName": "source.externalDocuments.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-external",
+    "concept": "外部業務設計書の目録項目",
+    "informationId": "cf-5246ed43cf82fc",
+    "item": "種類",
+    "physicalName": "Package.externalDocuments[].kind",
+    "category": "fixed",
+    "reason": "この文書または形式を識別する固定値。",
+    "basis": "Package.externalDocuments[].kind"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "n-checkdoc-field-1",
+    "item": "識別子",
+    "physicalName": "retained Check document.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "n-checkdoc-field-2",
+    "item": "改訂",
+    "physicalName": "retained Check document.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "n-checkdoc-field-3",
+    "item": "参照元",
+    "physicalName": "retained Check document.basedOn",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "cf-d479ca1faa5493",
+    "item": "文書の版",
+    "physicalName": "Check.schemaVersion",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "cf-7002a402a9b4a2",
+    "item": "種類",
+    "physicalName": "Check.kind",
+    "category": "fixed",
+    "reason": "この文書または形式を識別する固定値。",
+    "basis": "Check.kind"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "cf-460e5fb604bcb6",
+    "item": "名前",
+    "physicalName": "Check.title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "cf-d7b8496c2d645a",
+    "item": "原典の改訂",
+    "physicalName": "Check.basedOn.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-checkdoc",
+    "concept": "チェック文書（CheckDocument）",
+    "informationId": "cf-47944f407a4814",
+    "item": "原典の確認状態",
+    "physicalName": "Check.basedOn.verification",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-check",
+    "concept": "チェック項目（CheckItem）",
+    "informationId": "n-check-field-1",
+    "item": "識別子",
+    "physicalName": "retained Check.items.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-check",
+    "concept": "チェック項目（CheckItem）",
+    "informationId": "n-check-field-2",
+    "item": "表示番号",
+    "physicalName": "retained Check.items.checkId",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-check",
+    "concept": "チェック項目（CheckItem）",
+    "informationId": "n-check-field-3",
+    "item": "確認状態",
+    "physicalName": "retained Check.items.reviewState",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "needs-review"
+  },
+  {
+    "conceptId": "n-check",
+    "concept": "チェック項目（CheckItem）",
+    "informationId": "cf-2af7e5abeb81ef",
+    "item": "名前",
+    "physicalName": "Check.items[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-check",
+    "concept": "チェック項目（CheckItem）",
+    "informationId": "cf-c9266f8766647e",
+    "item": "概要",
+    "physicalName": "Check.items[].detailSummary",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "needs-review"
+  },
+  {
+    "conceptId": "n-check",
+    "concept": "チェック項目（CheckItem）",
+    "informationId": "cf-c9b1db9948abbf",
+    "item": "所属する節",
+    "physicalName": "Check.items[].sectionId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-package",
+    "concept": "文書パッケージ（DocumentPackage）",
+    "informationId": "cf-fa56ab6bd9ad29",
+    "item": "形式",
+    "physicalName": "format",
+    "category": "fixed",
+    "reason": "この文書または形式を識別する固定値。",
+    "basis": "Package.format"
+  },
+  {
+    "conceptId": "n-package",
+    "concept": "文書パッケージ（DocumentPackage）",
+    "informationId": "cf-cb2cab3103539a",
+    "item": "形式の版",
+    "physicalName": "formatVersion",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-package",
+    "concept": "文書パッケージ（DocumentPackage）",
+    "informationId": "cf-56a9d80cc8c10f",
+    "item": "改訂",
+    "physicalName": "revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-package",
+    "concept": "文書パッケージ（DocumentPackage）",
+    "informationId": "cf-3907e6aa0081d2",
+    "item": "文書",
+    "physicalName": "documents[]",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-package",
+    "concept": "文書パッケージ（DocumentPackage）",
+    "informationId": "cf-2afe02557bfa91",
+    "item": "診断",
+    "physicalName": "Package.diagnostics",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-1591c4b77df1b7",
+    "item": "識別子",
+    "physicalName": "State.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-46c7022c8c0c56",
+    "item": "文書の版",
+    "physicalName": "State.schemaVersion",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-d45319b8ff1cdd",
+    "item": "種類",
+    "physicalName": "State.kind",
+    "category": "fixed",
+    "reason": "この文書または形式を識別する固定値。",
+    "basis": "State.kind"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-8f9f0382a64e3c",
+    "item": "改訂",
+    "physicalName": "State.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-79972e22c66be7",
+    "item": "名前",
+    "physicalName": "State.title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-7471e29c30cd89",
+    "item": "原典の改訂",
+    "physicalName": "State.basedOn.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-99898735b216fb",
+    "item": "原典の確認状態",
+    "physicalName": "State.basedOn.verification",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-0c6928ded152e8",
+    "item": "対象",
+    "physicalName": "State.objectId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-cb26e3ccac9a71",
+    "item": "開始状態",
+    "physicalName": "State.start",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-b63c33876057e6",
+    "item": "終了状態",
+    "physicalName": "State.terminal",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-0d219db14d46ce",
+    "item": "定義の網羅状態",
+    "physicalName": "State.completeness",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-state-doc",
+    "concept": "状態遷移文書（StateTransitionDocument）",
+    "informationId": "cf-7beeaac9a2b451",
+    "item": "原典",
+    "physicalName": "State.source",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-8dce497869ab6c",
+    "item": "識別子",
+    "physicalName": "Concept.id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-65c7c1e771c6fb",
+    "item": "文書の版",
+    "physicalName": "Concept.schemaVersion",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-3baed98548504d",
+    "item": "種類",
+    "physicalName": "Concept.kind",
+    "category": "fixed",
+    "reason": "この文書または形式を識別する固定値。",
+    "basis": "Concept.kind"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-710c131201eaed",
+    "item": "改訂",
+    "physicalName": "Concept.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-013cc0b1c39ea6",
+    "item": "原典の改訂",
+    "physicalName": "Concept.basedOn.revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-f0cc7fdbbd6852",
+    "item": "原典の確認状態",
+    "physicalName": "Concept.basedOn.verification",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-6d5369a568adaa",
+    "item": "効果",
+    "physicalName": "Concept.benefits",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-21a3e76ff23010",
+    "item": "考慮事項",
+    "physicalName": "Concept.considerations",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-06162a37975af9",
+    "item": "確認観点",
+    "physicalName": "Concept.reviewPoints",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-7595370fd7be76",
+    "item": "補足情報",
+    "physicalName": "Concept.meta",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-b4221e246a23a0",
+    "item": "業務別の表示",
+    "physicalName": "Concept.presentation.activityViews",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-ce0494dcadcd31",
+    "item": "作成業務",
+    "physicalName": "Concept.presentation.creatorActivityIds",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-79fd909da0c750",
+    "item": "サンプルの説明",
+    "physicalName": "Concept.presentation.sampleCaption",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-ebf08005cd2b97",
+    "item": "サブシステム別表示を定義済み",
+    "physicalName": "Concept.presentation.subsystemViews",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "n-concept-doc",
+    "concept": "概念モデル文書（ConceptModelDocument）",
+    "informationId": "cf-489ca19c33a72b",
+    "item": "全体のサブシステム別表示に含む受渡し",
+    "physicalName": "Concept.presentation.subsystemViews.handoffIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-f72e806aab63f8",
+    "concept": "原典情報（SourceRecord）",
+    "informationId": "cf-051ba4217cc539",
+    "item": "参照する文書",
+    "physicalName": "Package.sources[].documentId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-f72e806aab63f8",
+    "concept": "原典情報（SourceRecord）",
+    "informationId": "cf-8f72903f661259",
+    "item": "改訂",
+    "physicalName": "Package.sources[].revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "c-f72e806aab63f8",
+    "concept": "原典情報（SourceRecord）",
+    "informationId": "cf-b911ffd2749455",
+    "item": "原典のハッシュ",
+    "physicalName": "Package.sources[].sha256",
+    "category": "hash",
+    "reason": "原典を照合するSHA-256の値。"
+  },
+  {
+    "conceptId": "c-f72e806aab63f8",
+    "concept": "原典情報（SourceRecord）",
+    "informationId": "cf-1b534ed06c44c9",
+    "item": "リンク先",
+    "physicalName": "Package.sources[].uri",
+    "category": "uri",
+    "reason": "参照先のURI。"
+  },
+  {
+    "conceptId": "c-f6845a968ec2f3",
+    "concept": "外部業務の目録項目（ExternalActivity）",
+    "informationId": "cf-c60748c7739ecb",
+    "item": "識別子",
+    "physicalName": "Package.externalDocuments[].activities[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-f6845a968ec2f3",
+    "concept": "外部業務の目録項目（ExternalActivity）",
+    "informationId": "cf-d31f49c46d6346",
+    "item": "名前",
+    "physicalName": "Package.externalDocuments[].activities[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-241397ef723b2b",
+    "concept": "文章・参照・リンクの要素（RichTextPart）",
+    "informationId": "cf-6f159c6e766495",
+    "item": "種類",
+    "physicalName": "Check.intro[].kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "Check.intro[].kind"
+  },
+  {
+    "conceptId": "c-241397ef723b2b",
+    "concept": "文章・参照・リンクの要素（RichTextPart）",
+    "informationId": "cf-4deeafa4495eb6",
+    "item": "値（種類による）",
+    "physicalName": "Check.intro[].value",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-241397ef723b2b",
+    "concept": "文章・参照・リンクの要素（RichTextPart）",
+    "informationId": "cf-448e853c63ca63",
+    "item": "参照先（種類による）",
+    "physicalName": "Check.intro[].targetId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-241397ef723b2b",
+    "concept": "文章・参照・リンクの要素（RichTextPart）",
+    "informationId": "cf-56f97e9b7600ee",
+    "item": "表示名（種類による）",
+    "physicalName": "Check.intro[].label",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-241397ef723b2b",
+    "concept": "文章・参照・リンクの要素（RichTextPart）",
+    "informationId": "cf-c6d2e7337685ae",
+    "item": "リンク先（種類による）",
+    "physicalName": "Check.intro[].uri",
+    "category": "uri",
+    "reason": "参照先のURI。"
+  },
+  {
+    "conceptId": "c-9a087ebdf10360",
+    "concept": "業務とチェックの索引（CheckActivityIndex）",
+    "informationId": "cf-558d1ceac82fda",
+    "item": "業務",
+    "physicalName": "Check.index[].activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-9a087ebdf10360",
+    "concept": "業務とチェックの索引（CheckActivityIndex）",
+    "informationId": "cf-cf897c96883299",
+    "item": "目的",
+    "physicalName": "Check.index[].purpose",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-9a087ebdf10360",
+    "concept": "業務とチェックの索引（CheckActivityIndex）",
+    "informationId": "cf-4bf003cc4cfb12",
+    "item": "業務間のつながり",
+    "physicalName": "Check.index[].connections",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-9a087ebdf10360",
+    "concept": "業務とチェックの索引（CheckActivityIndex）",
+    "informationId": "cf-ebbba991e05cb9",
+    "item": "チェック項目",
+    "physicalName": "Check.index[].checkIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-ebdc5848ce938e",
+    "concept": "チェックの節（CheckSection）",
+    "informationId": "cf-6acc343166294c",
+    "item": "識別子",
+    "physicalName": "Check.sections[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-ebdc5848ce938e",
+    "concept": "チェックの節（CheckSection）",
+    "informationId": "cf-68a6486ee86bf1",
+    "item": "業務",
+    "physicalName": "Check.sections[].activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-ebdc5848ce938e",
+    "concept": "チェックの節（CheckSection）",
+    "informationId": "cf-9045914e8197f9",
+    "item": "名前",
+    "physicalName": "Check.sections[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-d5e58e7c97899e",
+    "concept": "保証（CheckGuarantee）",
+    "informationId": "cf-c404e79971073d",
+    "item": "識別子",
+    "physicalName": "Check.guarantees[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-d5e58e7c97899e",
+    "concept": "保証（CheckGuarantee）",
+    "informationId": "cf-57a0a7286f565e",
+    "item": "所属する節",
+    "physicalName": "Check.guarantees[].sectionId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-d5e58e7c97899e",
+    "concept": "保証（CheckGuarantee）",
+    "informationId": "cf-eb3975a7bf5a82",
+    "item": "名前",
+    "physicalName": "Check.guarantees[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-2137820ffea042",
+    "concept": "保証の記述（GuaranteeBlock）",
+    "informationId": "cf-e3a3e8b9cc7f36",
+    "item": "種類",
+    "physicalName": "Check.guarantees[].blocks[].kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "Check.guarantees[].blocks[].kind"
+  },
+  {
+    "conceptId": "c-2137820ffea042",
+    "concept": "保証の記述（GuaranteeBlock）",
+    "informationId": "cf-8b153b4b9bac15",
+    "item": "サンプル（種類による）",
+    "physicalName": "Check.guarantees[].blocks[].exampleId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-68122134eabe2b",
+    "concept": "チェックのサンプル（CheckExample）",
+    "informationId": "cf-3f7785142487ff",
+    "item": "識別子",
+    "physicalName": "Check.examples[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-68122134eabe2b",
+    "concept": "チェックのサンプル（CheckExample）",
+    "informationId": "cf-683948d485e46d",
+    "item": "対応する保証",
+    "physicalName": "Check.examples[].guaranteeId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-68122134eabe2b",
+    "concept": "チェックのサンプル（CheckExample）",
+    "informationId": "cf-40c3d844066dc2",
+    "item": "列",
+    "physicalName": "Check.examples[].columns",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-aa71fb518740f9",
+    "concept": "注記（CheckNote）",
+    "informationId": "cf-a754e953ec59de",
+    "item": "識別子",
+    "physicalName": "Check.notes[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-aa71fb518740f9",
+    "concept": "注記（CheckNote）",
+    "informationId": "cf-26c07fc54a97e6",
+    "item": "名前",
+    "physicalName": "Check.notes[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-dee923ba0e4112",
+    "concept": "状態（State）",
+    "informationId": "cf-3fd46e3efaae37",
+    "item": "識別子",
+    "physicalName": "State.states[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-dee923ba0e4112",
+    "concept": "状態（State）",
+    "informationId": "cf-e0526c3d4b96d3",
+    "item": "名前",
+    "physicalName": "State.states[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-f7d1cbaf255a14",
+    "item": "識別子",
+    "physicalName": "State.transitions[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-8908f4c37f4836",
+    "item": "原典の識別子",
+    "physicalName": "State.transitions[].sourceId",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-7dabb063b220f1",
+    "item": "変更前",
+    "physicalName": "State.transitions[].fromId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-047059a93be7e2",
+    "item": "業務",
+    "physicalName": "State.transitions[].activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-12d3ee506e635b",
+    "item": "発生事象",
+    "physicalName": "State.transitions[].event",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "legacy"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-8e1a6f3eb42961",
+    "item": "条件",
+    "physicalName": "State.transitions[].condition",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-248bd7cd7e22cb",
+    "item": "変更後",
+    "physicalName": "State.transitions[].toId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-9a18a448b9efaa",
+    "item": "状態への影響",
+    "physicalName": "State.transitions[].effect",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "State.transitions[].effect"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-37cfb1f0b37861",
+    "item": "経路の種類",
+    "physicalName": "State.transitions[].path",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "State.transitions[].path"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-782e7748652561",
+    "item": "根拠",
+    "physicalName": "State.transitions[].evidence",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-c7b7a3c41c1024",
+    "item": "注記",
+    "physicalName": "State.transitions[].note",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-d000e290c72442",
+    "item": "例外",
+    "physicalName": "State.transitions[].exceptionId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-33d907fd2b7851",
+    "item": "条件の表示名",
+    "physicalName": "State.transitions[].conditionLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-5d1e7f527404d3",
+    "item": "変更前の状態の種類",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "c-3389910e106420",
+    "concept": "状態遷移（StateTransition）",
+    "informationId": "cf-7e4981f3bac2be",
+    "item": "変更後の状態の種類",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  },
+  {
+    "conceptId": "c-b4278294b5f080",
+    "concept": "関連する状態遷移の参照（RelatedStateReference）",
+    "informationId": "cf-acb00996ceae6d",
+    "item": "参照する文書",
+    "physicalName": "Concept.relatedStates[].documentId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-b4278294b5f080",
+    "concept": "関連する状態遷移の参照（RelatedStateReference）",
+    "informationId": "cf-181348b6d8666b",
+    "item": "改訂",
+    "physicalName": "Concept.relatedStates[].revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "c-b4278294b5f080",
+    "concept": "関連する状態遷移の参照（RelatedStateReference）",
+    "informationId": "cf-efee92b9c80efc",
+    "item": "原典の確認状態",
+    "physicalName": "Concept.relatedStates[].verification",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "c-bb240ce62355fa",
+    "concept": "サブシステム（Subsystem）",
+    "informationId": "cf-95b8e55978fb10",
+    "item": "識別子",
+    "physicalName": "Concept.subsystems[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-bb240ce62355fa",
+    "concept": "サブシステム（Subsystem）",
+    "informationId": "cf-acb6b29b28e391",
+    "item": "名前",
+    "physicalName": "Concept.subsystems[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-bb240ce62355fa",
+    "concept": "サブシステム（Subsystem）",
+    "informationId": "cf-c407aa8717369e",
+    "item": "目的",
+    "physicalName": "Concept.subsystems[].purpose",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-bb240ce62355fa",
+    "concept": "サブシステム（Subsystem）",
+    "informationId": "cf-5440c55d88a9b8",
+    "item": "情報項目",
+    "physicalName": "Concept.subsystems[].information",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-bb240ce62355fa",
+    "concept": "サブシステム（Subsystem）",
+    "informationId": "cf-0e471e4abe3209",
+    "item": "理由",
+    "physicalName": "Concept.subsystems[].reason",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-bb240ce62355fa",
+    "concept": "サブシステム（Subsystem）",
+    "informationId": "cf-2b4a79c4f0f3e6",
+    "item": "関連業務",
+    "physicalName": "Concept.subsystems[].activityIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-bb240ce62355fa",
+    "concept": "サブシステム（Subsystem）",
+    "informationId": "cf-012d8473a1a69a",
+    "item": "確認状態",
+    "physicalName": "Concept.subsystems[].reviewState",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "needs-review"
+  },
+  {
+    "conceptId": "c-a661f11490568f",
+    "concept": "概念（Concept）",
+    "informationId": "cf-18185457d05149",
+    "item": "識別子",
+    "physicalName": "Concept.concepts[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-a661f11490568f",
+    "concept": "概念（Concept）",
+    "informationId": "cf-2a626ff0ff7d02",
+    "item": "名前",
+    "physicalName": "Concept.concepts[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-a661f11490568f",
+    "concept": "概念（Concept）",
+    "informationId": "cf-b051d0d470095e",
+    "item": "サブシステム",
+    "physicalName": "Concept.concepts[].subsystemId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-a661f11490568f",
+    "concept": "概念（Concept）",
+    "informationId": "cf-0e6cac31d5e179",
+    "item": "理由",
+    "physicalName": "Concept.concepts[].reason",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-a661f11490568f",
+    "concept": "概念（Concept）",
+    "informationId": "cf-a9d8fb1ee82e79",
+    "item": "説明",
+    "physicalName": "Concept.concepts[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-a661f11490568f",
+    "concept": "概念（Concept）",
+    "informationId": "cf-12e62a5c4c6af0",
+    "item": "対応する対象",
+    "physicalName": "Concept.concepts[].businessObjectIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-a661f11490568f",
+    "concept": "概念（Concept）",
+    "informationId": "cf-d2c0cd0cfdbdca",
+    "item": "確認状態",
+    "physicalName": "Concept.concepts[].reviewState",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "needs-review"
+  },
+  {
+    "conceptId": "c-df1ae8aaf7a602",
+    "concept": "概念の情報項目（ConceptAttribute）",
+    "informationId": "cf-a6fbbbc43cae98",
+    "item": "識別子",
+    "physicalName": "Concept.concepts[].information[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-df1ae8aaf7a602",
+    "concept": "概念の情報項目（ConceptAttribute）",
+    "informationId": "cf-ecd49d7d756a04",
+    "item": "名前",
+    "physicalName": "Concept.concepts[].information[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-df1ae8aaf7a602",
+    "concept": "概念の情報項目（ConceptAttribute）",
+    "informationId": "cf-9d0e9d927202a9",
+    "item": "責任の状態",
+    "physicalName": "Concept.concepts[].information[].responsibilityStatus",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "c-df1ae8aaf7a602",
+    "concept": "概念の情報項目（ConceptAttribute）",
+    "informationId": "cf-7370db16dbe90f",
+    "item": "責任を持つサブシステム",
+    "physicalName": "Concept.concepts[].information[].responsibleSubsystemId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-f4c788364ffcb1",
+    "concept": "業務との対応（ConceptActivityLink）",
+    "informationId": "cf-8a79bb8d0da177",
+    "item": "業務",
+    "physicalName": "Concept.concepts[].activityLinks[].activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-f4c788364ffcb1",
+    "concept": "業務との対応（ConceptActivityLink）",
+    "informationId": "cf-8ae7f7e818ffb5",
+    "item": "用途",
+    "physicalName": "Concept.concepts[].activityLinks[].uses",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-cddfb7eed853ea",
+    "concept": "根拠の参照（ConceptSourceReference）",
+    "informationId": "cf-f6bc7d2abf5cf0",
+    "item": "参照する文書",
+    "physicalName": "Concept.concepts[].sourceRefs[].documentId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-cddfb7eed853ea",
+    "concept": "根拠の参照（ConceptSourceReference）",
+    "informationId": "cf-96da1d6b8c09fc",
+    "item": "改訂",
+    "physicalName": "Concept.concepts[].sourceRefs[].revision",
+    "category": "version",
+    "reason": "文書や形式の版・改訂を区別する。特定の版番号に固定しない。"
+  },
+  {
+    "conceptId": "c-cddfb7eed853ea",
+    "concept": "根拠の参照（ConceptSourceReference）",
+    "informationId": "cf-6409e9670e47fe",
+    "item": "対象の種類",
+    "physicalName": "Concept.concepts[].sourceRefs[].targetType",
+    "category": "referenceType",
+    "reason": "参照する対象の種類と対応する。"
+  },
+  {
+    "conceptId": "c-cddfb7eed853ea",
+    "concept": "根拠の参照（ConceptSourceReference）",
+    "informationId": "cf-136963f419b6bc",
+    "item": "参照先",
+    "physicalName": "Concept.concepts[].sourceRefs[].targetId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-cddfb7eed853ea",
+    "concept": "根拠の参照（ConceptSourceReference）",
+    "informationId": "cf-13dd73356c7793",
+    "item": "箇所",
+    "physicalName": "Concept.concepts[].sourceRefs[].section",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-15584cfab64de4",
+    "item": "識別子",
+    "physicalName": "Concept.relations[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-f2500eabc99f36",
+    "item": "出発側の概念",
+    "physicalName": "Concept.relations[].fromConceptId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-b14e90806c9ace",
+    "item": "到着側の概念",
+    "physicalName": "Concept.relations[].toConceptId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-a256be08d32335",
+    "item": "出発側の件数",
+    "physicalName": "Concept.relations[].fromPerTarget",
+    "category": "cardinality",
+    "reason": "関係の最小・最大件数を表す。例だけを取り得る値にしない。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-ac8bd26ae595ac",
+    "item": "到着側の件数",
+    "physicalName": "Concept.relations[].toPerSource",
+    "category": "cardinality",
+    "reason": "関係の最小・最大件数を表す。例だけを取り得る値にしない。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-1ee8b5979a8779",
+    "item": "条件",
+    "physicalName": "Concept.relations[].condition",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-6adc11eb0279bd",
+    "item": "確認状態",
+    "physicalName": "Concept.relations[].reviewState",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "needs-review"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-0d428562e56d4f",
+    "item": "出発側の表示件数",
+    "physicalName": "Concept.relations[].fromLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-aaa7b589b330e5",
+    "item": "到着側の表示件数",
+    "physicalName": "Concept.relations[].toLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-2df4f3cb2c3787",
+    "concept": "概念間の関係（ConceptRelation）",
+    "informationId": "cf-3fa56825fe3b69",
+    "item": "種類",
+    "physicalName": "Concept.relations[].kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "Concept.relations[].kind"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-e34451304a3099",
+    "item": "識別子",
+    "physicalName": "Concept.handoffs[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-e9daa257c2795f",
+    "item": "出発側のサブシステム",
+    "physicalName": "Concept.handoffs[].fromSubsystemId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-758ba4f5975fe3",
+    "item": "到着側のサブシステム",
+    "physicalName": "Concept.handoffs[].toSubsystemId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-c0d8a7beda5359",
+    "item": "情報項目",
+    "physicalName": "Concept.handoffs[].information",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-b7bb16b824dde8",
+    "item": "説明",
+    "physicalName": "Concept.handoffs[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-8db9bb0dea3381",
+    "item": "関連業務",
+    "physicalName": "Concept.handoffs[].activityIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-dc9e78bca09235",
+    "item": "向き",
+    "physicalName": "Concept.handoffs[].flowDirection",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "Concept.handoffs[].flowDirection"
+  },
+  {
+    "conceptId": "c-885e9b200c2404",
+    "concept": "サブシステム間の受渡し（SubsystemHandoff）",
+    "informationId": "cf-8b35f69146b6ae",
+    "item": "確認状態",
+    "physicalName": "Concept.handoffs[].reviewState",
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "needs-review"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-5fa9cfe53d9c72",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-2a972279c5ff4d",
+    "item": "サブシステム",
+    "physicalName": "Concept.reviewGroups[].subsystemId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-96de7fa9ecd918",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-e03f8ffc6530a7",
+    "item": "説明",
+    "physicalName": "Concept.reviewGroups[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-43c418ff860c65",
+    "item": "担当ロール",
+    "physicalName": "Concept.reviewGroups[].reviewer.roleId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-c1744ad741086d",
+    "item": "関連業務",
+    "physicalName": "Concept.reviewGroups[].relatedActivityIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-6b50a0c386c8ec",
+    "item": "対象概念",
+    "physicalName": "Concept.reviewGroups[].graph.conceptIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-0bf8348b380872",
+    "item": "サブシステム別表示を定義済み",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-82616e95cee368",
+    "item": "レビューのサブシステム別表示に含む受渡し",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.handoffIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-74e3c7a00a6888",
+    "item": "確認事項",
+    "physicalName": "Concept.reviewGroups[].meta.questions",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-479460dfd2aa11",
+    "concept": "概念レビューの単位（ConceptReviewGroup）",
+    "informationId": "cf-20033ad39c9221",
+    "item": "仮説",
+    "physicalName": "Concept.reviewGroups[].meta.hypotheses",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "c-ee0e1966321a10",
+    "concept": "レビュー図の概念（ReviewGraphNode）",
+    "informationId": "cf-872111986cbb04",
+    "item": "対象の概念",
+    "physicalName": "Concept.reviewGroups[].graph.nodes[].conceptId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-ee0e1966321a10",
+    "concept": "レビュー図の概念（ReviewGraphNode）",
+    "informationId": "cf-0ab2e9ffd441dc",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].graph.nodes[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-ee0e1966321a10",
+    "concept": "レビュー図の概念（ReviewGraphNode）",
+    "informationId": "cf-0fae178ed578b4",
+    "item": "詳細",
+    "physicalName": "Concept.reviewGroups[].graph.nodes[].fields",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-ee0e1966321a10",
+    "concept": "レビュー図の概念（ReviewGraphNode）",
+    "informationId": "cf-4bc3013a01f24b",
+    "item": "説明",
+    "physicalName": "Concept.reviewGroups[].graph.nodes[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-ee0e1966321a10",
+    "concept": "レビュー図の概念（ReviewGraphNode）",
+    "informationId": "cf-42bad405d14c41",
+    "item": "原典情報",
+    "physicalName": "Concept.reviewGroups[].graph.nodes[].sources",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-ee0e1966321a10",
+    "concept": "レビュー図の概念（ReviewGraphNode）",
+    "informationId": "cf-cbb08a4110ca13",
+    "item": "根拠となる業務",
+    "physicalName": "Concept.reviewGroups[].graph.nodes[].sourceActivityIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-5301fdbc9906a9",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-93690ea3ee9262",
+    "item": "出発側の概念",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].fromConceptId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-135acb3994fe5a",
+    "item": "到着側の概念",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].toConceptId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-7ea37b8b8340eb",
+    "item": "対象の関係",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].relationIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-e9917c3f5a263a",
+    "item": "対象範囲",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].scope",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-b2d932ed3dc905",
+    "item": "出発側の表示件数",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].fromLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-651d015c32251d",
+    "item": "到着側の表示件数",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].toLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-984738bcdd15a0",
+    "concept": "レビュー図の関係（ReviewGraphEdge）",
+    "informationId": "cf-fef3e4afdf720a",
+    "item": "種類",
+    "physicalName": "Concept.reviewGroups[].graph.edges[].kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "Concept.reviewGroups[].graph.edges[].kind"
+  },
+  {
+    "conceptId": "c-cf1ab9792c4afd",
+    "concept": "表示する概念（SubsystemViewNode）",
+    "informationId": "cf-4e67ab723e70e5",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-cf1ab9792c4afd",
+    "concept": "表示する概念（SubsystemViewNode）",
+    "informationId": "cf-f2f85c784ba351",
+    "item": "対象の概念",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].conceptId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-cf1ab9792c4afd",
+    "concept": "表示する概念（SubsystemViewNode）",
+    "informationId": "cf-9e0636e646317b",
+    "item": "サブシステム",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].subsystemId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-cf1ab9792c4afd",
+    "concept": "表示する概念（SubsystemViewNode）",
+    "informationId": "cf-bdb4dd8ad16827",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-cf1ab9792c4afd",
+    "concept": "表示する概念（SubsystemViewNode）",
+    "informationId": "cf-40ac5527dfd311",
+    "item": "説明",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-cf1ab9792c4afd",
+    "concept": "表示する概念（SubsystemViewNode）",
+    "informationId": "cf-17dad34b3c55c0",
+    "item": "原典情報",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].sources",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-f00cd2058baea0",
+    "concept": "表示する項目（SubsystemViewField）",
+    "informationId": "cf-c2d4fcf9f8b82b",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].fields[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-f00cd2058baea0",
+    "concept": "表示する項目（SubsystemViewField）",
+    "informationId": "cf-1e973b3890d796",
+    "item": "情報項目",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.nodes[].fields[].informationId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-67599703cb1878",
+    "concept": "表示する関係（SubsystemViewEdge）",
+    "informationId": "cf-f8c85e50030df1",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-67599703cb1878",
+    "concept": "表示する関係（SubsystemViewEdge）",
+    "informationId": "cf-ca79b879ba2b5f",
+    "item": "出発側の表示",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].fromViewId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-67599703cb1878",
+    "concept": "表示する関係（SubsystemViewEdge）",
+    "informationId": "cf-2e669ee69a1b69",
+    "item": "到着側の表示",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].toViewId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-67599703cb1878",
+    "concept": "表示する関係（SubsystemViewEdge）",
+    "informationId": "cf-adaf9f4f2c177c",
+    "item": "対象の関係",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].relationIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-67599703cb1878",
+    "concept": "表示する関係（SubsystemViewEdge）",
+    "informationId": "cf-451606ab2ec7d0",
+    "item": "出発側の表示件数",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].fromLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-67599703cb1878",
+    "concept": "表示する関係（SubsystemViewEdge）",
+    "informationId": "cf-254d5ccd385212",
+    "item": "到着側の表示件数",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].toLabel",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-67599703cb1878",
+    "concept": "表示する関係（SubsystemViewEdge）",
+    "informationId": "cf-2407b1f8ff5fe3",
+    "item": "種類",
+    "physicalName": "Concept.reviewGroups[].graph.subsystemViews.edges[].kind",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "Concept.reviewGroups[].graph.subsystemViews.edges[].kind"
+  },
+  {
+    "conceptId": "c-4e8bcd5e5b6991",
+    "concept": "構造についての確認事項（StructureStatement）",
+    "informationId": "cf-22da58339a49f3",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].structureStatements[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-4e8bcd5e5b6991",
+    "concept": "構造についての確認事項（StructureStatement）",
+    "informationId": "cf-0ae2dd148a5964",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].structureStatements[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-4e8bcd5e5b6991",
+    "concept": "構造についての確認事項（StructureStatement）",
+    "informationId": "cf-9e7ab1bab14e9f",
+    "item": "説明",
+    "physicalName": "Concept.reviewGroups[].structureStatements[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-4e8bcd5e5b6991",
+    "concept": "構造についての確認事項（StructureStatement）",
+    "informationId": "cf-52bfaa02936440",
+    "item": "サンプル",
+    "physicalName": "Concept.reviewGroups[].structureStatements[].sampleIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-f053259698f7db",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].capabilities[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-3b70ce3b31b5ba",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].capabilities[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-bcbf430241c767",
+    "item": "説明",
+    "physicalName": "Concept.reviewGroups[].capabilities[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-b1e34fc5ffd0b7",
+    "item": "補足情報",
+    "physicalName": "Concept.reviewGroups[].capabilities[].meta",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-b4e88ec9fe4c1d",
+    "item": "機能とチェックの対応を定義済み",
+    "physicalName": "Concept.reviewGroups[].capabilities[].testSpecification",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-f6c2348108ab40",
+    "item": "判定表の例",
+    "physicalName": "Concept.reviewGroups[].capabilities[].testSpecification.decisionExampleIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-3b28b45d18839e",
+    "item": "判定のチェック",
+    "physicalName": "Concept.reviewGroups[].capabilities[].testSpecification.decisionCheckIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-454865bf2f4ea9",
+    "item": "結果のチェック",
+    "physicalName": "Concept.reviewGroups[].capabilities[].testSpecification.resultCheckIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-95cabd9dcf8a99",
+    "concept": "機能（Capability）",
+    "informationId": "cf-8883a41bc28a26",
+    "item": "サンプル",
+    "physicalName": "Concept.reviewGroups[].capabilities[].testSpecification.sampleIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-c2b2d686587864",
+    "concept": "機能のサンプル（CapabilitySample）",
+    "informationId": "cf-e4eed8f01f48b8",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-c2b2d686587864",
+    "concept": "機能のサンプル（CapabilitySample）",
+    "informationId": "cf-09dc6622db3672",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-c2b2d686587864",
+    "concept": "機能のサンプル（CapabilitySample）",
+    "informationId": "cf-f4a8445a61d27a",
+    "item": "条件",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].when",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-c2b2d686587864",
+    "concept": "機能のサンプル（CapabilitySample）",
+    "informationId": "cf-2f5c9c597760c6",
+    "item": "意味",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].meaning",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-c2b2d686587864",
+    "concept": "機能のサンプル（CapabilitySample）",
+    "informationId": "cf-4221263a67b8bd",
+    "item": "注記",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].note",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-c2b2d686587864",
+    "concept": "機能のサンプル（CapabilitySample）",
+    "informationId": "cf-cefad66baec8fb",
+    "item": "チェック項目（種類による）",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].checkIds",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-fa68cedac024c1",
+    "concept": "サンプルの表（SampleBlock）",
+    "informationId": "cf-3f99f834385412",
+    "item": "対象の概念",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].card",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-fa68cedac024c1",
+    "concept": "サンプルの表（SampleBlock）",
+    "informationId": "cf-eebd7c70c2be51",
+    "item": "空の場合の表示",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].empty",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-95968cadda360a",
+    "concept": "サンプルの列（SampleColumn）",
+    "informationId": "cf-43f6bcc1c32685",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-95968cadda360a",
+    "concept": "サンプルの列（SampleColumn）",
+    "informationId": "cf-61152952713ecb",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].name",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-95968cadda360a",
+    "concept": "サンプルの列（SampleColumn）",
+    "informationId": "cf-b46f7844799233",
+    "item": "情報項目",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].columns[].informationId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-930d0be564d125",
+    "concept": "サンプルの行（SampleRow）",
+    "informationId": "cf-41a34811493a5f",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-5be91edc9a7f6b",
+    "concept": "サンプルの値（SampleCell）",
+    "informationId": "cf-10479709494816",
+    "item": "対象の列",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].cells[].columnId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-5be91edc9a7f6b",
+    "concept": "サンプルの値（SampleCell）",
+    "informationId": "cf-3756ccb9208e42",
+    "item": "値",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].cells[].value",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "c-5be91edc9a7f6b",
+    "concept": "サンプルの値（SampleCell）",
+    "informationId": "cf-40910446fb8734",
+    "item": "リンク先",
+    "physicalName": "Concept.reviewGroups[].capabilities[].samples[].blocks[].rows[].cells[].linkId",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "c-0fbe265bb9e0c2",
+    "concept": "制約（Limitation）",
+    "informationId": "cf-f0e7e38b2e5d4e",
+    "item": "識別子",
+    "physicalName": "Concept.reviewGroups[].limitations[].id",
+    "category": "identifier",
+    "reason": "対象を識別する値。具体的な採番や文字形式は決めない。"
+  },
+  {
+    "conceptId": "c-0fbe265bb9e0c2",
+    "concept": "制約（Limitation）",
+    "informationId": "cf-fbfca64ed42ab8",
+    "item": "名前",
+    "physicalName": "Concept.reviewGroups[].limitations[].title",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-0fbe265bb9e0c2",
+    "concept": "制約（Limitation）",
+    "informationId": "cf-172e5ea8df32b1",
+    "item": "説明",
+    "physicalName": "Concept.reviewGroups[].limitations[].description",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-0fbe265bb9e0c2",
+    "concept": "制約（Limitation）",
+    "informationId": "cf-85cfee4fb84b28",
+    "item": "理由",
+    "physicalName": "Concept.reviewGroups[].limitations[].reason",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-0fbe265bb9e0c2",
+    "concept": "制約（Limitation）",
+    "informationId": "cf-5e9aee6eef1ae1",
+    "item": "補足情報",
+    "physicalName": "Concept.reviewGroups[].limitations[].meta",
+    "category": "undecided",
+    "reason": "現在の定義だけでは値域を確定できない。"
+  },
+  {
+    "conceptId": "c-8f29ddbbb0111f",
+    "concept": "レビュー間の関係（ReviewGroupRelationship）",
+    "informationId": "cf-efa8c8f2127ad8",
+    "item": "出発側",
+    "physicalName": "Concept.presentation.landscapeRelationships[].from",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-8f29ddbbb0111f",
+    "concept": "レビュー間の関係（ReviewGroupRelationship）",
+    "informationId": "cf-da22657a98dc03",
+    "item": "到着側",
+    "physicalName": "Concept.presentation.landscapeRelationships[].to",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-afef9bf65df472",
+    "concept": "レビュー間の境界（ReviewBoundary）",
+    "informationId": "cf-88d642dad3d62b",
+    "item": "出発側",
+    "physicalName": "Concept.presentation.reviewBoundaries[].from",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-afef9bf65df472",
+    "concept": "レビュー間の境界（ReviewBoundary）",
+    "informationId": "cf-2e3bc4744a9d96",
+    "item": "到着側",
+    "physicalName": "Concept.presentation.reviewBoundaries[].to",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "c-afef9bf65df472",
+    "concept": "レビュー間の境界（ReviewBoundary）",
+    "informationId": "cf-9a9846ff4aacd6",
+    "item": "表示名",
+    "physicalName": "Concept.presentation.reviewBoundaries[].label",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "c-afef9bf65df472",
+    "concept": "レビュー間の境界（ReviewBoundary）",
+    "informationId": "cf-7ab2a2bd886a9f",
+    "item": "受渡しの約束",
+    "physicalName": "Concept.presentation.reviewBoundaries[].promise",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-flow-step",
+    "concept": "フロー内の手順（FlowStep）",
+    "informationId": "n-step-field-2",
+    "item": "所属する業務",
+    "physicalName": "steps.activityId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-flow-step",
+    "concept": "フロー内の手順（FlowStep）",
+    "informationId": "n-step-field-6",
+    "item": "適用する判定行",
+    "physicalName": "steps.whenDecisionRowId",
+    "category": "reference",
+    "reason": "関連先を参照し、参照先の定義と整合させる。"
+  },
+  {
+    "conceptId": "n-flow-step",
+    "concept": "フロー内の手順（FlowStep）",
+    "informationId": "cf-325c153e7c0af3",
+    "item": "必須・任意",
+    "physicalName": "steps.obligation",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "compatibility": "legacy",
+    "basis": "BD.activities[].procedure.steps[].obligation"
+  },
+  {
+    "conceptId": "n-flow-step",
+    "concept": "フロー内の手順（FlowStep）",
+    "informationId": "cf-d6937d0cbb9486",
+    "item": "適用条件",
+    "physicalName": "steps.appliesWhen",
+    "category": "text",
+    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+  },
+  {
+    "conceptId": "n-flow-step",
+    "concept": "フロー内の手順（FlowStep）",
+    "informationId": "cf-fde33f3870ef9f",
+    "item": "手順の順序",
+    "physicalName": "",
+    "category": "scalar",
+    "reason": "真偽値・数値または条件に応じた値として扱う。"
+  },
+  {
+    "conceptId": "n-flow-step",
+    "concept": "フロー内の手順（FlowStep）",
+    "informationId": "cf-de02b14f7f7ee3",
+    "item": "実施条件の確定状態",
+    "physicalName": "",
+    "category": "enum",
+    "reason": "意味のある区分を有限の選択肢で示す。",
+    "basis": "概念モデルの定義"
+  }
+]

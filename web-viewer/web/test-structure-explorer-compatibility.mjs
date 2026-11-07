@@ -54,7 +54,8 @@ try{
  covered.push('STRUCTURE-COMPAT-003');
 }finally{w.close();}
 assert.equal(JSON.stringify(model),before);assert.deepEqual(readFileSync(path),bytes);
-const unchanged=structuredClone(pkg);delete unchanged.documents.find(d=>d.kind==='conceptModel').meta.compatibilityReview;
+const unchanged=structuredClone(pkg),unchangedMeta=unchanged.documents.find(d=>d.kind==='conceptModel').meta;delete unchangedMeta.compatibilityReview;
+for(const mapping of unchangedMeta.fieldMappings){delete mapping.valueDomain;if(mapping.physicalName==='continuities.outcome')delete mapping.sampleValue;}
 // The approved procedure, exception-origin and ownership revisions change the
 // model itself; retain the lock with only compatibility notes removed.
 assert.equal(hash(JSON.stringify(unchanged)),'b3d45152143a03dc377c5ab57c5d383ef282692ac274568ba9d50b19975ccea5');

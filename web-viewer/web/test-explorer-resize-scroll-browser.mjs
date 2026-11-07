@@ -50,7 +50,7 @@ export async function verifyExplorerResizeScroll(browser){
    await page.locator('#design-explorer .shell-heading button').click();assert(!await explorer.isVisible());await page.locator('#node-list-toggle').click();assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1,'opening the drawer retains its width');
    await page.reload();await page.locator('.structure-detail-page:not([hidden])').waitFor({state:'visible',timeout:30000});if(!await explorer.isVisible())await page.locator('#node-list-toggle').click();assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1,'reload restores the width in this session');
    if(width>800){
-    await documentTab.click();const group=page.locator('#explorer-document-panel [data-explorer-key="group:concept"]');if(await group.getAttribute('aria-expanded')==='false')await group.click();await page.locator('#explorer-document-panel [data-explorer-key="concept:overview"]').click();
+    await documentTab.click();const group=page.locator('#explorer-document-panel [data-explorer-key="group:subsystems"]');if(await group.getAttribute('aria-expanded')==='false')await group.click();await page.locator('#explorer-document-panel [data-explorer-key="concept:landscape"]').click();
     const right=page.locator('.concept-related');if(!await right.isVisible())await page.locator('#drawer').click();await right.waitFor({state:'visible'});
     const rightBefore=(await right.boundingBox()).width,leftBefore=(await explorer.boundingBox()).width;
     await separator.focus();await separator.press('ArrowLeft');assert(Math.abs((await right.boundingBox()).width-rightBefore)<=1,'left resize leaves right width unchanged');
