@@ -17,9 +17,9 @@ const coverage=actual=>{assert.equal(actual.length,required.length);assert.equal
 assert.throws(()=>coverage(required.slice(1)));assert.throws(()=>coverage([...required,required[0]]));
 const model=JSON.parse(readFileSync('../business-design/alder/json-complete-concept-review.json')).documents.find(d=>d.kind==='conceptModel'),before=JSON.stringify(model);
 const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
-const w=new JSDOM('<div class="concept-drawer-body"><div class="concept-related-content"></div></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
+const w=new JSDOM('<div class="structure-detail-page"><div class="structure-detail-content"></div></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{
- w.eval(code+';globalThis.Explorer=Explorer;');const detail=w.document.querySelector('.concept-related-content');
+ w.eval(code+';globalThis.Explorer=Explorer;');const detail=w.document.querySelector('.structure-detail-content');
  const style=w.document.createElement('style');style.textContent=readFileSync('src/structure-explorer.css','utf8')+'\n'+readFileSync('src/viewer-shell.css','utf8');w.document.head.append(style);
  const get=(m,path)=>{const item=m.meta.fieldMappings.find(x=>x.physicalName===path);assert(item,path);return item;};
  const show=(m,conceptId='n-bd')=>w.Explorer.renderStructureDetails(detail,m,{kind:'structure',conceptId});
@@ -35,7 +35,7 @@ try{
  field.sampleValue='<img src=x onerror=alert(1)>'+('長い値'.repeat(100));show(changed);assert.equal(sample(changed,'businessDesigns.revision'),field.sampleValue);assert.equal(detail.querySelector('img'),null);
  delete field.sampleValue;delete field.referenceValue;show(changed);assert.equal(sample(changed,'businessDesigns.revision'),'未記載');row(changed,'businessDesigns.revision').querySelector('button').click();assert.equal(value('サンプル'),'未記載');covered.push('STRUCTURE-SAMPLE-HEADER-002');
  show(model);const headers=[...detail.querySelectorAll('.structure-attribute-table thead th')];assert.deepEqual(headers.map(x=>x.textContent),['項目','サンプル','説明']);for(const th of headers){const css=w.getComputedStyle(th);assert.equal(css.position,'sticky');assert(['0','0px'].includes(css.top));assert.equal(css.zIndex,'1');}assert.match(style.textContent,/\.structure-attribute-table thead th\{[^}]*background:var\(--bg\)/);
- const wrap=detail.querySelector('.structure-attribute-wrap'),wrapStyle=w.getComputedStyle(wrap);assert(!['auto','scroll','hidden'].includes(wrapStyle.overflowX));assert(!['auto','scroll','hidden'].includes(wrapStyle.overflow));assert.equal(w.getComputedStyle(w.document.querySelector('.concept-drawer-body')).overflow,'auto');covered.push('STRUCTURE-SAMPLE-HEADER-003');
+ const wrap=detail.querySelector('.structure-attribute-wrap'),wrapStyle=w.getComputedStyle(wrap);assert(!['auto','scroll','hidden'].includes(wrapStyle.overflowX));assert(!['auto','scroll','hidden'].includes(wrapStyle.overflow));assert.equal(w.getComputedStyle(w.document.querySelector('.structure-detail-page')).overflow,'auto');covered.push('STRUCTURE-SAMPLE-HEADER-003');
  const table=detail.querySelector('.structure-attribute-table'),cell=table.querySelector('td');assert.equal(w.getComputedStyle(table).tableLayout,'fixed');assert.equal(w.getComputedStyle(table).width,'100%');assert.equal(w.getComputedStyle(cell).overflowWrap,'anywhere');assert.equal(JSON.stringify(model),before);verify();covered.push('STRUCTURE-SAMPLE-HEADER-004');
 }finally{w.close();}
 coverage(covered);verify();console.log(JSON.stringify({checks:covered,scope:'sample-only display, fallback, data preservation and sticky-header CSS/DOM; geometry requires browser'}));

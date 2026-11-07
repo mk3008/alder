@@ -96,7 +96,7 @@ try{
  render(model,'n-axis');expand();const item=tree.querySelector('[data-relation-id="nr-dataitem-information"][data-relation-direction="reference"]');assert(item,'decision axis reaches the same information item through the group');
  item.querySelector(':scope > details > summary').click();assert.equal(value('所属'),'対象（Object）');
  const owner=item.querySelector(':scope > details > ul > [data-relation-id="nr-object-information"][data-relation-direction="owner"]');assert(owner,'reverse view of the existing ownership');
- assert.match(owner.textContent,/所属する対象.*型：Object/);assert.match(owner.textContent,/既出/);
+ assert.match(owner.textContent,/所属する対象/);assert(!owner.textContent.includes('型：'));assert.match(owner.textContent,/既出/);
  assert(tree.querySelectorAll('.structure-item').length<model.relations.length+model.concepts.length+15,'expand all terminates with a reverse ownership cycle');
  render(model,'n-information');const parent=tree.querySelector('[data-relation-id="nr-object-information"][data-relation-direction="owner"]');assert(parent);parent.querySelector('summary').click();assert.equal(value('ローカル名'),'所属する対象');
  const without=structuredClone(model);delete without.meta.reverseRelationNames;render(without,'n-information');assert(!tree.querySelector('[data-relation-direction="owner"]'),'unannotated models retain their original tree');

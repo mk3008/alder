@@ -18,24 +18,22 @@ try{
  const shell=w.Shell.installViewerShell(d.querySelector('#app'),options);shell.syncDocument();
  const select=s=>d.querySelector(s),overview=select('iframe[data-concept-view="overview"]');assert(overview&&!overview.hidden);
  const originalSrc=overview.getAttribute('src');assert.match(originalSrc,/concept\.html\?view=overview/);
- const heading=select('[data-explorer-key="group:concept"]');if(heading.getAttribute('aria-expanded')==='false')heading.click();
- const item=select('[data-explorer-key="concept:structure-explorer"]');assert(item);item.click();
+ const structure=select('#explorer-tab-structure'),documents=select('#explorer-tab-document');assert(structure&&!structure.disabled);structure.click();assert(!select('#explorer-structure-panel').hidden);assert(!overview.hidden,'changing the explorer alone retains the current view');
+ const root=select('.structure-root > [data-concept-id="n-bd"] > details > summary');assert(root);root.click();
  assert.equal(new URL(w.location.href).searchParams.get('concept'),'structure-explorer');
- assert.equal(select('.structure-explorer').hidden,false);assert(select('.structure-root > [data-concept-id="n-bd"]'));assert(select('[data-concept-id="n-activity"]'));
+ assert.equal(select('.structure-explorer').hidden,false);assert(select('#explorer-structure-panel [data-concept-id="n-bd"]'));assert(select('[data-concept-id="n-activity"]'));
  assert.equal(select('#concept-tab-structure-explorer').getAttribute('aria-current'),'true');assert.equal(overview.hidden,true);
- assert.equal(select('#drawer').disabled,false,'the structure view has a usable detail drawer');
- select('.structure-root > [data-concept-id="n-bd"] > details > summary').click();assert(select('#concept-related-panel').hidden,'selecting a structure does not open a closed drawer');
- select('#drawer').click();assert(!select('#concept-related-panel').hidden);select('.concept-related-content .structure-attribute-select').click();assert.match(select('.concept-related-content').textContent,/ローカル名識別子/,'the selected attribute opens in the common drawer');assert.match(select('.concept-related-content').textContent,/所属業務設計書/);
- select('[data-explorer-key="concept:overview"]').click();assert.equal(overview.hidden,false);assert.equal(overview.getAttribute('src'),originalSrc,'existing graph and its iframe are retained');
- assert.equal(select('.structure-explorer').hidden,true);assert.equal(select('#drawer').disabled,false);
- select('[data-explorer-key="concept:structure-explorer"]').click();
- select('.structure-toolbar button').click();assert.equal(new Set([...d.querySelectorAll('.structure-explorer [data-concept-id]')].map(el=>el.dataset.conceptId)).size,25);
+ assert.equal(select('#drawer').disabled,true,'structure detail is in the main area');assert(select('#concept-related-panel').hidden);
+ assert(!select('.structure-detail-page').hidden);select('.structure-detail-content .structure-attribute-select').click();assert.match(select('.structure-detail-content').textContent,/ローカル名識別子/);assert.match(select('.structure-detail-content').textContent,/所属業務設計書/);
+ documents.click();select('[data-explorer-key="concept:overview"]').click();assert.equal(overview.hidden,false);assert.equal(overview.getAttribute('src'),originalSrc,'existing graph and its iframe are retained');
+ assert.equal(select('#explorer-structure-panel').hidden,true);assert.equal(select('#drawer').disabled,false);
+ structure.click();root.click();select('.structure-toolbar button').click();assert.equal(new Set([...d.querySelectorAll('.structure-explorer [data-concept-id]')].map(el=>el.dataset.conceptId)).size,25);
  const close=select('[aria-label="データ構造：構造エクスプローラーのタブを閉じる"]');assert(close);close.click();assert.equal(select('#concept-tab-structure-explorer'),null);assert.equal(overview.hidden,false);
- select('[data-explorer-key="concept:structure-explorer"]').click();
+ structure.click();select('.structure-root > [data-concept-id="n-bd"] > details > summary').click();
  current=physicalContext;key='other';shell.syncDocument();
- select('[data-explorer-key="concept:structure-explorer"]').click();assert(select('.structure-root > [data-concept-id="fmt-package"]'),'changing documents renders the new package root');
- assert(!select('.structure-explorer [data-concept-id="n-bd"]'),'changing documents does not retain the old tree');
- assert(!select('.concept-related-content').textContent.includes('ローカル名識別子'),'changing documents clears the old selection');
+ structure.click();assert(select('#explorer-structure-panel .structure-root > [data-concept-id="fmt-package"]'),'changing documents renders the new package root');
+ assert(!select('#explorer-structure-panel [data-concept-id="n-bd"]'),'changing documents does not retain the old tree');
+ assert(!select('.structure-detail-content')?.textContent.includes('ローカル名識別子'),'changing documents clears the old selection');
 }finally{w.close();}
 const direct=new JSDOM('<div id="app"><header><button id="node-list-toggle"></button><button id="drawer"></button></header><div class="tab-strip"><nav id="tabs"></nav></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main></main></div></div>',{url:'https://viewer.test/?view=concept&concept=structure-explorer',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{

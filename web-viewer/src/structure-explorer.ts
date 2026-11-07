@@ -1,4 +1,4 @@
-import {createElement,Box,ExternalLink,Link,Search} from 'lucide';
+import {createElement,Box,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
 
 type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown;referenceSource?:string};
@@ -216,7 +216,7 @@ function sampleValue(mapping:Mapping|undefined){
 }
 
 /** The DOM is lazy per path. A full expansion visits each concept once. */
-export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,options:{rootId?:string;openStructure?:(id:string)=>void;select?:(selection:StructureSelection)=>void;clearSelection?:()=>void}={}){
+export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,options:{rootId?:string;autoSelect?:boolean;select?:(selection:StructureSelection,reason:'select'|'filter'|'initial')=>void;clearSelection?:()=>void}={}){
  const graph=structureGraph(model),marks=reviewMarks(model);host.replaceChildren();host.className='structure-explorer';
  if(!graph.roots.length){text(host,'p','この構造モデルには概念がありません。','structure-empty');return;}
  if(options.rootId&&!graph.nodes.has(options.rootId)){text(host,'p','指定した構造が見つかりません。','structure-empty');return;}
@@ -239,7 +239,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  const keyOf=(selection:StructureSelection)=>JSON.stringify(selection.kind==='attribute'?['attribute',selection.conceptId,selection.informationId]:['structure',selection.conceptId,selection.fromId??'',selection.relationId??'']);
  const mark=(row:HTMLElement)=>{row.classList.add('structure-selected');row.setAttribute('aria-current','true');};
  const restoreSelection=()=>{tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});const row=Array.from(tree.querySelectorAll<HTMLElement>('[data-structure-selection]')).find(item=>item.dataset.structureSelection===selectedKey);if(row)mark(row);};
- const select=(selection:StructureSelection,row:HTMLElement)=>{currentSelection=selection;selectedKey=keyOf(selection);tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});mark(row);options.select?.({...selection,hideLegacy:hideLegacy.checked});};
+ const select=(selection:StructureSelection,row:HTMLElement,reason:'select'|'initial'='select')=>{currentSelection=selection;selectedKey=keyOf(selection);tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});mark(row);options.select?.({...selection,hideLegacy:hideLegacy.checked},reason);};
 
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
   const concept=graph.nodes.get(id)!;const item=document.createElement('li');item.className='structure-item';item.dataset.conceptId=id;
@@ -264,11 +264,10 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   if(edge){if(edge.direction==='unknownOut')text(row,'span',labels[edge.direction],'structure-type');text(row,'span',edge.count,'structure-count');row.title=`${labels[edge.direction]}：移動先 ${edge.count}／反対側 ${edge.reverseCount}${edge.relation.condition?' — '+edge.relation.condition:''}${edge.fields.length>edge.visibleFields.length?' — 物理項目：'+edge.fields.join('、'):''}`;}
   if(edge){
    const fields=edge.fieldDetails.length?edge.fieldDetails:[undefined];
-   const entry=(name:string,field:EdgeField|undefined)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);text(label,'span','型：'+typeName+(field?.valueType==='array'?'[]':''),'structure-element-type');};
-   if(edge.roleName&&fields.length===1)entry(edge.roleName,fields[0]);
-   else{if(edge.roleName)entry(edge.roleName,undefined);fields.forEach((field,index)=>{if(index||edge.roleName)text(row,'span','／');entry(field?.name?.trim()||'名前未定義',field);});}
-  }else{ text(row,'strong',typeName);if(logicalName&&logicalName!==typeName)text(row,'span',logicalName,'structure-type'); }
-  if(options.openStructure&&id!==options.rootId){const open=document.createElement('button');open.type='button';open.className='structure-open';open.setAttribute('aria-label',concept.name+'の構造を別タブで開く');open.title='構造を別タブで開く';open.append(icon(ExternalLink));open.onclick=event=>{event.preventDefault();event.stopPropagation();options.openStructure!(id);};row.append(open);}
+   const entry=(name:string)=>{const label=document.createElement('span');label.className='structure-element';row.append(label);text(label,'strong',name);};
+   if(edge.roleName&&fields.length===1)entry(edge.roleName);
+   else{if(edge.roleName)entry(edge.roleName);fields.forEach((field,index)=>{if(index||edge.roleName)text(row,'span','／');entry(field?.name?.trim()||'名前未定義');});}
+  }else text(row,'strong',logicalName||concept.name);
   if(cycle||previouslySeen)text(row,'span','既出','structure-seen');
   const hasChildren=(graph.edges.get(id)??[]).some(rel=>visibleDirections.includes(rel.direction)||rel.direction==='owner'&&!!rel.roleName&&!(edge?.direction==='owned'&&edge.relation.id===rel.relation.id&&edge.from===rel.to));
   const details=document.createElement('details');details.className='structure-node'+(hasChildren?'':' structure-leaf');details.append(row);item.append(details);
@@ -296,7 +295,8 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
   }
   empty.hidden=!!query||!hideLegacy.checked||!roots.every(id=>marks.concept(id)?.kind==='legacy');
  };
- hideLegacy.onchange=()=>{const selected=tree.querySelector<HTMLElement>('.structure-selected');if(hideLegacy.checked&&selected?.closest('[data-compatibility="legacy"]')){selectedKey=undefined;currentSelection=undefined;options.clearSelection?.();}else if(currentSelection)options.select?.({...currentSelection,hideLegacy:hideLegacy.checked});filter();restoreSelection();};
+ hideLegacy.onchange=()=>{const selected=tree.querySelector<HTMLElement>('.structure-selected');if(hideLegacy.checked&&selected?.closest('[data-compatibility="legacy"]')){selectedKey=undefined;currentSelection=undefined;options.clearSelection?.();}else if(currentSelection)options.select?.({...currentSelection,hideLegacy:hideLegacy.checked},'filter');filter();restoreSelection();};
  all.onclick=()=>{savedTree=null;search.value='';render(true);filter();};collapse.onclick=()=>{savedTree=null;search.value='';render(false);const first=tree.querySelector<HTMLDetailsElement>('.structure-node');if(first)first.open=false;filter();};search.oninput=filter;
  render(false);
+ if(options.autoSelect){const first=Array.from(tree.querySelectorAll<HTMLElement>('.structure-root > .structure-item')).find(item=>!item.hidden),row=first?.querySelector<HTMLElement>(':scope > details > summary');if(first?.dataset.conceptId&&row)select({kind:'structure',conceptId:first.dataset.conceptId},row,'initial');}
 }

@@ -22,9 +22,9 @@ const t=boot();try{
  assert.deepEqual(keys('#explorer-subsystems>.explorer-item'),['concept:landscape']);
  assert.deepEqual(keys('#explorer-subsystem-approval .explorer-item'),['concept:group-request','concept:group-decision']);
  assert.deepEqual(keys('#explorer-subsystem-receiving .explorer-item'),['concept:group-handoff','concept:group-result']);
- assert.deepEqual(keys('#explorer-concept>.explorer-item'),['concept:overview','concept:structure-explorer']);
+ assert.deepEqual(keys('#explorer-concept>.explorer-item'),['concept:overview']);
  assert.deepEqual(keys('#explorer-concept-relations .explorer-item'),['concept:request','concept:version','concept:item','concept:preparation','concept:receipt','concept:line']);
- const entries=keys('.explorer-groups [data-explorer-key^="concept:"]');assert.equal(entries.length,13);assert.equal(new Set(entries).size,13);assert.equal(d.querySelector('[data-explorer-key="group:concept-model"]'),null);
+ const entries=keys('.explorer-groups [data-explorer-key^="concept:"]');assert.equal(entries.length,12);assert.equal(new Set(entries).size,12);assert(d.querySelector('#explorer-tab-structure'));assert.equal(d.querySelector('[data-explorer-key="group:concept-model"]'),null);
  const parent=()=>d.querySelector('[data-explorer-key="group:subsystem-approval"]');if(parent().getAttribute('aria-expanded')==='false')parent().click();parent().click();const input=d.querySelector('input');input.value='購入要求';input.dispatchEvent(new w.Event('input'));assert(!d.querySelector('#explorer-subsystem-approval').hidden);assert(!d.querySelector('#explorer-subsystems').hidden);input.value='';input.dispatchEvent(new w.Event('input'));assert(d.querySelector('#explorer-subsystem-approval').hidden);
  const saved=JSON.parse(w.sessionStorage.getItem('alder-explorer-v1:/'));const restored=boot('',saved);try{assert(restored.d.querySelector('#explorer-subsystem-approval').hidden);}finally{restored.w.close();}coverage.add('STRUCTURE-SHELL-001');
  for(const id of ['group-request','group-decision','group-handoff','group-result']){

@@ -40,10 +40,10 @@ const window=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runSc
 const covered=[];
 try{
  window.eval(source+';globalThis.Explorer=Explorer;');const host=window.document.getElementById('host'),detail=window.document.createElement('div');
- const render=(model,rootId)=>{window.Explorer.renderStructureExplorer(host,model,{rootId,select:selection=>window.Explorer.renderStructureDetails(detail,model,selection)});host.querySelector('.structure-root > li > details > summary').click();};
+ let shown;const render=(model,rootId)=>{shown=model;window.Explorer.renderStructureExplorer(host,model,{rootId,select:selection=>window.Explorer.renderStructureDetails(detail,model,selection)});host.querySelector('.structure-root > li > details > summary').click();};
  const open=details=>{details.open=true;details.dispatchEvent(new window.Event('toggle'));};
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
- const pairs=summary=>[...summary.querySelectorAll(':scope > .structure-element')].map(node=>[node.querySelector('strong').textContent,node.querySelector('.structure-element-type').textContent]);
+ const pairs=summary=>{assert(!summary.querySelector('.structure-element-type'));const item=summary.closest('.structure-item'),parent=item.parentElement.closest('.structure-item'),probe=window.document.createElement('div');window.Explorer.renderStructureDetails(probe,shown,{kind:'structure',conceptId:item.dataset.conceptId,fromId:parent.dataset.conceptId,relationId:item.dataset.relationId});const type=[...probe.querySelectorAll('dt')].find(dt=>dt.textContent==='型名').nextElementSibling.textContent;return [...summary.querySelectorAll(':scope > .structure-element')].map(node=>[node.querySelector('strong').textContent,'型：'+type]);};
 
  render(normalized,'n-data');
  assert.deepEqual(pairs(row('nr-data-dataitem')),[['構成項目','型：InformationGroupMember']]);
@@ -56,8 +56,8 @@ try{
 
  render(normalized,'n-step');
  const root=host.querySelector('.structure-root > .structure-item > details > summary');
- assert.equal(root.querySelector(':scope > strong').textContent,'Step');
- assert.equal(root.querySelector(':scope > .structure-type').textContent,'手順行','root shows the declared logical name separately');
+ assert.equal(root.querySelector(':scope > strong').textContent,'手順行');
+ assert.equal(root.querySelector(':scope > .structure-type'),null);assert.match(detail.textContent,/型名Step/,'the root type remains in detail');
  assert.equal(root.querySelector('.structure-element'),null,'a root is a type, not a child property');
  const attribute=detail.querySelector('.structure-attribute-table tbody tr');assert(!host.querySelector('.structure-field'));
  assert.match(attribute.textContent,/識別子.*型：未定義/,'an attribute shows its name and known or undefined type');
@@ -81,9 +81,10 @@ try{
  render(physical,'fmt-package');
  const pkgRoot=host.querySelector('.structure-root > .structure-item > details > summary');
  assert.equal(pkgRoot.querySelector(':scope > strong').textContent,'文書パッケージ（0.7候補）');
- assert.deepEqual(pairs(row('rel-package-bd')),[['文書一覧','型：業務設計書（Business Design）[]']],'the explicit array is attached to the element type');
+ assert.deepEqual(pairs(row('rel-package-bd')),[['文書一覧','型：業務設計書（Business Design）']],'the explicit array is attached to the element type');
  render(physical,'fmt-order');
- assert.deepEqual(pairs(row('rel-order-step')),[['前後の手順','型：手順行（Step）'],['対象手順','型：手順行（Step）[]']],'each mapped element keeps its own name and array metadata');
+ assert.deepEqual(pairs(row('rel-order-step')),[['前後の手順','型：手順行（Step）'],['対象手順','型：手順行（Step）']],'each mapped element keeps its own name and type');
+ assert.deepEqual(window.Explorer.structureGraph(physical).edges.get('fmt-order').find(edge=>edge.relation.id==='rel-order-step').fieldDetails.map(field=>[field.name,field.valueType]),[['前後の手順',undefined],['対象手順','array']],'array metadata is retained in the model');
  covered.push('STRUCTURE-LABEL-002');
 
  const ambiguous=structuredClone(physical);
@@ -97,7 +98,7 @@ try{
  render(normalized,'n-bd');
  assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：Who']],'owned role name and declared type are clearly distinguished');
  render(normalized,'n-who');const whoRoot=host.querySelector('.structure-root > .structure-item > details > summary');
- assert.equal(whoRoot.querySelector(':scope > strong').textContent,'Who');assert.equal(whoRoot.querySelector(':scope > .structure-type').textContent,'主体');
+ assert.equal(whoRoot.querySelector(':scope > strong').textContent,'主体');assert.equal(whoRoot.querySelector(':scope > .structure-type'),null);assert.match(detail.textContent,/型名Who/);
  render(normalized,'n-activity');
  assert.deepEqual(pairs(row('nr-who-activity')),[['実行主体','型：Who']],'a different reference to the same type retains its role');
  render(normalized,'n-row');
@@ -107,7 +108,7 @@ try{
  const changed=structuredClone(normalized);changed.meta.conceptNames['n-who']={typeName:'主体（Admin）',logicalName:'共有する主体'};render(changed,'n-bd');
  assert.deepEqual(pairs(row('nr-bd-actor')),[['主体','型：主体（Admin）']],'the explicitly declared type is used without splitting, even when it contains parentheses');
  render(changed,'n-who');const changedRoot=host.querySelector('.structure-root > .structure-item > details > summary');
- assert.equal(changedRoot.querySelector(':scope > strong').textContent,'主体（Admin）');assert.equal(changedRoot.querySelector(':scope > .structure-type').textContent,'共有する主体');
+ assert.equal(changedRoot.querySelector(':scope > strong').textContent,'共有する主体');assert.equal(changedRoot.querySelector(':scope > .structure-type'),null);assert.match(detail.textContent,/型名主体（Admin）/);
  const searchType=host.querySelector('input[type=search]');searchType.value='共有する主体';searchType.dispatchEvent(new window.Event('input'));
  assert([...host.querySelectorAll('[data-concept-id="n-who"]')].some(item=>!item.hidden),'search includes the declared logical name');
  const fallback=structuredClone(normalized);delete fallback.meta.conceptNames;fallback.concepts.find(concept=>concept.id==='n-who').name='主体（ロールなど）';render(fallback,'n-bd');

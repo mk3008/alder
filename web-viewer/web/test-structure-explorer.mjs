@@ -154,8 +154,8 @@ try{
  assert.deepEqual(groups(activity),['所有（5）','参照（1）'],'Activity shows its own attributes and outgoing references only');
  const step=host.querySelector('[data-relation-id="nr-activity-step"][data-relation-direction="owned"] > details');
  const stepRow=step.querySelector(':scope > summary');assert.equal(step.open,false);
- assert.match(stepRow.textContent,/1\.\.N.*手順.*型：Step/,'name, type and multiplicity remain on the row');
- assert(!stepRow.textContent.includes('業務内の順序付き手順。'));w.Explorer.renderStructureDetails(detail,model,{kind:'structure',conceptId:'n-step',fromId:'n-activity',relationId:'nr-activity-step'});assert(detail.textContent.includes('業務内の順序付き手順。'),'the relationship description moves to the detail');
+ assert.match(stepRow.textContent,/1\.\.N.*手順/,'name and multiplicity remain on the row');assert(!stepRow.textContent.includes('型：'));
+ assert(!stepRow.textContent.includes('業務内の順序付き手順。'));w.Explorer.renderStructureDetails(detail,model,{kind:'structure',conceptId:'n-step',fromId:'n-activity',relationId:'nr-activity-step'});assert(detail.textContent.includes('業務内の順序付き手順。'),'the relationship description moves to the detail');assert.match(detail.textContent,/型名Step/,'the type is retained in detail');
  assert(!stepRow.textContent.includes('n-step')&&!stepRow.textContent.includes('逆 1'),'internal ID and reverse count are not displayed in the row');
  assert.match(stepRow.title,/移動先 1\.\.N／反対側 1/,'both defined multiplicities remain available');
  assert.equal(activity.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"]').length,0);

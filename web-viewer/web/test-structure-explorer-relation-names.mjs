@@ -42,9 +42,9 @@ const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,w
 const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host');
- const render=(m,rootId)=>w.Explorer.renderStructureExplorer(host,m,{rootId});
+ let shown;const render=(m,rootId)=>{shown=m;w.Explorer.renderStructureExplorer(host,m,{rootId});};
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
- const pairs=s=>[...s.querySelectorAll(':scope > .structure-element')].map(n=>[n.querySelector('strong').textContent,n.querySelector('.structure-element-type').textContent]);
+ const pairs=s=>{assert(!s.querySelector('.structure-element-type'));const item=s.closest('.structure-item'),parent=item.parentElement.closest('.structure-item'),probe=w.document.createElement('div');w.Explorer.renderStructureDetails(probe,shown,{kind:'structure',conceptId:item.dataset.conceptId,fromId:parent.dataset.conceptId,relationId:item.dataset.relationId});const type=[...probe.querySelectorAll('dt')].find(dt=>dt.textContent==='型名').nextElementSibling.textContent;return [...s.querySelectorAll(':scope > .structure-element')].map(n=>[n.querySelector('strong').textContent,'型：'+type]);};
  const changed=structuredClone(normalized);changed.meta.relationNames['nr-step-data']='モデルに記録した操作対象';
  render(changed,'n-step');
  assert.deepEqual(pairs(row('nr-step-data')),[['モデルに記録した操作対象','型：InformationGroup']],'the loaded model is the source of the name');
@@ -70,9 +70,9 @@ try{
  const invalid=structuredClone(normalized);invalid.meta.relationNames['nr-exchange-pair']=42;render(invalid,'n-exchange');
  assert.deepEqual(pairs(row('nr-exchange-pair')),[['対応する手順','型：Step']],'a non-string conceptual name does not override a valid field mapping');
  invalid.meta.relationNames['nr-step-data']=' ';render(invalid,'n-step');assert.deepEqual(pairs(row('nr-step-data')),[['名前未定義','型：InformationGroup']]);
- render(physical,'fmt-package');assert.deepEqual(pairs(row('rel-package-bd')),[['文書一覧','型：業務設計書（Business Design）[]']]);
+ render(physical,'fmt-package');assert.deepEqual(pairs(row('rel-package-bd')),[['文書一覧','型：業務設計書（Business Design）']]);
  const multi=structuredClone(physical);multi.meta.relationNames={'rel-order-step':'順序規則の手順'};render(multi,'fmt-order');
- assert.deepEqual(pairs(row('rel-order-step')),[['順序規則の手順','型：手順行（Step）'],['前後の手順','型：手順行（Step）'],['対象手順','型：手順行（Step）[]']],'conceptual names do not erase multiple physical field names or array information');
+ assert.deepEqual(pairs(row('rel-order-step')),[['順序規則の手順','型：手順行（Step）'],['前後の手順','型：手順行（Step）'],['対象手順','型：手順行（Step）']],'conceptual names do not erase multiple physical field names or array information');
  covered.push('STRUCTURE-NAME-003');
 }finally{w.close();}
 checkCoverage(covered);verify(readFileSync('verification/structure-explorer-relation-names.check-items.json'));

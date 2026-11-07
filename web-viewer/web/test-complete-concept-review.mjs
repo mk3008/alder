@@ -106,7 +106,7 @@ const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,w
 const w=new JSDOM('<div id="host"></div>',{url:'https://viewer.test/',runScripts:'outside-only',pretendToBeVisual:true}).window;
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const host=w.document.getElementById('host'),detail=w.document.createElement('div');w.Explorer.renderStructureExplorer(host,model,{select:selection=>w.Explorer.renderStructureDetails(detail,model,selection)});
- const root=host.querySelector('.structure-root > [data-concept-id="n-package"] > details > summary');assert(root);assert.match(root.textContent,/DocumentPackage.*文書パッケージ/);
+ const root=host.querySelector('.structure-root > [data-concept-id="n-package"] > details > summary');assert(root);assert.match(root.textContent,/文書パッケージ/);assert(!root.textContent.includes('DocumentPackage'));
  for(const id of ['nr-package-bd','nr-package-checkdoc','nr-package-state-doc','nr-package-concept-doc'])assert(host.querySelector(`[data-relation-id="${id}"]`),id);
  assert(!host.textContent.includes('この起点からたどれない構造'));
  [...host.querySelectorAll('button')].find(x=>x.textContent==='すべて展開').click();
