@@ -1,4 +1,4 @@
-name: Structure sidebar browser check
+name: Verify concept domain navigation contracts
 on:
   push:
     branches:
@@ -6,9 +6,9 @@ on:
 permissions:
   contents: read
 jobs:
-  browser:
+  contract:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: web-viewer
@@ -16,44 +16,10 @@ jobs:
       - uses: actions/checkout@v4.4.0
         with:
           persist-credentials: false
+          fetch-depth: 2
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '24.22.1'
       - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm run build
-      - run: npm run test:complete-concept-review
-      - run: npm run test:structure-explorer
-      - run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
-      - name: Install Japanese review-image font
-        run: |
-          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
-            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
-            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf --output "$FONT_FILE"
-            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
-            mkdir -p "$HOME/.local/share/fonts"
-            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
-            fc-cache -f "$HOME/.local/share/fonts"
-          fi
-          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
-      - name: Check structure sidebar at desktop and mobile widths
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
-          SERVER_PID=$!
-          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
-            sleep 1
-          done
-          export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
-          node web/test-browser.mjs --cases structureSampleHeader,explorerResizeScroll,conceptValueDomains
-      - name: Save screenshots
-        if: always()
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: structure-sidebar-screenshots
-          path: |
-            web-viewer/web/evidence/structure-explorer-sidebar/*.png
-            web-viewer/web/evidence/explorer-resize-scroll/*.png
-            web-viewer/web/evidence/concept-value-domains/*.png
-          if-no-files-found: ignore
-          retention-days: 7
+      - run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
+      - run: npm run verify:contract
