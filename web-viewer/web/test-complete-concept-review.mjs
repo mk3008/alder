@@ -69,8 +69,10 @@ for(const p of ['BD.objects[].information[].description','BD.activities[].where'
 const versioned=relation(recorded.get('Concept.reviewGroups[].capabilities[].samples[].checkIds').relationId);assert.equal(versioned.toLabel,'0..N');assert.match(versioned.condition,/0\.2.*1件以上.*0\.1/);
 assert.equal(recorded.get('Concept.reviewGroups[].capabilities[].testSpecification').representation,'flattened');covered.push('COMPLETE-02');
 
-for(const c of old.concepts){const after=graph.nodes.get(c.id);assert(after,c.id);if(c.id!=='n-order')assert.deepEqual(model.meta.conceptNames[c.id],old.meta.conceptNames[c.id],c.id+' name');for(const f of c.information)assert.deepEqual(after.information.find(x=>x.id===f.id),f,c.id+' field');}
-for(const r of old.relations){const next=relation(r.id);assert(next,r.id);for(const key of ['fromConceptId','toConceptId','kind','fromLabel','toLabel','reviewState'])assert.equal(next[key],r[key],r.id+' '+key);}
+const movedFlowFields=new Set(['n-step-field-2','n-step-field-6']);
+for(const c of old.concepts){const after=graph.nodes.get(c.id);assert(after,c.id);if(c.id!=='n-order')assert.deepEqual(model.meta.conceptNames[c.id],old.meta.conceptNames[c.id],c.id+' name');for(const f of c.information){const owner=c.id==='n-step'&&movedFlowFields.has(f.id)?graph.nodes.get('n-flow-step'):after;assert.deepEqual(owner.information.find(x=>x.id===f.id),f,c.id+' field');}}
+for(const r of old.relations){const next=relation(r.id);assert(next,r.id);for(const key of ['fromConceptId','toConceptId','kind','fromLabel','toLabel','reviewState']){if(r.id==='nr-activity-step'&&['toConceptId','fromLabel'].includes(key))continue;if(r.id==='nr-step-when'&&key==='fromConceptId')continue;assert.equal(next[key],r[key],r.id+' '+key);}}
+assert.deepEqual([relation('nr-activity-step').toConceptId,relation('nr-activity-step').fromLabel],['n-flow-step','0..1']);assert.equal(relation('nr-step-when').fromConceptId,'n-flow-step');
 assert.equal(model.meta.conceptNames['n-order'].logicalName,'順序制約');covered.push('COMPLETE-03');
 
 const actual=source.documents.find(d=>d.kind==='checkItems');

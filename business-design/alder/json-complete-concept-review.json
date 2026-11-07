@@ -1091,7 +1091,7 @@
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "候補の activities。現行0.7の物理構造そのものではない。",
+          "description": "一つの目的の達成を目指す業務。標準手順で目的を達成し、未達で中断・終了する場合は必要に応じて例外を記録する。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -1215,10 +1215,6 @@
               "name": "識別子"
             },
             {
-              "id": "n-step-field-2",
-              "name": "所属する業務"
-            },
-            {
               "id": "n-step-field-3",
               "name": "操作"
             },
@@ -1231,20 +1227,8 @@
               "name": "やり取りの種類"
             },
             {
-              "id": "n-step-field-6",
-              "name": "適用する判定行"
-            },
-            {
               "id": "cf-db0d007e8ba4d3",
               "name": "旧手順の記述"
-            },
-            {
-              "id": "cf-325c153e7c0af3",
-              "name": "必須・任意"
-            },
-            {
-              "id": "cf-d6937d0cbb9486",
-              "name": "適用条件"
             },
             {
               "id": "cf-7c34239a2778a4",
@@ -1257,14 +1241,10 @@
             {
               "id": "cf-d17f8349434605",
               "name": "前提手順の確定状態"
-            },
-            {
-              "id": "cf-fde33f3870ef9f",
-              "name": "手順の順序"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "候補の steps。現行0.7の物理構造そのものではない。",
+          "description": "業務で主体が行う一つの手順の内容。同じ業務の標準フローと例外フローで、共通の手順を参照できる。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -1600,10 +1580,18 @@
             {
               "id": "n-exception-field-4",
               "name": "説明"
+            },
+            {
+              "id": "cf-72bb8e0364abb4",
+              "name": "発生条件"
+            },
+            {
+              "id": "cf-fc923775ebb84a",
+              "name": "例外時の結果"
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "候補の exceptions。現行0.7の物理構造そのものではない。",
+          "description": "業務の目的を達成する前に中断・終了する場合の条件、対応と結果。下書きを残す中断のように、エラーではない例外もある。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -1644,7 +1632,7 @@
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "候補の continuities。現行0.7の物理構造そのものではない。",
+          "description": "例外による中断後に必要な扱い、保持する情報と再開の条件・手順。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -3160,6 +3148,43 @@
           "activityLinks": [],
           "sourceRefs": [],
           "reviewState": "未レビュー"
+        },
+        {
+          "id": "n-flow-step",
+          "name": "フロー内の手順（FlowStep）",
+          "subsystemId": "format-review",
+          "information": [
+            {
+              "id": "n-step-field-2",
+              "name": "所属する業務"
+            },
+            {
+              "id": "n-step-field-6",
+              "name": "適用する判定行"
+            },
+            {
+              "id": "cf-325c153e7c0af3",
+              "name": "必須・任意"
+            },
+            {
+              "id": "cf-d6937d0cbb9486",
+              "name": "適用条件"
+            },
+            {
+              "id": "cf-fde33f3870ef9f",
+              "name": "手順の順序"
+            },
+            {
+              "id": "cf-de02b14f7f7ee3",
+              "name": "実施条件の確定状態"
+            }
+          ],
+          "reason": "Alder JSON概念モデルのレビュー候補。",
+          "description": "一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。",
+          "businessObjectIds": [],
+          "activityLinks": [],
+          "sourceRefs": [],
+          "reviewState": "未レビュー"
         }
       ],
       "relations": [
@@ -3270,13 +3295,13 @@
         {
           "id": "nr-activity-step",
           "fromConceptId": "n-activity",
-          "toConceptId": "n-step",
-          "fromPerTarget": "1",
+          "toConceptId": "n-flow-step",
+          "fromPerTarget": "0..1",
           "toPerSource": "1..N",
-          "condition": "業務内の順序付き手順。",
+          "condition": "業務の目的を達成する標準フローの手順。順序と実施条件を持ち、対象の手順を参照する。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
-          "fromLabel": "1",
+          "fromLabel": "0..1",
           "toLabel": "1..N",
           "kind": "down"
         },
@@ -3312,7 +3337,7 @@
           "toConceptId": "n-exception",
           "fromPerTarget": "1",
           "toPerSource": "0..N",
-          "condition": "例外は業務に属する。",
+          "condition": "目的を達成する前の中断・終了のうち、後続の業務に影響するものや、扱いを明記する必要があるもの。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -3477,11 +3502,11 @@
         },
         {
           "id": "nr-step-when",
-          "fromConceptId": "n-step",
+          "fromConceptId": "n-flow-step",
           "toConceptId": "n-row",
           "fromPerTarget": "0..N",
           "toPerSource": "0..1",
-          "condition": "手順を実行する判定行。",
+          "condition": "この流れで手順を実行する条件を判定表の行として表す場合の参照。別の実施条件があれば併せて保持する。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -5541,6 +5566,32 @@
           "fromLabel": "0..N",
           "toLabel": "0..1",
           "kind": "reference"
+        },
+        {
+          "id": "nr-exception-step",
+          "fromConceptId": "n-exception",
+          "toConceptId": "n-flow-step",
+          "fromPerTarget": "0..1",
+          "toPerSource": "0..N",
+          "condition": "目的未達で中断・終了するときに行う手順。順序と実施条件を持ち、同じ業務の手順を参照する。",
+          "reviewState": "未レビュー",
+          "sourceRefs": [],
+          "fromLabel": "0..1",
+          "toLabel": "0..N",
+          "kind": "down"
+        },
+        {
+          "id": "nr-flow-step-definition",
+          "fromConceptId": "n-flow-step",
+          "toConceptId": "n-step",
+          "fromPerTarget": "0..N",
+          "toPerSource": "1",
+          "condition": "この流れで実行する手順。同じ業務の標準・例外フローで共通の手順を参照できる。",
+          "reviewState": "未レビュー",
+          "sourceRefs": [],
+          "fromLabel": "0..N",
+          "toLabel": "1",
+          "kind": "reference"
         }
       ],
       "handoffs": [],
@@ -5695,7 +5746,7 @@
             "nullable": true,
             "nullableReason": "目的が未決の草案を保持できるようにする。合意済みの業務では目的を明らかにする。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "その業務を行い、結果を成立させる目的。",
+            "logicalMeaning": "その業務で何を達成したいかという目的。画面の操作と業務の目的は同じとは限らない。",
             "referenceValue": "業務上の意味と保証の合意",
             "referenceSource": "Alder自身の業務設計書（旧0.4形式）"
           },
@@ -5863,7 +5914,9 @@
             "nullable": true,
             "nullableReason": "手順の操作が未決の草案を保持できるようにする。合意済みの手順では操作を明らかにする。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "手順で主体が行う操作や、相手に対する働きかけ。"
+            "logicalMeaning": "手順で主体が行う操作や、相手に対する働きかけ。",
+            "referenceValue": "下書きを保存する",
+            "referenceSource": "架空の編集業務における中断の例"
           },
           {
             "informationId": "n-step-field-4",
@@ -6339,7 +6392,9 @@
             "nullable": false,
             "nullableReason": "この項目を他と区別し、業務の言葉で確認するための名前を持つ。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "業務で起きる例外を他と区別する名前。"
+            "logicalMeaning": "目的を達成する前に業務が中断・終了する場合を、他の例外と区別する名前。",
+            "referenceValue": "編集の中断（下書き保存）",
+            "referenceSource": "架空の編集業務における中断の例"
           },
           {
             "informationId": "n-exception-field-4",
@@ -6350,7 +6405,9 @@
             "nullable": true,
             "nullableReason": "未記録・未確定の草案を保持できるようにする。合意時に必要な内容は別途確認し、非該当と混同しない。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "例外が発生する状況や、業務上の扱いを説明する。"
+            "logicalMeaning": "目的を達成する前の中断・終了について、条件や結果だけでは表しきれない扱いを説明する。下書き保存のようにエラーではない中断も含む。",
+            "referenceValue": "編集内容を確定せず下書きを残し、後で編集を再開できる。",
+            "referenceSource": "架空の編集業務における中断の例"
           },
           {
             "informationId": "n-continuity-field-1",
@@ -6369,7 +6426,7 @@
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "中断・再開の扱いが必要になる条件。"
+            "logicalMeaning": "既存データに記録された中断・再開の条件。例外の発生条件と照合し、内容を失わずに引き継ぐ。"
           },
           {
             "informationId": "n-continuity-field-3",
@@ -6379,7 +6436,9 @@
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "中断した業務を再開・続行・終了のどの扱いにするか。"
+            "logicalMeaning": "中断した業務を再開・続行・終了のどの扱いにするか。",
+            "referenceValue": "下書きを残して中断し、後で再開できる。",
+            "referenceSource": "架空の編集業務における中断の例"
           },
           {
             "informationId": "n-continuity-field-4",
@@ -6389,7 +6448,9 @@
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "中断した業務を再開できる条件。"
+            "logicalMeaning": "中断した業務を再開できる条件。",
+            "referenceValue": "保存した下書きがあるとき",
+            "referenceSource": "架空の編集業務における中断の例"
           },
           {
             "informationId": "n-continuity-field-5",
@@ -6399,7 +6460,9 @@
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "中断した業務を再開するときに行う操作。"
+            "logicalMeaning": "中断した業務を再開するときに行う操作。",
+            "referenceValue": "保存した下書きを開いて編集を再開する",
+            "referenceSource": "架空の編集業務における中断の例"
           },
           {
             "informationId": "n-relation-field-1",
@@ -9147,10 +9210,10 @@
             "relationIds": [],
             "valueType": "string",
             "sampleValue": "required",
-            "nullable": true,
-            "nullableReason": "必須・任意が未決の手順を保持し、合意時に必要性を明らかにする。",
+            "nullable": null,
+            "nullableReason": "既存の必須・任意の記録を移行時に照合する。新しい手順の独立した属性とはしない。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "手順が必須か任意かを表す。適用条件とは区別する。"
+            "logicalMeaning": "既存の手順に記録された必須・任意。選択できたかどうかの意味を、将来の変換時に条件やフローと照合する。"
           },
           {
             "informationId": "cf-d6937d0cbb9486",
@@ -9158,10 +9221,10 @@
             "relationIds": [],
             "valueType": "string | null",
             "sampleValue": null,
-            "nullable": null,
-            "nullableReason": "適用条件なしと条件未決は別であり、nullだけで両方を表さない。",
+            "nullable": true,
+            "nullableReason": "判定行だけで条件を表す場合や無条件の場合は文章を持たない。条件未決と無条件は確定状態で区別する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "その手順を適用する条件。条件が未決の場合と、条件なしと確定した場合は区別する。"
+            "logicalMeaning": "この手順を実行する条件。判定表の行で同じ条件を表せる場合は重ねて記載せず、別の条件は保持する。条件の未決・無条件・条件ありは確定状態で区別する。"
           },
           {
             "informationId": "cf-7c34239a2778a4",
@@ -9226,7 +9289,7 @@
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "業務が中断されたときに行う対応。"
+            "logicalMeaning": "既存データに記録された中断時の対応。例外時の手順と照合し、内容を失わずに引き継ぐ。"
           },
           {
             "informationId": "cf-3b6b631818c9b6",
@@ -9345,11 +9408,46 @@
             "logicalSourcePaths": [
               "steps.ordinal"
             ],
+            "logicalMeaning": "標準フローまたは一つの例外フローの中での手順の順序。表示例は1番から数える。",
             "sampleValue": 1,
             "nullable": false,
             "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
-            "nullableStatus": "proposal",
-            "logicalMeaning": "同じ業務の中での手順の順序。表示例は1番から数える。"
+            "nullableStatus": "proposal"
+          },
+          {
+            "informationId": "cf-de02b14f7f7ee3",
+            "physicalName": "",
+            "relationIds": [],
+            "valueType": "string（未決／無条件／条件あり）",
+            "logicalMeaning": "この手順を行う条件が未決、無条件、条件ありのどれか。条件ありには判定行による条件も含む。",
+            "referenceValue": "条件あり",
+            "nullable": false,
+            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
+            "nullableStatus": "proposal"
+          },
+          {
+            "informationId": "cf-72bb8e0364abb4",
+            "physicalName": "",
+            "relationIds": [],
+            "valueType": "string",
+            "logicalMeaning": "業務の目的を達成する前に、例外の扱いが必要になる条件。",
+            "referenceValue": "編集の途中で下書き保存を選択した場合",
+            "referenceSource": "架空の編集業務における中断の例",
+            "nullable": true,
+            "nullableReason": "条件が未決の草案や、判定行を条件として参照する例外を保持する。合意時には発生条件を明らかにする。",
+            "nullableStatus": "proposal"
+          },
+          {
+            "informationId": "cf-fc923775ebb84a",
+            "physicalName": "",
+            "relationIds": [],
+            "valueType": "string",
+            "logicalMeaning": "目的が未達のまま中断・終了したときに、後続の業務に影響する結果。",
+            "referenceValue": "編集内容を確定せず、下書きとして残す",
+            "referenceSource": "架空の編集業務における中断の例",
+            "nullable": true,
+            "nullableReason": "結果が未決の草案を保持する。後続に影響する結果は合意時に明らかにする。",
+            "nullableStatus": "proposal"
           },
           {
             "informationId": "cf-5d1e7f527404d3",
@@ -9944,7 +10042,7 @@
           "nr-bd-data": "情報項目グループ",
           "nr-data-dataitem": "構成項目",
           "nr-dataitem-information": "情報項目",
-          "nr-activity-step": "手順",
+          "nr-activity-step": "標準手順",
           "nr-activity-result": "業務結果",
           "nr-activity-decision": "判定表",
           "nr-activity-exception": "例外",
@@ -10118,7 +10216,9 @@
           "cr-0e892d7d1941a0": "原典のチェック文書",
           "cr-efc1603a290fe5": "原典の状態遷移文書",
           "cr-e85dabdee49a39": "原典の概念モデル文書",
-          "cr-6be09cb6892e2c": "原典の外部業務設計書"
+          "cr-6be09cb6892e2c": "原典の外部業務設計書",
+          "nr-exception-step": "例外時の手順",
+          "nr-flow-step-definition": "実行する手順"
         },
         "conceptNames": {
           "n-bd": {
@@ -10380,6 +10480,10 @@
           "c-afef9bf65df472": {
             "typeName": "ReviewBoundary",
             "logicalName": "レビュー間の境界"
+          },
+          "n-flow-step": {
+            "typeName": "FlowStep",
+            "logicalName": "フロー内の手順"
           }
         },
         "schemaCoverage": [
@@ -12376,7 +12480,8 @@
             "relationIds": [
               "nr-activity-step"
             ],
-            "orderInformationId": "cf-fde33f3870ef9f"
+            "orderInformationId": "cf-fde33f3870ef9f",
+            "note": "旧JSONの手順を標準・例外に自動分類しない。旧手順の順序・条件と元の記録を保持して移行時に対応を確認する。"
           },
           {
             "path": "BD.activities[].procedure.steps[].id",
@@ -12405,14 +12510,16 @@
           {
             "path": "BD.activities[].procedure.steps[].obligation",
             "representation": "attribute",
-            "conceptId": "n-step",
-            "informationId": "cf-325c153e7c0af3"
+            "conceptId": "n-flow-step",
+            "informationId": "cf-325c153e7c0af3",
+            "note": "旧optionalを無条件の必須手順に変換しない。実施を選べた意味と元の値を保持し、条件・フローへの対応を確認する。"
           },
           {
             "path": "BD.activities[].procedure.steps[].appliesWhen",
             "representation": "attribute",
-            "conceptId": "n-step",
-            "informationId": "cf-d6937d0cbb9486"
+            "conceptId": "n-flow-step",
+            "informationId": "cf-d6937d0cbb9486",
+            "stateInformationId": "cf-de02b14f7f7ee3"
           },
           {
             "path": "BD.activities[].procedure.steps[].effect",
@@ -12559,7 +12666,7 @@
           {
             "path": "BD.activities[].procedure.steps[].whenDecision.rowId",
             "representation": "relation",
-            "conceptId": "n-step",
+            "conceptId": "n-flow-step",
             "informationId": "n-step-field-6",
             "relationIds": [
               "nr-step-when"
@@ -13224,12 +13331,16 @@
               "reason": "旧形式の状態遷移の発生事象を保持する。"
             },
             "cf-325c153e7c0af3": {
-              "kind": "needs-review",
-              "reason": "現行候補にはあるが、手順に必須・任意を独立して持つ必要があるか確認する。"
+              "kind": "legacy",
+              "reason": "既存JSONの必須・任意。概念候補では独立項目とせず、変換時に選択可能だった意味を条件やフローと照合する。"
             },
-            "cf-d6937d0cbb9486": {
-              "kind": "needs-review",
-              "reason": "文章の適用条件と判定行の参照の役割・重複を確認する。"
+            "n-continuity-field-2": {
+              "kind": "legacy",
+              "reason": "既存の中断条件。例外の発生条件と照合し、元の記述を失わずに引き継ぐ。"
+            },
+            "cf-1443c584c8cbc3": {
+              "kind": "legacy",
+              "reason": "既存の中断時の扱い。例外時の手順と照合し、元の記述を失わずに引き継ぐ。"
             },
             "cf-c9266f8766647e": {
               "kind": "needs-review",
@@ -13388,7 +13499,7 @@
               "conceptId": "n-activity",
               "subsystemId": "format-review",
               "name": "業務（Activity）",
-              "description": "候補の activities。現行0.7の物理構造そのものではない。",
+              "description": "一つの目的の達成を目指す業務。標準手順で目的を達成し、未達で中断・終了する場合は必要に応じて例外を記録する。",
               "sources": [],
               "fields": [
                 {
@@ -13508,16 +13619,12 @@
               "conceptId": "n-step",
               "subsystemId": "format-review",
               "name": "手順行（Step）",
-              "description": "候補の steps。現行0.7の物理構造そのものではない。",
+              "description": "業務で主体が行う一つの手順の内容。同じ業務の標準フローと例外フローで、共通の手順を参照できる。",
               "sources": [],
               "fields": [
                 {
                   "name": "識別子",
                   "informationId": "n-step-field-1"
-                },
-                {
-                  "name": "所属する業務",
-                  "informationId": "n-step-field-2"
                 },
                 {
                   "name": "操作",
@@ -13532,20 +13639,8 @@
                   "informationId": "n-step-field-5"
                 },
                 {
-                  "name": "適用する判定行",
-                  "informationId": "n-step-field-6"
-                },
-                {
                   "name": "旧手順の記述",
                   "informationId": "cf-db0d007e8ba4d3"
-                },
-                {
-                  "name": "必須・任意",
-                  "informationId": "cf-325c153e7c0af3"
-                },
-                {
-                  "name": "適用条件",
-                  "informationId": "cf-d6937d0cbb9486"
                 },
                 {
                   "name": "操作の効果",
@@ -13558,10 +13653,6 @@
                 {
                   "name": "前提手順の確定状態",
                   "informationId": "cf-d17f8349434605"
-                },
-                {
-                  "name": "手順の順序",
-                  "informationId": "cf-fde33f3870ef9f"
                 }
               ]
             },
@@ -13744,6 +13835,40 @@
                   "informationId": "cf-c9b1db9948abbf"
                 }
               ]
+            },
+            {
+              "id": "overview-n-flow-step",
+              "conceptId": "n-flow-step",
+              "subsystemId": "format-review",
+              "name": "フロー内の手順（FlowStep）",
+              "description": "一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。",
+              "sources": [],
+              "fields": [
+                {
+                  "name": "所属する業務",
+                  "informationId": "n-step-field-2"
+                },
+                {
+                  "name": "適用する判定行",
+                  "informationId": "n-step-field-6"
+                },
+                {
+                  "name": "必須・任意",
+                  "informationId": "cf-325c153e7c0af3"
+                },
+                {
+                  "name": "適用条件",
+                  "informationId": "cf-d6937d0cbb9486"
+                },
+                {
+                  "name": "手順の順序",
+                  "informationId": "cf-fde33f3870ef9f"
+                },
+                {
+                  "name": "実施条件の確定状態",
+                  "informationId": "cf-de02b14f7f7ee3"
+                }
+              ]
             }
           ],
           "edges": [
@@ -13816,11 +13941,11 @@
             {
               "id": "overview-nr-activity-step",
               "fromViewId": "overview-n-activity",
-              "toViewId": "overview-n-step",
+              "toViewId": "overview-n-flow-step",
               "relationIds": [
                 "nr-activity-step"
               ],
-              "fromLabel": "1",
+              "fromLabel": "0..1",
               "toLabel": "1..N",
               "kind": "down"
             },
@@ -13889,6 +14014,17 @@
               "fromLabel": "1",
               "toLabel": "0..N",
               "kind": "down"
+            },
+            {
+              "id": "overview-nr-flow-step-definition",
+              "fromViewId": "overview-n-flow-step",
+              "toViewId": "overview-n-step",
+              "relationIds": [
+                "nr-flow-step-definition"
+              ],
+              "fromLabel": "0..N",
+              "toLabel": "1",
+              "kind": "reference"
             }
           ],
           "handoffIds": []

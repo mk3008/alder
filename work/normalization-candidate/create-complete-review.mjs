@@ -382,6 +382,7 @@ for(const [path,ids] of [
 ])Object.assign(model.meta.schemaCoverage.find(x=>x.path===path),{relationIds:ids});
 // Add business facts present in the source schema but omitted from the earlier
 // 25-structure projection. Existing field IDs remain stable in this candidate.
+addNode('n-flow-step','FlowStep','フロー内の手順','一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。');
 const extras={
  'n-bd':[['schemaVersion','文書の版','string'],['kind','文書の種類','string'],['preface','前書き','string'],['scope','対象範囲の説明','string']],
  'n-object':[['icon','アイコン','string']],
@@ -400,6 +401,14 @@ for(const [id,fields] of Object.entries(extras))for(const [key,label,type] of fi
  const row=(normalized.entities[table]??[]).find(x=>Object.hasOwn(x,key)&&x[key]!==null&&x[key]!=='')??(normalized.entities[table]??[]).find(x=>Object.hasOwn(x,key));
  const mapping={informationId:field,physicalName:table+'.'+key,relationIds:[],valueType:type,...(row?{sampleValue:structuredClone(row[key])}:{})};model.meta.fieldMappings.push(mapping);infoMap.set(field,mapping);
 }
+// An action may be shared by the standard and exception flows. The condition,
+// source ownership key and old obligation apply to its position in a flow.
+for(const physical of ['steps.activityId','steps.whenDecisionRowId','steps.obligation','steps.appliesWhen']){
+ const mapping=model.meta.fieldMappings.find(item=>item.physicalName===physical),source=nodes.get('n-step'),target=nodes.get('n-flow-step');
+ const index=source.information.findIndex(item=>item.id===mapping?.informationId);
+ if(index<0)throw Error('Missing flow-specific field '+physical);
+ target.information.push(source.information.splice(index,1)[0]);
+}
 // The logical state distinguishes undecided / known-empty / known-present.
 // Source-only flags used for lossless reconstruction are not promoted to
 // business entities or shown as if they were the business meaning.
@@ -416,9 +425,24 @@ for(const [id,key,label,table,stateKey,association,ownerKey] of logicalStates){
  model.meta.fieldMappings.push(mapping);infoMap.set(field,mapping);
 }
 const orderField=infoId('logical.step-order'),firstStep=normalized.entities.steps[0];
-nodes.get('n-step').information.push({id:orderField,name:'手順の順序'});
-const orderMapping={informationId:orderField,physicalName:'',relationIds:[],valueType:'number',logicalSourcePaths:['steps.ordinal'],...(firstStep?{sampleValue:firstStep.ordinal+1}:{})};
+nodes.get('n-flow-step').information.push({id:orderField,name:'手順の順序'});
+const orderMapping={informationId:orderField,physicalName:'',relationIds:[],valueType:'number',logicalSourcePaths:['steps.ordinal'],logicalMeaning:'標準フローまたは一つの例外フローの中での手順の順序。表示例は1番から数える。',...(firstStep?{sampleValue:firstStep.ordinal+1}:{})};
 model.meta.fieldMappings.push(orderMapping);infoMap.set(orderField,orderMapping);
+// Conditions are business information even when the specific representation
+// is an existing decision row. A source null alone cannot settle the status.
+const stepConditionStatus=infoId('logical.step-condition-status');
+nodes.get('n-flow-step').information.push({id:stepConditionStatus,name:'実施条件の確定状態'});
+const stepConditionMapping={informationId:stepConditionStatus,physicalName:'',relationIds:[],valueType:'string（未決／無条件／条件あり）',logicalMeaning:'この手順を行う条件が未決、無条件、条件ありのどれか。条件ありには判定行による条件も含む。',referenceValue:'条件あり'};
+model.meta.fieldMappings.push(stepConditionMapping);infoMap.set(stepConditionStatus,stepConditionMapping);
+// A general exception can occur without an interruption. Its condition and
+// outcome are logical facts; source prose is not automatically decomposed.
+for(const [key,label,meaning,example] of [
+ ['exception-condition','発生条件','業務の目的を達成する前に、例外の扱いが必要になる条件。','編集の途中で下書き保存を選択した場合'],
+ ['exception-outcome','例外時の結果','目的が未達のまま中断・終了したときに、後続の業務に影響する結果。','編集内容を確定せず、下書きとして残す']
+]){
+ const id=infoId('logical.'+key),mapping={informationId:id,physicalName:'',relationIds:[],valueType:'string',logicalMeaning:meaning,referenceValue:example,referenceSource:'架空の編集業務における中断の例'};
+ nodes.get('n-exception').information.push({id,name:label});model.meta.fieldMappings.push(mapping);infoMap.set(id,mapping);
+}
 // A missing referenced State alone cannot distinguish @none from @unknown.
 // Preserve that business distinction explicitly while keeping JSON sentinels
 // as source mappings rather than declaring physical columns.
@@ -439,6 +463,22 @@ const logicalNotes={
  'nr-data-dataitem':'同じ情報項目でも、グループごとに含める条件を持てる。構成項目はその関係を表す。'
 };
 for(const [id,note] of Object.entries(logicalNotes))model.relations.find(x=>x.id===id).condition=note;
+// The association is needed because a single Step can be shared by flows but
+// have a different order or condition in each. It is not a physical table.
+const standardSteps=model.relations.find(x=>x.id==='nr-activity-step');
+standardSteps.toConceptId='n-flow-step';
+standardSteps.fromPerTarget=standardSteps.fromLabel='0..1';
+standardSteps.condition='業務の目的を達成する標準フローの手順。順序と実施条件を持ち、対象の手順を参照する。';
+model.meta.relationNames[standardSteps.id]='標準手順';
+addEdge('nr-exception-step','n-exception','n-flow-step','例外時の手順','0..1','0..N','down','目的未達で中断・終了するときに行う手順。順序と実施条件を持ち、同じ業務の手順を参照する。');
+addEdge('nr-flow-step-definition','n-flow-step','n-step','実行する手順','0..N','1','reference','この流れで実行する手順。同じ業務の標準・例外フローで共通の手順を参照できる。');
+nodes.get('n-activity').description='一つの目的の達成を目指す業務。標準手順で目的を達成し、未達で中断・終了する場合は必要に応じて例外を記録する。';
+nodes.get('n-step').description='業務で主体が行う一つの手順の内容。同じ業務の標準フローと例外フローで、共通の手順を参照できる。';
+nodes.get('n-exception').description='業務の目的を達成する前に中断・終了する場合の条件、対応と結果。下書きを残す中断のように、エラーではない例外もある。';
+nodes.get('n-continuity').description='例外による中断後に必要な扱い、保持する情報と再開の条件・手順。';
+model.relations.find(x=>x.id==='nr-activity-exception').condition='目的を達成する前の中断・終了のうち、後続の業務に影響するものや、扱いを明記する必要があるもの。';
+const stepWhen=model.relations.find(x=>x.id==='nr-step-when');stepWhen.fromConceptId='n-flow-step';
+stepWhen.condition='この流れで手順を実行する条件を判定表の行として表す場合の参照。別の実施条件があれば併せて保持する。';
 // The old ordering construct captures a logical constraint. Its relation to
 // conditional prerequisites remains a review question, not a table decision.
 model.meta.conceptNames['n-order'].logicalName='順序制約';
@@ -477,7 +517,10 @@ bdField('BD.activities[].who.kind','actors.kind');bdField('BD.activities[].who.r
 bdFlat('BD.activities[].procedure','n-activity','手順の所有関係に展開。');
 bdRelation('BD.activities[].procedure.steps','nr-activity-step');
 bdCoverage.find(x=>x.path==='BD.activities[].procedure.steps').orderInformationId=orderField;
+bdCoverage.find(x=>x.path==='BD.activities[].procedure.steps').note='旧JSONの手順を標準・例外に自動分類しない。旧手順の順序・条件と元の記録を保持して移行時に対応を確認する。';
 const sp='BD.activities[].procedure.steps[]';bdFields(sp,'steps','id action method legacyText obligation appliesWhen effect');
+bdCoverage.find(x=>x.path===sp+'.appliesWhen').stateInformationId=stepConditionStatus;
+bdCoverage.find(x=>x.path===sp+'.obligation').note='旧optionalを無条件の必須手順に変換しない。実施を選べた意味と元の値を保持し、条件・フローへの対応を確認する。';
 bdRelation(sp+'.whatDataIds','nr-step-data');bdRelation(sp+'.exchange','nr-step-exchange');bdField(sp+'.exchange.kind','steps.exchangeKind');
 bdFields(sp+'.exchange','stepInteractions','phase direction objectId relationId pairedStepId');bdRelation(sp+'.exchange.dataIds','nr-exchange-data');
 bdRelation(sp+'.parties','nr-step-party');
@@ -546,13 +589,27 @@ for(const [path,value] of Object.entries(actualReferences)){
  const mapping=model.meta.fieldMappings.find(item=>item.physicalName===path);
  if(mapping&&value!==undefined&&!Object.hasOwn(mapping,'referenceValue')){mapping.referenceValue=structuredClone(value);mapping.referenceSource='Alder自身の業務設計書（旧0.4形式）';}
 }
+// A single consistent, explicitly illustrative editing example makes the
+// exception, interruption and restart reviewable without changing source BD.
+for(const [path,value] of Object.entries({
+ 'steps.action':'下書きを保存する',
+ 'exceptions.name':'編集の中断（下書き保存）',
+ 'exceptions.description':'編集内容を確定せず下書きを残し、後で編集を再開できる。',
+ 'continuities.outcome':'下書きを残して中断し、後で再開できる。',
+ 'continuities.resumeCondition':'保存した下書きがあるとき',
+ 'continuities.resumeAction':'保存した下書きを開いて編集を再開する'
+})){
+ const mapping=model.meta.fieldMappings.find(item=>item.physicalName===path);
+ if(mapping&&!Object.hasOwn(mapping,'referenceValue')){mapping.referenceValue=value;mapping.referenceSource='架空の編集業務における中断の例';}
+}
 // Review annotations are explicit and do not change the original mappings.
 // See compatibility-inventory.ja.md for evidence and unresolved distinctions.
 const markedFields={
  'steps.legacyText':['legacy','旧形式の手順文章を移行時に保持する。'],
  'State.transitions[].event':['legacy','旧形式の状態遷移の発生事象を保持する。'],
- 'steps.obligation':['needs-review','現行候補にはあるが、手順に必須・任意を独立して持つ必要があるか確認する。'],
- 'steps.appliesWhen':['needs-review','文章の適用条件と判定行の参照の役割・重複を確認する。'],
+ 'steps.obligation':['legacy','既存JSONの必須・任意。概念候補では独立項目とせず、変換時に選択可能だった意味を条件やフローと照合する。'],
+ 'continuities.trigger':['legacy','既存の中断条件。例外の発生条件と照合し、元の記述を失わずに引き継ぐ。'],
+ 'continuities.onInterrupt':['legacy','既存の中断時の扱い。例外時の手順と照合し、元の記述を失わずに引き継ぐ。'],
  'Check.items[].detailSummary':['needs-review','旧形式の詳細見出しを保持する。現行のチェックにも独立した概要が必要か確認する。'],
  'retained Check.items.reviewState':['needs-review','旧データの確認状態を保持し、現在の運用で必要な状態を確認する。'],
  'Concept.subsystems[].reviewState':['needs-review','旧データの確認状態を保持し、現在の運用で必要な状態を確認する。'],
@@ -577,10 +634,17 @@ const relationMarks={};for(const relation of model.relations){
  if(mark)relationMarks[relation.id]=mark;
 }
 model.meta.compatibilityReview={fields:fieldMarks,concepts:conceptMarks,relations:relationMarks};
-// Refresh the already-authored overview's labels/fields without changing its
-// membership; the structure explorer reads the full model and new package root.
+// The overview's standard-step edge must point to the flow-specific entry;
+// keep the Step node and connect it through the new conceptual reference.
+const overview=model.presentation.subsystemViews;
+const standardView=overview.edges.find(edge=>edge.relationIds.includes('nr-activity-step'));
+if(!standardView)throw Error('Missing standard-step overview relation');
+standardView.toViewId='overview-n-flow-step';standardView.fromLabel='0..1';
+overview.nodes.push({id:'overview-n-flow-step',conceptId:'n-flow-step',subsystemId:'format-review',name:nodes.get('n-flow-step').name,description:nodes.get('n-flow-step').description,sources:[],fields:[]});
+overview.edges.push({id:'overview-nr-flow-step-definition',fromViewId:'overview-n-flow-step',toViewId:'overview-n-step',relationIds:['nr-flow-step-definition'],fromLabel:'0..N',toLabel:'1',kind:'reference'});
+// Refresh the already-authored overview's labels and fields from the model.
 const byId=new Map(model.concepts.map(c=>[c.id,c]));
-for(const n of model.presentation.subsystemViews.nodes){const c=byId.get(n.conceptId);n.name=c.name;n.fields=c.information.map(f=>({name:f.name,informationId:f.id}));}
+for(const n of model.presentation.subsystemViews.nodes){const c=byId.get(n.conceptId);n.name=c.name;n.fields=c.information.map(f=>({name:f.name,informationId:f.id}));if(['n-activity','n-step','n-exception','n-continuity','n-flow-step'].includes(n.conceptId))n.description=c.description;}
 validate(pkg);
 writeFileSync(new URL('../../business-design/alder/json-complete-concept-review.json',here),JSON.stringify(pkg,null,2)+'\n');
 console.log(JSON.stringify({concepts:model.concepts.length,relations:model.relations.length,coverage:model.meta.schemaCoverage.length,aliases:model.meta.schemaAliases.length}));
