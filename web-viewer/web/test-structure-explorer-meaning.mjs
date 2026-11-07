@@ -45,7 +45,7 @@ const withoutMeanings=structuredClone(pkg);const priorMeta=withoutMeanings.docum
 delete priorMeta.compatibilityReview;for(const mapping of priorMeta.fieldMappings)delete mapping.logicalMeaning;
 // The procedure, exception-origin and information-owner requirements revise
 // this candidate explicitly; retain a full lock apart from explanations.
-assert.equal(hash(JSON.stringify(withoutMeanings)),'579814bed8f7fad00423cedd038f2f59016dfe6a35a5956f487df7303a67aff8','only field explanations may change beyond the approved conceptual revisions');
+assert.equal(hash(JSON.stringify(withoutMeanings)),'5a40e7935bba495a14b61019de2eaa643ab3de4e0e1c776136a83f10d1f7faee','only field explanations may change beyond the approved conceptual revisions');
 assert.equal(hash(readFileSync('../business-design/alder/business-design.json')),'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9');
 assert.equal(hash(readFileSync('../tools/document_storage/schema.mjs')),'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2');
 assert.deepEqual(readFileSync(path),bytes);covered.push('STRUCTURE-MEANING-004');

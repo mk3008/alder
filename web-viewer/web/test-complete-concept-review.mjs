@@ -85,7 +85,7 @@ const reference=model.meta.fieldMappings.find(x=>x.sourceSchemaPath==='State.sta
 for(const path of ['Check.items[].fields','Concept.reviewGroups[].reviewer','Concept.reviewGroups[].graph','Concept.reviewGroups[].graph.subsystemViews','Concept.reviewGroups[].capabilities[].testSpecification','Concept.reviewGroups[].meta','Concept.presentation','Concept.presentation.subsystemViews'])assert.equal(recorded.get(path).representation,'flattened',path);
 for(const path of ['Concept.reviewGroups[].graph.subsystemViews','Concept.reviewGroups[].capabilities[].testSpecification','Concept.presentation.subsystemViews'])assert(mapping(recorded.get(path).stateInformationId),'optional flattened property retains presence: '+path);
 const oneToOneOwned=model.relations.filter(r=>r.kind==='down'&&['1','0..1'].includes(r.toLabel)).map(r=>r.id).sort();assert.deepEqual(oneToOneOwned,['nr-exception-continuity','nr-step-exchange']);
-assert.match(relation('nr-step-exchange').condition,/受渡しがある手順/);assert.match(relation('nr-exception-continuity').condition,/中断する例外.*必要な場合/);assert.equal(model.meta.conceptNames['n-continuity'].logicalName,'中断・再開の扱い');covered.push('LOGICAL-01');
+assert.match(relation('nr-step-exchange').condition,/受渡しがある手順/);assert.match(graph.nodes.get('n-continuity').description,/中断する例外で必要/);assert.equal(model.meta.conceptNames['n-continuity'].logicalName,'中断・再開の扱い');covered.push('LOGICAL-01');
 
 const example=structuredClone(source),bd=example.documents.find(d=>d.kind==='businessDesign'),informationId='logical-test-phone';
 bd.objects[0].information.push({id:informationId,name:'電話番号',description:'連絡先の電話番号'});

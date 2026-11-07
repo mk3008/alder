@@ -464,7 +464,9 @@ for(const [key,label,type,path,reference] of [
 }
 const logicalNotes={
  'nr-step-exchange':'受渡しがある手順だけに付く情報。独立した業務や識別子を意味しない。',
- 'nr-exception-continuity':'中断・再開を別業務として表現することもできるが、配線が複雑になる場合は必要な情報を例外に含める。中断する例外に必要な場合だけ付け、再開しない場合や別業務で再開する場合もある。',
+ // The meaning and rationale are authored on the concept itself so the
+ // drawer has one complete explanation rather than two duplicate sections.
+ 'nr-exception-continuity':'',
  'nr-step-party':'手順のFrom／Toに記録された当事者。未記録は当事者が存在しないという確定ではない。',
  'nr-data-dataitem':'同じ情報項目でも、グループごとに含める条件を持てる。構成項目はその関係を表す。'
 };
@@ -484,7 +486,7 @@ nodes.get('n-step').description='業務で主体が行う一つの手順の内�
 nodes.get('n-exception').description='業務の目的を達成する前に中断・終了する場合の条件、対応と結果。下書きを残す中断のように、エラーではない例外もある。特定の手順で発生する場合と、業務全体で発生する場合を区別し、発生箇所が未決の例外も保持する。';
 model.meta.conceptNames['n-continuity'].logicalName='中断・再開の扱い';
 nodes.get('n-continuity').name='中断・再開の扱い（InterruptionHandling）';
-nodes.get('n-continuity').description='中断・再開は別の業務として表現することもできるが、業務とその配線が複雑になる場合は例外として同じ業務に含める。中断時に保持する情報や必要に応じた再開条件・操作を表し、再開しない中断では再開を設けない。';
+nodes.get('n-continuity').description='中断する例外で必要な情報をまとめる。中断・再開は別業務として表現することもできるが、配線が複雑になる場合は例外に含める。中断時に保持する情報や必要に応じた再開条件・操作を表し、再開せず終了する場合や別業務で再開する場合もある。';
 model.meta.relationNames['nr-exception-continuity']='中断・再開の扱い';
 model.meta.relationNames['nr-continuity-interrupted']='中断した位置';
 model.meta.relationNames['nr-continuity-resume']='再開する位置';

@@ -49,7 +49,7 @@ covered.push('EXCEPTION-ORIGIN-02');
 edge('nr-exception-continuity','n-exception','n-continuity','down','1','0..1');
 edge('nr-continuity-interrupted','n-continuity','n-step','reference','0..N','0..1');
 edge('nr-continuity-resume','n-continuity','n-step','reference','0..N','0..1');
-assert.match(concept('n-continuity').description,/再開しない中断/);
+assert.match(concept('n-continuity').description,/再開せず終了/);
 assert.match(relation('nr-continuity-resume').condition,/別の業務で再開/);
 const draft=read('../tools/document_storage/examples/continuity-draft-v06.json').documents[0].exceptions[0].continuity;
 assert.equal(draft.interruptedAtStepId,'enter');assert.equal(draft.resumeAtStepId,'enter');
@@ -61,7 +61,7 @@ assert.equal(model.meta.relationNames['nr-continuity-resume'],'再開する位�
 assert.match(relation('nr-continuity-interrupted').condition,/中断操作そのものではない/);
 assert.match(relation('nr-continuity-resume').condition,/再開操作そのものではない/);
 assert.match(mapping('continuities.resumeAction').logicalMeaning,/操作.*位置とは区別/);
-assert.match(relation('nr-exception-continuity').condition,/別業務.*配線が複雑.*例外に含める/);
+assert.match(concept('n-continuity').description,/別業務.*配線が複雑.*例外に含める/);
 covered.push('EXCEPTION-ORIGIN-04');
 
 assert.deepEqual(mapping('exceptions.activityId').relationKeyIds,['nr-activity-exception']);
@@ -91,7 +91,7 @@ try{
  const render=(m,id)=>w.Explorer.renderStructureExplorer(tree,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection)});
  const value=label=>[...detail.querySelectorAll('dt')].find(item=>item.textContent===label)?.nextElementSibling?.textContent;
  const expand=()=>[...tree.querySelectorAll('button')].find(item=>item.textContent==='すべて展開').click();
- render(model,'n-exception');const continuity=tree.querySelector('[data-relation-id="nr-exception-continuity"] > details > summary');assert(continuity);continuity.click();assert.match(value('説明'),/別業務.*配線が複雑.*例外に含める/);
+ render(model,'n-exception');const continuity=tree.querySelector('[data-relation-id="nr-exception-continuity"] > details > summary');assert(continuity);continuity.click();assert.match(value('説明'),/別業務.*配線が複雑.*例外に含める/);assert.equal(value('構造の説明'),undefined,'the rationale appears once as a complete explanation');
  render(model,'n-flow-step');assert(tree.querySelector('[data-relation-id="nr-flow-step-exception"]'));
  render(model,'n-axis');expand();const item=tree.querySelector('[data-relation-id="nr-dataitem-information"][data-relation-direction="reference"]');assert(item,'decision axis reaches the same information item through the group');
  item.querySelector(':scope > details > summary').click();assert.equal(value('所属'),'対象（Object）');
