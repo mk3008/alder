@@ -17,7 +17,7 @@ const modified=JSON.parse(authorityBytes);modified.checks[0].guarantee='';assert
 const path='../business-design/alder/json-complete-concept-review.json',bytes=readFileSync(path),pkg=JSON.parse(bytes);
 const model=pkg.documents.find(d=>d.kind==='conceptModel'),before=JSON.stringify(model),catalog=model.meta.compatibilityReview;
 const field=(m,path)=>{const mapping=m.meta.fieldMappings.find(item=>item.physicalName===path),owner=m.concepts.find(c=>c.information.some(i=>i.id===mapping?.informationId));assert(mapping&&owner,path);return {mapping,owner};};
-const legacy=['steps.legacyText','State.transitions[].event','steps.obligation','continuities.trigger','continuities.onInterrupt'];
+const legacy=['steps.legacyText','State.transitions[].event','steps.obligation','continuities.trigger','continuities.onInterrupt','steps.appliesWhen'];
 const uncertain=['Check.items[].detailSummary','retained Check.items.reviewState','Concept.subsystems[].reviewState','Concept.concepts[].reviewState','Concept.relations[].reviewState','Concept.handoffs[].reviewState'];
 for(const path of legacy)assert.equal(catalog.fields[field(model,path).mapping.informationId]?.kind,'legacy',path);
 for(const path of uncertain)assert.equal(catalog.fields[field(model,path).mapping.informationId]?.kind,'needs-review',path);
@@ -57,10 +57,31 @@ try{
 }finally{w.close();}
 assert.equal(JSON.stringify(model),before);assert.deepEqual(readFileSync(path),bytes);
 const unchanged=structuredClone(pkg),unchangedMeta=unchanged.documents.find(d=>d.kind==='conceptModel').meta;delete unchangedMeta.compatibilityReview;
+// Restore only the superseded FlowStep/purpose changes when checking the earlier
+// frozen hash. Their new behavior is checked by structure-explorer-review-feedback.
+const previousFlow=unchanged.documents.find(d=>d.kind==='conceptModel');
+const flow=previousFlow.concepts.find(x=>x.id==='n-flow-step');
+assert(!flow.information.some(x=>x.id==='cf-de02b14f7f7ee3'));
+flow.description="一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。";
+flow.information.push({"id":"cf-de02b14f7f7ee3","name":"実施条件の確定状態"});
+previousFlow.relations.find(x=>x.id==='nr-step-when').condition="この流れで手順を実行する条件を判定表の行として表す場合の参照。別の実施条件があれば併せて保持する。";
+const flowNode=previousFlow.presentation.subsystemViews.nodes.find(x=>x.id==='overview-n-flow-step');
+flowNode.description="一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。";
+flowNode.fields.push({"name":"実施条件の確定状態","informationId":"cf-de02b14f7f7ee3"});
+const mappings=previousFlow.meta.fieldMappings;
+const insertion=mappings.findIndex(x=>x.informationId==='cf-b1693377ad86be');assert(insertion>=0);
+mappings.splice(insertion,0,{"informationId":"cf-de02b14f7f7ee3","physicalName":"","relationIds":[],"valueType":"string（未決／無条件／条件あり）","logicalMeaning":"この手順を行う条件が未決、無条件、条件ありのどれか。条件ありには判定行による条件も含む。","referenceValue":"条件あり","nullable":false,"nullableReason":"未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。","nullableStatus":"proposal","valueDomain":{"kind":"enum","source":"概念モデルの定義","values":[{"value":"未決"},{"value":"無条件"},{"value":"条件あり"}]}});
+mappings.find(x=>x.physicalName==='steps.appliesWhen').nullableReason="判定行だけで条件を表す場合や無条件の場合は文章を持たない。条件未決と無条件は確定状態で区別する。";
+delete mappings.find(x=>x.physicalName==='activities.problem').logicalPurpose;
+const coverageEntry=previousFlow.meta.schemaCoverage.find(x=>x.informationId==='cf-d6937d0cbb9486');
+delete coverageEntry.note;coverageEntry.stateInformationId='cf-de02b14f7f7ee3';
+
+mappings.find(x=>x.physicalName==='steps.appliesWhen').logicalMeaning="この手順を実行する条件。判定表の行で同じ条件を表せる場合は重ねて記載せず、別の条件は保持する。条件の未決・無条件・条件ありは確定状態で区別する。";
+
 for(const mapping of unchangedMeta.fieldMappings){delete mapping.valueDomain;if(mapping.physicalName==='continuities.outcome')delete mapping.sampleValue;}
 // The approved procedure, exception-origin and ownership revisions change the
 // model itself; retain the lock with only compatibility notes removed.
-assert.equal(hash(JSON.stringify(unchanged)),'5334e630fd80a7c51cf489c406bd84078e55a41b051ffce1ee29bdaa08d24856');
+assert.equal(hash(JSON.stringify(unchanged)),'b3d45152143a03dc377c5ab57c5d383ef282692ac274568ba9d50b19975ccea5');
 assert.equal(hash(readFileSync('../business-design/alder/business-design.json')),'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9');
 assert.equal(hash(readFileSync('../tools/document_storage/schema.mjs')),'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2');
 covered.push('STRUCTURE-COMPAT-004');coverage(covered);assert.equal(hash(readFileSync(authority)),authorityHash);assert.equal(hash(readFileSync(previousAuthority)),previousHash);
