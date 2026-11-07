@@ -16,7 +16,7 @@ export async function verifyExplorerResizeScroll(browser){
  const raw=readFileSync('../business-design/alder/json-complete-concept-review.json','utf8');
  const results=[],out='web/evidence/explorer-resize-scroll';mkdirSync(out,{recursive:true});
  for(const width of [1280,393]){
-  const context=await browser.newContext({viewport:{width,height:700}}),page=await context.newPage(),errors=[];
+  const context=await browser.newContext({viewport:{width,height:700},hasTouch:width<=800}),page=await context.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   try{
    await context.route(fixture,route=>route.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:raw}));
@@ -27,7 +27,12 @@ export async function verifyExplorerResizeScroll(browser){
    const separator=page.getByRole('separator',{name:'エクスプローラーの幅'}),tree=page.locator('#explorer-structure-panel .structure-tree');
    await tree.waitFor({state:'visible'});const initial=(await explorer.boundingBox()).width;
    const handle=await separator.boundingBox();await page.mouse.move(handle.x+handle.width/2,handle.y+100);await page.mouse.down();await page.mouse.move(handle.x+handle.width/2+60,handle.y+100,{steps:5});await page.mouse.up();
-   const dragged=(await explorer.boundingBox()).width;assert(dragged>=initial+50,'dragging right widens the left drawer');
+   let dragged=(await explorer.boundingBox()).width;assert(dragged>=initial+50,'dragging right widens the left drawer');
+   if(width<=800){
+    const touch=await context.newCDPSession(page),edge=await separator.boundingBox(),x=edge.x+edge.width/2,y=edge.y+100;
+    await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+20,y}]});await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+    const touched=(await explorer.boundingBox()).width;assert(touched>=dragged+18,'touch drag widens the left drawer');dragged=touched;await touch.detach();
+   }
    assert.equal(Number(await separator.getAttribute('aria-valuenow')),Math.round(dragged));
    await separator.focus();await separator.press('ArrowLeft');const narrowed=(await explorer.boundingBox()).width;assert(Math.abs(narrowed-(dragged-40))<=1,'left arrow narrows the drawer');
    await separator.press('ArrowRight');assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1,'right arrow widens the drawer');
@@ -45,7 +50,7 @@ export async function verifyExplorerResizeScroll(browser){
    await page.locator('#design-explorer .shell-heading button').click();assert(!await explorer.isVisible());await page.locator('#node-list-toggle').click();assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1,'opening the drawer retains its width');
    await page.reload();await page.locator('.structure-detail-page:not([hidden])').waitFor({state:'visible',timeout:30000});if(!await explorer.isVisible())await page.locator('#node-list-toggle').click();assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1,'reload restores the width in this session');
    if(width>800){
-    await documentTab.click();await page.locator('#explorer-document-panel [data-explorer-key="concept:overview"]').click();
+    await documentTab.click();const group=page.locator('#explorer-document-panel [data-explorer-key="group:concept"]');if(await group.getAttribute('aria-expanded')==='false')await group.click();await page.locator('#explorer-document-panel [data-explorer-key="concept:overview"]').click();
     const right=page.locator('.concept-related');if(!await right.isVisible())await page.locator('#drawer').click();await right.waitFor({state:'visible'});
     const rightBefore=(await right.boundingBox()).width,leftBefore=(await explorer.boundingBox()).width;
     await separator.focus();await separator.press('ArrowLeft');assert(Math.abs((await right.boundingBox()).width-rightBefore)<=1,'left resize leaves right width unchanged');
