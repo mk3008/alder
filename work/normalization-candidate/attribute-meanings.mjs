@@ -78,7 +78,7 @@ Object.assign(meanings,{
  'rowChecks.coverage':'判定行とチェック項目の対応が、その行の全体を覆うか一部かを示す。',
  'exceptions.id':'業務中に起きる例外を識別し、手順や状態遷移から参照するための値。',
  'continuities.outcome':'中断した業務を再開・続行・終了のどの扱いにするか。',
- 'continuities.resumeAction':'中断した業務を再開するときに行う操作。',
+ 'continuities.resumeAction':'中断した業務を再開するために行う操作。再開後に続ける手順の位置とは区別する。再開しない場合には不要。',
  'continuities.onInterrupt':'既存データに記録された中断時の対応。例外時の手順と照合し、内容を失わずに引き継ぐ。',
  'relations.id':'業務と対象の関係を識別し、手順などとの対応を追跡する。',
  'relations.label':'業務と対象の関係に付ける補足の名前。関係の種類や両端とは別。',

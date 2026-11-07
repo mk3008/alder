@@ -80,6 +80,7 @@ export function nullabilityProposal(concept,info,mapping){
  let decision=specific[mapping.physicalName];
  if(!decision&&concept.id==='n-exception'&&info.name==='発生条件')decision=[true,'条件が未決の草案や、判定行を条件として参照する例外を保持する。合意時には発生条件を明らかにする。'];
  if(!decision&&concept.id==='n-exception'&&info.name==='例外時の結果')decision=[true,'結果が未決の草案を保持する。後続に影響する結果は合意時に明らかにする。'];
+ if(!decision&&concept.id==='n-exception'&&info.name==='発生箇所')decision=[false,'発生箇所は未決、業務全体、手順を区別する。元の記録だけで確定しない場合は未決とする。'];
  if(!decision&&info.name==='識別子')decision=[false,'設計上の対象を同一のものとして追跡・参照するため、識別子を持つ。採番方法は決めない。'];
  if(!decision&&['名前','項目名','グループ名','表題','判定軸の名前'].includes(info.name))decision=[false,'この項目を他と区別し、業務の言葉で確認するための名前を持つ。'];
  if(!decision&&['改訂','原典の改訂','文書の版','形式の版','文書の種類','形式'].includes(info.name))decision=[false,'文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。'];

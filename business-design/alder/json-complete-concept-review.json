@@ -1149,7 +1149,7 @@
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "候補の information。現行0.7の物理構造そのものではない。",
+          "description": "対象が持つ一つの情報項目。情報項目グループや判定表から参照する場合も、対象に定義した同じ項目を参照する。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -1467,7 +1467,7 @@
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "候補の axes。現行0.7の物理構造そのものではない。",
+          "description": "判定表で条件を整理する観点。情報項目自体とは限らず、同じ項目グループについて値や重複など異なる観点を設けられる。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -1582,6 +1582,10 @@
               "name": "説明"
             },
             {
+              "id": "cf-b1693377ad86be",
+              "name": "発生箇所"
+            },
+            {
               "id": "cf-72bb8e0364abb4",
               "name": "発生条件"
             },
@@ -1591,7 +1595,7 @@
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "業務の目的を達成する前に中断・終了する場合の条件、対応と結果。下書きを残す中断のように、エラーではない例外もある。",
+          "description": "業務の目的を達成する前に中断・終了する場合の条件、対応と結果。下書きを残す中断のように、エラーではない例外もある。特定の手順で発生する場合と、業務全体で発生する場合を区別し、発生箇所が未決の例外も保持する。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -1599,7 +1603,7 @@
         },
         {
           "id": "n-continuity",
-          "name": "中断・再開（InterruptionHandling）",
+          "name": "中断・再開の扱い（InterruptionHandling）",
           "subsystemId": "format-review",
           "information": [
             {
@@ -1632,7 +1636,7 @@
             }
           ],
           "reason": "正規化候補の構造レビュー。",
-          "description": "例外による中断後に必要な扱い、保持する情報と再開の条件・手順。",
+          "description": "中断・再開は別の業務として表現することもできるが、業務とその配線が複雑になる場合は例外として同じ業務に含める。中断時に保持する情報や必要に応じた再開条件・操作を表し、再開しない中断では再開を設けない。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -3285,7 +3289,7 @@
           "toConceptId": "n-information",
           "fromPerTarget": "0..N",
           "toPerSource": "1",
-          "condition": "グループに含める情報項目。",
+          "condition": "グループに含める情報項目。対象が持つ同じ項目を参照し、グループごとに項目の複製を作らない。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -3337,7 +3341,7 @@
           "toConceptId": "n-exception",
           "fromPerTarget": "1",
           "toPerSource": "0..N",
-          "condition": "目的を達成する前の中断・終了のうち、後続の業務に影響するものや、扱いを明記する必要があるもの。",
+          "condition": "この業務に属する例外の定義。後続の業務に影響するものや扱いを明記する必要があるものを記録する。業務に属すること自体は業務全体で発生することを意味せず、発生箇所を別に区別する。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -3558,7 +3562,7 @@
           "toConceptId": "n-data",
           "fromPerTarget": "0..N",
           "toPerSource": "0..N",
-          "condition": "判定軸が参照する情報項目グループ。",
+          "condition": "判定軸が参照する情報項目グループ。グループに含まれる項目とその所属先をたどれる。未記録の場合に参照先を推測しない。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -3662,7 +3666,7 @@
           "toConceptId": "n-continuity",
           "fromPerTarget": "1",
           "toPerSource": "0..1",
-          "condition": "中断・再開がある例外だけに付く情報。独立した業務や識別子を意味しない。",
+          "condition": "中断・再開を別業務として表現することもできるが、配線が複雑になる場合は必要な情報を例外に含める。中断する例外に必要な場合だけ付け、再開しない場合や別業務で再開する場合もある。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "1",
@@ -3675,7 +3679,7 @@
           "toConceptId": "n-step",
           "fromPerTarget": "0..N",
           "toPerSource": "0..1",
-          "condition": "中断時の手順。",
+          "condition": "中断時に作業していた手順。下書きを保存するなどの中断操作そのものではない。特定の位置がない場合や未決の場合は参照しない。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -3688,7 +3692,7 @@
           "toConceptId": "n-step",
           "fromPerTarget": "0..N",
           "toPerSource": "0..1",
-          "condition": "再開時の手順。",
+          "condition": "再開後に続ける手順。下書きを探して開くなどの再開操作そのものではない。再開しない場合や位置が未決の場合は参照しない。別の業務で再開する場合もある。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -5592,6 +5596,19 @@
           "fromLabel": "0..N",
           "toLabel": "1",
           "kind": "reference"
+        },
+        {
+          "id": "nr-flow-step-exception",
+          "fromConceptId": "n-flow-step",
+          "toConceptId": "n-exception",
+          "fromPerTarget": "0..N",
+          "toPerSource": "0..N",
+          "condition": "この手順で起きることが分かっている、同じ業務に属する例外。同じ例外を複数の手順から参照できる。判定行で同じ発生条件を表す場合は意味を重複管理しない。判定表への参照だけでは発生手順を確定しない。",
+          "reviewState": "未レビュー",
+          "sourceRefs": [],
+          "fromLabel": "0..N",
+          "toLabel": "0..N",
+          "kind": "reference"
         }
       ],
       "handoffs": [],
@@ -6460,7 +6477,7 @@
             "nullable": null,
             "nullableReason": "この情報が未決・非該当・空のときの違いと、合意時に必要かを確認する。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "中断した業務を再開するときに行う操作。",
+            "logicalMeaning": "中断した業務を再開するために行う操作。再開後に続ける手順の位置とは区別する。再開しない場合には不要。",
             "referenceValue": "保存した下書きを開いて編集を再開する",
             "referenceSource": "架空の編集業務における中断の例"
           },
@@ -9426,6 +9443,18 @@
             "nullableStatus": "proposal"
           },
           {
+            "informationId": "cf-b1693377ad86be",
+            "physicalName": "",
+            "relationIds": [],
+            "valueType": "string（未決／業務全体／手順）",
+            "logicalMeaning": "例外の発生箇所が未決か、特定の手順に限らない業務全体か、特定の手順かを区別する。手順が複数ある場合は同じ例外をそれぞれから参照できる。元の記録から分からない場合は未決とする。",
+            "referenceValue": "業務全体",
+            "referenceSource": "架空の編集業務における中断の例",
+            "nullable": false,
+            "nullableReason": "発生箇所は未決、業務全体、手順を区別する。元の記録だけで確定しない場合は未決とする。",
+            "nullableStatus": "proposal"
+          },
+          {
             "informationId": "cf-72bb8e0364abb4",
             "physicalName": "",
             "relationIds": [],
@@ -10045,7 +10074,7 @@
           "nr-activity-step": "標準手順",
           "nr-activity-result": "業務結果",
           "nr-activity-decision": "判定表",
-          "nr-activity-exception": "例外",
+          "nr-activity-exception": "定義する例外",
           "nr-activity-order": "順序制約",
           "nr-step-exchange": "受渡し",
           "nr-step-party": "手順の当事者",
@@ -10070,9 +10099,9 @@
           "nr-checklink-check": "チェック項目",
           "nr-row-data": "判定結果の項目グループ",
           "nr-row-exception": "判定結果の例外",
-          "nr-exception-continuity": "中断・再開",
-          "nr-continuity-interrupted": "中断時の手順",
-          "nr-continuity-resume": "再開時の手順",
+          "nr-exception-continuity": "中断・再開の扱い",
+          "nr-continuity-interrupted": "中断した位置",
+          "nr-continuity-resume": "再開する位置",
           "nr-continuity-data": "保持する項目グループ",
           "nr-order-before": "前の手順",
           "nr-order-after": "後の手順",
@@ -10218,7 +10247,8 @@
           "cr-e85dabdee49a39": "原典の概念モデル文書",
           "cr-6be09cb6892e2c": "原典の外部業務設計書",
           "nr-exception-step": "例外時の手順",
-          "nr-flow-step-definition": "実行する手順"
+          "nr-flow-step-definition": "実行する手順",
+          "nr-flow-step-exception": "この手順で発生する例外"
         },
         "conceptNames": {
           "n-bd": {
@@ -10299,7 +10329,7 @@
           },
           "n-continuity": {
             "typeName": "InterruptionHandling",
-            "logicalName": "中断・再開"
+            "logicalName": "中断・再開の扱い"
           },
           "n-relation": {
             "typeName": "BusinessRelation",
@@ -13319,6 +13349,9 @@
           }
         ],
         "schemaVariants": "概念モデル文書は0.1と0.2の両方を含む。サンプルのCheck参照と機能テスト仕様は0.2で追加された。",
+        "reverseRelationNames": {
+          "nr-object-information": "所属する対象"
+        },
         "nullabilityProposal": "業務設計に基づく未承認の候補。未決、なし、非該当と移行時の元記録を区別する。",
         "compatibilityReview": {
           "fields": {
@@ -13575,7 +13608,7 @@
               "conceptId": "n-information",
               "subsystemId": "format-review",
               "name": "情報項目（InformationItem）",
-              "description": "候補の information。現行0.7の物理構造そのものではない。",
+              "description": "対象が持つ一つの情報項目。情報項目グループや判定表から参照する場合も、対象に定義した同じ項目を参照する。",
               "sources": [],
               "fields": [
                 {

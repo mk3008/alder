@@ -55,9 +55,9 @@ try{
 }finally{w.close();}
 assert.equal(JSON.stringify(model),before);assert.deepEqual(readFileSync(path),bytes);
 const unchanged=structuredClone(pkg);delete unchanged.documents.find(d=>d.kind==='conceptModel').meta.compatibilityReview;
-// The approved procedure-goal revision changes the model itself; retain the
-// byte lock on that complete candidate with only compatibility notes removed.
-assert.equal(hash(JSON.stringify(unchanged)),'8f127c74847a79fa868d53b0a3d6c7866fa23ed68db867f8723851faf50e89e5');
+// The approved procedure, exception-origin and ownership revisions change the
+// model itself; retain the lock with only compatibility notes removed.
+assert.equal(hash(JSON.stringify(unchanged)),'722affaf43b7845805f13410f9d21d18617cc323eb989a154f8ecf281a600495');
 assert.equal(hash(readFileSync('../business-design/alder/business-design.json')),'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9');
 assert.equal(hash(readFileSync('../tools/document_storage/schema.mjs')),'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2');
 covered.push('STRUCTURE-COMPAT-004');coverage(covered);assert.equal(hash(readFileSync(authority)),authorityHash);

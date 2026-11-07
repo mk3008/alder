@@ -434,6 +434,12 @@ const stepConditionStatus=infoId('logical.step-condition-status');
 nodes.get('n-flow-step').information.push({id:stepConditionStatus,name:'実施条件の確定状態'});
 const stepConditionMapping={informationId:stepConditionStatus,physicalName:'',relationIds:[],valueType:'string（未決／無条件／条件あり）',logicalMeaning:'この手順を行う条件が未決、無条件、条件ありのどれか。条件ありには判定行による条件も含む。',referenceValue:'条件あり'};
 model.meta.fieldMappings.push(stepConditionMapping);infoMap.set(stepConditionStatus,stepConditionMapping);
+// An exception belongs to an activity independently of where it can arise.
+// Missing source information must not be mistaken for an activity-wide origin.
+const exceptionOrigin=infoId('logical.exception-origin');
+nodes.get('n-exception').information.push({id:exceptionOrigin,name:'発生箇所'});
+const exceptionOriginMapping={informationId:exceptionOrigin,physicalName:'',relationIds:[],valueType:'string（未決／業務全体／手順）',logicalMeaning:'例外の発生箇所が未決か、特定の手順に限らない業務全体か、特定の手順かを区別する。手順が複数ある場合は同じ例外をそれぞれから参照できる。元の記録から分からない場合は未決とする。',referenceValue:'業務全体',referenceSource:'架空の編集業務における中断の例'};
+model.meta.fieldMappings.push(exceptionOriginMapping);infoMap.set(exceptionOrigin,exceptionOriginMapping);
 // A general exception can occur without an interruption. Its condition and
 // outcome are logical facts; source prose is not automatically decomposed.
 for(const [key,label,meaning,example] of [
@@ -458,7 +464,7 @@ for(const [key,label,type,path,reference] of [
 }
 const logicalNotes={
  'nr-step-exchange':'受渡しがある手順だけに付く情報。独立した業務や識別子を意味しない。',
- 'nr-exception-continuity':'中断・再開がある例外だけに付く情報。独立した業務や識別子を意味しない。',
+ 'nr-exception-continuity':'中断・再開を別業務として表現することもできるが、配線が複雑になる場合は必要な情報を例外に含める。中断する例外に必要な場合だけ付け、再開しない場合や別業務で再開する場合もある。',
  'nr-step-party':'手順のFrom／Toに記録された当事者。未記録は当事者が存在しないという確定ではない。',
  'nr-data-dataitem':'同じ情報項目でも、グループごとに含める条件を持てる。構成項目はその関係を表す。'
 };
@@ -472,11 +478,28 @@ standardSteps.condition='業務の目的を達成する標準フローの手順�
 model.meta.relationNames[standardSteps.id]='標準手順';
 addEdge('nr-exception-step','n-exception','n-flow-step','例外時の手順','0..1','0..N','down','目的未達で中断・終了するときに行う手順。順序と実施条件を持ち、同じ業務の手順を参照する。');
 addEdge('nr-flow-step-definition','n-flow-step','n-step','実行する手順','0..N','1','reference','この流れで実行する手順。同じ業務の標準・例外フローで共通の手順を参照できる。');
+addEdge('nr-flow-step-exception','n-flow-step','n-exception','この手順で発生する例外','0..N','0..N','reference','この手順で起きることが分かっている、同じ業務に属する例外。同じ例外を複数の手順から参照できる。判定行で同じ発生条件を表す場合は意味を重複管理しない。判定表への参照だけでは発生手順を確定しない。');
 nodes.get('n-activity').description='一つの目的の達成を目指す業務。標準手順で目的を達成し、未達で中断・終了する場合は必要に応じて例外を記録する。';
 nodes.get('n-step').description='業務で主体が行う一つの手順の内容。同じ業務の標準フローと例外フローで、共通の手順を参照できる。';
-nodes.get('n-exception').description='業務の目的を達成する前に中断・終了する場合の条件、対応と結果。下書きを残す中断のように、エラーではない例外もある。';
-nodes.get('n-continuity').description='例外による中断後に必要な扱い、保持する情報と再開の条件・手順。';
-model.relations.find(x=>x.id==='nr-activity-exception').condition='目的を達成する前の中断・終了のうち、後続の業務に影響するものや、扱いを明記する必要があるもの。';
+nodes.get('n-exception').description='業務の目的を達成する前に中断・終了する場合の条件、対応と結果。下書きを残す中断のように、エラーではない例外もある。特定の手順で発生する場合と、業務全体で発生する場合を区別し、発生箇所が未決の例外も保持する。';
+model.meta.conceptNames['n-continuity'].logicalName='中断・再開の扱い';
+nodes.get('n-continuity').name='中断・再開の扱い（InterruptionHandling）';
+nodes.get('n-continuity').description='中断・再開は別の業務として表現することもできるが、業務とその配線が複雑になる場合は例外として同じ業務に含める。中断時に保持する情報や必要に応じた再開条件・操作を表し、再開しない中断では再開を設けない。';
+model.meta.relationNames['nr-exception-continuity']='中断・再開の扱い';
+model.meta.relationNames['nr-continuity-interrupted']='中断した位置';
+model.meta.relationNames['nr-continuity-resume']='再開する位置';
+model.relations.find(x=>x.id==='nr-continuity-interrupted').condition='中断時に作業していた手順。下書きを保存するなどの中断操作そのものではない。特定の位置がない場合や未決の場合は参照しない。';
+model.relations.find(x=>x.id==='nr-continuity-resume').condition='再開後に続ける手順。下書きを探して開くなどの再開操作そのものではない。再開しない場合や位置が未決の場合は参照しない。別の業務で再開する場合もある。';
+model.meta.relationNames['nr-activity-exception']='定義する例外';
+model.relations.find(x=>x.id==='nr-activity-exception').condition='この業務に属する例外の定義。後続の業務に影響するものや扱いを明記する必要があるものを記録する。業務に属すること自体は業務全体で発生することを意味せず、発生箇所を別に区別する。';
+// This is the reverse view of the existing ownership, not a second fact or
+// a copied information item. The viewer exposes only explicitly named reverse
+// navigation, while preserving the original owner-to-item relationship.
+model.meta.reverseRelationNames={...(model.meta.reverseRelationNames??{}),'nr-object-information':'所属する対象'};
+nodes.get('n-information').description='対象が持つ一つの情報項目。情報項目グループや判定表から参照する場合も、対象に定義した同じ項目を参照する。';
+nodes.get('n-axis').description='判定表で条件を整理する観点。情報項目自体とは限らず、同じ項目グループについて値や重複など異なる観点を設けられる。';
+model.relations.find(x=>x.id==='nr-dataitem-information').condition='グループに含める情報項目。対象が持つ同じ項目を参照し、グループごとに項目の複製を作らない。';
+model.relations.find(x=>x.id==='nr-axis-data').condition='判定軸が参照する情報項目グループ。グループに含まれる項目とその所属先をたどれる。未記録の場合に参照先を推測しない。';
 const stepWhen=model.relations.find(x=>x.id==='nr-step-when');stepWhen.fromConceptId='n-flow-step';
 stepWhen.condition='この流れで手順を実行する条件を判定表の行として表す場合の参照。別の実施条件があれば併せて保持する。';
 // The old ordering construct captures a logical constraint. Its relation to
@@ -644,7 +667,7 @@ overview.nodes.push({id:'overview-n-flow-step',conceptId:'n-flow-step',subsystem
 overview.edges.push({id:'overview-nr-flow-step-definition',fromViewId:'overview-n-flow-step',toViewId:'overview-n-step',relationIds:['nr-flow-step-definition'],fromLabel:'0..N',toLabel:'1',kind:'reference'});
 // Refresh the already-authored overview's labels and fields from the model.
 const byId=new Map(model.concepts.map(c=>[c.id,c]));
-for(const n of model.presentation.subsystemViews.nodes){const c=byId.get(n.conceptId);n.name=c.name;n.fields=c.information.map(f=>({name:f.name,informationId:f.id}));if(['n-activity','n-step','n-exception','n-continuity','n-flow-step'].includes(n.conceptId))n.description=c.description;}
+for(const n of model.presentation.subsystemViews.nodes){const c=byId.get(n.conceptId);n.name=c.name;n.fields=c.information.map(f=>({name:f.name,informationId:f.id}));if(['n-activity','n-step','n-exception','n-continuity','n-flow-step','n-information','n-axis'].includes(n.conceptId))n.description=c.description;}
 validate(pkg);
 writeFileSync(new URL('../../business-design/alder/json-complete-concept-review.json',here),JSON.stringify(pkg,null,2)+'\n');
 console.log(JSON.stringify({concepts:model.concepts.length,relations:model.relations.length,coverage:model.meta.schemaCoverage.length,aliases:model.meta.schemaAliases.length}));

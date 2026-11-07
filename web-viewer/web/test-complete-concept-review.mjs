@@ -70,7 +70,7 @@ const versioned=relation(recorded.get('Concept.reviewGroups[].capabilities[].sam
 assert.equal(recorded.get('Concept.reviewGroups[].capabilities[].testSpecification').representation,'flattened');covered.push('COMPLETE-02');
 
 const movedFlowFields=new Set(['n-step-field-2','n-step-field-6']);
-for(const c of old.concepts){const after=graph.nodes.get(c.id);assert(after,c.id);if(c.id!=='n-order')assert.deepEqual(model.meta.conceptNames[c.id],old.meta.conceptNames[c.id],c.id+' name');for(const f of c.information){const owner=c.id==='n-step'&&movedFlowFields.has(f.id)?graph.nodes.get('n-flow-step'):after;assert.deepEqual(owner.information.find(x=>x.id===f.id),f,c.id+' field');}}
+for(const c of old.concepts){const after=graph.nodes.get(c.id);assert(after,c.id);if(!['n-order','n-continuity'].includes(c.id))assert.deepEqual(model.meta.conceptNames[c.id],old.meta.conceptNames[c.id],c.id+' name');for(const f of c.information){const owner=c.id==='n-step'&&movedFlowFields.has(f.id)?graph.nodes.get('n-flow-step'):after;assert.deepEqual(owner.information.find(x=>x.id===f.id),f,c.id+' field');}}
 for(const r of old.relations){const next=relation(r.id);assert(next,r.id);for(const key of ['fromConceptId','toConceptId','kind','fromLabel','toLabel','reviewState']){if(r.id==='nr-activity-step'&&['toConceptId','fromLabel'].includes(key))continue;if(r.id==='nr-step-when'&&key==='fromConceptId')continue;assert.equal(next[key],r[key],r.id+' '+key);}}
 assert.deepEqual([relation('nr-activity-step').toConceptId,relation('nr-activity-step').fromLabel],['n-flow-step','0..1']);assert.equal(relation('nr-step-when').fromConceptId,'n-flow-step');
 assert.equal(model.meta.conceptNames['n-order'].logicalName,'順序制約');covered.push('COMPLETE-03');
@@ -85,7 +85,7 @@ const reference=model.meta.fieldMappings.find(x=>x.sourceSchemaPath==='State.sta
 for(const path of ['Check.items[].fields','Concept.reviewGroups[].reviewer','Concept.reviewGroups[].graph','Concept.reviewGroups[].graph.subsystemViews','Concept.reviewGroups[].capabilities[].testSpecification','Concept.reviewGroups[].meta','Concept.presentation','Concept.presentation.subsystemViews'])assert.equal(recorded.get(path).representation,'flattened',path);
 for(const path of ['Concept.reviewGroups[].graph.subsystemViews','Concept.reviewGroups[].capabilities[].testSpecification','Concept.presentation.subsystemViews'])assert(mapping(recorded.get(path).stateInformationId),'optional flattened property retains presence: '+path);
 const oneToOneOwned=model.relations.filter(r=>r.kind==='down'&&['1','0..1'].includes(r.toLabel)).map(r=>r.id).sort();assert.deepEqual(oneToOneOwned,['nr-exception-continuity','nr-step-exchange']);
-assert.match(relation('nr-step-exchange').condition,/受渡しがある手順/);assert.match(relation('nr-exception-continuity').condition,/中断・再開がある例外/);covered.push('LOGICAL-01');
+assert.match(relation('nr-step-exchange').condition,/受渡しがある手順/);assert.match(relation('nr-exception-continuity').condition,/中断する例外.*必要な場合/);assert.equal(model.meta.conceptNames['n-continuity'].logicalName,'中断・再開の扱い');covered.push('LOGICAL-01');
 
 const example=structuredClone(source),bd=example.documents.find(d=>d.kind==='businessDesign'),informationId='logical-test-phone';
 bd.objects[0].information.push({id:informationId,name:'電話番号',description:'連絡先の電話番号'});

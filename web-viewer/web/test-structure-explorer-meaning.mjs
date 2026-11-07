@@ -43,9 +43,9 @@ const withoutMeanings=structuredClone(pkg);const priorMeta=withoutMeanings.docum
 // The later compatibility filter adds review annotations without changing
 // the underlying mappings or the earlier meaning guarantee.
 delete priorMeta.compatibilityReview;for(const mapping of priorMeta.fieldMappings)delete mapping.logicalMeaning;
-// PROCEDURE-GOAL-01..05 explicitly revise the candidate's flow structure;
-// retain the full-model lock on the new candidate apart from explanations.
-assert.equal(hash(JSON.stringify(withoutMeanings)),'236ec382a456bd9d71e01681f3cf20505881a7633a2f803f220d575cfad24d6f','only field explanations may change beyond the approved flow revision');
+// The procedure, exception-origin and information-owner requirements revise
+// this candidate explicitly; retain a full lock apart from explanations.
+assert.equal(hash(JSON.stringify(withoutMeanings)),'579814bed8f7fad00423cedd038f2f59016dfe6a35a5956f487df7303a67aff8','only field explanations may change beyond the approved conceptual revisions');
 assert.equal(hash(readFileSync('../business-design/alder/business-design.json')),'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9');
 assert.equal(hash(readFileSync('../tools/document_storage/schema.mjs')),'e46e388660df746173e16e8c72b56e9a9a74f6fcd6935f5bff304737961dddb2');
 assert.deepEqual(readFileSync(path),bytes);covered.push('STRUCTURE-MEANING-004');
