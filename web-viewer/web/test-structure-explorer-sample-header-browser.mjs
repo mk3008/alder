@@ -30,7 +30,7 @@ export async function verifyStructureSampleHeader(browser){
    const after=await body.evaluate(el=>{const header=el.querySelector('thead th'),table=el.querySelector('table'),body=el.getBoundingClientRect(),head=header.getBoundingClientRect(),t=table.getBoundingClientRect(),style=getComputedStyle(header),wrap=getComputedStyle(table.parentElement);return {scrollTop:el.scrollTop,bodyTop:body.top,bodyLeft:body.left,bodyRight:body.right,paddingTop:parseFloat(getComputedStyle(el).paddingTop),headerTop:head.top,headerBottom:head.bottom,tableBottom:t.bottom,tableLeft:t.left,tableRight:t.right,position:style.position,background:style.backgroundColor,wrapOverflowX:wrap.overflowX};});
    assert(after.scrollTop>0);assert.equal(after.position,'sticky');assert(after.headerTop>=after.bodyTop-1&&after.headerTop<=after.bodyTop+after.paddingTop+2,'header stays visible at the content top');assert(after.tableBottom>after.headerBottom,'header stays in the table bounds');assert.notEqual(after.background,'rgba(0, 0, 0, 0)');assert.equal(after.wrapOverflowX,'visible');
    assert(after.tableLeft>=after.bodyLeft-1&&after.tableRight<=after.bodyRight+1,'table fits within the content');
-   assert.deepEqual(await table.locator('thead th').allTextContents(),['項目','サンプル','説明']);
+   assert.deepEqual(await table.locator('thead th').allTextContents(),['項目','サンプル','説明','用途']);
    await page.screenshot({path:`${out}/content-${width}.png`});
    await page.locator('#theme').click();assert.notEqual(await header.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)','sticky heading remains opaque in dark mode');
    assert.deepEqual(errors,[]);results.push({width,contentScrollTop:after.scrollTop,headerTop:after.headerTop,bodyTop:after.bodyTop,tableFits:true});

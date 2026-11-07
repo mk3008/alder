@@ -3177,14 +3177,10 @@
             {
               "id": "cf-fde33f3870ef9f",
               "name": "手順の順序"
-            },
-            {
-              "id": "cf-de02b14f7f7ee3",
-              "name": "実施条件の確定状態"
             }
           ],
           "reason": "Alder JSON概念モデルのレビュー候補。",
-          "description": "一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。",
+          "description": "一つの標準フローか一つの例外フローと手順の対応。順序と参照する判定行はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。入力誤りや人数不足など、バリデーションで検出する問題は該当手順の例外に記述する。検査を通過した後の処理は通常の流れに記述する。倒れたものを立て直すように、対象がなければ何もしないだけの場合は、独立した条件を設けず手順に記述する。",
           "businessObjectIds": [],
           "activityLinks": [],
           "sourceRefs": [],
@@ -3510,7 +3506,7 @@
           "toConceptId": "n-row",
           "fromPerTarget": "0..N",
           "toPerSource": "0..1",
-          "condition": "この流れで手順を実行する条件を判定表の行として表す場合の参照。別の実施条件があれば併せて保持する。",
+          "condition": "この流れで手順を実行する判定行への参照。バリデーションの失敗は該当手順の例外として扱う。",
           "reviewState": "未レビュー",
           "sourceRefs": [],
           "fromLabel": "0..N",
@@ -10604,6 +10600,7 @@
             "nullableReason": "課題が未確認・課題なしの場合は内容を持たない。両者は課題の確認状態で区別し、課題ありなら内容が必要。",
             "nullableStatus": "proposal",
             "logicalMeaning": "現在の業務で実際に経験される困りごと。課題が未確認の場合と、課題なしと確認した場合は区別する。",
+            "logicalPurpose": "業務改善を検討する際、解決したい困りごとを把握する。",
             "referenceValue": null,
             "referenceSource": "Alder自身の業務設計書（旧0.4形式）",
             "valueDomain": {
@@ -10688,11 +10685,11 @@
             "valueType": "string | null",
             "sampleValue": null,
             "nullable": true,
-            "nullableReason": "判定行だけで条件を表す場合や無条件の場合は文章を持たない。条件未決と無条件は確定状態で区別する。",
+            "nullableReason": "旧形式の条件文を保持する。nullから無条件や未決を推測しない。",
             "nullableStatus": "proposal",
-            "logicalMeaning": "この手順を実行する条件。判定表の行で同じ条件を表せる場合は重ねて記載せず、別の条件は保持する。条件の未決・無条件・条件ありは確定状態で区別する。",
+            "logicalMeaning": "旧形式の手順に記録された条件文。元の記録を保持し、例外・判定・手順との対応を確認する。",
             "valueDomain": {
-              "kind": "text"
+              "kind": "historical"
             }
           },
           {
@@ -11016,32 +11013,6 @@
             "nullableStatus": "proposal",
             "valueDomain": {
               "kind": "scalar"
-            }
-          },
-          {
-            "informationId": "cf-de02b14f7f7ee3",
-            "physicalName": "",
-            "relationIds": [],
-            "valueType": "string（未決／無条件／条件あり）",
-            "logicalMeaning": "この手順を行う条件が未決、無条件、条件ありのどれか。条件ありには判定行による条件も含む。",
-            "referenceValue": "条件あり",
-            "nullable": false,
-            "nullableReason": "未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。",
-            "nullableStatus": "proposal",
-            "valueDomain": {
-              "kind": "enum",
-              "source": "概念モデルの定義",
-              "values": [
-                {
-                  "value": "未決"
-                },
-                {
-                  "value": "無条件"
-                },
-                {
-                  "value": "条件あり"
-                }
-              ]
             }
           },
           {
@@ -14229,7 +14200,7 @@
             "representation": "attribute",
             "conceptId": "n-flow-step",
             "informationId": "cf-d6937d0cbb9486",
-            "stateInformationId": "cf-de02b14f7f7ee3"
+            "note": "旧形式の条件文は原本を保持し、例外・判定・手順との対応を確認する。nullを無条件または未決に自動確定しない。"
           },
           {
             "path": "BD.activities[].procedure.steps[].effect",
@@ -15047,6 +15018,10 @@
               "kind": "legacy",
               "reason": "既存JSONの必須・任意。概念候補では独立項目とせず、変換時に選択可能だった意味を条件やフローと照合する。"
             },
+            "cf-d6937d0cbb9486": {
+              "kind": "legacy",
+              "reason": "旧形式の条件文。元の記録を保持し、例外・判定・手順への対応を移行時に確認する。"
+            },
             "n-continuity-field-2": {
               "kind": "legacy",
               "reason": "既存の中断条件。例外の発生条件と照合し、元の記述を失わずに引き継ぐ。"
@@ -15554,7 +15529,7 @@
               "conceptId": "n-flow-step",
               "subsystemId": "format-review",
               "name": "フロー内の手順（FlowStep）",
-              "description": "一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。",
+              "description": "一つの標準フローか一つの例外フローと手順の対応。順序と参照する判定行はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。入力誤りや人数不足など、バリデーションで検出する問題は該当手順の例外に記述する。検査を通過した後の処理は通常の流れに記述する。倒れたものを立て直すように、対象がなければ何もしないだけの場合は、独立した条件を設けず手順に記述する。",
               "sources": [],
               "fields": [
                 {
@@ -15576,10 +15551,6 @@
                 {
                   "name": "手順の順序",
                   "informationId": "cf-fde33f3870ef9f"
-                },
-                {
-                  "name": "実施条件の確定状態",
-                  "informationId": "cf-de02b14f7f7ee3"
                 }
               ]
             }

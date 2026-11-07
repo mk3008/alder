@@ -3092,8 +3092,9 @@
     "informationId": "cf-d6937d0cbb9486",
     "item": "適用条件",
     "physicalName": "steps.appliesWhen",
-    "category": "text",
-    "reason": "業務や文書に応じた名前・記述であり、値を列挙しない。"
+    "category": "historical",
+    "reason": "既存記録を保持し、現在の業務概念への扱いは別に確認する。",
+    "compatibility": "legacy"
   },
   {
     "conceptId": "n-flow-step",
@@ -3103,15 +3104,5 @@
     "physicalName": "",
     "category": "scalar",
     "reason": "真偽値・数値または条件に応じた値として扱う。"
-  },
-  {
-    "conceptId": "n-flow-step",
-    "concept": "フロー内の手順（FlowStep）",
-    "informationId": "cf-de02b14f7f7ee3",
-    "item": "実施条件の確定状態",
-    "physicalName": "",
-    "category": "enum",
-    "reason": "意味のある区分を有限の選択肢で示す。",
-    "basis": "概念モデルの定義"
   }
 ]

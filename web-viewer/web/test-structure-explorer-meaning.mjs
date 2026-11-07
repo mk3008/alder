@@ -40,6 +40,26 @@ try{
  assert.equal(JSON.stringify(model),before);covered.push('STRUCTURE-MEANING-003');
 }finally{w.close();}
 const withoutMeanings=structuredClone(pkg);const priorMeta=withoutMeanings.documents.find(d=>d.kind==='conceptModel').meta;
+
+// Restore only the superseded FlowStep/purpose changes when checking the earlier
+// frozen hash. Their new behavior is checked by structure-explorer-review-feedback.
+const previousFlow=withoutMeanings.documents.find(d=>d.kind==='conceptModel');
+const flow=previousFlow.concepts.find(x=>x.id==='n-flow-step');
+assert(!flow.information.some(x=>x.id==='cf-de02b14f7f7ee3'));
+flow.description="一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。";
+flow.information.push({"id":"cf-de02b14f7f7ee3","name":"実施条件の確定状態"});
+previousFlow.relations.find(x=>x.id==='nr-step-when').condition="この流れで手順を実行する条件を判定表の行として表す場合の参照。別の実施条件があれば併せて保持する。";
+const flowNode=previousFlow.presentation.subsystemViews.nodes.find(x=>x.id==='overview-n-flow-step');
+flowNode.description="一つの標準フローか一つの例外フローと手順の対応。順序と実施条件はこの対応に属し、同じ業務の複数の流れから共通の手順を参照できる。";
+flowNode.fields.push({"name":"実施条件の確定状態","informationId":"cf-de02b14f7f7ee3"});
+const mappings=previousFlow.meta.fieldMappings;
+const insertion=mappings.findIndex(x=>x.informationId==='cf-b1693377ad86be');assert(insertion>=0);
+mappings.splice(insertion,0,{"informationId":"cf-de02b14f7f7ee3","physicalName":"","relationIds":[],"valueType":"string（未決／無条件／条件あり）","logicalMeaning":"この手順を行う条件が未決、無条件、条件ありのどれか。条件ありには判定行による条件も含む。","referenceValue":"条件あり","nullable":false,"nullableReason":"未決・なし・あり等の業務上の区別、または手順の順序そのものを明示する項目。","nullableStatus":"proposal","valueDomain":{"kind":"enum","source":"概念モデルの定義","values":[{"value":"未決"},{"value":"無条件"},{"value":"条件あり"}]}});
+mappings.find(x=>x.physicalName==='steps.appliesWhen').nullableReason="判定行だけで条件を表す場合や無条件の場合は文章を持たない。条件未決と無条件は確定状態で区別する。";
+delete mappings.find(x=>x.physicalName==='activities.problem').logicalPurpose;
+const coverageEntry=previousFlow.meta.schemaCoverage.find(x=>x.informationId==='cf-d6937d0cbb9486');
+delete coverageEntry.note;coverageEntry.stateInformationId='cf-de02b14f7f7ee3';
+
 // The later compatibility filter adds review annotations without changing
 // the underlying mappings or the earlier meaning guarantee.
 delete priorMeta.compatibilityReview;for(const mapping of priorMeta.fieldMappings){delete mapping.logicalMeaning;delete mapping.valueDomain;if(mapping.physicalName==='continuities.outcome')delete mapping.sampleValue;}

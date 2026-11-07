@@ -19,7 +19,7 @@ const coverage=actual=>{assert.equal(actual.length,checks.length);assert.equal(n
 const pkg=JSON.parse(readFileSync('../business-design/alder/json-complete-concept-review.json')),model=pkg.documents.find(item=>item.kind==='conceptModel'),before=JSON.stringify(model);
 const inventory=JSON.parse(readFileSync('../work/normalization-candidate/value-domain-inventory.json'));
 const all=model.concepts.flatMap(concept=>concept.information.map(info=>({concept,info}))),byId=new Map(model.meta.fieldMappings.map(mapping=>[mapping.informationId,mapping]));
-assert.equal(all.length,340);assert.equal(byId.size,all.length);assert.equal(inventory.length,all.length);
+assert.equal(all.length,339);assert.equal(byId.size,all.length);assert.equal(inventory.length,all.length);
 assert.equal(new Set(inventory.map(item=>item.informationId)).size,all.length);
 assert.deepEqual(new Set(inventory.map(item=>item.informationId)),new Set(all.map(item=>item.info.id)));
 for(const entry of inventory){const mapping=byId.get(entry.informationId);assert(mapping);assert.equal(entry.physicalName,mapping.physicalName);assert.equal(entry.category,mapping.valueDomain.kind);assert(entry.reason);}
@@ -59,9 +59,9 @@ try{
  const show=(m,id,hideLegacy)=>w.Explorer.renderStructureDetails(detail,m,{kind:'structure',conceptId:id,hideLegacy});
  const row=(m,path)=>detail.querySelector(`tr[data-information-id="${m.meta.fieldMappings.find(x=>x.physicalName===path).informationId}"]`);
  const value=label=>[...detail.querySelectorAll('dt')].find(item=>item.textContent===label)?.nextElementSibling?.textContent;
- show(model,'n-who');const kind=row(model,'actors.kind');assert.match(kind.textContent,/型：列挙/);for(const word of ['role：人が担う役割','system：自動実行するシステム','scheduler：スケジューラー'])assert(kind.textContent.includes(word));assert.equal(kind.querySelectorAll('.structure-domain-values li').length,3);assert.match(kind.textContent,/role/);
+ show(model,'n-who');const kind=row(model,'actors.kind');assert(kind.textContent.includes('型："role" | "system" | "scheduler"'));for(const word of ['role：人が担う役割','system：自動実行するシステム','scheduler：スケジューラー'])assert(kind.textContent.includes(word));assert.equal(kind.querySelectorAll('.structure-domain-values li').length,3);assert.match(kind.textContent,/role/);
  assert.match(row(model,'actors.id').textContent,/型：識別子/);assert.match(row(model,'actors.name').textContent,/空文字や空白のみは使用しない/);assert(!row(model,'actors.name').querySelector('.structure-domain-values'));
- kind.querySelector('button').click();assert.equal(value('型名'),'列挙');assert.match(value('選択肢'),/role：人が担う役割/);assert.match(value('選択肢'),/system：自動実行するシステム/);assert.match(value('選択肢'),/scheduler：スケジューラー/);assert.equal(value('サンプル'),'role');assert.equal(value('null許容'),'許容しない');
+ kind.querySelector('button').click();assert.equal(value('型名'),'"role" | "system" | "scheduler"');assert.match(value('選択肢'),/role：人が担う役割/);assert.match(value('選択肢'),/system：自動実行するシステム/);assert.match(value('選択肢'),/scheduler：スケジューラー/);assert.equal(value('サンプル'),'role');assert.equal(value('null許容'),'許容しない');
  show(model,'n-flow-step',true);assert(!row(model,'steps.obligation'));show(model,'n-flow-step',false);assert.match(row(model,'steps.obligation').textContent,/required：必須/);assert.match(row(model,'steps.obligation').textContent,/互換・移行用/);
  const arbitrary=structuredClone(model),who=arbitrary.meta.fieldMappings.find(item=>item.physicalName==='actors.kind');who.valueDomain={kind:'enum',values:[{value:0},{value:false},{value:''}]};who.sampleValue=0;show(arbitrary,'n-who');assert.match(row(arbitrary,'actors.kind').textContent,/0.*false.*""/);assert(row(arbitrary,'actors.kind').textContent.includes('0'));
  who.valueDomain={kind:'enum',values:[{value:{wrong:true}}]};show(arbitrary,'n-who');assert(!row(arbitrary,'actors.kind').querySelector('.structure-domain-values'));assert.match(row(arbitrary,'actors.kind').textContent,/型：string/);
@@ -76,6 +76,6 @@ for(const path of ['businessDesigns.schemaVersion','formatVersion','Concept.sche
 for(const path of ['actors.color','objects.icon'])assert.equal(field(path).valueDomain.kind,'presentation');
 assert.equal(field('Concept.concepts[].sourceRefs[].targetType').valueDomain.kind,'referenceType');assert.equal(field('Concept.concepts[].sourceRefs[].targetId').valueDomain.kind,'reference');
 const original=structuredClone(pkg),originalModel=original.documents.find(item=>item.kind==='conceptModel');for(const mapping of originalModel.meta.fieldMappings){delete mapping.valueDomain;if(mapping.physicalName==='continuities.outcome')delete mapping.sampleValue;}
-assert.equal(hash(JSON.stringify(original,null,2)+'\n'),'1f8abc11ad3ff741acb6e4e26ce7c47ac1a02327e6a6fa99941a6e54acf5bec7','only value-domain metadata and the corrected outcome sample changed');
+assert.equal(hash(JSON.stringify(original,null,2)+'\n'),'31bb1a96de01c8973e67f988cb3cbe5d2a43714d2cf75324f19a3d9df3e2e6b0','only value-domain metadata and the corrected outcome sample changed');
 covered.push('VALUE-DOMAIN-004');validate(pkg);verifyFrozen();covered.push('VALUE-DOMAIN-005');coverage(covered);
 console.log(JSON.stringify({checks:covered,concepts:model.concepts.length,items:inventory.length,domains:inventory.reduce((counts,item)=>(counts[item.category]=(counts[item.category]??0)+1,counts),{}),scope:'conceptual domains, metadata/DOM and unchanged source; browser geometry checked separately'}));
