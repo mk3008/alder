@@ -137,6 +137,30 @@ test('VERSION-POLICY-014: conversion save failures and source races clean staged
  });
 });
 
+test('VERSION-POLICY-014: unlink failure reports a warning after successful conversion',()=>workspace(old1,async c=>{
+ const unlink=fs.unlinkSync;fs.unlinkSync=()=>{throw Error('synthetic unlinkSync failure');};
+ let r;try{r=await invoke(author,'prepare-version-upgrade',c.source,c.candidate,c.request);}finally{
+  fs.unlinkSync=unlink;
+  for(const file of fs.readdirSync(c.dir).filter(f=>f.startsWith('.alder-conversion-')))fs.unlinkSync(path.join(c.dir,file));
+ }
+ assert.equal(r.status,0,r.error);assert.deepEqual(read(c.candidate),upgradeExceptions(old1,c.req));
+ assert.deepEqual(fs.readFileSync(c.source),c.before);assert.equal(sha(c.source),c.originalSha);
+ assert.deepEqual(r.info.cleanupWarning,{code:'CLEANUP_WARNING',message:'synthetic unlinkSync failure'});c.clean();
+}));
+
+test('VERSION-POLICY-014: unlink failure preserves the original link failure and reports a warning',()=>workspace(old1,async c=>{
+ const link=fs.linkSync,unlink=fs.unlinkSync;
+ fs.linkSync=()=>{throw Error('synthetic linkSync failure');};fs.unlinkSync=()=>{throw Error('synthetic unlinkSync failure');};
+ let r;try{r=await invoke(author,'prepare-version-upgrade',c.source,c.candidate,c.request);}finally{
+  fs.linkSync=link;fs.unlinkSync=unlink;
+  for(const file of fs.readdirSync(c.dir).filter(f=>f.startsWith('.alder-conversion-')))fs.unlinkSync(path.join(c.dir,file));
+ }
+ assert.equal(r.status,2);const messages=r.error.split('\n').map(line=>JSON.parse(line));
+ assert.deepEqual(messages.find(m=>m.code==='CLEANUP_WARNING'),{code:'CLEANUP_WARNING',message:'synthetic unlinkSync failure'});
+ assert.equal(messages.find(m=>m.diagnostics).diagnostics[0].message,c.source+': synthetic linkSync failure');
+ assert.equal(fs.existsSync(c.candidate),false);assert.deepEqual(fs.readFileSync(c.source),c.before);assert.equal(sha(c.source),c.originalSha);c.clean();
+}));
+
 test('VERSION-POLICY-015: migration commit conflicts, lock and save failures preserve bytes/mode',async()=>{
  for(const bundle of [false,true])for(const failure of ['hash','revision','lock','fsyncSync','chmodSync','renameSync','race'])await workspace(old1,async c=>{
   const next=upgradeExceptions(old1,c.req);write(c.candidate,next);
@@ -181,7 +205,7 @@ test('VERSION-POLICY-019: native create/commit and migration preserve all AUTHOR
   const next=upgradeExceptions(old1,c.req);write(c.candidate,next);
   if(bundle)write(c.source,{format:'alder-named-plans',formatVersion:'1.0',plans:[{id:'selected',name:'選択案',package:old1}]});
   fs.chmodSync(c.source,permissions);write(c.op,{expectedRevision:old1.revision,expectedSha256:sha(c.source),migration:'exceptions-0.4'});
-  const r=await invoke(bundle?named:author,'commit',c.source,...(bundle?['selected']:[]),c.candidate,c.op);assert.equal(r.status,0,r.error);assert.equal(mode(c.source),permissions);c.clean();
+  const r=await invoke(bundle?named:author,'commit',c.source,...(bundle?['selected']:[]),c.candidate,c.op);assert.equal(r.status,0,r.error);if(process.platform!=='win32')assert.equal(mode(c.source),permissions);c.clean();
  });
  await workspace(native,async c=>{
   write(c.candidate,native);write(c.op,{});const target=path.join(c.dir,'created.json');assert.equal((await invoke(author,'create',c.candidate,target,c.op)).status,0);

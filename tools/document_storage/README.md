@@ -4,6 +4,19 @@
 
 JSONの作成・検証・編集はNode 24を使います。MD変換だけPython 3.12以降が必要です。追加パッケージ、APIキー、通信は不要です。新規出力は候補契約`0.4`で、例外をIDで参照します。[構造・旧版互換・明示移行](../../docs/json-native-contract.ja.md)を参照してください。正式v1採用・releaseは未実施です。
 
+## まず試す
+
+購買BDと共通保証・比較表付きCheck見本を同じファイルに変換します。Repositoryルートで、見本の[変換要求](examples/request.json)を使います。
+
+```sh
+node tools/document_storage/cli.mjs convert tools/document_storage/examples/request.json /tmp/alder-purchase.json
+node tools/document_storage/cli.mjs validate /tmp/alder-purchase.json
+```
+
+出力先には存在しないファイル名を指定してください。成功時はBDとCheckの2文書を持つJSONが作られ、`valid: true`で構造と参照を確認できます。業務上の合意は判定しないため、Checkの原典対応は`unverified`のままです。
+
+自分の文書を変換する場合は、要求ファイルの`path`・`documentId`・`revision`とCheckの`basedOn`を変更します。`path`は要求ファイルからの相対パスです。`documentId`は同じ文書で使い続ける識別子にし、変更時には内容revisionも更新します。Pythonのコマンドが`python3`でない環境は、環境変数`ALDER_PYTHON`へ実行ファイルを指定できます。
+
 ## 旧JSONを明示的に0.4へ変換する（Phase 2）
 
 本人から変換の明示依頼がある場合だけ実行する。0.1／0.2／0.3を検出して構造移行し、未知版・混在した文書契約・解決できない例外名は対象と理由を返して停止する。0.4は通常編集する。読取り互換モデルを保存候補として流用せず、移行専用処理がrevision更新と差分検証を行う。
@@ -59,19 +72,6 @@ named-plansのcommitには従来どおり単一package候補を渡す。要求�
 0.1／0.2では `roleId: null` とWho原文・未確定診断を残し、0.3に既存RoleがあればID／名称／色と参照を保持する。`upgradeRoles` の0.3化は単純WhoからRoleを生成するため、0.4への汎用変換には合成しない。Conceptは現行Schemaでは0.4専用で、旧版との混在を変換可能と推測しない。
 
 Skillは既存 `alder-manage-json-documents` の明示移行ルートを使う。配布用同梱コピーとprovenanceの再生成には [同梱同期手順](https://github.com/mk3008/alder/blob/96ccd8d9/docs/plugin-bundling.md) の公開済みソースコミットが必要。この未コミット実装では再生成・配布を行わず、リポジトリのCLIを使う。同梱版への反映はソース公開後にexporterとpackage検査で行う。
-
-## まず試す
-
-購買BDと共通保証・比較表付きCheck見本を同じファイルに変換します。Repositoryルートで、見本の[変換要求](examples/request.json)を使います。
-
-```sh
-node tools/document_storage/cli.mjs convert tools/document_storage/examples/request.json /tmp/alder-purchase.json
-node tools/document_storage/cli.mjs validate /tmp/alder-purchase.json
-```
-
-出力先には存在しないファイル名を指定してください。成功時はBDとCheckの2文書を持つJSONが作られ、`valid: true`で構造と参照を確認できます。業務上の合意は判定しないため、Checkの原典対応は`unverified`のままです。
-
-自分の文書を変換する場合は、要求ファイルの`path`・`documentId`・`revision`とCheckの`basedOn`を変更します。`path`は要求ファイルからの相対パスです。`documentId`は同じ文書で使い続ける識別子にし、変更時には内容revisionも更新します。Pythonのコマンドが`python3`でない環境は、環境変数`ALDER_PYTHON`へ実行ファイルを指定できます。
 
 ## 更新する
 

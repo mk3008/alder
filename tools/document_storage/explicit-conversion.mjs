@@ -55,7 +55,7 @@ function reportConversion(previous,next,target){
 
 /** Separate new output; a named-plan conversion returns a whole candidate bundle. */
 export async function prepareVersionUpgrade(source,output,requestFile,planId){
- let temp;
+ let temp,result;
  const target=planId===undefined?source:source+' plan '+planId;
  try{
   demand(path.resolve(source)!==path.resolve(output),'Migration must preserve the source; output must be separate');
@@ -83,7 +83,10 @@ export async function prepareVersionUpgrade(source,output,requestFile,planId){
   const staged=parseStrict(fs.readFileSync(temp,'utf8'));if(plans)plans.validateNamedPlans(staged);else validate(staged);
   const afterSha256=hash(fs.readFileSync(source));demand(afterSha256===sourceSha256,'Source changed while preparing conversion');
   fs.linkSync(temp,output);
-  return {candidate:output,sourceSha256,sourceAfterSha256:afterSha256,sourceUnchanged:true,plan:planId??null,...report};
+  return result={candidate:output,sourceSha256,sourceAfterSha256:afterSha256,sourceUnchanged:true,plan:planId??null,...report};
  }catch(error){throw Error(target+': '+error.message,{cause:error});}
- finally{if(temp)try{fs.unlinkSync(temp);}catch(error){if(error.code!=='ENOENT')throw error;}}
+ finally{if(temp)try{fs.unlinkSync(temp);}catch(error){if(error.code!=='ENOENT'){
+  const cleanupWarning={code:'CLEANUP_WARNING',message:error.message};
+  if(result)result.cleanupWarning=cleanupWarning;else console.error(JSON.stringify(cleanupWarning));
+ }}}
 }
