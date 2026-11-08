@@ -55,6 +55,9 @@ export async function run(args){
    const updated=structuredClone(bundle);updated.plans.find(p=>p.id===id).package=next;validateNamedPlans(updated);
    stage(target,stringify(updated));validateNamedPlans(read(temp));
    demand(fingerprint(fs.readFileSync(target,'utf8'))===operation.expectedSha256,'File changed while preparing save');
+   const finalStat=fs.lstatSync(target);
+   demand(finalStat.isFile()&&!finalStat.isSymbolicLink()&&finalStat.nlink===1,'Target must be an unlinked regular JSON file');
+   demand((finalStat.mode&0o7777)===(stat.mode&0o7777),'Target mode changed while preparing save');
    fs.chmodSync(temp,stat.mode&0o7777);
    fs.renameSync(temp,target);temp=null;
    console.log(JSON.stringify({target,plan:id,sha256:fingerprint(fs.readFileSync(target,'utf8')),...result}));return 0;
