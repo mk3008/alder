@@ -18,6 +18,12 @@ Business Designの業務意味・合意はadoption、欄の役割はbusiness-des
 
 ## 更新とレビュー
 
+### 複数の業務案
+
+`alder-named-plans/1.0` では、各案のID・表示名と単一JSONを独立して保持する。単一JSONを変更せずにまとめるときは、同梱 `named-plans-cli.mjs create` に出力先と「案ID・表示名・元ファイル」を繰り返し渡す。`inspect` は全案を検査してファイルhashと各案のrevisionを返す。
+
+案を更新するときは対象IDを明示し、`extract` で別ファイルへ取り出して通常の手順で候補を作る。`named-plans-cli.mjs commit` に複数案ファイル・案ID・候補・操作要求を渡す。操作要求の `expectedSha256` は複数案ファイルのhash、`expectedRevision` は対象案の旧package revisionとする。BDの合意・Checkの人間判断・削除や移行の条件は単一JSONと同じで、他案を変更しない。原本の単一ファイルは書換えない。人間にJSONの手編集を求めない。
+
 既存の概念データ例をCheckに対応付ける場合は、[構造契約](json-native-contract.ja.md#check-itemとデータ例)の `conceptModel/0.2` と明示移行を使う。各例の `checkIds` は同じ業務設計に属する実在Checkの内部IDを指定し、名前・類似した値・セルの `linkId` から対応を推測しない。参照の構造検査後、条件・対象・結果と未合意をCheckおよびBusiness Designと別途照合する。Checkの生成・変更に必要な合意と既存ID、人間状態、Test証拠を維持する。
 
 既存正本をvalidate/inspectし、byte hashとpackage revisionを取得する。全体を読んでから依頼された要素だけを候補で変更する。Activity/Object追加には新IDを割り当て、既存の改名・並べ替え・内容更新ではIDを維持する。変更文書とpackageのrevisionだけ更新する。既存IDの無申告の削除/置換、原典目録の書換え、外部目録の改変は保存器が拒否する。保存前後で未決、Findings、文章内の引用、関係と共有Checkを比較する。

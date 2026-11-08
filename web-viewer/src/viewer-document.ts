@@ -9,10 +9,10 @@ import type {StateModel} from './state-transitions';
  * It is a viewing value, not an automatically migrated storage package. */
 export type ViewerDocumentJSON=DocumentModel & {version:1};
 export type OriginalDocument={format:'markdown'|'json';text:string};
-export type NormalizedDocument={data:ViewerDocumentJSON;original:OriginalDocument};
+export type NormalizedDocument={data:ViewerDocumentJSON;original:OriginalDocument;namedPlans?:{selected:string;choices:{id:string;name:string}[]}};
 
 /** Both formats project through this boundary; renderers never re-read MD sections. */
-export function readViewerDocument({data,original}:NormalizedDocument):Design{
+export function readViewerDocument({data,original,namedPlans}:NormalizedDocument):Design{
  if(data.version!==1)throw Error('Unsupported Viewer document version');
  const validation:{diagnostics:string[]}=validateReferences({formatVersion:'0.4',documents:[data.business,...data.checks,...data.states,...(data.concepts??[])],sources:data.sources??[],externalDocuments:data.externalDocuments??[],diagnostics:data.diagnostics},{allowUnresolvedFindings:true});
  data={...data,diagnostics:[...new Set(validation.diagnostics)]};
@@ -28,7 +28,7 @@ export function readViewerDocument({data,original}:NormalizedDocument):Design{
  return {graph:canonicalJSONGraph({version:1,...(bd.scope?{scope:bd.scope}:{}),nodes,relations:bd.relations.map(r=>({kind:r.kind,from:r.fromId,to:r.toId,label:r.label}))}),
   // Kept empty for old Session decoders; never a second business representation.
   sections:Object.fromEntries(nodes.map(n=>[n.id,''])),markdown:original.text,
-  ...(original.format==='json'?{sourceFormat:'json' as const}:{}),model:data,
+  ...(original.format==='json'?{sourceFormat:'json' as const}:{}),...(namedPlans?{namedPlans}:{}),model:data,
   activityOrder:bd.activities.map(a=>a.id),objectStateTransitions,
   findings:bd.findings.map(f=>({...f,displayId:f.sourceId,targets:[...f.targetIds,...f.unresolvedTargets],targetNames:[...f.targetIds,...f.unresolvedTargets].map(id=>all.find(n=>n.id===id)?.name??id)}))};
 }

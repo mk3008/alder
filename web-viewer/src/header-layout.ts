@@ -14,7 +14,8 @@ export function installHeaderTitleFit(header: HTMLElement) {
     const captioned = actions.reduce((width, action) => width + action.getBoundingClientRect().width, 0)
       + gap * actions.length + padding;
     const full = captioned + title.getBoundingClientRect().width + gap;
-    title.classList.toggle('header-title-hidden', full > header.clientWidth);
+    // The plan selector is an essential control even on a narrow viewport.
+    title.classList.toggle('header-title-hidden', !title.querySelector('select') && full > header.clientWidth);
     header.classList.toggle('header-icons-only', captioned > header.clientWidth);
   };
   update();

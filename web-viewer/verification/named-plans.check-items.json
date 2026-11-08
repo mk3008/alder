@@ -1,0 +1,17 @@
+{
+  "format": "viewer-verification/1",
+  "requirement": "https://github.com/mk3008/alder/issues/344",
+  "scope": "1 JSON内の独立した名前付き業務案を、既存の単一入力と併用する。",
+  "checks": [
+    {"id":"NAMED-PLANS-001","condition":"既存の単一JSONまたはMarkdownを開く。","guarantee":"形式の変更や追加ラッパーを要求せず、既存の読込・表示・復元と安全な拒否を維持する。","reason":"既存資料を移行せず利用できるようにする。","verification":"既存の入力・復元回帰"},
+    {"id":"NAMED-PLANS-002","condition":"名前付き業務案のJSONを作成または読む。","guarantee":"1件以上の案はそれぞれ非空の表示名と一意で安定したIDを持ち、既存の文書種別やrevisionとは別に、それぞれ完全な単一JSONを保持する。","reason":"案と文書改訂を混同せず、案内の識別を維持する。","verification":"tools/document_storage/test-named-plans.mjs"},
+    {"id":"NAMED-PLANS-003","condition":"案IDや包みの形式が空・重複・不正・未知、またはいずれかの案の構造や参照が不正である。","guarantee":"選択中でない案も含めて診断し拒否する。案間で参照を解決したり、未知情報を黙って捨てたりしない。","reason":"切替後に別案の要素や不正な参照を表示しない。","verification":"tools/document_storage/test-named-plans.mjs と Viewer入力回帰"},
+    {"id":"NAMED-PLANS-004","condition":"既存の単一JSONから案を作る。","guarantee":"元ファイルを変更せず、各案のID・参照・人間確認状態・未決・原典を保持した新規ファイルを作る。既存ファイルは上書きしない。","reason":"手編集を前提にせず元資料と人間判断を保つ。","verification":"tools/document_storage/test-named-plans.mjs"},
+    {"id":"NAMED-PLANS-005","condition":"既存の案をID指定して更新する。","guarantee":"対象案へ既存の保存ガードと競合検査を適用し、他の案を変更せず、失敗時は元ファイルを維持する。","reason":"案の独立性と人間確認・既存IDを守る。","verification":"tools/document_storage/test-named-plans.mjs"},
+    {"id":"NAMED-PLANS-006","condition":"3案以上のJSONを一度開いて案を選択・再選択する。","guarantee":"ヘッダーに選択案名を表示し、同じ場所のリストで切替える。図・詳細・Check・状態・概念はその案に一致する。","reason":"再読込やファイル選択なしで案を確認する。","verification":"Viewer入力・DOM・実ブラウザ回帰"},
+    {"id":"NAMED-PLANS-007","condition":"案を切替える、再読込・履歴から再表示・保存復元する。","guarantee":"案の選択と各表示の扱いは一貫し、別案のタブ・選択・配置や派生表示を混在させない。復元時は保存された案を再検証する。","reason":"同じIDが別案に存在しても異なる内容を誤表示しない。","verification":"Viewer状態・実ブラウザ回帰"},
+    {"id":"NAMED-PLANS-008","condition":"不正入力、更新衝突または保存失敗が発生する。","guarantee":"診断を示し、直前の正常な表示・保存データと復旧可能性を維持する。","reason":"切替や読込で以前の作業を失わない。","verification":"保存器とViewerの異常系回帰"},
+    {"id":"NAMED-PLANS-009","condition":"複数案のローカル読込・HTTPS取得・保存復元・切替を行う。","guarantee":"既存の容量・構造上限を無条件に緩和せず、境界付近の受入と拒否、処理時間・メモリ・描画の影響を測定し未測定も示す。","reason":"案の追加に伴う容量と応答性を利用時に判断できるようにする。","verification":"境界テストと実測記録"},
+    {"id":"NAMED-PLANS-010","condition":"固定Previewを人間が操作する。","guarantee":"公開可能な合成データだけを使い、3案の切替を確認できる。GUI採用・mainマージ・公開リリースは別判断とする。","reason":"案件情報を出さず、本人が表示を評価できるようにする。","verification":"固定Previewと実ブラウザ確認"}
+  ]
+}

@@ -1,7 +1,7 @@
 {
-  "alder_source_revision": "08f7f4ac288f0d9e87af397de82f3f3c1b071d9a",
+  "alder_source_revision": "5fa81940af72b13ccea462ce3d73f98aede2907a",
   "sources": {
-    "docs/plugin-json-authoring.ja.md": "06069103fadfe398c479bce72d2b66d409585c9443190631e0c42f1b0beb0c20",
+    "docs/plugin-json-authoring.ja.md": "d0197bcc4c2db6130bbe6232177f3ad07d8682a64545ba3a537ec6638bedf1da",
     "docs/adoption.md": "957f871704e647b03a850449a9b288ceb320b68af4ae1591b933b4f531a2acf8",
     "docs/business-design-structure.ja.md": "6a6fb0a568d2e6021789378b7393a290896c6c6761617c56461c0b5501980478",
     "docs/check-item-traceability.md": "5d12a583284076b27f0b32d89167f6c767c7c375e8d4e2d29de03c70205fccda",
@@ -27,7 +27,10 @@
     "tools/document_storage/state-declaration.mjs": "e38675411de4e6743075751b1edf449e02c2b7600ab4b216898733c588f2b9ec",
     "tools/document_storage/state-storage.mjs": "f54beb78f895f843379c23f98c755b1d259834fa24b75285feb63ff9e7529853",
     "tools/document_storage/roles.mjs": "31d17e62cd2dc4cb3e667e61e5f1bdc7ce232b78b0ab2612352c987fd8f12ca1",
-    "tools/document_storage/legacy-json.mjs": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb"
+    "tools/document_storage/legacy-json.mjs": "5f0ddbb7dc73c99dee863b5d17b6d7156b7eb8e063c6db8c59964860b64405bb",
+    "tools/document_storage/named-plans.mjs": "35106e4e46a1880f2ffc87c1aa75f5bb1d74101aa70dbd0c9499a3c633499a9b",
+    "tools/document_storage/named-plans-cli.mjs": "ce74b2f65b1ee07377942512bc4cdea9aa60ebf8b14b8ed4b50954fbd696cb8e",
+    "tools/document_storage/named-plans-schema.json": "d208c03d7425d0f3fe3e1aae2aab10972eba5357fc2b328c251f8d6d9fa625ea"
   },
   "script_destinations": {
     "tools/document_storage/core.mjs": "document_storage/core.mjs",
@@ -43,6 +46,9 @@
     "tools/document_storage/state-declaration.mjs": "document_storage/state-declaration.mjs",
     "tools/document_storage/state-storage.mjs": "document_storage/state-storage.mjs",
     "tools/document_storage/roles.mjs": "document_storage/roles.mjs",
-    "tools/document_storage/legacy-json.mjs": "document_storage/legacy-json.mjs"
+    "tools/document_storage/legacy-json.mjs": "document_storage/legacy-json.mjs",
+    "tools/document_storage/named-plans.mjs": "document_storage/named-plans.mjs",
+    "tools/document_storage/named-plans-cli.mjs": "document_storage/named-plans-cli.mjs",
+    "tools/document_storage/named-plans-schema.json": "document_storage/named-plans-schema.json"
   }
 }
