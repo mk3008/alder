@@ -4,6 +4,21 @@ import {validate,inventory,demand,requireCheckedSamples} from './core.mjs';
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
 export const fingerprint=v=>createHash('sha256').update(typeof v==='string'?v:JSON.stringify(canonical(v))).digest('hex');
 const equal=(a,b)=>fingerprint(a)===fingerprint(b);
+export const describeDeclaredValue=value=>value===undefined?'<missing>':typeof value==='string'?value:JSON.stringify(value);
+// This classifies declared versions only; callers must also validate the package.
+export function packageVersionPolicy(pkg,target='package'){
+ const format=pkg?.format,formatVersion=pkg?.formatVersion;
+ demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4'].includes(formatVersion),`${target}: unsupported format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(formatVersion)}; supported read formats are alder-document-package 0.1–0.4 and direct edit is 0.4 only. Stop editing and check whether explicit conversion to a separate file is supported.`);
+ const editable=formatVersion==='0.4';return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':'explicit-only-unassessed'};
+}
+export function requireEditablePackage(pkg,target='package'){
+ const policy=packageVersionPolicy(pkg,target);
+ demand(policy.editable,`${target}: format=${policy.format} formatVersion=${policy.formatVersion} cannot be edited directly; supported direct-edit version is alder-document-package 0.4. Request explicit conversion to a separate file; availability must be assessed.`);
+ return policy;
+}
+function validateForAuthoring(pkg,target){
+ try{return validate(pkg);}catch(error){throw Error(`${target}: invalid format=${pkg?.format??'<missing>'} formatVersion=${pkg?.formatVersion??'<missing>'}; correct the reported data before saving: ${error.message}`,{cause:error});}
+}
 const receipt=r=>r&&typeof r.source==='string'&&r.source.trim()&&typeof r.quote==='string'&&r.quote.trim();
 export function checkMeaning(pkg,item){
  const doc=pkg.documents.find(d=>d.items?.some(i=>i.id===item.id)),inv=inventory(pkg),seen=new Map();
@@ -40,7 +55,7 @@ function conceptIdentities(doc){
  return keys;
 }
 export function guardAuthoring(previous,next,operation={}){
- validate(next);if(previous)validate(previous);
+ validateForAuthoring(next,'candidate');if(previous)validateForAuthoring(previous,'target');
  const allowed=['expectedSha256','expectedRevision','bdConfirmations','humanDecisions','migration','removedTransitions'];
  const structuredUpgrade=operation.migration==='exceptions-0.4'&&previous&&['0.1','0.2','0.3'].includes(previous.formatVersion)&&next.formatVersion==='0.4';
  const checkedSamplesUpgrade=operation.migration==='check-samples-0.2'&&previous&&previous.formatVersion==='0.4'&&next.formatVersion==='0.4';

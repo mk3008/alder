@@ -1,0 +1,13 @@
+{
+  "format": "storage-verification/1",
+  "requirement": "https://github.com/mk3008/alder/issues/348",
+  "scope": "Phase 1: 単一・複数案JSONの読取版判定と直接編集ゲート。永続的な版変換の実装はPhase 2。",
+  "checks": [
+    {"id":"VERSION-POLICY-001","condition":"既知の単一package 0.1・0.2・0.3・0.4をinspectする。","guarantee":"実際の形式・版と読取可否・直接編集可否を区別し、0.4だけを直接編集可と示す。検査は原本を変更しない。","reason":"Plugin版・package版・revisionを混同せず操作を選べる。","verification":"tools/document_storage/test-version-policy.mjs"},
+    {"id":"VERSION-POLICY-002","condition":"旧版・未知形式・将来版または不正な現行候補を単一JSONとして作成・直接更新する。","guarantee":"正規CLIで拒否し、対象・検出版・対応版と次に必要な確認を示す。原本を変更せず、暗黙変換しない。","reason":"旧形式の編集や推定変換で業務意味を変えない。","verification":"tools/document_storage/test-version-policy.mjs と tools/test_json_plugin.py"},
+    {"id":"VERSION-POLICY-003","condition":"有効な0.4単一JSONを作成または更新する。","guarantee":"既存のID・参照・版・hash・人間合意・失敗時保護を維持する。","reason":"現行版の正規操作と人間判断を後退させない。","verification":"tools/document_storage/test-version-policy.mjs と test-authoring.mjs"},
+    {"id":"VERSION-POLICY-004","condition":"外側1.0の複数案で旧版と0.4の案が混在する。","guarantee":"案ごとの形式・版・直接編集可否を示す。指定した0.4案だけ更新でき、対象外の案と元ファイルを保つ。旧版案や曖昧・未知の対象は保存しない。","reason":"bundle版と対象案のpackage版を区別し、案の独立性を維持する。","verification":"tools/document_storage/test-version-policy.mjs と tools/test_json_plugin.py"},
+    {"id":"VERSION-POLICY-005","condition":"Viewerが対応済み旧版を閲覧する。","guarantee":"旧版を入力境界でメモリ上の共通モデルへ正規化して既存の表示経路に渡し、原本や人間承認を変更しない。完全な旧表示の再現は要求しない。","reason":"書込みを伴わず可能な範囲で旧版を閲覧する。","verification":"既存Viewer入力経路・test-native-json.mjs とCI"},
+    {"id":"VERSION-POLICY-006","condition":"Skillが単一・複数案JSONの編集依頼を受ける。","guarantee":"対象案と形式・版を検査し、直接編集不可なら止めて理由と次の明示変換の確認を示す。変換可否を未確認のまま成功可能と断定せず、旧版を自動変換しない。","reason":"Skillによる操作を保存CLIと同じ版ポリシーにする。","verification":"tools/test_json_plugin.py とSkill手順の意味照合"}
+  ]
+}

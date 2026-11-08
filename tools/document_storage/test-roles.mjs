@@ -1,6 +1,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
 import os from 'node:os';import path from 'node:path';import {spawnSync} from 'node:child_process';
 import {validate,graphV1} from './core.mjs';import {ROLE_PALETTE,initialRoleColor,upgradeRoles} from './roles.mjs';import {convertMarkdown} from './convert.mjs';import {guardAuthoring} from './authoring.mjs';import {applyEdits} from './edit.mjs';
+import {readLegacyPackage} from './legacy-json.mjs';
 const legacy=JSON.parse(fs.readFileSync(new URL('../../work/json-state/issue-275/purchase.json',import.meta.url))),bd=legacy.documents[0],state=legacy.documents[1];
 const revisions={expectedRevision:legacy.revision,revision:'package-roles-1',documentRevisions:{[bd.id]:{expected:bd.revision,next:'bd-role-1'},[state.id]:{expected:state.revision,next:'state-role-1'}}};
 const upgraded=upgradeRoles(legacy,revisions);
@@ -79,16 +80,16 @@ test('mixed Role diagnostics cannot create or commit JSON; failed saves preserve
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-role-diagnostics-'));
  const cli=new URL('./author-cli.mjs',import.meta.url).pathname;
  const run=(...args)=>spawnSync(process.execPath,[cli,...args],{encoding:'utf8'});
- try{for(const fixture of [upgraded,native]){
+ try{for(const [index,fixture] of [readLegacyPackage(upgraded),native].entries()){
   const good=structuredClone(fixture),bd=good.documents[0],a=bd.activities[0];a.who='申請者と承認者';a.roleId=null;
   good.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+a.who];
-  const target=path.join(dir,'saved-'+good.formatVersion+'.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json');
+  const target=path.join(dir,'saved-'+index+'.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json');
   fs.writeFileSync(candidate,JSON.stringify(good));fs.writeFileSync(op,'{}');let r=run('create',candidate,target,op);assert.equal(r.status,0,r.stderr);
   const before=fs.readFileSync(target),inspected=run('inspect',target);assert.equal(inspected.status,0,inspected.stderr);const pin=JSON.parse(inspected.stdout);
   const bad=structuredClone(good);bad.revision+='-next';bad.documents[0].revision+='-next';bad.documents[0].activities[0].who+='（変更）';
   for(const d of bad.documents.filter(d=>d.basedOn?.documentId===bd.id)){d.revision+='-next';d.basedOn.revision=bad.documents[0].revision;}
   bad.diagnostics=['unrelated diagnostic','Role未確定: '+a.id+' — '+bad.documents[0].activities[0].who,'Role未確定: '+a.id+' — '+a.who];
-  fs.writeFileSync(candidate,JSON.stringify(bad));const invalidTarget=path.join(dir,'invalid-'+good.formatVersion+'.json');
+  fs.writeFileSync(candidate,JSON.stringify(bad));const invalidTarget=path.join(dir,'invalid-'+index+'.json');
   r=run('create',candidate,invalidTarget,op);assert.equal(r.status,2,r.stderr);assert.equal(fs.existsSync(invalidTarget),false);
   fs.writeFileSync(op,JSON.stringify({expectedRevision:pin.revision,expectedSha256:pin.sha256}));
   r=run('commit',target,candidate,op);assert.equal(r.status,2,r.stderr);assert.deepEqual(fs.readFileSync(target),before);
