@@ -1,0 +1,43 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.6",
+  "revision": "example-1",
+  "documents": [{
+    "id": "bd-paper-note",
+    "schemaVersion": "0.5",
+    "kind": "businessDesign",
+    "revision": "bd-1",
+    "title": "記載内容の転記",
+    "preface": "合成例。対象システムの関与は未確認。",
+    "scope": "",
+    "objects": [
+      {"id": "paper", "name": "紙", "scope": null, "icon": "file-text", "information": [{"id": "paper-content", "name": "記載内容", "description": "紙の記載内容"}]},
+      {"id": "memo", "name": "メモ", "scope": null, "icon": "file-text", "information": [{"id": "memo-success", "name": "記載成功", "description": "記載が成功した結果"}]}
+    ],
+    "roles": [{"id": "worker", "name": "作業者", "color": "#8b5cf6"}],
+    "activities": [{
+      "id": "copy", "name": "記載内容を転記する", "scope": null,
+      "why": "記載内容をメモへ写す", "when": "転記作業のとき", "where": "未決", "who": {"kind": "role", "roleId": "worker"},
+      "procedure": {"steps": [
+        {"id": "read", "action": "読み取る", "method": null, "whatDataIds": ["content"], "obligation": "required", "appliesWhen": null, "effect": "read", "exchange": {"kind": "interaction", "phase": "request", "direction": "output", "objectId": "paper", "dataIds": null, "relationId": "paper-output", "pairedStepId": "read-response"}},
+        {"id": "read-response", "action": "返す", "method": null, "whatDataIds": ["content"], "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"kind": "interaction", "phase": "response", "direction": "input", "objectId": "paper", "dataIds": ["content"], "relationId": "paper-input", "pairedStepId": "read"}},
+        {"id": "write", "action": "書く", "method": null, "whatDataIds": ["content"], "obligation": "required", "appliesWhen": null, "effect": "undecided", "exchange": {"kind": "interaction", "phase": "request", "direction": "output", "objectId": "memo", "dataIds": ["content"], "relationId": "memo-output", "pairedStepId": "write-response"}},
+        {"id": "write-response", "action": "返す", "method": null, "whatDataIds": ["success"], "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"kind": "interaction", "phase": "response", "direction": "input", "objectId": "memo", "dataIds": ["success"], "relationId": "memo-input", "pairedStepId": "write"}}
+      ], "orderRules": []},
+      "results": [{"id": "result-written", "text": "メモへの記載が成功した"}],
+      "problem": null, "painLevel": null
+    }],
+    "data": [
+      {"id": "content", "name": "記載内容", "items": [{"informationId": "paper-content", "condition": null}]},
+      {"id": "success", "name": "記載成功", "items": [{"informationId": "memo-success", "condition": null}]}
+    ],
+    "relations": [
+      {"id": "paper-output", "kind": "output", "fromId": "copy", "toId": "paper"},
+      {"id": "paper-input", "kind": "input", "fromId": "paper", "toId": "copy"},
+      {"id": "memo-output", "kind": "output", "fromId": "copy", "toId": "memo"},
+      {"id": "memo-input", "kind": "input", "fromId": "memo", "toId": "copy"}
+    ],
+    "exceptions": [], "findings": []
+  }],
+  "sources": [], "externalDocuments": [], "diagnostics": []
+}

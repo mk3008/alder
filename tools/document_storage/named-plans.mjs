@@ -17,7 +17,12 @@ export const namedPlansSchema={
 
 /** Validate every plan independently, including legacy name-based references. */
 export function validateNamedPlans(bundle){
- validateShape(bundle,namedPlansSchema);
+ try{validateShape(bundle,namedPlansSchema);}catch(error){
+  // The outer shape can fail before the per-plan loop; retain the plan and
+  // declared version in diagnostics for malformed or mixed-version input.
+  if(Array.isArray(bundle?.plans))for(const plan of bundle.plans)try{validateShape(plan?.package,schema);}catch(cause){throw Error('Plan '+(plan?.id??'<missing>')+' (formatVersion '+String(plan?.package?.formatVersion)+'): '+cause.message,{cause});}
+  throw error;
+ }
  demand(bundle.plans.length>0,'At least one named plan is required');
  const ids=new Set();
  for(const plan of bundle.plans){
@@ -25,8 +30,8 @@ export function validateNamedPlans(bundle){
   demand(plan.name===plan.name.trim()&&!/[\r\n]/.test(plan.name),'Invalid plan name: '+plan.id);
   try{
    validate(plan.package);
-   if(plan.package.formatVersion!=='0.4')readLegacyPackage(plan.package);
-  }catch(error){throw Error('Plan '+plan.id+': '+error.message,{cause:error});}
+   if(['0.1','0.2','0.3'].includes(plan.package.formatVersion))readLegacyPackage(plan.package);
+  }catch(error){throw Error('Plan '+plan.id+' (formatVersion '+plan.package.formatVersion+'): '+error.message,{cause:error});}
  }
  return {valid:true,plans:bundle.plans.map(({id,name})=>({id,name}))};
 }

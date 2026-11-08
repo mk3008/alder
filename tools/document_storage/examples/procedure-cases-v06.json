@@ -1,0 +1,472 @@
+{
+  "format": "alder-document-package",
+  "formatVersion": "0.6",
+  "revision": "examples-1",
+  "documents": [
+    {
+      "id": "bd-cases",
+      "schemaVersion": "0.5",
+      "kind": "businessDesign",
+      "revision": "bd-1",
+      "title": "手順整理の合成例",
+      "preface": "合成例。対象システムはノート。顧客と承認者へは設計者が直接対応し、システムはアクセスしない。",
+      "scope": "",
+      "objects": [
+        {
+          "id": "notebook",
+          "name": "ノート",
+          "scope": true,
+          "icon": "file-text",
+          "information": [
+            {
+              "id": "i-filter",
+              "name": "検索条件",
+              "description": ""
+            },
+            {
+              "id": "i-result",
+              "name": "検索結果",
+              "description": ""
+            },
+            {
+              "id": "i-wait",
+              "name": "確認待ちの記録",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "customer",
+          "name": "顧客",
+          "scope": false,
+          "icon": "file-text",
+          "information": [
+            {
+              "id": "i-question",
+              "name": "確認事項",
+              "description": ""
+            },
+            {
+              "id": "i-answer",
+              "name": "顧客回答",
+              "description": ""
+            },
+            {
+              "id": "i-notice",
+              "name": "結果通知",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "approver",
+          "name": "承認者",
+          "scope": false,
+          "icon": "file-text",
+          "information": [
+            {
+              "id": "i-approval",
+              "name": "承認依頼",
+              "description": ""
+            },
+            {
+              "id": "i-decision",
+              "name": "承認結果",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "roles": [
+        {
+          "id": "designer",
+          "name": "設計者",
+          "color": "#8b5cf6"
+        }
+      ],
+      "activities": [
+        {
+          "id": "inquiry",
+          "name": "問合せを整理する",
+          "scope": true,
+          "why": "問合せを処理する",
+          "when": "問合せまたは変更連絡を受けたとき",
+          "where": "未決",
+          "who": {
+            "kind": "role",
+            "roleId": "designer"
+          },
+          "procedure": {
+            "steps": [
+              {
+                "id": "search",
+                "action": "検索する",
+                "method": null,
+                "whatDataIds": [
+                  "filter"
+                ],
+                "obligation": "required",
+                "appliesWhen": null,
+                "effect": "read",
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "request",
+                  "direction": "output",
+                  "objectId": "notebook",
+                  "dataIds": [
+                    "filter"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": "search-result"
+                }
+              },
+              {
+                "id": "search-result",
+                "action": "返す",
+                "method": null,
+                "whatDataIds": [
+                  "result"
+                ],
+                "obligation": "required",
+                "appliesWhen": null,
+                "effect": null,
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "response",
+                  "direction": "input",
+                  "objectId": "notebook",
+                  "dataIds": [
+                    "result"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": "search"
+                }
+              },
+              {
+                "id": "ask",
+                "action": "確認する",
+                "method": "人が直接やり取りする",
+                "whatDataIds": [
+                  "question"
+                ],
+                "obligation": "required",
+                "appliesWhen": null,
+                "effect": "not-applicable",
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "request",
+                  "direction": "output",
+                  "objectId": "customer",
+                  "dataIds": [
+                    "question"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": "answer-step"
+                }
+              },
+              {
+                "id": "answer-step",
+                "action": "返す",
+                "method": "人が直接やり取りする",
+                "whatDataIds": [
+                  "answer"
+                ],
+                "obligation": "required",
+                "appliesWhen": "期限までに顧客回答を得た場合",
+                "effect": null,
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "response",
+                  "direction": "input",
+                  "objectId": "customer",
+                  "dataIds": [
+                    "answer"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": "ask"
+                }
+              },
+              {
+                "id": "judge",
+                "action": "判断する",
+                "method": null,
+                "whatDataIds": [
+                  "answer"
+                ],
+                "obligation": "required",
+                "appliesWhen": "期限までに顧客回答を得た場合",
+                "effect": "not-applicable",
+                "exchange": {
+                  "kind": "internal"
+                }
+              },
+              {
+                "id": "save",
+                "action": "記録する",
+                "method": null,
+                "whatDataIds": [
+                  "answer"
+                ],
+                "obligation": "required",
+                "appliesWhen": "期限までに顧客回答を得た場合",
+                "effect": "create",
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "request",
+                  "direction": "output",
+                  "objectId": "notebook",
+                  "dataIds": [
+                    "answer"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": null
+                }
+              },
+              {
+                "id": "apply",
+                "action": "承認を依頼する",
+                "method": "人が直接やり取りする",
+                "whatDataIds": [
+                  "approval"
+                ],
+                "obligation": "required",
+                "appliesWhen": "期限までに顧客回答を得た場合",
+                "effect": "not-applicable",
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "request",
+                  "direction": "output",
+                  "objectId": "approver",
+                  "dataIds": [
+                    "approval"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": "decide"
+                }
+              },
+              {
+                "id": "decide",
+                "action": "返す",
+                "method": "人が直接やり取りする",
+                "whatDataIds": [
+                  "decision"
+                ],
+                "obligation": "required",
+                "appliesWhen": "期限までに顧客回答を得た場合",
+                "effect": null,
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "response",
+                  "direction": "input",
+                  "objectId": "approver",
+                  "dataIds": [
+                    "decision"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": "apply"
+                }
+              },
+              {
+                "id": "notify",
+                "action": "通知する",
+                "method": "人が直接やり取りする",
+                "whatDataIds": [
+                  "notice"
+                ],
+                "obligation": "required",
+                "appliesWhen": "期限までに顧客回答を得た場合",
+                "effect": null,
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": null,
+                  "direction": "output",
+                  "objectId": "customer",
+                  "dataIds": [
+                    "notice"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": null
+                }
+              },
+              {
+                "id": "wait-record",
+                "action": "確認待ちとして記録する",
+                "method": null,
+                "whatDataIds": [
+                  "waiting"
+                ],
+                "obligation": "required",
+                "appliesWhen": "期限までに顧客回答がない場合",
+                "effect": "create",
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "request",
+                  "direction": "output",
+                  "objectId": "notebook",
+                  "dataIds": [
+                    "waiting"
+                  ],
+                  "relationId": null,
+                  "pairedStepId": null
+                }
+              }
+            ],
+            "orderRules": []
+          },
+          "results": [
+            {
+              "id": "inquiry-result",
+              "text": "確認結果を記録する"
+            },
+            {
+              "id": "inquiry-wait-result",
+              "text": "回答待ちが記録される"
+            }
+          ],
+          "problem": null,
+          "painLevel": null
+        },
+        {
+          "id": "auto-check",
+          "name": "記録を自動照合する",
+          "scope": true,
+          "why": "保存済みの回答を照合する",
+          "when": "定刻",
+          "where": "未決",
+          "who": {
+            "kind": "scheduler",
+            "name": "定刻バッチ"
+          },
+          "procedure": {
+            "steps": [
+              {
+                "id": "auto-read",
+                "action": "照合する",
+                "method": null,
+                "whatDataIds": [
+                  "answer"
+                ],
+                "obligation": "required",
+                "appliesWhen": null,
+                "effect": "read",
+                "exchange": {
+                  "kind": "interaction",
+                  "phase": "request",
+                  "direction": "output",
+                  "objectId": "notebook",
+                  "dataIds": null,
+                  "relationId": null,
+                  "pairedStepId": null
+                }
+              }
+            ],
+            "orderRules": []
+          },
+          "results": [
+            {
+              "id": "auto-check-result",
+              "text": "照合結果を得る"
+            }
+          ],
+          "problem": null,
+          "painLevel": null
+        }
+      ],
+      "data": [
+        {
+          "id": "filter",
+          "name": "検索条件",
+          "items": [
+            {
+              "informationId": "i-filter",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "result",
+          "name": "検索結果",
+          "items": [
+            {
+              "informationId": "i-result",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "question",
+          "name": "確認事項",
+          "items": [
+            {
+              "informationId": "i-question",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "answer",
+          "name": "顧客回答",
+          "items": [
+            {
+              "informationId": "i-answer",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "approval",
+          "name": "承認依頼",
+          "items": [
+            {
+              "informationId": "i-approval",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "decision",
+          "name": "承認結果",
+          "items": [
+            {
+              "informationId": "i-decision",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "notice",
+          "name": "結果通知",
+          "items": [
+            {
+              "informationId": "i-notice",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "id": "waiting",
+          "name": "確認待ちの記録",
+          "items": [
+            {
+              "informationId": "i-wait",
+              "condition": null
+            }
+          ]
+        }
+      ],
+      "relations": [],
+      "exceptions": [
+        {
+          "id": "no-answer",
+          "activityId": "inquiry",
+          "name": "回答なし",
+          "description": "期限までに顧客回答がない場合は確認待ちとして記録する。"
+        }
+      ],
+      "findings": []
+    }
+  ],
+  "sources": [],
+  "externalDocuments": [],
+  "diagnostics": []
+}
