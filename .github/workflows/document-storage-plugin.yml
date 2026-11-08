@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-python@v5.6.0
         with:
           python-version: '3.12'
-      - run: node --test tools/document_storage/test-native-json.mjs tools/document_storage/test-storage.mjs tools/document_storage/test-authoring.mjs tools/document_storage/test-states.mjs tools/document_storage/test-roles.mjs tools/document_storage/test-concept-model.mjs tools/document_storage/test-check-samples.mjs tools/document_storage/test-version-policy.mjs
+      - run: node --test tools/document_storage/test-native-json.mjs tools/document_storage/test-storage.mjs tools/document_storage/test-authoring.mjs tools/document_storage/test-states.mjs tools/document_storage/test-roles.mjs tools/document_storage/test-concept-model.mjs tools/document_storage/test-check-samples.mjs tools/document_storage/test-version-policy.mjs tools/document_storage/test-explicit-conversion.mjs
       - run: python3 -m unittest tools/test_json_plugin.py tools/test_export_plugin_references.py
       - run: python3 tools/export_plugin_references.py --check --skill alder-manage-json-documents
       - run: python3 -m unittest discover -s tools/business_graph -p 'test_*.py'
