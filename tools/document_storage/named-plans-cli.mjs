@@ -4,7 +4,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {randomUUID} from 'node:crypto';
 import {parseStrict,stringify,demand} from './core.mjs';
-import {describeDeclaredValue,fingerprint,guardAuthoring,packageVersionPolicy,requireEditablePackage} from './authoring.mjs';
+import {describeDeclaredValue,fingerprint,guardAuthoring,packageVersionPolicy,requireEditablePackage,requireCommitTarget} from './authoring.mjs';
 import {validateNamedPlans,selectNamedPlan} from './named-plans.mjs';
 
 export async function run(args){
@@ -23,6 +23,11 @@ export async function run(args){
  try{
   demand(Number(process.versions.node.split('.')[0])>=24,'Node 24+ required');
   const [command,...rest]=args;
+  if(command==='prepare-version-upgrade'){
+   demand(rest.length===4,'prepare-version-upgrade plans.json plan-id new-bundle.json revisions.json');
+   const [source,id,output,request]=rest,{prepareVersionUpgrade}=await import('./explicit-conversion.mjs');
+   console.log(JSON.stringify(await prepareVersionUpgrade(source,output,request,id)));return 0;
+  }
   if(command==='inspect'){
    demand(rest.length===1,'inspect plans.json');
    const text=fs.readFileSync(rest[0],'utf8'),bundle=parseStrict(text);checkVersions(bundle);const result=validateNamedPlans(bundle);
@@ -50,7 +55,7 @@ export async function run(args){
    const current=fs.readFileSync(target,'utf8'),bundle=parseStrict(current),operation=read(opfile),next=read(candidate);
    demand(operation.expectedSha256===fingerprint(current),'File content conflict');
    checkVersions(bundle);const previous=selectNamedPlan(bundle,id).package;
-   requireEditablePackage(previous,'Plan '+id);requireEditablePackage(next,'candidate for plan '+id);
+   await requireCommitTarget(previous,next,operation,'Plan '+id);requireEditablePackage(next,'candidate for plan '+id);
    const result=guardAuthoring(previous,next,operation);
    const updated=structuredClone(bundle);updated.plans.find(p=>p.id===id).package=next;validateNamedPlans(updated);
    stage(target,stringify(updated));validateNamedPlans(read(temp));
@@ -59,7 +64,7 @@ export async function run(args){
    fs.renameSync(temp,target);temp=null;
    console.log(JSON.stringify({target,plan:id,sha256:fingerprint(fs.readFileSync(target,'utf8')),...result}));return 0;
   }
-  throw Error('Usage: named-plans-cli.mjs create | inspect | extract | commit');
+  throw Error('Usage: named-plans-cli.mjs create | inspect | extract | commit | prepare-version-upgrade');
  }catch(error){console.error(JSON.stringify({diagnostics:[{code:'NAMED_PLANS_OPERATION',message:error.message}]}));return 2;}
  finally{for(const file of [temp,ownsLock?lock:null])if(file)try{fs.unlinkSync(file);}catch(error){if(error.code!=='ENOENT')console.error(JSON.stringify({code:'CLEANUP_WARNING',message:error.message}));}}
 }

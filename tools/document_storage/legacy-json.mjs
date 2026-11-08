@@ -32,9 +32,11 @@ export function readLegacyPackage(pkg){
 }
 /** Explicit migration candidate. All changed document and package revisions must be supplied. */
 export function upgradeExceptions(pkg,{expectedRevision,revision,documentRevisions}){
- demand(pkg.revision===expectedRevision&&revision&&revision!==expectedRevision,'Migration package revision conflict');
- const next=readLegacyPackage(pkg),changed=next.documents.filter(d=>d.kind!=='checkItems'),ids=new Set(changed.map(d=>d.id));
- for(const d of next.documents)if(d.basedOn&&ids.has(d.basedOn.documentId))ids.add(d.id);
+ demand(pkg.revision===expectedRevision&&typeof revision==='string'&&revision.trim()&&revision!==expectedRevision,'Migration package revision conflict');
+ demand(documentRevisions&&typeof documentRevisions==='object'&&!Array.isArray(documentRevisions),'Migration document revisions required');
+ const next=readLegacyPackage(pkg),ids=new Set(next.documents.filter((d,i)=>JSON.stringify(d)!==JSON.stringify(pkg.documents[i])).map(d=>d.id));
+ // Include dependent documents regardless of their order, but retain untouched revisions.
+ let size;do{size=ids.size;for(const d of next.documents)if(d.basedOn&&ids.has(d.basedOn.documentId))ids.add(d.id);}while(size!==ids.size);
  for(const d of next.documents)if(ids.has(d.id)){
   const r=documentRevisions[d.id];demand(r&&r.expected===d.revision&&typeof r.next==='string'&&r.next.trim()&&r.next!==r.expected,'Migration document revision conflict: '+d.id);d.revision=r.next;
  }

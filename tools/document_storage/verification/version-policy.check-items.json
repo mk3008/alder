@@ -1,13 +1,140 @@
 {
   "format": "storage-verification/1",
   "requirement": "https://github.com/mk3008/alder/issues/348",
-  "scope": "Phase 1: 単一・複数案JSONの読取版判定と直接編集ゲート。永続的な版変換の実装はPhase 2。",
+  "scope": "Phase 1: 読取版判定と直接編集ゲート。Phase 2: 0.1〜0.3から0.4への別候補生成・差分報告・明示migration commit。",
   "checks": [
-    {"id":"VERSION-POLICY-001","condition":"既知の単一package 0.1・0.2・0.3・0.4をinspectする。","guarantee":"実際の形式・版と読取可否・直接編集可否を区別し、0.4だけを直接編集可と示す。検査は原本を変更しない。","reason":"Plugin版・package版・revisionを混同せず操作を選べる。","verification":"tools/document_storage/test-version-policy.mjs"},
-    {"id":"VERSION-POLICY-002","condition":"旧版・未知形式・将来版または不正な現行候補を単一JSONとして作成・直接更新する。","guarantee":"正規CLIで拒否し、対象・検出版・対応版と次に必要な確認を示す。原本を変更せず、暗黙変換しない。","reason":"旧形式の編集や推定変換で業務意味を変えない。","verification":"tools/document_storage/test-version-policy.mjs と tools/test_json_plugin.py"},
-    {"id":"VERSION-POLICY-003","condition":"有効な0.4単一JSONを作成または更新する。","guarantee":"既存のID・参照・版・hash・人間合意・失敗時保護を維持する。","reason":"現行版の正規操作と人間判断を後退させない。","verification":"tools/document_storage/test-version-policy.mjs と test-authoring.mjs"},
-    {"id":"VERSION-POLICY-004","condition":"外側1.0の複数案で旧版と0.4の案が混在する。","guarantee":"案ごとの形式・版・直接編集可否を示す。指定した0.4案だけ更新でき、対象外の案と元ファイルを保つ。旧版案や曖昧・未知の対象は保存しない。","reason":"bundle版と対象案のpackage版を区別し、案の独立性を維持する。","verification":"tools/document_storage/test-version-policy.mjs と tools/test_json_plugin.py"},
-    {"id":"VERSION-POLICY-005","condition":"Viewerが対応済み旧版を閲覧する。","guarantee":"旧版を入力境界でメモリ上の共通モデルへ正規化して既存の表示経路に渡し、原本や人間承認を変更しない。完全な旧表示の再現は要求しない。","reason":"書込みを伴わず可能な範囲で旧版を閲覧する。","verification":"既存Viewer入力経路・test-native-json.mjs とCI"},
-    {"id":"VERSION-POLICY-006","condition":"Skillが単一・複数案JSONの編集依頼を受ける。","guarantee":"対象案と形式・版を検査し、直接編集不可なら止めて理由と次の明示変換の確認を示す。変換可否を未確認のまま成功可能と断定せず、旧版を自動変換しない。","reason":"Skillによる操作を保存CLIと同じ版ポリシーにする。","verification":"tools/test_json_plugin.py とSkill手順の意味照合"}
+    {
+      "id": "VERSION-POLICY-001",
+      "condition": "既知の単一package 0.1・0.2・0.3・0.4をinspectする。",
+      "guarantee": "実際の形式・版と読取可否・直接編集可否を区別し、0.4だけを直接編集可と示す。検査は原本を変更しない。",
+      "reason": "Plugin版・package版・revisionを混同せず操作を選べる。",
+      "verification": "tools/document_storage/test-version-policy.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-002",
+      "condition": "旧版・未知形式・将来版または不正な現行候補を単一JSONとして作成・直接更新する。",
+      "guarantee": "正規CLIで拒否し、対象・検出版・対応版と次に必要な確認を示す。原本を変更せず、暗黙変換しない。",
+      "reason": "旧形式の編集や推定変換で業務意味を変えない。",
+      "verification": "tools/document_storage/test-version-policy.mjs と tools/test_json_plugin.py"
+    },
+    {
+      "id": "VERSION-POLICY-003",
+      "condition": "有効な0.4単一JSONを作成または更新する。",
+      "guarantee": "既存のID・参照・版・hash・人間合意・失敗時保護を維持する。",
+      "reason": "現行版の正規操作と人間判断を後退させない。",
+      "verification": "tools/document_storage/test-version-policy.mjs と test-authoring.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-004",
+      "condition": "外側1.0の複数案で旧版と0.4の案が混在する。",
+      "guarantee": "案ごとの形式・版・直接編集可否を示す。指定した0.4案だけ更新でき、対象外の案と元ファイルを保つ。旧版案や曖昧・未知の対象は保存しない。",
+      "reason": "bundle版と対象案のpackage版を区別し、案の独立性を維持する。",
+      "verification": "tools/document_storage/test-version-policy.mjs と tools/test_json_plugin.py"
+    },
+    {
+      "id": "VERSION-POLICY-005",
+      "condition": "Viewerが対応済み旧版を閲覧する。",
+      "guarantee": "旧版を入力境界でメモリ上の共通モデルへ正規化して既存の表示経路に渡し、原本や人間承認を変更しない。完全な旧表示の再現は要求しない。",
+      "reason": "書込みを伴わず可能な範囲で旧版を閲覧する。",
+      "verification": "既存Viewer入力経路・test-native-json.mjs とCI"
+    },
+    {
+      "id": "VERSION-POLICY-006",
+      "condition": "Skillが単一・複数案JSONの編集依頼を受ける。",
+      "guarantee": "対象案と形式・版を検査し、直接編集不可なら止めて理由と次の明示変換の確認を示す。変換可否を未確認のまま成功可能と断定せず、旧版を自動変換しない。",
+      "reason": "Skillによる操作を保存CLIと同じ版ポリシーにする。",
+      "verification": "tools/test_json_plugin.py とSkill手順の意味照合"
+    },
+    {
+      "id": "VERSION-POLICY-007",
+      "condition": "単一package 0.1・0.2・0.3の明示変換を依頼する。",
+      "guarantee": "入力hashと版を照合し、validate済み0.4候補と編集可否・ID・原典・参照・revisionの差分を返す。元bytes/hashとモードを保持する。",
+      "reason": "互換表示モデルをそのまま正本にせず、明示変換だけを永続化する。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-008",
+      "condition": "複数案から一つの案IDを指定して変換する。",
+      "guarantee": "対象案だけを変えた別bundleを生成し、対象外の案・順序・名前と元bundleを保持する。採用はextractした単一候補を既存commitへ渡す。",
+      "reason": "対象案のpackage版とbundle全体のhashを独立に扱う。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-009",
+      "condition": "未知形式・将来版・混在文書契約・形式不正・現行版を変換に渡す。",
+      "guarantee": "対象と理由を返し候補を保存しない。0.5等の業務意味を推測しない。",
+      "reason": "対応していない構造を正本にしない。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-010",
+      "condition": "Role／Whoや例外参照が未決の旧版を変換する。",
+      "guarantee": "Who原文、nullのRole／例外参照、未確定診断を残し、補完しなかった意味を一覧で報告する。",
+      "reason": "構造移行から業務判断を補完しない。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-011",
+      "condition": "旧Stateの例外名が不存在または曖昧である。",
+      "guarantee": "変換不能の理由と対象を返し、原本・既存出力を保持して停止する。",
+      "reason": "例外IDを推測で割り当てない。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-012",
+      "condition": "既存Checkを持つ候補を生成・採用する。",
+      "guarantee": "reviewState・証拠・unverifiedを保全し、採用には移行後BDの正確なrevisionへの既存人間合意ゲートを要求する。",
+      "reason": "変換成功を人間承認と扱わない。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-013",
+      "condition": "要求hash／package版／文書revisionが競合、または出力が既存・入力別名である。",
+      "guarantee": "要求を拒否し原本とモードを保持する。変更する文書だけ新revisionを要求する。",
+      "reason": "暗黙上書きや未変更revision更新を防ぐ。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-014",
+      "condition": "候補生成の書込・fsync・linkが失敗する、または生成中に入力が変わる。",
+      "guarantee": "候補を公開せず一時ファイルを片付け、外部変更を巻き戻さず検出する。",
+      "reason": "保存失敗や競合を変換成功と報告しない。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-015",
+      "condition": "単一・複数案のmigration commitにhash／版競合、既存lock、fsync／chmod／rename失敗や保存中競合がある。",
+      "guarantee": "既存bytes／モードを保持し、自分のlockと一時ファイルだけ片付ける。成功時も既存モードを保持する。",
+      "reason": "Phase 1の保存保護と#358のモード維持を後退させない。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-016",
+      "condition": "Role生成・Who変更・診断消失などをmigration候補へ混ぜる、またはmigrationを省略する。",
+      "guarantee": "構造移行の再計算結果と一致しない候補と通常の旧版直接編集を拒否する。二段移行を無条件に合成しない。",
+      "reason": "明示移行を使って業務意味や承認を補完しない。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-017",
+      "condition": "案の指定が不存在・重複、bundle版や内包package版が非対応である。",
+      "guarantee": "対象と理由を返し別候補も生成しない。先頭案を自動選択しない。",
+      "reason": "案の独立性を維持する。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-018",
+      "condition": "Concept文書が未変更の0.4更新、または旧版とConcept文書を混在させる。",
+      "guarantee": "通常の未変更Concept revisionを保持し、旧版Schemaに存在しないConcept構造は推測変換しない。",
+      "reason": "正式対応の文書契約とrevisionの意味を保持する。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs"
+    },
+    {
+      "id": "VERSION-POLICY-019",
+      "condition": "単一・複数案の既存モード0600／0640／0644／0660で移行保存し、現行0.4のcreate／inspect／commitも行う。",
+      "guarantee": "移行と通常編集で従来の保存経路と既存モードを維持する。",
+      "reason": "#358と通常の0.4編集の回帰を確認する。",
+      "verification": "tools/document_storage/test-explicit-conversion.mjs と test-authoring.mjs"
+    }
   ]
 }

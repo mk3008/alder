@@ -9,12 +9,19 @@ export const describeDeclaredValue=value=>value===undefined?'<missing>':typeof v
 export function packageVersionPolicy(pkg,target='package'){
  const format=pkg?.format,formatVersion=pkg?.formatVersion;
  demand(format==='alder-document-package'&&['0.1','0.2','0.3','0.4'].includes(formatVersion),`${target}: unsupported format=${describeDeclaredValue(format)} formatVersion=${describeDeclaredValue(formatVersion)}; supported read formats are alder-document-package 0.1–0.4 and direct edit is 0.4 only. Stop editing and check whether explicit conversion to a separate file is supported.`);
- const editable=formatVersion==='0.4';return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':'explicit-only-unassessed'};
+ const editable=formatVersion==='0.4';return {format,formatVersion,readable:true,editable,conversion:editable?'not-required':'explicit-only'};
 }
 export function requireEditablePackage(pkg,target='package'){
  const policy=packageVersionPolicy(pkg,target);
- demand(policy.editable,`${target}: format=${policy.format} formatVersion=${policy.formatVersion} cannot be edited directly; supported direct-edit version is alder-document-package 0.4. Request explicit conversion to a separate file; availability must be assessed.`);
+ demand(policy.editable,`${target}: format=${policy.format} formatVersion=${policy.formatVersion} cannot be edited directly; supported direct-edit version is alder-document-package 0.4. Request explicit conversion to a separate file using prepare-version-upgrade; input validation is required.`);
  return policy;
+}
+/** Only the explicitly requested, exact 0.4 migration may cross the edit gate. */
+export async function requireCommitTarget(previous,next,operation,target='target'){
+ if(operation.migration==='exceptions-0.4'&&packageVersionPolicy(previous,target).formatVersion!=='0.4'){
+  const {verifyConversionCandidate}=await import('./explicit-conversion.mjs');
+  verifyConversionCandidate(previous,next,target);
+ }else requireEditablePackage(previous,target);
 }
 function validateForAuthoring(pkg,target){
  try{return validate(pkg);}catch(error){throw Error(`${target}: invalid format=${pkg?.format??'<missing>'} formatVersion=${pkg?.formatVersion??'<missing>'}; correct the reported data before saving: ${error.message}`,{cause:error});}
