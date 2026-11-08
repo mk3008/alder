@@ -585,6 +585,7 @@ class ExportTests(unittest.TestCase):
             ('input', '依頼者', work,
              'システム要件 / 現場で認識されたProblem・Pain / レビュー結果 / 改善候補の採用判断'),
             ('input', '業務設計書', work, '現行業務要件 / 期待結果 / 未決事項 / Problem / Pain'),
+            ('input', '判断記録', work, '改善候補の採用判断 / 判断者 / 理由 / 未決事項'),
             ('input', 'Alder: 業務相関ナレッジ', work, '状態遷移・前後業務の確認観点'),
             ('input', 'Alder: 業務ナレッジ', work, '業務手順・条件・考慮事項の確認観点'),
             ('output', work, '業務設計書', '業務要件 / 期待結果 / 未決事項 / Problem / Pain'),
@@ -606,30 +607,66 @@ class ExportTests(unittest.TestCase):
         graph = parse_design(DESIGN.read_text())
         nodes = {n['id']: n for n in graph['nodes']}
         self.assertTrue(nodes['業務改善レビュー']['scope'])
+        self.assertTrue(nodes['改善案の確認']['scope'])
+        self.assertTrue(nodes['改善検討メモ']['scope'])
         self.assertIn('合意済み', nodes['業務改善レビュー']['when'])
         self.assertIn('Problem / Pain', nodes['業務改善レビュー']['when'])
+        self.assertIn('改善検討メモ', nodes['改善案の確認']['when'])
         ordinary = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
                     if '業務改善レビュー' in (r['from'], r['to'])}
         self.assertEqual(ordinary, {
             ('input', '業務設計書', '業務改善レビュー', '現在の業務上の意味 / Problem / Pain'),
-            ('input', '依頼者', '業務改善レビュー', '改善検討の依頼 / 記録済みProblemの補足'),
-            ('input', 'Alder: 業務ナレッジ', '業務改善レビュー', 'Problem起点の改善レビューの観点'),
-            ('output', '業務改善レビュー', '依頼者', '改善候補 / 比較根拠 / 確認事項'),
+            ('input', '改善検討メモ', '業務改善レビュー',
+             '前回の候補 / 比較根拠 / 残る確認事項（再検討時）'),
+            ('input', '依頼者', '業務改善レビュー',
+             '改善検討の依頼 / 記録済みProblemの補足 / 既存候補の再検討依頼'),
+            ('input', 'Alder: 業務ナレッジ', '業務改善レビュー',
+             'Problem起点の改善レビューの観点'),
+            ('output', '業務改善レビュー', '改善検討メモ',
+             '改善候補 / 比較根拠 / 説明内容 / 確認事項 / 未確認の前提'),
         })
-        self.assertIn(('input', '依頼者', '業務設計',
-                       'システム要件 / 現場で認識されたProblem・Pain / レビュー結果 / 改善候補の採用判断'),
+        confirmation = {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']
+                        if '改善案の確認' in (r['from'], r['to'])}
+        self.assertEqual(confirmation, {
+            ('input', '改善検討メモ', '改善案の確認',
+             '改善候補 / 比較根拠 / 説明内容 / 確認事項 / 未確認の前提'),
+            ('input', '業務設計書', '改善案の確認', '現在の業務要件 / Problem / Pain'),
+            ('input', '依頼者', '改善案の確認',
+             '改善候補への回答 / 採否判断 / 再検討の依頼'),
+            ('output', '改善案の確認', '判断記録',
+             '確定した改善候補の採否 / 判断者 / 理由 / 残る確認事項'),
+            ('output', '改善案の確認', '依頼者',
+             '採否の確認結果 / 保留事項 / 再検討の確認事項'),
+        })
+        self.assertIn(('input', '判断記録', '業務設計',
+                       '改善候補の採用判断 / 判断者 / 理由 / 未決事項'),
                       {(r['kind'], r['from'], r['to'], r['label']) for r in graph['relations']})
         design_source = DESIGN.read_text().split('# Activity 業務設計\n', 1)[1].split(
             '# Activity 業務改善レビュー\n', 1)[0]
+        review_source = DESIGN.read_text().split('# Activity 業務改善レビュー\n', 1)[1].split(
+            '# Activity 改善案の確認\n', 1)[0]
+        confirmation_source = DESIGN.read_text().split('# Activity 改善案の確認\n', 1)[1].split(
+            '# Activity 検査項目の設計\n', 1)[0]
         self.assertIn('Problemと相対的なPain levelを依頼者と確認して業務設計書へ記録する',
                       design_source)
         self.assertIn('未決の業務仕様とは区別', design_source)
+        self.assertIn('候補がない場合はその理由を記録する', review_source)
+        self.assertIn('再検討時は改善検討メモに記録した前回の候補', review_source)
+        self.assertIn('業務設計書は変更しない', review_source)
+        self.assertIn('候補が0件なら', confirmation_source)
+        self.assertIn('採用が確定した候補のみ業務設計へ渡し', confirmation_source)
+        self.assertIn('不採用・保留の場合は現行の業務設計書を変更しない',
+                      confirmation_source)
         self.assertFalse(any(r['kind'] == 'business-exception'
-                             and '業務改善レビュー' in (r['from'], r['to'])
+                             and ('業務改善レビュー' in (r['from'], r['to'])
+                                  or '改善案の確認' in (r['from'], r['to']))
                              for r in graph['relations']))
+        self.assertFalse(any(r['kind'] == 'output' and r['from'] == '業務改善レビュー'
+                             and r['to'] == '依頼者' for r in graph['relations']))
         self.assertNotIn('改善候補', nodes)
         self.assertNotIn('candidate', nodes['業務改善レビュー'])
         self.assertNotIn('problem', nodes['業務改善レビュー'])
+        self.assertNotIn('problem', nodes['改善案の確認'])
 
     def test_self_design_projection_and_regeneration(self):
         graph = parse_design(DESIGN.read_text())
@@ -637,18 +674,18 @@ class ExportTests(unittest.TestCase):
         nodes = {n['id']: n for n in graph['nodes']}
         self.assertEqual({n['id'] for n in nodes.values() if n['type'] == 'business'}, {
             '業務設計', '検査項目の設計', 'システム設計', '実装',
-            '同期漏れ検査', '業務改善レビュー',
+            '同期漏れ検査', '業務改善レビュー', '改善案の確認',
             '画面設計', 'Alder実装レビュー', '製品検証', '検証結果の統合',
         })
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'business' and not n['scope']},
                          {'システム設計', '実装', '画面設計', 'Alder実装レビュー',
                           '製品検証', '検証結果の統合'})
-        self.assertEqual(len(nodes), 25)
-        self.assertEqual(len(graph['relations']), 63)
+        self.assertEqual(len(nodes), 27)
+        self.assertEqual(len(graph['relations']), 70)
         self.assertEqual({n['id'] for n in nodes.values()
                           if n['type'] == 'object' and n['scope']}, {
-            '業務設計書', '検査項目', '判断記録', '同期照合情報', '同期漏れの候補',
+            '業務設計書', '検査項目', '判断記録', '改善検討メモ', '同期照合情報', '同期漏れの候補',
             'Alder: 業務相関ナレッジ', 'Alder: 業務ナレッジ', 'Alder: 検査項目設計ナレッジ',
         })
         self.assertEqual({n['id'] for n in nodes.values()
