@@ -1,0 +1,13 @@
+{
+  "kind": "temporary exact reuse of business-graph gesture modules; shared canvas extraction deferred",
+  "sources": {
+    "node-drag": {
+      "path": "web-viewer/src/node-drag.ts",
+      "sha256": "c7ec07037faf3a304e13daaecf4fdb570d9e795829066395b6f521870f25bea4"
+    },
+    "touch-gestures": {
+      "path": "web-viewer/src/touch-gestures.ts",
+      "sha256": "a5a034ef0f006d985e0e33994b38f1a47b79effb2ee3ba5c0236c650c1cb8c9f"
+    }
+  }
+}
