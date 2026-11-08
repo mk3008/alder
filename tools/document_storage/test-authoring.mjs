@@ -39,6 +39,70 @@ test('CLI protects last package, CAS, alias targets, lock and runtime without Py
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 
+// Synthetic snapshots are normalized only to prepare current-version test fixtures.
+for(const mode of [0o600,0o640,0o644,0o660])test(`AUTHOR-MODE-001: commit preserves ${mode.toString(8)} permissions`,{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-author-mode-'));
+ try{
+  const target=path.join(dir,'target.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json');
+  const previous=readLegacyPackage(p1),next=readLegacyPackage(p2);
+  fs.writeFileSync(target,JSON.stringify(previous));fs.chmodSync(target,mode);assert.equal(fs.statSync(target).mode&0o7777,mode);
+  fs.writeFileSync(candidate,JSON.stringify(next));const candidateBytes=fs.readFileSync(candidate);
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:previous.revision,expectedSha256:fingerprint(fs.readFileSync(target,'utf8'))}));
+  const committed=spawnSync(process.execPath,[new URL('./author-cli.mjs',import.meta.url).pathname,'commit',target,candidate,op],{encoding:'utf8'});
+  assert.equal(committed.status,0,committed.stderr);assert.equal(JSON.parse(committed.stdout).approval,'not-evaluated');
+  assert.equal(fs.statSync(target).mode&0o7777,mode);assert.deepEqual(JSON.parse(fs.readFileSync(target,'utf8')),next);
+  assert.deepEqual(fs.readFileSync(candidate),candidateBytes);assert.ok(!fs.readdirSync(dir).some(n=>n.startsWith('.alder-json-')||n.endsWith('.alder-lock')));
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+for(const mode of [0o600,0o640,0o644,0o660])test(`AUTHOR-MODE-002: guard or save failure preserves bytes and ${mode.toString(8)} permissions`,{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-author-mode-failure-'));
+ try{
+  const target=path.join(dir,'target.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json'),preload=path.join(dir,'fail-save.mjs');
+  const previous=readLegacyPackage(p1),next=readLegacyPackage(p2),cli=new URL('./author-cli.mjs',import.meta.url).pathname;
+  fs.writeFileSync(target,JSON.stringify(previous));fs.chmodSync(target,mode);fs.writeFileSync(candidate,JSON.stringify(next));
+  const before=fs.readFileSync(target),validOp={expectedRevision:previous.revision,expectedSha256:fingerprint(before.toString('utf8'))};
+  const check=()=>{assert.deepEqual(fs.readFileSync(target),before);assert.equal(fs.statSync(target).mode&0o7777,mode);assert.equal(fs.existsSync(target+'.alder-lock'),false);assert.deepEqual(fs.readdirSync(dir).filter(n=>n.startsWith('.alder-json-')),[]);};
+  const fail=(prefix,message)=>{const result=spawnSync(process.execPath,[...prefix,cli,'commit',target,candidate,op],{encoding:'utf8'});assert.equal(result.status,2,result.stderr);assert.match(result.stderr,message);check();};
+  fs.writeFileSync(op,JSON.stringify({...validOp,expectedSha256:'wrong'}));fail([],/File content conflict/);
+  fs.writeFileSync(op,JSON.stringify({...validOp,expectedRevision:'wrong'}));fail([],/Package revision conflict/);
+  fs.writeFileSync(op,JSON.stringify(validOp));
+  for(const method of ['fsyncSync','chmodSync','renameSync']){
+   fs.writeFileSync(preload,`import fs from 'node:fs';fs.${method}=()=>{throw Error('synthetic ${method} failure');};\n`);
+   fail(['--import',preload],new RegExp(`synthetic ${method} failure`));
+  }
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+test('AUTHOR-MODE-002: human agreement guards preserve bytes and permissions',{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-author-mode-human-'));
+ try{
+  const target=path.join(dir,'target.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json');
+  const previous=readLegacyPackage(p3),next=update(previous,q=>{c(q).revision+='-next';c(q).items[0].reviewState='確認済み';});
+  fs.writeFileSync(target,JSON.stringify(previous));fs.chmodSync(target,0o644);fs.writeFileSync(candidate,JSON.stringify(next));
+  const before=fs.readFileSync(target),validOp={expectedRevision:previous.revision,expectedSha256:fingerprint(before.toString('utf8'))};
+  for(const [input,message]of [[validOp,/Human Business Design/],[{...validOp,...confirm(next)},/Human review state/]]){
+   fs.writeFileSync(op,JSON.stringify(input));
+   const result=spawnSync(process.execPath,[new URL('./author-cli.mjs',import.meta.url).pathname,'commit',target,candidate,op],{encoding:'utf8'});
+   assert.equal(result.status,2,result.stderr);assert.match(result.stderr,message);assert.deepEqual(fs.readFileSync(target),before);assert.equal(fs.statSync(target).mode&0o7777,0o644);
+   assert.ok(!fs.readdirSync(dir).some(n=>n.startsWith('.alder-json-')||n.endsWith('.alder-lock')));
+  }
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+test('AUTHOR-MODE-002: final fingerprint conflict stops before chmod or rename',{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-author-mode-conflict-'));
+ try{
+  const target=path.join(dir,'target.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json'),preload=path.join(dir,'change-target.mjs');
+  const previous=readLegacyPackage(p1),next=readLegacyPackage(p2);
+  fs.writeFileSync(target,JSON.stringify(previous));fs.chmodSync(target,0o644);fs.writeFileSync(candidate,JSON.stringify(next));
+  const before=fs.readFileSync(target,'utf8');fs.writeFileSync(op,JSON.stringify({expectedRevision:previous.revision,expectedSha256:fingerprint(before)}));
+  // Simulate an external writer after the temp file is written, before the final content check.
+  fs.writeFileSync(preload,`import fs from 'node:fs';const sync=fs.fsyncSync;fs.fsyncSync=fd=>{sync(fd);fs.appendFileSync(${JSON.stringify(target)},' ');};for(const method of ['chmodSync','renameSync'])fs[method]=()=>{throw Error('unexpected '+method);};\n`);
+  const result=spawnSync(process.execPath,['--import',preload,new URL('./author-cli.mjs',import.meta.url).pathname,'commit',target,candidate,op],{encoding:'utf8'});
+  assert.equal(result.status,2,result.stderr);assert.match(result.stderr,/File changed while preparing save/);
+  assert.equal(fs.readFileSync(target,'utf8'),before+' ');assert.equal(fs.statSync(target).mode&0o7777,0o644);
+  assert.ok(!fs.readdirSync(dir).some(n=>n.startsWith('.alder-json-')||n.endsWith('.alder-lock')));
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+
 test('PURCHASE-STATE-005: transition removal retains CLI byte conflict protection',()=>{
  const previous=readLegacyPackage(JSON.parse(fs.readFileSync(new URL('../../work/json-state/issue-275/purchase.json',import.meta.url),'utf8')));
  const next=structuredClone(previous),state=next.documents.find(d=>d.kind==='stateTransition'),removed=state.transitions.pop();
