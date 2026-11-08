@@ -78,6 +78,29 @@ test('NAMED-PLANS-MODE-002: guard or chmod failure preserves bytes and permissio
   const failed=run(['--import',preload],'commit',target,'current',candidate,op);assert.equal(failed.status,2,failed.stderr);assert.match(failed.stderr,/synthetic chmod failure/);check();
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
+for(const timing of ['fsync','final read'])for(const [initialMode,externalMode]of [[0o644,0o600],[0o600,0o644]])test(`NAMED-PLANS-MODE-003: mode change ${initialMode.toString(8)} to ${externalMode.toString(8)} after ${timing} stops before chmod or rename`,{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-plans-mode-race-'));
+ try{
+  const target=path.join(dir,'plans.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json'),preload=path.join(dir,'change-mode.mjs');
+  fs.writeFileSync(target,JSON.stringify(bundle()));fs.chmodSync(target,initialMode);assert.equal(fs.statSync(target).mode&0o7777,initialMode);
+  fs.writeFileSync(candidate,JSON.stringify(p2));const before=fs.readFileSync(target);
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:p1.revision,expectedSha256:fingerprint(before.toString('utf8'))}));
+  // Use the original chmod for the external change; fail if saving reaches chmod or rename.
+  fs.writeFileSync(preload,`import fs from 'node:fs';
+const target=${JSON.stringify(target)},chmod=fs.chmodSync;
+const change=()=>chmod(target,${externalMode});
+for(const method of ['chmodSync','renameSync'])fs[method]=()=>{throw Error('unexpected '+method);};
+${timing==='fsync'?`const sync=fs.fsyncSync;let injected=false;
+fs.fsyncSync=function(...args){const result=sync.apply(this,args);if(!injected){injected=true;change();}return result;};`:`const read=fs.readFileSync;let reads=0;
+fs.readFileSync=function(file,...args){const result=read.call(this,file,...args);if(file===target&&++reads===2)change();return result;};`}
+`);
+  const result=spawnSync(process.execPath,['--import',preload,new URL('./named-plans-cli.mjs',import.meta.url).pathname,'commit',target,'current',candidate,op],{encoding:'utf8'});
+  assert.equal(result.status,2,result.stderr);assert.match(result.stderr,/Target mode changed while preparing save/);
+  assert.deepEqual(fs.readFileSync(target),before);assert.equal(fs.statSync(target).mode&0o7777,externalMode);
+  assert.equal(fs.existsSync(target+'.alder-lock'),false);assert.deepEqual(fs.readdirSync(dir).filter(n=>n.startsWith('.alder-plans-')),[]);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+
 test('NAMED-PLANS-005: an attempted human-state change cannot bypass the single-package guard',()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-plans-human-'));
  try{

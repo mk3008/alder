@@ -103,6 +103,30 @@ test('AUTHOR-MODE-002: final fingerprint conflict stops before chmod or rename',
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 
+for(const timing of ['fsync','final read'])for(const [initialMode,externalMode]of [[0o644,0o600],[0o600,0o644]])test(`AUTHOR-MODE-003: mode change ${initialMode.toString(8)} to ${externalMode.toString(8)} after ${timing} stops before chmod or rename`,{skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-author-mode-race-'));
+ try{
+  const target=path.join(dir,'target.json'),candidate=path.join(dir,'candidate.json'),op=path.join(dir,'operation.json'),preload=path.join(dir,'change-mode.mjs');
+  const previous=readLegacyPackage(p1),next=readLegacyPackage(p2);
+  fs.writeFileSync(target,JSON.stringify(previous));fs.chmodSync(target,initialMode);assert.equal(fs.statSync(target).mode&0o7777,initialMode);
+  fs.writeFileSync(candidate,JSON.stringify(next));const before=fs.readFileSync(target);
+  fs.writeFileSync(op,JSON.stringify({expectedRevision:previous.revision,expectedSha256:fingerprint(before.toString('utf8'))}));
+  // Use the original chmod for the external change; fail if saving reaches chmod or rename.
+  fs.writeFileSync(preload,`import fs from 'node:fs';
+const target=${JSON.stringify(target)},chmod=fs.chmodSync;
+const change=()=>chmod(target,${externalMode});
+for(const method of ['chmodSync','renameSync'])fs[method]=()=>{throw Error('unexpected '+method);};
+${timing==='fsync'?`const sync=fs.fsyncSync;let injected=false;
+fs.fsyncSync=function(...args){const result=sync.apply(this,args);if(!injected){injected=true;change();}return result;};`:`const read=fs.readFileSync;let reads=0;
+fs.readFileSync=function(file,...args){const result=read.call(this,file,...args);if(file===target&&++reads===2)change();return result;};`}
+`);
+  const result=spawnSync(process.execPath,['--import',preload,new URL('./author-cli.mjs',import.meta.url).pathname,'commit',target,candidate,op],{encoding:'utf8'});
+  assert.equal(result.status,2,result.stderr);assert.match(result.stderr,/Target mode changed while preparing save/);
+  assert.deepEqual(fs.readFileSync(target),before);assert.equal(fs.statSync(target).mode&0o7777,externalMode);
+  assert.equal(fs.existsSync(target+'.alder-lock'),false);assert.deepEqual(fs.readdirSync(dir).filter(n=>n.startsWith('.alder-json-')),[]);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+
 test('PURCHASE-STATE-005: transition removal retains CLI byte conflict protection',()=>{
  const previous=readLegacyPackage(JSON.parse(fs.readFileSync(new URL('../../work/json-state/issue-275/purchase.json',import.meta.url),'utf8')));
  const next=structuredClone(previous),state=next.documents.find(d=>d.kind==='stateTransition'),removed=state.transitions.pop();
