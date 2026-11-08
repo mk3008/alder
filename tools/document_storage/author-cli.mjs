@@ -30,9 +30,10 @@ export async function run(args){
   demand(['create','commit'].includes(command)&&rest.length===3,'Usage: create candidate.json target.json operation.json | commit target.json candidate.json operation.json | inspect package.json | ids N | runtime');
   const [a,b,op]=rest,target=path.resolve(command==='create'?b:a),candidate=path.resolve(command==='create'?a:b);
   demand(candidate!==target,'Candidate must be separate from target');const operation=parseStrict(fs.readFileSync(op,'utf8')),next=parseStrict(fs.readFileSync(candidate,'utf8'));
-  let previous=null;
+  let previous=null,targetMode;
   if(command==='commit'){
    const stat=fs.lstatSync(target);demand(stat.isFile()&&!stat.isSymbolicLink()&&stat.nlink===1,'Target must be an unlinked regular JSON file');
+   targetMode=stat.mode&0o7777;
    lock=target+'.alder-lock';const fd=fs.openSync(lock,'wx',0o600);ownsLock=true;fs.closeSync(fd);
    const current=fs.readFileSync(target,'utf8');demand(operation.expectedSha256===fingerprint(current),'File content conflict');previous=parseStrict(current);
   }
@@ -41,7 +42,7 @@ export async function run(args){
   temp=path.join(path.dirname(target),'.alder-json-'+randomUUID());const fd=fs.openSync(temp,'wx',0o600);try{fs.writeFileSync(fd,text,'utf8');fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
   validate(parseStrict(fs.readFileSync(temp,'utf8')));
   if(command==='create')fs.linkSync(temp,target);
-  else{demand(fingerprint(fs.readFileSync(target,'utf8'))===operation.expectedSha256,'File changed while preparing save');fs.renameSync(temp,target);temp=null;}
+  else{demand(fingerprint(fs.readFileSync(target,'utf8'))===operation.expectedSha256,'File changed while preparing save');fs.chmodSync(temp,targetMode);fs.renameSync(temp,target);temp=null;}
   console.log(JSON.stringify({target,sha256:fingerprint(fs.readFileSync(target,'utf8')),...result}));return 0;
  }catch(e){console.error(JSON.stringify({diagnostics:e.diagnostics??[{code:'JSON_OPERATION',message:e.message}]}));return 2;}
  finally{for(const f of [temp,ownsLock?lock:null])if(f)try{fs.unlinkSync(f);}catch(e){if(e.code!=='ENOENT')console.error(JSON.stringify({code:'CLEANUP_WARNING',message:e.message}));}}
