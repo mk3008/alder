@@ -1,0 +1,103 @@
+name: Verify published main-based structure review
+on:
+  push:
+    branches:
+      - 'review/340-published-check-4c62c627'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+          ref: 4c62c627ee84b7a9b6f9e3bbf7ea0c785ba226cf
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - name: Compare published files with the fixed build
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const base='https://mk3008.github.io/alder/preview/pr-357/4c62c627ee84b7a9b6f9e3bbf7ea0c785ba226cf-main-review/';
+          const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+          let last;
+          for(let attempt=1;attempt<=36;attempt++){
+            try{
+              const response=await fetch(base+'preview-manifest.json',{cache:'no-store',signal:AbortSignal.timeout(15000)});
+              assert.equal(response.status,200);
+              const bytes=Buffer.from(await response.arrayBuffer());
+              assert.equal(hash(bytes),'5871f2c7ea8daeb3059306120471a3ba5a2c1ec5d91f363111296dd59fd20ca7');
+              const manifest=JSON.parse(bytes);
+              assert.equal(manifest.source,'4c62c627ee84b7a9b6f9e3bbf7ea0c785ba226cf');
+              assert.equal(manifest.mainBase,'777b79a4f919a1456c74a724b949bc7748f32df1');
+              assert.equal(manifest.modelSource,'887c0f60a191d06e1db0ed50567844cca2ec1950');
+              assert.equal(manifest.humanGuiReview,'not-performed');
+              assert.equal(manifest.files['examples/json-complete-concept-review.json'],'e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181');
+              assert.equal(Object.keys(manifest.files).length,12);
+              for(const [path,expected] of Object.entries(manifest.files)){
+                const asset=await fetch(base+path,{cache:'no-store',signal:AbortSignal.timeout(15000)});
+                assert.equal(asset.status,200,path);
+                assert.equal(hash(Buffer.from(await asset.arrayBuffer())),expected,path);
+              }
+              console.log(JSON.stringify({source:manifest.source,checked:12,manifestSha256:hash(bytes),base}));last=undefined;break;
+            }catch(error){last=error;console.log('Attempt '+attempt+': '+error.message);await new Promise(resolve=>setTimeout(resolve,5000));}
+          }
+          if(last)throw last;
+          NODE
+      - name: Install browser driver
+        run: npm install --prefix "$RUNNER_TEMP/published-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Check fixed public URL in Chrome
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/published-browser/node_modules/playwright
+          EVIDENCE_DIR: ${{ runner.temp }}/published-evidence
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {createRequire} from 'node:module';
+          import {mkdirSync,writeFileSync} from 'node:fs';
+          const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE);
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
+          const base='https://mk3008.github.io/alder/preview/pr-357/4c62c627ee84b7a9b6f9e3bbf7ea0c785ba226cf-main-review/';
+          const source=base+'examples/json-complete-concept-review.json';
+          const out=process.env.EVIDENCE_DIR;mkdirSync(out,{recursive:true});const results=[];
+          try{
+            for(const width of [1280,393]){
+              const context=await browser.newContext({viewport:{width,height:900}}),page=await context.newPage(),errors=[],reads=[];
+              page.on('pageerror',error=>errors.push(error.message));
+              page.on('response',response=>{if(response.url()===source)reads.push(response.status());});
+              const review=concept=>base+'?preview=1&view=concept&concept='+encodeURIComponent(concept)+'#source='+encodeURIComponent(source);
+              await page.goto(review('structure-explorer'));
+              const detail=page.locator('.structure-detail-page:not([hidden])');await detail.waitFor({state:'visible',timeout:45000});
+              await detail.locator('.structure-attribute-table').waitFor({state:'visible'});
+              assert.equal(await page.locator('.structure-pending').first().textContent(),'null許容が未決：47項目（互換・移行用を含む）');
+              assert((await page.locator('#preview-badge').textContent()).includes('4c62c627'));
+              assert(reads.includes(200));
+              await page.screenshot({path:out+'/root-'+width+'.png'});
+              await page.goto(review('structure-explorer:n-who'));
+              await detail.locator('[data-information-id="n-who-field-4"]').waitFor({state:'visible',timeout:45000});
+              const row=detail.locator('[data-information-id="n-who-field-4"]');assert((await row.textContent()).includes('null許容：未決'));
+              await row.locator('button').click();
+              const value=label=>detail.locator('dt').filter({hasText:new RegExp('^'+label+'$')}).evaluate(element=>element.nextElementSibling.textContent);
+              assert.equal(await value('null許容'),'未決');
+              assert.equal(await value('null許容の理由'),'色はRoleにのみ関係する。非該当と未設定を区別し、主体の種類との持たせ方を検討する。');
+              assert.equal(await page.locator('.concept-related').isVisible(),false);
+              assert.deepEqual(errors,[]);
+              await page.screenshot({path:out+'/undecided-'+width+'.png'});
+              results.push({width,sourceStatus:reads,defaultRoute:true,undecided:47,reasonVisible:true,pageErrors:errors});await context.close();
+            }
+          }finally{await browser.close();}
+          writeFileSync(out+'/results.json',JSON.stringify({base,results,humanGuiReview:'not-performed'},null,2));
+          console.log(JSON.stringify({base,results,humanGuiReview:'not-performed'}));
+          NODE
+      - name: Retain published URL observations
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: published-structure-4c62c627
+          path: ${{ runner.temp }}/published-evidence/
+          if-no-files-found: error
+          retention-days: 14
