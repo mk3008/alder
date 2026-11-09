@@ -1,0 +1,132 @@
+[
+  {
+    "id": "formal_repair",
+    "class": 1,
+    "source": "正式書式は ### Procedure。業務担当者は備品を受領する。",
+    "location": "備品を受領する / How",
+    "before": "### Procedue\n業務担当者は備品を受領する。",
+    "after": "### Procedure\n業務担当者は備品を受領する。",
+    "reason": "正式見出しへの訂正だけで業務意味を保つ。",
+    "action": "repair_then_review"
+  },
+  {
+    "id": "undecided_who",
+    "class": 2,
+    "source": "返却品を受領する。担当者は未決。",
+    "location": "返却品を受領する / Who",
+    "before": "Who: 未決",
+    "after": "Who: 未決",
+    "question": "返却品の受領は誰が担当するか。",
+    "reason": "担当者を特定する根拠がない。",
+    "action": "unconfirmed_and_response"
+  },
+  {
+    "id": "when_procedure",
+    "class": 2,
+    "source": "When: 承認後に開始。Procedure: 担当者が承認前に記録する。どちらを正とするか未決。",
+    "location": "返却を記録する / When・Procedure",
+    "before": "When: 承認後\nProcedure: 承認前に記録",
+    "after": "When: 承認後\nProcedure: 承認前に記録",
+    "question": "返却の記録は承認前か承認後か。",
+    "reason": "矛盾は確実でも開始時点を選べない。",
+    "action": "unconfirmed_and_response"
+  },
+  {
+    "id": "step_and_io_gap",
+    "class": 2,
+    "source": "Input: 返却品。Procedure: 状態を確認する。Output: 修理要否。判定材料と判断者は未記載。",
+    "location": "返却品を確認する / Input・Procedure・Output",
+    "before": "返却品の状態を確認し、修理要否を渡す。",
+    "after": "返却品の状態を確認し、修理要否を渡す。",
+    "question": "誰が何を根拠に修理要否を判断するか。",
+    "reason": "手順と入出力の飛躍を、拒否や追加承認の創作で埋められない。",
+    "action": "unconfirmed_and_response"
+  },
+  {
+    "id": "ambiguous_reference",
+    "class": 2,
+    "source": "Object: 返却記録、貸出記録。Input: 記録。どちらを受け取るか未決。",
+    "location": "返却を照合する / Input",
+    "before": "Input: 記録",
+    "after": "Input: 記録",
+    "question": "照合時に受け取る記録は返却記録か貸出記録か。",
+    "reason": "参照不備の検出と正しい参照先の確定は別。複数候補から選ばない。",
+    "action": "unconfirmed_and_response"
+  },
+  {
+    "id": "optional_proposals",
+    "class": 3,
+    "source": "備品を返却し、担当者が受領する。",
+    "location": "返却品を受領する",
+    "before": "担当者が返却品を受領する。",
+    "after": "担当者が返却品を受領する。",
+    "proposals": [
+      {
+        "title": "追加承認",
+        "value": "高価な備品の受領確認を別担当が確認する候補。承認待ちの負担も増える。"
+      },
+      {
+        "title": "代理返却",
+        "value": "本人不在時も返却できる候補。誰が返したかの扱いは採否判断に残す。"
+      }
+    ],
+    "reason": "原要求にない変更であり、未決の必須事項ではない。",
+    "action": "response_only"
+  },
+  {
+    "id": "zero_proposals",
+    "class": 3,
+    "source": "備品を返却し、担当者が受領する。追加の改善要求はない。",
+    "location": "返却品を受領する",
+    "before": "担当者が返却品を受領する。",
+    "after": "担当者が返却品を受領する。",
+    "proposals": [],
+    "reason": "関連性と具体的価値のある候補がなければ、件数を埋めない。",
+    "action": "response_only"
+  },
+  {
+    "id": "standalone_review",
+    "classes": [
+      1,
+      2,
+      3
+    ],
+    "mode": "review_only",
+    "source": "正式書式、担当者未決、任意の追加承認候補。",
+    "location": "業務設計全体",
+    "before": "### Procedue\nWho: 未決",
+    "after": "### Procedue\nWho: 未決",
+    "reason": "一意な修正でも単独reviewerは報告のみ。",
+    "action": "report_only"
+  },
+  {
+    "id": "decision_only",
+    "classes": [
+      1,
+      2,
+      3
+    ],
+    "mode": "review_only",
+    "source": "人間回答：担当は管理担当。追加承認は不採用。代理返却は保留。",
+    "location": "返却品を受領する / Who",
+    "before": "Who: 未決",
+    "after": "Who: 未決",
+    "reason": "採否回答だけでは単独レビューの書込み権限は変わらない。",
+    "action": "report_only"
+  },
+  {
+    "id": "explicit_revision",
+    "classes": [
+      1,
+      2,
+      3
+    ],
+    "mode": "explicit_revision",
+    "source": "人間回答：担当は管理担当。追加承認は不採用、代理返却は保留。依頼：この回答を既存草案へ反映して再レビューして。",
+    "location": "返却品を受領する / Who",
+    "before": "Who: 未決\n修理判断の根拠: 未決",
+    "after": "Who: 管理担当\n修理判断の根拠: 未決",
+    "reason": "明示改稿で決まった担当だけ反映。不採用・保留案の履歴をBDへ強制しない。",
+    "action": "revise_then_review"
+  }
+]

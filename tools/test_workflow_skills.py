@@ -391,6 +391,89 @@ class WorkflowSkillsTest(unittest.TestCase):
         self.assertEqual(failed['expected']['review_status'], 'incomplete')
         self.assertTrue(failed['expected']['unreviewed_changes'])
 
+    def test_business_finding_classes_and_write_boundaries_are_distributed(self):
+        # Instruction distribution only; no model or client is executed here.
+        guides = [ROOT / 'docs/adoption.md', *[
+            SKILLS / name / 'references/adoption.md' for name in
+            ['alder-draft-business-design', 'alder-draft-check-items', 'alder-follow-up-review']]]
+        for path in guides:
+            text = path.read_text()
+            for phrase in ['Detecting an error does not establish the correct repair',
+                           'Uniquely repairable error', 'Clear problem, undecided answer',
+                           'Optional proposal or hypothesis', 'several plausible targets',
+                           'unconfirmed preamble and the response',
+                           'do not fabricate a refusal, approval condition or outcome',
+                           'zero proposals is valid',
+                           'Do not add unaccepted proposals to the Business Design',
+                           'not automatically `# Findings`',
+                           'standalone Business Design review reports all three classes read-only',
+                           'separate explicit editing request',
+                           'Decisions alone and silence do not authorize edits']:
+                with self.subTest(path=path, phrase=phrase):
+                    self.assertIn(phrase, text)
+        review = (SKILLS / 'alder-review-business-design/SKILL.md').read_text()
+        self.assertIn('All three classes remain read-only', review)
+        self.assertIn('Human acceptance, rejection or deferral does not itself authorize editing', review)
+        self.assertIn('Do not automatically register every unconfirmed matter as Findings', review)
+        draft = (SKILLS / 'alder-draft-business-design/SKILL.md').read_text()
+        self.assertIn('only when the repair is uniquely determined', draft)
+        self.assertIn('If answers arrive within this requested authoring task', draft)
+        self.assertIn('After a standalone review, require a separate explicit editing request', draft)
+
+    def test_json_business_finding_route_uses_the_shared_current_authorities(self):
+        # Keep the JSON runtime's independently pinned bundle intact. Business
+        # authoring/review selects the shared authorities inside the same plugin.
+        skill = SKILLS / 'alder-manage-json-documents'
+        text = (skill / 'SKILL.md').read_text()
+        for link, canonical in [
+                ('../alder-draft-business-design/references/adoption.md', 'docs/adoption.md'),
+                ('../alder-review-business-design/references/business-design-quality-check.ja.md',
+                 'docs/business-design-quality-check.ja.md')]:
+            self.assertIn('](' + link + ')', text)
+            self.assertEqual((skill / link).read_bytes(), (ROOT / canonical).read_bytes())
+        for phrase in ['既存レビュー・修復ループと3分類', 'prefaceの未確認事項と返答',
+                       '候補0件', '未確認事項を自動でFindings化しない',
+                       '採否回答だけでは保存しない', '別の明示的な改稿依頼',
+                       '業務合意は人間に残す']:
+            self.assertIn(phrase, text)
+
+    def test_classification_examples_preserve_undecided_meaning_and_review_only_bytes(self):
+        # Authored examples, not observations of an agent choosing these actions.
+        cases = {c['id']: c for c in json.loads((ROOT /
+            'tools/fixtures/plugin-draft-review-loop/classification.json').read_text())}
+        self.assertEqual(set(cases), {'formal_repair', 'undecided_who', 'when_procedure',
+            'step_and_io_gap', 'ambiguous_reference', 'optional_proposals', 'zero_proposals',
+            'standalone_review', 'decision_only', 'explicit_revision'})
+        for case in cases.values():
+            for field in ['source', 'location', 'before', 'after', 'reason', 'action']:
+                self.assertTrue(case[field], (case['id'], field))
+        repair = cases['formal_repair']
+        self.assertEqual(repair['after'], repair['before'].replace('### Procedue', '### Procedure'))
+        self.assertEqual(repair['action'], 'repair_then_review')
+        for name in ['undecided_who', 'when_procedure', 'step_and_io_gap', 'ambiguous_reference']:
+            case = cases[name]
+            self.assertEqual(case['class'], 2)
+            self.assertTrue(case['question'])
+            self.assertEqual(case['before'], case['after'])
+            self.assertEqual(case['action'], 'unconfirmed_and_response')
+        for name, count in [('optional_proposals', 2), ('zero_proposals', 0)]:
+            case = cases[name]
+            self.assertEqual(case['class'], 3)
+            self.assertEqual(len(case['proposals']), count)
+            self.assertEqual(case['before'], case['after'])
+            self.assertEqual(case['action'], 'response_only')
+            self.assertNotIn('question', case)
+        for name in ['standalone_review', 'decision_only']:
+            case = cases[name]
+            self.assertEqual(case['classes'], [1, 2, 3])
+            self.assertEqual(case['mode'], 'review_only')
+            self.assertEqual(case['before'].encode(), case['after'].encode())
+            self.assertEqual(case['action'], 'report_only')
+        revision = cases['explicit_revision']
+        self.assertEqual(revision['after'], revision['before'].replace('Who: 未決', 'Who: 管理担当'))
+        self.assertIn('修理判断の根拠: 未決', revision['after'])
+        self.assertEqual(revision['action'], 'revise_then_review')
+
     def test_security_intake_is_reachable_and_preserves_product_authority(self):
         guide = (ROOT / 'docs/adoption.md').read_text()
         start = guide.index('### Carry security requirements into implementation')
