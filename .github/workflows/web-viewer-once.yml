@@ -7,6 +7,8 @@ on:
       - 'business-design/alder/business-design.json'
       - 'business-design/alder/README.md'
       - 'tools/viewer-preview.mjs'
+      - 'work/361-beta-fixes/**'
+      - 'work/361-copy-separation/**'
       - 'work/viewer-json/issue-274/layout-regression/**'
       - 'tools/document_storage/**'
       - 'tools/business_graph/**'
