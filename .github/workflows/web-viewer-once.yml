@@ -19,15 +19,21 @@ concurrency:
 permissions:
   contents: read
 jobs:
-  verify:
+  chrome:
+    name: Chrome ${{ matrix.shard }} / 3
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ['1', '2', '3']
     env:
       REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
       REVIEW_PR: ${{ github.event.pull_request.number }}
     defaults:
       run:
         working-directory: web-viewer
+        shell: bash
     steps:
       - uses: actions/checkout@v4.4.0
         with:
@@ -37,13 +43,11 @@ jobs:
         with:
           node-version: '24.22.1'
       - run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Lint Viewer source and tests
-        run: npm run lint
-      - name: Fetch frozen pre-B verification authority
-        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
-      - name: Verify UI verification authority
-        run: npm run verify:contract
-      - run: npm test
+      - name: Validate complete browser partition and select shard
+        id: partition
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: node web/browser-shards.mjs "$SHARD" >> "$GITHUB_OUTPUT"
       - run: npm run build
       - name: Install browser driver
         run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
@@ -60,6 +64,71 @@ jobs:
             fc-cache -f "$HOME/.local/share/fonts"
           fi
           fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Verify built app in Chrome
+        env:
+          CASES: ${{ steps.partition.outputs.cases }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
+          node web/test-browser.mjs --cases "$CASES" | tee "$RUNNER_TEMP/browser-results.log"
+      - name: Verify shard results and report timing
+        if: always() && steps.partition.outcome == 'success'
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          node web/browser-shards.mjs "$SHARD" "$RUNNER_TEMP/browser-results.log" | tee "$RUNNER_TEMP/browser-summary.json"
+          echo "::notice title=Chrome shard $SHARD::$(cat "$RUNNER_TEMP/browser-summary.json")"
+          cat "$RUNNER_TEMP/browser-summary.json" >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain Chrome shard results and review evidence
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: chrome-${{ matrix.shard }}-${{ github.event.pull_request.head.sha }}
+          path: |
+            ${{ runner.temp }}/browser-results.log
+            ${{ runner.temp }}/browser-summary.json
+            ${{ runner.temp }}/viewer-preview.log
+            web-viewer/web/evidence/
+          if-no-files-found: error
+          retention-days: 14
+  verify:
+    needs: chrome
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
+      REVIEW_PR: ${{ github.event.pull_request.number }}
+    defaults:
+      run:
+        working-directory: web-viewer
+    steps:
+      - name: Require every Chrome shard to succeed
+        env:
+          CHROME_RESULT: ${{ needs.chrome.result }}
+        run: test "$CHROME_RESULT" = success
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Lint Viewer source and tests
+        run: npm run lint
+      - name: Fetch frozen pre-B verification authority
+        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
+      - name: Verify UI verification authority
+        run: npm run verify:contract
+      - run: npm test
+      - run: npm run build
       - name: Select bounded B-loop comparison
         id: b_loop
         run: |
@@ -70,7 +139,25 @@ jobs:
             cp -a "$GITHUB_WORKSPACE/web-viewer/dist" "$RUNNER_TEMP/b-loop-baseline/web-viewer/dist"
             echo 'enabled=true' >> "$GITHUB_OUTPUT"
           fi
-      - name: Verify built app in Chrome
+      - name: Install browser driver
+        if: steps.b_loop.outputs.enabled == 'true'
+        run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Install Japanese review-image font
+        if: steps.b_loop.outputs.enabled == 'true'
+        run: |
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 \
+              https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf \
+              --output "$FONT_FILE"
+            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
+            fc-cache -f "$HOME/.local/share/fonts"
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Verify built app in Chrome (opt-in B-loop comparison)
+        if: steps.b_loop.outputs.enabled == 'true'
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/viewer-preview.log" 2>&1 &
           SERVER_PID=$!
@@ -80,11 +167,7 @@ jobs:
             sleep 1
           done
           export PLAYWRIGHT_MODULE="$RUNNER_TEMP/viewer-browser/node_modules/playwright"
-          if [ "${{ steps.b_loop.outputs.enabled }}" = true ]; then
-            node web/measure-b-loop.mjs "$RUNNER_TEMP/b-loop-baseline/web-viewer"
-          else
-            node web/test-browser.mjs
-          fi
+          node web/measure-b-loop.mjs "$RUNNER_TEMP/b-loop-baseline/web-viewer"
 
       - name: Retain bounded B-loop measurements
         if: always() && steps.b_loop.outputs.enabled == 'true'
@@ -95,7 +178,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Retain MD JSON geometry evidence
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: json-layout-${{ github.event.pull_request.head.sha }}
@@ -104,7 +187,7 @@ jobs:
           retention-days: 14
 
       - name: Preserve shell review screenshots
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: viewer-shell-${{ github.event.pull_request.head.sha }}
@@ -112,14 +195,14 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
       - name: Preserve header review screenshots
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: header-controls-${{ github.sha }}
           path: web-viewer/web/evidence/header-controls/*.png
           if-no-files-found: ignore
       - name: Retain JSON review screenshots and observations
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: json-document-${{ github.event.pull_request.head.sha }}
@@ -127,7 +210,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Retain save-conflict review screenshots
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: save-conflict-review-${{ github.sha }}
@@ -135,7 +218,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
       - name: Retain findings review screenshots
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: design-findings-review-${{ github.sha }}
@@ -143,7 +226,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
       - name: Retain wiring review screenshots
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: wiring-review-${{ github.event.pull_request.head.sha }}
@@ -164,7 +247,7 @@ jobs:
           path: web-viewer/review-package/
           retention-days: 14
       - name: Retain related Check screenshots
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: related-checks-${{ github.event.pull_request.head.sha }}
@@ -173,7 +256,7 @@ jobs:
           retention-days: 14
 
       - name: Retain state JSON comparison evidence
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: json-states-${{ github.event.pull_request.head.sha }}
@@ -182,7 +265,7 @@ jobs:
           retention-days: 14
 
       - name: Retain role JSON comparison evidence
-        if: always()
+        if: always() && steps.b_loop.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: json-roles-${{ github.event.pull_request.head.sha }}

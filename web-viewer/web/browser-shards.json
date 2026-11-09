@@ -1,0 +1,78 @@
+{
+  "measurement": {
+    "phase": "calibration",
+    "note": "Temporary allocation using the six supplied #360 timings and passing local measurements; unmeasured cases use a 10s estimate. Replace with all 52 successful CI timings before finalizing."
+  },
+  "shards": [
+    {
+      "id": "1",
+      "cases": [
+        "jsonLayout",
+        "jsonDocuments",
+        "jsonOfflinePreview",
+        "documentActions",
+        "saveState",
+        "lifecycleSave",
+        "sourceSharing",
+        "layoutReset",
+        "emptyState",
+        "nodeEdgeDrag",
+        "touchZoom",
+        "layoutLock",
+        "nodeDrawer",
+        "edgeOption",
+        "scopeGeometry:fixed-drawer",
+        "legacySmoke"
+      ],
+      "calibrationEstimateMs": 294896
+    },
+    {
+      "id": "2",
+      "cases": [
+        "conceptInitial",
+        "viewerShell",
+        "jsonRoles",
+        "namedPlans",
+        "jsonBoundaries",
+        "findings",
+        "saveConflictNoop",
+        "editorViewport",
+        "gettingStarted",
+        "toolbarSettings",
+        "savedStatePreflight",
+        "initialLeftMargin",
+        "bottomClearance",
+        "previewIsolation",
+        "facingRoutes",
+        "scopeOption",
+        "scopeShortcut",
+        "scopeGeometry:combined"
+      ],
+      "calibrationEstimateMs": 295302
+    },
+    {
+      "id": "3",
+      "cases": [
+        "tabScroll",
+        "subsystemOverview",
+        "jsonStates",
+        "sharedCaptions",
+        "activityWorkspace",
+        "relatedChecks",
+        "graphPng",
+        "sessionConcurrency",
+        "markdownEditor",
+        "headerControls",
+        "drawerOpeningFocus",
+        "returnRoutes",
+        "routeCache",
+        "documentOrder",
+        "tabStrip",
+        "labelLayout",
+        "exceptionOption",
+        "scopeGeometry:drawer-only"
+      ],
+      "calibrationEstimateMs": 295063
+    }
+  ]
+}
