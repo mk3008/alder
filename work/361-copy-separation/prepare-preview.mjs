@@ -2,10 +2,8 @@ import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import {join,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {execFileSync} from 'node:child_process';
 import {preparePreview as prepareBetaPreview} from '../361-beta-fixes/prepare-preview.mjs';
 import {reviewDisplayCopy,copy} from './prepare-display-copy.mjs';
-const repo=fileURLToPath(new URL('../../',import.meta.url));
 const escape=value=>value.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 export function preparePreview(output){
@@ -17,7 +15,7 @@ export function preparePreview(output){
  // A Preview-only entry point; no input-text processing or new general UI rule.
  writeFileSync(join(dest,'preview-authoring-guide.js'),`const badge=document.getElementById('preview-badge');if(badge){const link=document.createElement('a');link.href='./flowstep-authoring-guide.html';link.textContent='FlowStep 作成ガイド';link.style.color='inherit';link.style.marginInlineStart='1em';badge.append(link);}\n`);
  const index=join(dest,'index.html');writeFileSync(index,readFileSync(index,'utf8').replace('</body>','<script type="module" src="./preview-authoring-guide.js"></script></body>'));
- manifest.mainBase=execFileSync('git',['-C',repo,'rev-parse','c0376fcd'],{encoding:'utf8'}).trim();
+ manifest.mainBase='c0376fcd34eb7227f695d26da07c9fe2d04f0778';
  manifest.reviewedSha256=hash(reviewed);manifest.displayCopy='display-copy-provenance.json';manifest.authoringGuide='flowstep-authoring-guide.html';
  manifest.files=Object.fromEntries(readdirSync(dest,{recursive:true}).filter(file=>/\.(html|js|css|txt|json)$/.test(file)&&file!=='preview-manifest.json').sort().map(file=>[file,hash(readFileSync(join(dest,file)))]));
  writeFileSync(join(dest,'preview-manifest.json'),JSON.stringify(manifest,null,2)+'\n');return result;
