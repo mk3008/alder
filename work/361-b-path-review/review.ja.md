@@ -23,3 +23,19 @@ A/X/S: この B は業務意味の承認、Check-Test 恒久対応の再編、Ch
 ## 検証方針
 
 反復では構造 Node suite と、検索の深い子孫一致・互換枝の遮断・0件・解除の独立した期待値を使用する。先行成功時点では実 Chrome、共通 contract と通常 Node の残りは未検証。最終候補で lint、全 Node、build、contract、全 Chrome と全体 CI を維持する。各候補と終了時に別工程で固定正本のバイト、全 ID/cases/results の網羅性を機械照合し、ID削除・case削除・result欠落の負例も行う。本人 GUI と業務承認を代行しない。公開済み固定 Preview を変更・配信しない。
+
+## 固定製品候補の結果
+
+製品候補 `4ec70543763c7abc41270e2d130b22b2581445f4`。変更はfilterの5行追加・2行置換のみ。新規検索回帰は手書きの独立期待値9例を開始版と候補で確認し、既存構造22ファイル＋表示文検査は成功した。既存テストは編集していない。
+
+別Agentの読み取り専用結果は `independent-review.ja.md` に記録。既存137保護ファイル・269テストのバイト保持と32ID/39ケース台帳一致を確認し、実装不一致なし。初期検証記録の証拠粒度への指摘を受け、BETA-001〜005は実browser観測がなければpending-browserとした。台帳の結果行生成を個別assertion実行証明とは扱わない。正本の意味とテストの対応も別工程で照合する。
+
+関連Chrome（ローカルはChromium 154）2/55群: structureSampleHeader / explorerResizeScroll は成功。検索・互換・コピー文・native keyboard・280pxのツリーと幅調整・横スクロールを1280/393pxで確認、pageErrorsなし。残り53群はこの限定実行では未検証。11配信ファイルのHTTP応答とbuildの全バイトを照合し、`browser-identity.json` で製品SHA・観測JSONのSHA256と結合した。browser-results.json と targeted-browser-summary.json は観測記録であって検証正本ではない。
+
+再実行（repo root）:
+
+```sh
+node work/361-b-path-review/verify.mjs work/361-b-path-review/browser-results.json work/361-b-path-review/browser-identity.json
+```
+
+ゲートは固定blobを一括読取し、byte不変とID/cases/results欠落・重複・失敗の負例を機械照合する。正常な過去の観測JSONが任意に偽装されないことを保証する仕組みではなく、この実行の記録と対象を明示するためのもの。配布buildがない場合は第2・第3引数を省略し、browserをpendingのまま実行できる。全体CIの結果はPRの最終headコメントを参照する。既存固定Previewは変更・再配信していない。
