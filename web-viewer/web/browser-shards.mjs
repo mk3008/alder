@@ -23,9 +23,14 @@ assert.ok(shard,'unknown shard ID');
 const selected=plan(['--cases',shard.cases.join(',')]).selected;
 assert.equal(selected.length,shard.cases.length,'runner selection dropped a case');
 if(logPath){
- const lines=readFileSync(logPath,'utf8').split('\n').filter(line=>line.startsWith('{"browserSummary":'));
- assert.equal(lines.length,1,'expected exactly one browser summary');
- const summary=JSON.parse(lines[0]).browserSummary;
+ // Individual cases also emit summaries for their own nested checks. Only the
+ // outer runner reports the complete registry's available count.
+ const summaries=readFileSync(logPath,'utf8').split('\n')
+  .filter(line=>line.startsWith('{"browserSummary":'))
+  .map(line=>JSON.parse(line).browserSummary)
+  .filter(summary=>summary.available===full.available);
+ assert.equal(summaries.length,1,'expected exactly one outer browser summary');
+ const summary=summaries[0];
  assert.equal(summary.available,full.available,'result registry differs from plan');
  assert.deepEqual(summary.selected,selected,'result selection differs from shard');
  assert.equal(summary.total,selected.length,'incomplete shard result');
