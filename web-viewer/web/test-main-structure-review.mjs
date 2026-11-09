@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const base='777b79a4f919a1456c74a724b949bc7748f32df1';
+const base='c0376fcd34eb7227f695d26da07c9fe2d04f0778';
 const source='887c0f60a191d06e1db0ed50567844cca2ec1950';
 const prepared='d3123341';
 const git=(...args)=>execFileSync('git',['-C','..',...args],{maxBuffer:20*1024*1024});
