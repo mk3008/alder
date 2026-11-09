@@ -365,10 +365,13 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  const filter=()=>{const query=search.value.trim().toLocaleLowerCase();
   if(query&&!savedTree){savedTree=tree.firstChild;render(true);}else if(!query&&savedTree){tree.replaceChildren(savedTree);savedTree=null;restoreSelection();}
   const items=Array.from(tree.querySelectorAll<HTMLElement>('[data-search-text]')).reverse();
+  // Reverse DOM order settles children first; propagate only visible direct
+  // children so a hidden compatibility branch still blocks its descendants.
+  const parentsWithVisibleChildren=new Set<HTMLElement>();
   for(const item of items){
    const own=(hideLegacy.checked?item.dataset.searchVisibleText??item.dataset.searchText:item.dataset.searchText)?.includes(query)??false;
-   const descendant=Array.from(item.querySelectorAll<HTMLElement>('[data-search-text]')).some(child=>child.parentElement?.closest('[data-search-text]')===item&&!child.hidden);
-   item.hidden=(hideLegacy.checked&&item.dataset.compatibility==='legacy')||(!!query&&!own&&!descendant);
+   item.hidden=(hideLegacy.checked&&item.dataset.compatibility==='legacy')||(!!query&&!own&&!parentsWithVisibleChildren.has(item));
+   if(!item.hidden){const parent=item.parentElement?.closest<HTMLElement>('[data-search-text]');if(parent)parentsWithVisibleChildren.add(parent);}
   }
   empty.hidden=!!query||!hideLegacy.checked||!roots.every(id=>marks.concept(id)?.kind==='legacy');
   noMatches.hidden=!query||Array.from(tree.querySelectorAll('.structure-root > li')).some(item=>!(item as HTMLElement).hidden);
