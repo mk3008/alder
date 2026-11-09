@@ -48,8 +48,16 @@ Viewerの共通入力入口は `document-input.ts`。MDの場合だけ `legacy-d
 
 ## 保存形式を明示移行する
 
+汎用操作は `author-cli.mjs prepare-version-upgrade old.json candidate.json revisions.json`。0.1／0.2／0.3の入力を検証し、0.4候補を別ファイルへ生成する。要求には入力全体のexpectedSha256、expectedRevision、新しいpackage revision、実際に変更する文書のexpected／next revisionが必要。既存の例外移行を使い、Role／Whoは推定しない。0.1／0.2の未確定Roleはnullと診断を保持し、0.3の既存Roleはそのまま保持する。未知版・不正形式・解決できない例外参照は対象と理由を返して停止する。既存prepare-role-upgradeの0.3候補生成とprepare-exception-upgradeの意味は変えない。
+
+差分報告は入力の変換前後hash、文書ごとの変更箇所・revision・basedOn、ID・原典・外部参照・Check人間状態の保全と未決を示す。変更した文書だけrevisionを更新する。候補は正規validate済みで直接編集可否を別途inspectできるが、人間承認は未評価。Conceptは現行0.4契約の文書なので、旧版に混ぜた入力を推測変換しない。
+
+複数案は `named-plans-cli.mjs prepare-version-upgrade plans.json plan-id new-plans.json revisions.json` として対象案を一意に選び、対象外の案を保持した別bundleを生成する。採用時はextractした単一候補を従来のnamed-plans commitへ渡す。hashは元bundle全体、expectedRevisionは対象案packageを照合する。[要求・報告と操作例](../tools/document_storage/README.md#旧jsonを明示的に04へ変換するphase-2)を参照。
+
 `author-cli.mjs prepare-exception-upgrade old.json candidate.json revisions.json` は、旧ファイルを残して候補0.4を新規ファイルへ作る。要求にはexpectedRevision、新しいpackage revision、変更する各文書のexpected／next revisionを渡す。BDと従属状態／CheckのbasedOnを整合させ、既存ID・原典情報・Checkレビュー状態を維持する。
 
 候補の検査後、既存のcommitに期待hash／版と `migration: "exceptions-0.4"` を渡す。Checkがある場合は新しいBD版に対する既存の人間合意ゲートも必要で、構造移行から人間の確認を推定しない。MD→JSONの明示convertは0.4を出力し、旧MDを保持する。JSON→MD同期は行わない。
+
+正規commitで旧版から0.4へ進めるのは上記migration指定と構造移行候補の一致を確認できた場合だけ。通常編集の0.4ゲート、期待hash／版の照合、既存モードの維持と競合・保存失敗時の保護を維持する。業務内容・Role・Who・Check reviewStateを同時に編集して移行として保存しない。
 
 Business Graph v1は従来の独立した契約である。0.4の表示名には旧MDの区切り記法を構造制約として適用しない。Graph v1で表現できない表示名を明示exportした場合は拒否し、Graph v1自体の仕様を変更しない。

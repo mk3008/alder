@@ -19,7 +19,7 @@ const cli=file=>new URL('./'+file,import.meta.url).pathname;
 const run=(file,...args)=>spawnSync(process.execPath,[cli(file),...args],{encoding:'utf8'});
 const message=result=>JSON.parse(result.stderr).diagnostics[0].message;
 const write=(file,value)=>fs.writeFileSync(file,JSON.stringify(value));
-const expectVersion=(info,pkg,editable)=>assert.deepEqual(info.compatibility,{format:'alder-document-package',formatVersion:pkg.formatVersion,readable:true,editable,conversion:editable?'not-required':'explicit-only-unassessed'});
+const expectVersion=(info,pkg,editable)=>assert.deepEqual(info.compatibility,{format:'alder-document-package',formatVersion:pkg.formatVersion,readable:true,editable,conversion:editable?'not-required':'explicit-only'});
 
 test('VERSION-POLICY-001: inspect identifies readable 0.1–0.4 without writing',()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'alder-version-read-'));

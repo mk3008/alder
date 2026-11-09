@@ -17,6 +17,62 @@ node tools/document_storage/cli.mjs validate /tmp/alder-purchase.json
 
 自分の文書を変換する場合は、要求ファイルの`path`・`documentId`・`revision`とCheckの`basedOn`を変更します。`path`は要求ファイルからの相対パスです。`documentId`は同じ文書で使い続ける識別子にし、変更時には内容revisionも更新します。Pythonのコマンドが`python3`でない環境は、環境変数`ALDER_PYTHON`へ実行ファイルを指定できます。
 
+## 旧JSONを明示的に0.4へ変換する（Phase 2）
+
+本人から変換の明示依頼がある場合だけ実行する。0.1／0.2／0.3を検出して構造移行し、未知版・混在した文書契約・解決できない例外名は対象と理由を返して停止する。0.4は通常編集する。読取り互換モデルを保存候補として流用せず、移行専用処理がrevision更新と差分検証を行う。
+
+```sh
+node tools/document_storage/author-cli.mjs inspect old.json
+node tools/document_storage/author-cli.mjs prepare-version-upgrade old.json candidate.json revisions.json > conversion-report.json
+node tools/document_storage/cli.mjs validate candidate.json
+node tools/document_storage/author-cli.mjs inspect candidate.json
+```
+
+`revisions.json` は次の形。`expectedSha256` は入力ファイル全体のSHA-256（inspectのsha256）、revisionは文書内容から推測せず新しい値を明示する。`documentRevisions` には実際に変わる文書だけを指定する。BDの構造変更に従ってState／CheckのbasedOnも更新する。未変更文書のrevision指定は拒否する。
+
+```json
+{
+  "expectedSha256": "<inspectが返した64桁のhash>",
+  "expectedRevision": "package-old",
+  "revision": "package-converted",
+  "documentRevisions": {
+    "bd": {"expected": "bd-old", "next": "bd-converted"},
+    "state": {"expected": "state-old", "next": "state-converted"}
+  }
+}
+```
+
+標準出力の例（抜粋）:
+
+```json
+{"candidate":"candidate.json","sourceUnchanged":true,"fromVersion":"0.2","toVersion":"0.4","migration":"exceptions-0.4","editable":true,"approval":"not-evaluated"}
+```
+
+実際の報告は変換前後の入力hash、文書ごとの変更フィールド・revision・basedOn、既存／追加ID、原典・外部参照目録の保全、Check reviewState、未確定Role／Who・例外参照と診断を含む。候補はvalidate済みで新規出力のみ。出力が既存ファイルや入力の別名なら失敗する。報告の保存先にも入力ファイルを指定しない。
+
+候補を正本へ採用する依頼を受けたら、差分を確認し通常のcommitを使う。
+
+```sh
+node tools/document_storage/author-cli.mjs commit old.json candidate.json operation.json
+```
+
+`operation.json` には入力の `expectedSha256`／`expectedRevision` と `migration: "exceptions-0.4"` を指定する。CheckのbasedOnが変わる場合、移行後BDの正確なrevisionに対する実際の人間確認を `bdConfirmations` に渡す（形式は既存authoring手順）。移行候補の作成は確認を要求・生成しない。候補作成時点の確認を人間合意として保存しない。commitは候補を構造移行の再計算結果と照合し、Role／Who・業務内容・Check状態の変更を混ぜた候補を拒否する。採用後に改めて通常編集する。旧版の直接編集とroles-0.3の保存は引き続き拒否する。
+
+複数案は案IDを一つ明示する。候補は対象案だけを変えた別bundle。対象外の案・名前・順序を保持し、入力bundleのhashを照合する。
+
+```sh
+node tools/document_storage/named-plans-cli.mjs prepare-version-upgrade plans.json selected new-plans.json revisions.json > conversion-report.json
+node tools/document_storage/named-plans-cli.mjs inspect new-plans.json
+node tools/document_storage/named-plans-cli.mjs extract new-plans.json selected selected-candidate.json
+node tools/document_storage/named-plans-cli.mjs commit plans.json selected selected-candidate.json operation.json
+```
+
+named-plansのcommitには従来どおり単一package候補を渡す。要求のexpectedRevisionは対象案のpackage、expectedSha256は元bundle全体の値。案の選択省略・不存在・重複は拒否する。
+
+0.1／0.2では `roleId: null` とWho原文・未確定診断を残し、0.3に既存RoleがあればID／名称／色と参照を保持する。`upgradeRoles` の0.3化は単純WhoからRoleを生成するため、0.4への汎用変換には合成しない。Conceptは現行Schemaでは0.4専用で、旧版との混在を変換可能と推測しない。
+
+Skillは既存 `alder-manage-json-documents` の明示移行ルートを使う。配布用同梱コピーとprovenanceの再生成には [同梱同期手順](https://github.com/mk3008/alder/blob/96ccd8d9/docs/plugin-bundling.md) の公開済みソースコミットが必要。この未コミット実装では再生成・配布を行わず、リポジトリのCLIを使う。同梱版への反映はソース公開後にexporterとpackage検査で行う。
+
 ## 更新する
 
 JSONを草案・編集する処理から、同じSchemaと検証器を呼び出せます。
