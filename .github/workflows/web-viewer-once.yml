@@ -35,7 +35,7 @@ jobs:
         working-directory: web-viewer
         shell: bash
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 2
@@ -114,7 +114,7 @@ jobs:
         env:
           CHROME_RESULT: ${{ needs.chrome.result }}
         run: test "$CHROME_RESULT" = success
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 2

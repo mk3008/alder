@@ -49,7 +49,7 @@ jobs:
       revision: ${{ steps.request.outputs.revision }}
       publish: ${{ steps.request.outputs.publish }}
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ needs.resolve.outputs.revision }}
           persist-credentials: false
@@ -114,7 +114,7 @@ jobs:
       group: alder-product-release
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ needs.resolve.outputs.revision }}
           persist-credentials: false
