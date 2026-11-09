@@ -49,7 +49,7 @@ Review Business Design itself with:
 業務設計書をAlderでレビューして
 ```
 
-This review checks description quality, connections between business activities, and material omissions while remaining read-only. It separates wording/structure findings from matters requiring requester/designer judgment and does not decide unresolved business rules.
+This review checks description quality, connections between business activities, and material omissions while remaining read-only. The authoring and review workflows distinguish uniquely repairable errors, clear problems with undecided answers, and optional proposals. During drafting, only a uniquely evidence-grounded repair is applied and re-reviewed; material unknowns remain in the draft’s unconfirmed text and the response. Useful optional proposals belong only in the chat/console result, with zero proposals allowed. They are not silently added to the design or Findings. Standalone review reports every class without writing, even when the repair is certain. After people decide, a separate explicit revision request authorizes applying the accepted result and re-reviewing it. The workflows do not require a history of unaccepted proposals in Business Design.
 
 Review completed scoped implementation separately with:
 
