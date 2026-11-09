@@ -110,6 +110,7 @@ jobs:
         working-directory: web-viewer
     steps:
       - name: Require every Chrome shard to succeed
+        working-directory: ${{ runner.temp }}
         env:
           CHROME_RESULT: ${{ needs.chrome.result }}
         run: test "$CHROME_RESULT" = success
