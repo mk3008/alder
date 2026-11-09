@@ -1,0 +1,24 @@
+{
+  "source": "bd5bb6febf87b25320ce41c4caeea077d43d75af",
+  "sourceTree": "38a35c0eea73c9c71005904147b7cbd4105e0a36",
+  "mainBase": "777b79a4f919a1456c74a724b949bc7748f32df1",
+  "modelSource": "887c0f60a191d06e1db0ed50567844cca2ec1950",
+  "originalSha256": "e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181",
+  "reviewedSha256": "299857eb4388687355cd0e76519541a121a7eac0306e80079c4d2455c82b956d",
+  "humanGuiReview": "not-performed",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/canvas-toolbar-aYSe-n1e.js": "b62ceb5ee11a41a22f65c305cd1ed1372750f8ac3fed831fc8ce22c2c34e9cbb",
+    "assets/concept-C2-zV7OO.js": "96873ec03883f4dbe6423cd32cae668a5ff97a3a5f0d3daf79ca3a83aace2f3e",
+    "assets/concept-DZziS4lh.css": "50c4fb6e1388f50986405b4f4f767fbc9f00ac0eab6b4782e874ad0452b6a9ad",
+    "assets/main-9N6b0R5j.js": "d834a47ad7b9e1394c04b732fbf731e84b6936fcaeeab773fd6f5dbf82f38651",
+    "assets/main-z682XLpA.css": "666375e6e7b496643f069bec5f2f95d0a42101e4e2673e3bf82379b77fc19eef",
+    "concept.html": "4363f77df4b2d17fb8cb0297f1e319e311e9400f353aade12f04c010fd7e14d9",
+    "examples/json-complete-concept-review.json": "299857eb4388687355cd0e76519541a121a7eac0306e80079c4d2455c82b956d",
+    "examples/json-complete-concept-review.original.json": "e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181",
+    "index.html": "80f1ac334488388056d5211b636b56eb484438855216e8c388e860f8a0c629e9",
+    "named-plans-example.json": "4f14c3bfb776a62d984703390ca8abc8fc173aea41ff8d3d54f4d7581409ba9b"
+  }
+}
