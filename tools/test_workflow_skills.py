@@ -431,6 +431,8 @@ class WorkflowSkillsTest(unittest.TestCase):
                  'docs/business-design-quality-check.ja.md')]:
             self.assertIn('](' + link + ')', text)
             self.assertEqual((skill / link).read_bytes(), (ROOT / canonical).read_bytes())
+        for owner in ['alder-draft-business-design', 'alder-review-business-design']:
+            self.assertIn('](../' + owner + '/references/provenance.json)', text)
         for phrase in ['既存レビュー・修復ループと3分類', 'prefaceの未確認事項と返答',
                        '候補0件', '未確認事項を自動でFindings化しない',
                        '採否回答だけでは保存しない', '別の明示的な改稿依頼',

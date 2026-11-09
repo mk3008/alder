@@ -23,7 +23,7 @@ JSONの編集前に正規CLIの`inspect`で`format`・`formatVersion`と`compati
 7. Roleを含む新規JSONは[ロール契約](references/json-roles.ja.md)を読み、rolesの安定ID/名称/基本5色を一元化してActivityから参照する。改名でID/色を変えず、複合Whoは原文と未確定診断を残す。旧JSONは「旧JSONの明示変換」で別候補を作り、採用を依頼された場合だけ期待hash／版・migration指定付きcommitを使う。人間Checkゲートを保持する。
 8. 返却前に全体Schema/参照/版と要求・業務意味の対応を別々に点検する。Checkは保存候補とBD全体を使って、原典→保証/例・全index/共有参照を確認するread-onlyのConsistency reviewを別工程で行う。独立readerがない場合は同じ文脈で行ったと開示する。根拠のある範囲だけ修正し、再検査する。人間にJSONの手修正を委ねない。
 
-BDの草案・改稿では、共有adoptionの既存レビュー・修復ループと3分類を適用する。一意な根拠付き修復だけを候補へ反映して再レビューし、未決Who・When/Procedureの矛盾・手順/I/Oの飛躍は根拠箇所と人間が判断する一点をprefaceの未確認事項と返答へ示す。任意提案は価値のある少数だけチャット／コンソールの結果へ返し、候補0件も認める。未採用案をJSON本文・未確認事項・Findingsへ混ぜず、未確認事項を自動でFindings化しない。単独レビューは一意に直せる誤りも含め常に読取り専用とし、採否回答だけでは保存しない。別の明示的な改稿依頼を受けてから採用結果を反映し、再レビューする。既に依頼された草案・改稿内の回答反映は同じループで行い、業務合意は人間に残す。
+BDの草案・改稿では、共有adoptionの既存レビュー・修復ループと3分類を適用する。一意な根拠付き修復だけを候補へ反映して再レビューし、未決Who・When/Procedureの矛盾・手順/I/Oの飛躍は根拠箇所と人間が判断する一点をprefaceの未確認事項と返答へ示す。任意提案は価値のある少数だけチャット／コンソールの結果へ返し、候補0件も認める。未採用案をJSON本文・未確認事項・Findingsへ混ぜず、未確認事項を自動でFindings化しない。単独レビューは一意に直せる誤りも含め常に読取り専用とし、採否回答だけでは保存しない。別の明示的な改稿依頼を受けてから採用結果を反映し、再レビューする。既に依頼された草案・改稿内の回答反映は同じループで行い、業務合意は人間に残す。共有指針のsource revisionとhashは[草案側](../alder-draft-business-design/references/provenance.json)と[レビュー側](../alder-review-business-design/references/provenance.json)のprovenanceを結果に含め、JSON runtimeの版と区別する。
 
 既存の概念データ例をCheckの具体例として使う依頼では、[JSON操作ガイド](references/plugin-json-authoring.ja.md)のCheck参照・明示移行に従う。対応先を名前やデータ値から推測せず、参照検査と意味の整合レビューを分ける。例をCheckに結び付ける操作も、Check新規作成や内容変更の合意ゲートを免除しない。
 
