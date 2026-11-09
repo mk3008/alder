@@ -1,0 +1,49 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {registerHooks} from 'node:module';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+
+registerHooks({resolve(s,c,n){if((s.startsWith('./')||s.startsWith('../'))&&!/\.[a-z0-9]+$/i.test(s)){try{return n(s+'.ts',c)}catch{}try{return n(s+'.js',c)}catch{}}return n(s,c)}});
+const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
+const authority='verification/structure-explorer-sidebar.check-items.json',authorityHash='ead6853f99cefb181ffcad88f5d8ffcdb632c56b864bc4548c3a495729933269';
+const fixed={
+ '../business-design/alder/json-complete-concept-review.json':'e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181',
+ '../business-design/alder/business-design.json':'b8356070947d73502197e08560a9084e139aa8c0f7c88c64109a98502d7182c9',
+ '../tools/document_storage/schema.mjs':'9a6f63990f5b679ea807d873e56e0c5895aae28d1b253d78c3af63f4141546df'
+};
+const verify=()=>{assert.equal(digest(readFileSync(authority)),authorityHash);for(const [path,hash] of Object.entries(fixed))assert.equal(digest(readFileSync(path)),hash,path);};verify();
+const required=JSON.parse(readFileSync(authority)).checks.map(x=>x.id),covered=[];
+const coverage=ids=>{assert.equal(ids.length,required.length);assert.equal(new Set(ids).size,ids.length);assert.deepEqual(new Set(ids),new Set(required));};assert.throws(()=>coverage(required.slice(1)));assert.throws(()=>coverage([...required,required[0]]));
+const {parseDocument}=await import('../src/document-input.ts');
+const read=path=>{const parsed=parseDocument(readFileSync(path,'utf8')).model;return {model:parsed.concepts[0],business:parsed.business};};
+const complete=read('../business-design/alder/json-complete-concept-review.json'),physical=read('../business-design/alder/json-structure-review.json');
+const before=JSON.stringify(complete.model),code=(await build({entryPoints:['src/viewer-shell.ts'],bundle:true,write:false,format:'iife',globalName:'Shell',loader:{'.css':'empty'}})).outputFiles[0].text;
+const markup='<div id="app"><header><button id="node-list-toggle"></button><button id="drawer"></button></header><div class="tab-strip"><nav id="tabs"></nav></div><div class="workspace"><aside id="node-list-drawer" hidden></aside><main></main><aside id="formattedMarkdownDrawer" hidden></aside></div></div>';
+function boot(url='https://viewer.test/?view=concept&concept=overview',initial=complete,width=1280){
+ const w=new JSDOM(markup,{url,runScripts:'outside-only',pretendToBeVisual:true}).window;Object.defineProperty(w,'innerWidth',{value:width,writable:true});w.eval(code+';globalThis.Shell=Shell;');
+ let current=initial,key='candidate',open=true;const shell=w.Shell.installViewerShell(w.document.querySelector('#app'),{rightDrawer:{isOpen:()=>open,isReady:()=>true,setOpen:value=>{open=value;}},capture(){},business:()=>({key,concept:current,activities:[],objects:[],states:[],views:[{key:'overview',name:'全体図'}],viewKey:'overview'}),openActivity(){},openObject(){},openOverview(){},activateView(){},statePanel(){},closeLegacyList(){},refresh(){}});shell.syncDocument();
+ return {w,d:w.document,shell,open:()=>open,change(next,nextKey){current=next;key=nextKey;shell.syncDocument();}};
+}
+const test=boot();try{
+ const {w,d}=test,$=s=>d.querySelector(s),doc=$('#explorer-tab-document'),structure=$('#explorer-tab-structure'),sidebar=$('#explorer-structure-panel');
+ assert.equal(doc.textContent,'文章');assert.equal(structure.textContent,'構造');assert.equal(doc.getAttribute('aria-selected'),'true');assert.equal(sidebar.hidden,true);assert.equal(structure.disabled,false);
+ const overview=$('iframe[data-concept-view="overview"]');assert(!overview.hidden);structure.click();assert.equal(structure.getAttribute('aria-selected'),'true');assert(!sidebar.hidden);assert($('#explorer-document-panel').hidden);assert(!overview.hidden,'changing explorer tabs does not replace the current content');
+ const tree=sidebar.querySelector('.structure-explorer');assert(tree);for(const button of ['すべて展開','すべて折りたたみ'])assert([...tree.querySelectorAll('button')].some(b=>b.textContent===button));assert(tree.querySelector('.structure-compatibility-filter input'));assert(tree.querySelector('input[type=search]'));
+ tree.querySelector('.structure-root > li > details > summary').click();assert.equal($('#concept-tab-structure-explorer').getAttribute('aria-current'),'true');assert(!$('.structure-detail-page').hidden);assert.equal($('#drawer').disabled,true);assert($('#concept-related-panel').hidden);assert.equal(test.open(),true,'the shared right drawer preference is untouched');
+ const details=()=>$('.structure-detail-page:not([hidden]) .structure-detail-content'),value=label=>[...details().querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling?.textContent;
+ const bd=tree.querySelector('[data-relation-id="nr-package-bd"] > details > summary');assert(bd);bd.click();assert.equal(value('ローカル名'),'業務設計書');assert.equal(value('型名'),'BusinessDesign');assert(details().textContent.includes('bd-review-1'));assert(!details().closest('#concept-related-panel'));
+ assert.equal(tree.querySelectorAll('.structure-element-type,.structure-open').length,0);assert(!tree.querySelector('.structure-root > li > details > summary').textContent.includes('DocumentPackage'));assert.match(tree.querySelector('.structure-root > li > details > summary').textContent,/文書パッケージ/);assert.match(bd.textContent,/0\.\.N.*業務設計書/);assert(!bd.textContent.includes('BusinessDesign'));covered.push('STRUCTURE-SIDEBAR-002');
+ const name=details().querySelector('[data-information-id="n-bd-field-1"] button');assert(name);name.click();assert.equal(value('ローカル名'),'識別子');assert.equal(value('所属'),'業務設計書（BusinessDesign）');details().querySelector('.structure-attribute-back').click();assert(details().querySelector('table'));assert($('#concept-related-panel').hidden);covered.push('STRUCTURE-SIDEBAR-003');
+ const selected=tree.querySelector('.structure-selected');assert(selected);doc.click();assert(!$('#explorer-document-panel').hidden);assert(sidebar.hidden);assert(!$('.structure-detail-page').hidden,'switching explorer tabs keeps the selected main content');structure.click();assert(!sidebar.hidden);assert(tree.contains(selected));assert.equal(value('ローカル名'),'業務設計書');covered.push('STRUCTURE-SIDEBAR-001');
+ const search=tree.querySelector('input[type=search]');search.value='activities.name';search.dispatchEvent(new w.Event('input'));assert([...tree.querySelectorAll('[data-concept-id="n-activity"]')].some(x=>!x.closest('[hidden]')));search.value='';search.dispatchEvent(new w.Event('input'));assert(tree.querySelector('.structure-selected'));
+ tree.querySelector('.structure-toolbar button').click();assert(tree.querySelectorAll('.structure-item').length<complete.model.relations.length+complete.model.concepts.length+10);assert(tree.querySelector('.structure-seen'));const toggle=tree.querySelector('.structure-compatibility-filter input');assert(toggle.checked);toggle.checked=false;toggle.dispatchEvent(new w.Event('change'));assert(!toggle.checked);toggle.checked=true;toggle.dispatchEvent(new w.Event('change'));assert(toggle.checked);
+ doc.click();$('#explorer-document-panel [data-explorer-key="concept:overview"]').click();assert(!overview.hidden);assert(!$('#drawer').disabled);assert(!$('#concept-related-panel').hidden);assert.equal(test.open(),true,'another view retains its drawer state');$('#drawer').click();assert.equal(test.open(),false);structure.click();tree.querySelector('.structure-root > li > details > summary').click();assert($('#drawer').disabled);doc.click();$('#explorer-document-panel [data-explorer-key="concept:overview"]').click();assert($('#concept-related-panel').hidden,'a closed drawer remains closed outside the structure');covered.push('STRUCTURE-SIDEBAR-005');
+ test.change(physical,'other');assert(!d.querySelector('[data-concept-id="n-package"]'));assert(!structure.disabled);structure.click();assert(d.querySelector('#explorer-structure-panel [data-concept-id="fmt-package"]'));assert(!d.querySelector('.structure-detail-content')?.textContent.includes('bd-review-1'));
+ covered.push('STRUCTURE-SIDEBAR-004');
+}finally{test.w.close();}
+const direct=boot('https://viewer.test/?view=concept&concept=structure-explorer%3An-activity');try{const {d}=direct;assert.equal(d.querySelector('#explorer-tab-structure').getAttribute('aria-selected'),'true');assert(d.querySelector('#explorer-structure-panel .structure-root > [data-concept-id="n-activity"]'));assert(!d.querySelector('.structure-detail-page').hidden);assert(d.querySelector('.structure-detail-content').textContent.includes('Activity'));}finally{direct.w.close();}
+const mobile=boot('https://viewer.test/?view=concept&concept=structure-explorer',complete,393);try{const {d}=mobile;assert(d.querySelector('#design-explorer').hidden);d.querySelector('#node-list-toggle').click();assert(!d.querySelector('#design-explorer').hidden);assert(!d.querySelector('#explorer-structure-panel').hidden);assert(d.querySelector('.structure-root > [data-concept-id="n-package"]'));d.querySelector('#design-explorer .shell-heading button').click();assert(d.querySelector('#design-explorer').hidden);assert(!d.querySelector('.structure-detail-page').hidden);}finally{mobile.w.close();}
+const absent=boot('https://viewer.test/?view=business',undefined);try{absent.change(undefined,'no-model');assert(absent.d.querySelector('#explorer-tab-structure').disabled);assert.equal(absent.d.querySelector('#explorer-tab-document').getAttribute('aria-selected'),'true');}finally{absent.w.close();}
+coverage(covered);assert.equal(JSON.stringify(complete.model),before);verify();console.log(JSON.stringify({checks:covered,scope:'sidebar switching, main details, drawer preference, model and navigation isolation'}));

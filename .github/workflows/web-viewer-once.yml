@@ -40,7 +40,7 @@ jobs:
       - name: Lint Viewer source and tests
         run: npm run lint
       - name: Fetch frozen pre-B verification authority
-        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
+        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e 777b79a4f919a1456c74a724b949bc7748f32df1 887c0f60a191d06e1db0ed50567844cca2ec1950 d3123341bdb69aae3e5dca8f6e648bffed0389d7
       - name: Verify UI verification authority
         run: npm run verify:contract
       - run: npm test

@@ -1,0 +1,128 @@
+// Candidate storage contracts. Complete lifecycles remain unsupported.
+const str={type:'string'},text={type:'string',minLength:1,pattern:'\\S'},id={type:'string',pattern:'^[A-Za-z0-9_-]+$'},nullable=s=>({anyOf:[s,{type:'null'}]}),array=items=>({type:'array',items});
+const obj=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false});
+const ref=name=>({$ref:'#/$defs/'+name});
+const rich=array({anyOf:[obj({kind:{enum:['text']},value:str}),obj({kind:{enum:['reference']},targetId:id,label:str}),obj({kind:{enum:['link']},uri:text,label:str})]});
+const entity=obj({id,name:text,scope:{type:'boolean'}}).properties;
+const relation=obj({id,kind:{enum:['input','output','business-exception','object-exception']},fromId:id,toId:id,label:text});
+const finding=obj({id,sourceId:id,kind:{enum:['question','correction']},status:{enum:['open','resolved']},scope:{enum:['items','document','unassigned']},targetIds:array(id),unresolvedTargets:array(text),summary:text,content:text});
+const bd=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['businessDesign']},revision:text,title:text,preface:str,scope:str,
+ objects:array(obj({...entity,icon:text,information:array(text)})),
+ activities:array(obj({...entity,why:text,when:text,who:text,where:text,procedure:text,exception:nullable(text),result:text,problem:nullable(text),painLevel:nullable({enum:['Low','Medium','High']})})),
+ relations:array(relation),findings:array(finding)});
+const role=obj({id,name:text,color:{enum:['#8b5cf6','#2563eb','#c2410c','#008576','#be185d']}});
+const roleBD=obj({...bd.properties,schemaVersion:{enum:['0.2']},roles:array(role),activities:array(obj({...bd.properties.activities.items.properties,roleId:nullable(id)}))});
+const structuredBD=obj({...roleBD.properties,schemaVersion:{enum:['0.3']},exceptions:array(obj({id,activityId:id,name:text,description:str}))});
+const nonempty=items=>({...array(items),minItems:1});
+const information=obj({id,name:text,description:str});
+const orderRule={anyOf:[obj({kind:{enum:['before']},beforeId:id,afterId:id}),obj({kind:{enum:['interchangeable']},stepIds:{...array(id),minItems:2}})]};
+const structuredActivityProperties=Object.fromEntries(Object.entries(structuredBD.properties.activities.items.properties).filter(([key])=>!['who','roleId','procedure','result','exception'].includes(key)));
+// 0.5 is the historical, unreleased D2.2 format. Its performer meaning is not
+// reinterpreted as the new Activity Who.
+const oldPerformer=obj({objectId:id,roleIds:array(id)});
+const oldStep=obj({id,text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),performerObjectIds:nullable(nonempty(id))});
+const sharedData=obj({id,name:text,items:nonempty(obj({informationId:id,condition:nullable(text)}))});
+const oldStructuredBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.4']},
+ objects:array(obj({...entity,icon:text,information:array(information)})),
+ activities:nonempty(obj({...structuredActivityProperties,performers:nullable(nonempty(oldPerformer)),procedure:obj({steps:nonempty(oldStep),orderRules:array(orderRule)}),results:nonempty(obj({id,text}))})),
+ data:array(sharedData),relations:array({anyOf:[obj({id,kind:{enum:['input','output']},fromId:id,toId:id,dataId:id}),obj({...relation.properties,kind:{enum:['business-exception','object-exception']}})]})});
+// 0.6 is the new candidate: a Step owns the interaction details; a relation
+// may retain an existing endpoint/ID but never duplicates its Data label.
+const who={anyOf:[obj({kind:{enum:['role']},roleId:id}),obj({kind:{enum:['system','scheduler']},name:text}),{type:'null'}]};
+const exchange={anyOf:[
+ obj({kind:{enum:['interaction']},phase:nullable({enum:['request','response','not-applicable']}),direction:{enum:['input','output']},objectId:id,dataIds:nullable(array(id)),relationId:nullable(id),pairedStepId:nullable(id)}),
+ obj({kind:{enum:['internal']}}),obj({kind:{enum:['unresolved']}})
+]};
+// Action is the fourth table column. Historical Step prose may be retained as
+// legacyText during migration; it is not a second current action definition.
+// The acting/target parties are independent of the direction in which Data
+// moves. Missing parties are undecided, not inferred from an input arrow.
+const party={anyOf:[obj({kind:{enum:['who']}}),obj({kind:{enum:['object']},objectId:id})]};
+const parties=obj({from:nullable(party),to:nullable(party)});
+const newStep=obj({id,action:text,method:nullable(text),whatDataIds:nullable(array(id)),legacyText:text,obligation:{enum:['required','optional']},appliesWhen:nullable(text),effect:nullable({enum:['create','read','update','delete','not-applicable','undecided']}),exchange,parties},['id','action','method','whatDataIds','obligation','appliesWhen','effect','exchange']);
+// A continuation is optional: historical descriptions and undecided business
+// facts must remain readable without manufacturing a pause or a restart.
+const continuity=obj({trigger:nullable(text),onInterrupt:nullable(text),outcome:nullable({enum:['resume','continue','end']}),resumeCondition:nullable(text),resumeAction:nullable(text),interruptedAtStepId:nullable(id),resumeAtStepId:nullable(id),retainedDataIds:nullable(array(id))});
+const procedureException=obj({id,activityId:id,name:text,description:str,continuity},['id','activityId','name','description']);
+const scopedEntity={...entity,scope:nullable({type:'boolean'})};
+const newBD=obj({...structuredBD.properties,schemaVersion:{enum:['0.5']},
+ objects:array(obj({...scopedEntity,icon:text,information:array(information)})),
+ activities:nonempty(obj({...structuredActivityProperties,...scopedEntity,who,procedure:obj({steps:nonempty(newStep),orderRules:array(orderRule)}),results:nonempty(obj({id,text}))})),
+ exceptions:array(procedureException),data:array(sharedData),relations:array({anyOf:[obj({id,kind:{enum:['input','output']},fromId:id,toId:id}),obj({...relation.properties,kind:{enum:['business-exception','object-exception']}})]})});
+// 0.7 keeps the 0.6 interaction meaning and adds Activity-owned decisions.
+// Cells, their operators, result references and Check links are separate from
+// readable business terms; they are not an executable rules language.
+const decisionValue={anyOf:[text,{type:'number'},{type:'boolean'}]};
+const decisionCondition={anyOf:[
+ obj({axisId:id,kind:{enum:['value']},operator:{enum:['is','eq','gte','lte','gt','lt']},value:decisionValue}),
+ ...['else','any','undecided'].map(kind=>obj({axisId:id,kind:{enum:[kind]}}))
+]};
+const decisionAxis=obj({id,name:text,dataIds:array(id),unit:str,trueLabel:text,falseLabel:text},['id','name','dataIds']);
+const decisionResult=obj({kind:{enum:['accepted','error','value','undecided']},text:nullable(text),dataIds:array(id),exceptionIds:array(id)});
+const decisionRow=obj({id,conditions:nonempty(decisionCondition),result:decisionResult,checkRefs:array(obj({checkId:id,coverage:{enum:['full','partial']}}))});
+const decisionReference=obj({decisionId:id,rowId:id});
+const decisionTable=obj({id,title:text,kind:{enum:['authorization','validation','algorithm']},note:nullable(text),appliesWhen:nullable(decisionReference),axes:nonempty(decisionAxis),rows:nonempty(decisionRow)});
+// An omitted or null dependency list is undecided; [] explicitly records that
+// the Step has no local prerequisites. Older 0.7 candidates stay readable.
+const stepPrerequisite=obj({stepId:id,whenDecision:nullable(decisionReference)});
+const decisionStep=obj({...newStep.properties,decisionIds:array(id),whenDecision:nullable(decisionReference),dependsOn:nullable(array(stepPrerequisite))},[...newStep.required,'decisionIds','whenDecision']);
+const decisionBD=obj({...newBD.properties,schemaVersion:{enum:['0.6']},activities:nonempty(obj({...newBD.properties.activities.items.properties,procedure:obj({steps:nonempty(decisionStep),orderRules:array(orderRule)}),decisions:array(decisionTable)}))});
+const checkFields=Object.fromEntries(['classification','condition','expectedResult','guarantee','evidence','derivation','related','testEvidence','question','alternatives','confidence'].map(k=>[k,rich]));
+const checks=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['checkItems']},revision:text,title:text,basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),intro:rich,
+ index:array(obj({activityId:id,purpose:str,connections:str,checkIds:array(id)})),
+ sections:array(obj({id,activityId:nullable(id),title:text,preamble:rich})),
+ guarantees:array(obj({id,sectionId:id,title:text,blocks:array({anyOf:[obj({kind:{enum:['prose']},content:rich}),obj({kind:{enum:['example']},exampleId:id})]})})),
+ examples:array(obj({id,guaranteeId:id,columns:array(text),rows:array(array(rich))})),
+ items:array(obj({id,checkId:id,title:text,detailSummary:str,sectionId:id,reviewState:{enum:['未レビュー','要確認','確認済み','要修正']},fields:obj(checkFields,[])})),
+ notes:array(obj({id,title:text,content:rich}))});
+const stateTransition=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['stateTransition']},revision:text,title:text,
+ basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),objectId:id,
+ states:array(obj({id,name:text})),start:{enum:['@new']},terminal:{enum:['@unknown']},completeness:{enum:['partial']},source:text,
+ transitions:array(obj({id,sourceId:text,fromId:text,activityId:id,event:nullable(text),exception:nullable(text),condition:text,toId:text,
+ effect:{enum:['change','unchanged','no-create','constraint']},path:{enum:['normal','exception']},evidence:text,note:text}))});
+const structuredTransitionFields=Object.fromEntries(Object.entries({...stateTransition.properties.transitions.items.properties,exceptionId:nullable(id)}).filter(([key])=>key!=='exception'));
+const structuredState=obj({...stateTransition.properties,schemaVersion:{enum:['0.2']},transitions:array(obj({...structuredTransitionFields,conditionLabel:text},Object.keys(structuredTransitionFields)))});
+// Concept data is part of the same package. Metadata is retained as authored;
+// it is not interpreted as a rule or used to synthesize Viewer content.
+const conceptSource=obj({documentId:id,revision:text,targetType:text,targetId:id,section:text});
+const conceptInformation=obj({id,name:text,responsibilityStatus:text,responsibleSubsystemId:id},['id','name']);
+const conceptEntry=obj({id,name:text,subsystemId:id,information:array(conceptInformation),reason:str,description:str,
+ businessObjectIds:array(id),activityLinks:array(obj({activityId:id,uses:array(text)})),sourceRefs:array(conceptSource),reviewState:text});
+const modelRelation=obj({id,fromConceptId:id,toConceptId:id,fromPerTarget:text,toPerSource:text,condition:str,reviewState:text,
+ sourceRefs:array(conceptSource),fromLabel:text,toLabel:text,kind:{enum:['down','reference']}});
+const subsystem=obj({id,name:text,purpose:str,information:array(text),reason:str,activityIds:array(id),reviewState:text});
+const handoff=obj({id,fromSubsystemId:id,toSubsystemId:id,information:text,description:str,activityIds:array(id),flowDirection:{enum:['forward','return']},reviewState:text});
+const sampleCell=obj({columnId:id,value:{anyOf:[str,{type:'number'}]},linkId:text},['columnId','value']);
+const sampleBlock=obj({card:id,columns:array(obj({id,name:text,informationId:id})),rows:array(obj({id,cells:array(sampleCell)})),empty:str},['card','columns','rows']);
+const sample=obj({id,name:text,when:str,meaning:str,blocks:array(sampleBlock),note:str},['id','name','when','meaning','blocks']);
+const capability=obj({id,title:text,description:str,meta:{},samples:array(sample)});
+// New sample records must name the Check Items whose expectations they explain.
+// The old concept payload remains readable as a compatibility input.
+const checkedSample=obj({...sample.properties,checkIds:{...array(id),minItems:1,uniqueItems:true}},[...sample.required,'checkIds']);
+// An optional review projection references existing Checks, comparison tables,
+// and successful data examples. The Check remains the source of each guarantee.
+const functionSpecification=obj({decisionExampleIds:array(id),decisionCheckIds:array(id),resultCheckIds:array(id),sampleIds:array(id)});
+const checkedCapability=obj({...capability.properties,samples:array(checkedSample),testSpecification:functionSpecification},[...Object.keys(capability.properties)]);
+const limitation=obj({id,title:text,description:str,reason:str,meta:{}});
+const viewNode=obj({conceptId:id,name:text,fields:array(text),description:str,sources:array(text),sourceActivityIds:array(id)});
+const viewEdge=obj({id,fromConceptId:id,toConceptId:id,relationIds:array(id),scope:str,fromLabel:text,toLabel:text,kind:{enum:['down','reference']}});
+// Optional subsystem-specific projections describe which information appears
+// in each boundary. A projection is not a new entity or a physical table.
+const boundaryNode=obj({id,conceptId:id,subsystemId:id,name:text,description:str,sources:array(text),fields:array(obj({name:text,informationId:id}))});
+const boundaryEdge=obj({id,fromViewId:id,toViewId:id,relationIds:array(id),fromLabel:text,toLabel:text,kind:{enum:['down','reference']}});
+const boundaryViews=obj({nodes:array(boundaryNode),edges:array(boundaryEdge),handoffIds:array(id)});
+const reviewGroup=obj({id,subsystemId:id,title:text,description:str,reviewer:obj({roleId:id}),relatedActivityIds:array(id),
+ graph:obj({conceptIds:array(id),nodes:array(viewNode),edges:array(viewEdge),subsystemViews:boundaryViews},['conceptIds','nodes','edges']),
+ structureStatements:array(obj({id,title:text,description:str,sampleIds:array(id),sourceRefs:array(conceptSource)})),
+ capabilities:array(capability),limitations:array(limitation),meta:obj({questions:array(text),hypotheses:{}},['questions'])});
+const checkedReviewGroup=obj({...reviewGroup.properties,capabilities:array(checkedCapability)});
+const conceptModel=obj({id,schemaVersion:{enum:['0.1']},kind:{enum:['conceptModel']},revision:text,
+ basedOn:obj({documentId:id,revision:text,verification:{enum:['unverified']}}),
+ relatedStates:array(obj({documentId:id,revision:text,verification:{enum:['unverified']}})),
+ subsystems:array(subsystem),concepts:array(conceptEntry),relations:array(modelRelation),handoffs:array(handoff),reviewGroups:array(reviewGroup),
+ benefits:array(text),considerations:array(text),reviewPoints:array(text),meta:{},
+ presentation:obj({activityViews:{},creatorActivityIds:{},sampleCaption:str,subsystemViews:boundaryViews,landscapeRelationships:array(obj({from:id,to:id})),
+  reviewBoundaries:array(obj({from:id,to:id,label:str,promise:str}))},['landscapeRelationships','reviewBoundaries'])});
+const checkedConceptModel=obj({...conceptModel.properties,schemaVersion:{enum:['0.2']},reviewGroups:array(checkedReviewGroup)});
+const packageShape=(version,kinds)=>obj({format:{enum:['alder-document-package']},formatVersion:{enum:[version]},revision:text,documents:array({anyOf:kinds.map(ref)}),sources:array(obj({documentId:id,revision:text,sha256:{type:'string',pattern:'^[0-9a-f]{64}$'},uri:str})),externalDocuments:array(obj({id,kind:{enum:['businessDesign']},revision:text,activities:array(obj({id,name:text}))})),diagnostics:array(text)});
+export const schema={anyOf:[packageShape('0.1',['businessDesign','checkItems']),packageShape('0.2',['businessDesign','checkItems','stateTransition']),packageShape('0.3',['businessDesignRoles','checkItems','stateTransition']),packageShape('0.4',['businessDesignStructured','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel']),packageShape('0.5',['oldStructuredBusinessDesign','checkItems','stateTransitionStructured']),packageShape('0.6',['procedureBusinessDesign','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel']),packageShape('0.7',['decisionBusinessDesign','checkItems','stateTransitionStructured','conceptModel','checkedConceptModel'])],$schema:'https://json-schema.org/draft/2020-12/schema',$defs:{businessDesign:bd,businessDesignRoles:roleBD,businessDesignStructured:structuredBD,oldStructuredBusinessDesign:oldStructuredBD,procedureBusinessDesign:newBD,decisionBusinessDesign:decisionBD,checkItems:checks,stateTransition,stateTransitionStructured:structuredState,conceptModel,checkedConceptModel}};
