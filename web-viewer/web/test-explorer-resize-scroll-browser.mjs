@@ -24,6 +24,13 @@ export async function verifyExplorerResizeScroll(browser){
    await page.locator('.structure-detail-page:not([hidden])').waitFor({state:'visible',timeout:30000});
    if(await page.locator('#check-followup').isVisible())await page.locator('#check-followup-later').click();
    const explorer=page.locator('#design-explorer');if(!await explorer.isVisible())await page.locator('#node-list-toggle').click();
+   // Retain main's close -> search native Tab path, and keep new mode tabs reachable.
+   const close=page.locator('#design-explorer .shell-heading button');await close.focus();await page.keyboard.press('Shift+Tab');
+   assert.equal(await page.locator('#explorer-tab-structure').evaluate(el=>document.activeElement===el),true);
+   await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#explorer-tab-document').getAttribute('aria-selected'),'true');
+   await close.focus();await page.keyboard.press('Tab');assert.equal(await page.locator('.explorer-search input').evaluate(el=>document.activeElement===el),true);
+   await close.focus();await page.keyboard.press('Shift+Tab');assert.equal(await page.locator('#explorer-tab-document').evaluate(el=>document.activeElement===el),true);
+   await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#explorer-tab-structure').getAttribute('aria-selected'),'true');
    const separator=page.getByRole('separator',{name:'エクスプローラーの幅'}),tree=page.locator('#explorer-structure-panel .structure-tree');
    await tree.waitFor({state:'visible'});const initial=(await explorer.boundingBox()).width;
    const handle=await separator.boundingBox();await page.mouse.move(handle.x+handle.width/2,handle.y+100);await page.mouse.down();await page.mouse.move(handle.x+handle.width/2+60,handle.y+100,{steps:5});await page.mouse.up();

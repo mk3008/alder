@@ -27,6 +27,9 @@ export function installViewerShell(app:HTMLElement,options:Options){
  const workbench=document.createElement('div');workbench.className='shell-workbench';business.before(workbench);
  const explorer=document.createElement('aside');explorer.id='design-explorer';explorer.setAttribute('aria-label','設計ナビゲーション');
  explorer.innerHTML='<div class="shell-heading"><strong>エクスプローラー</strong><button type="button" aria-label="ナビゲーションを閉じる">×</button></div><div class="explorer-mode-tabs" role="tablist" aria-label="エクスプローラーの切替"><button type="button" role="tab" id="explorer-tab-document" aria-controls="explorer-document-panel">文章</button><button type="button" role="tab" id="explorer-tab-structure" aria-controls="explorer-structure-panel">構造</button></div><div id="explorer-document-panel" class="explorer-document-panel" role="tabpanel" aria-labelledby="explorer-tab-document"><label class="explorer-search"><span>設計を検索</span><input type="search" aria-label="設計を検索" placeholder="名前で絞り込み" autocomplete="off"></label><nav class="explorer-groups" aria-label="設計の一覧"></nav></div><div id="explorer-structure-panel" class="explorer-structure-panel" role="tabpanel" aria-labelledby="explorer-tab-structure" hidden></div>';
+ // Keep main's native close -> search Tab path. The mode tabs remain
+ // reachable with Shift+Tab from close; CSS keeps the heading visually first.
+ explorer.prepend(explorer.querySelector('.explorer-mode-tabs')!);
  const center=document.createElement('div');center.className='shell-center';workbench.append(explorer,center);center.append(strip,business);
  const tabScroll=document.createElement('div');tabScroll.className='shell-open-tabs';nativeTabs.before(tabScroll);tabScroll.append(nativeTabs);installTabScroll(tabScroll);
  const conceptTabs=document.createElement('nav');conceptTabs.className='concept-tabs';conceptTabs.setAttribute('aria-label','開いているサブシステムとデータ構造');tabScroll.append(conceptTabs);

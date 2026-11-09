@@ -182,3 +182,6 @@
 
 /* The card action is a label, while layout-owned CSS stays unchanged. */
 .activity-open{font-size:11px}
+
+/* Preserve close-to-search keyboard order while keeping the mode tabs visible. */
+#design-explorer>.shell-heading{order:-2}.explorer-mode-tabs{order:-1}
