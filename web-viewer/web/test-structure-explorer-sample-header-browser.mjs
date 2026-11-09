@@ -1,3 +1,4 @@
+import {verifyStructureBetaFixes} from './test-structure-beta-browser.mjs';
 import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync} from 'node:fs';
 
@@ -36,5 +37,5 @@ export async function verifyStructureSampleHeader(browser){
    assert.deepEqual(errors,[]);results.push({width,contentScrollTop:after.scrollTop,headerTop:after.headerTop,bodyTop:after.bodyTop,tableFits:true});
   }finally{await context.close();}
  }
- return {browser:browser.version(),results};
+ return {browser:browser.version(),results,beta:await verifyStructureBetaFixes(browser)};
 }

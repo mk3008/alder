@@ -295,11 +295,12 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
  if(undecided)text(panel,'p',`null許容が未決：${undecided}項目（互換・移行用を含む）`,'structure-pending');
  const tree=document.createElement('div');tree.className='structure-tree';tree.setAttribute('aria-label','構造のツリー');panel.append(tree);
  const empty=document.createElement('p');empty.className='structure-filter-empty';empty.hidden=true;empty.textContent='互換・移行用の構造は非表示です。表示するにはフィルターをOFFにしてください。';tree.before(empty);
- let savedTree:Node|null=null,selectedKey:string|undefined,currentSelection:StructureSelection|undefined;
+ const noMatches=document.createElement('p');noMatches.className='structure-filter-empty';noMatches.hidden=true;noMatches.setAttribute('role','status');noMatches.textContent='検索結果は0件です。';tree.before(noMatches);
+ let savedTree:Node|null=null,selectedKey:string|undefined,currentSelection:StructureSelection|undefined,selectedRow:HTMLElement|undefined;
  const keyOf=(selection:StructureSelection)=>JSON.stringify(selection.kind==='attribute'?['attribute',selection.conceptId,selection.informationId]:['structure',selection.conceptId,selection.fromId??'',selection.relationId??'']);
  const mark=(row:HTMLElement)=>{row.classList.add('structure-selected');row.setAttribute('aria-current','true');};
- const restoreSelection=()=>{tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});const row=Array.from(tree.querySelectorAll<HTMLElement>('[data-structure-selection]')).find(item=>item.dataset.structureSelection===selectedKey);if(row)mark(row);};
- const select=(selection:StructureSelection,row:HTMLElement,reason:'select'|'initial'='select')=>{currentSelection=selection;selectedKey=keyOf(selection);tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});mark(row);options.select?.({...selection,hideLegacy:hideLegacy.checked},reason);};
+ const restoreSelection=()=>{tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});const row=selectedRow&&tree.contains(selectedRow)&&selectedRow.dataset.structureSelection===selectedKey?selectedRow:Array.from(tree.querySelectorAll<HTMLElement>('[data-structure-selection]')).find(item=>item.dataset.structureSelection===selectedKey);if(row){selectedRow=row;mark(row);}};
+ const select=(selection:StructureSelection,row:HTMLElement,reason:'select'|'initial'='select')=>{currentSelection=selection;selectedKey=keyOf(selection);selectedRow=row;tree.querySelectorAll<HTMLElement>('.structure-selected').forEach(item=>{item.classList.remove('structure-selected');item.removeAttribute('aria-current');});mark(row);options.select?.({...selection,hideLegacy:hideLegacy.checked},reason);};
 
  const buildNode=(id:string,path:ReadonlySet<string>,edge?:StructureEdge,seen?:Set<string>):HTMLLIElement=>{
   const concept=graph.nodes.get(id)!;const item=document.createElement('li');item.className='structure-item';item.dataset.conceptId=id;
@@ -340,6 +341,22 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
     for(const relation of outgoing)children.append(buildNode(relation.to,nextPath,relation,expand));
    }if(tree.contains(details)){restoreSelection();filter();}
   };
+  row.addEventListener('keydown',event=>{
+   if(!['ArrowDown','ArrowUp','ArrowRight','ArrowLeft','Home','End'].includes(event.key)||event.altKey||event.ctrlKey||event.metaKey)return;
+   event.preventDefault();event.stopPropagation();
+   const rows=Array.from(tree.querySelectorAll<HTMLElement>('summary')).filter(candidate=>{
+    if(candidate.closest('[hidden]'))return false;
+    for(let parent=candidate.parentElement?.parentElement;parent&&parent!==tree;parent=parent.parentElement)if(parent instanceof HTMLDetailsElement&&!parent.open)return false;
+    return true;
+   });
+   const index=rows.indexOf(row);
+   if(event.key==='ArrowDown')rows[index+1]?.focus();
+   else if(event.key==='ArrowUp')rows[index-1]?.focus();
+   else if(event.key==='Home')rows[0]?.focus();
+   else if(event.key==='End')rows.at(-1)?.focus();
+   else if(event.key==='ArrowRight'&&hasChildren){if(!details.open){details.open=true;build();}else details.querySelector<HTMLElement>(':scope > .structure-children > li:not([hidden]) > details > summary')?.focus();}
+   else if(event.key==='ArrowLeft'){if(details.open&&hasChildren)details.open=false;else item.parentElement?.closest('.structure-item')?.querySelector<HTMLElement>(':scope > details > summary')?.focus();}
+  });
   details.addEventListener('toggle',()=>{if(details.open)build();});
   if(seen&&!visited&&!cycle){seen.add(visitKey);details.open=true;build(seen);}
   return item;
@@ -354,6 +371,7 @@ export function renderStructureExplorer(host:HTMLElement,model:ConceptModel,opti
    item.hidden=(hideLegacy.checked&&item.dataset.compatibility==='legacy')||(!!query&&!own&&!descendant);
   }
   empty.hidden=!!query||!hideLegacy.checked||!roots.every(id=>marks.concept(id)?.kind==='legacy');
+  noMatches.hidden=!query||Array.from(tree.querySelectorAll('.structure-root > li')).some(item=>!(item as HTMLElement).hidden);
  };
  hideLegacy.onchange=()=>{const selected=tree.querySelector<HTMLElement>('.structure-selected');if(hideLegacy.checked&&selected?.closest('[data-compatibility="legacy"]')){selectedKey=undefined;currentSelection=undefined;options.clearSelection?.();}else if(currentSelection)options.select?.({...currentSelection,hideLegacy:hideLegacy.checked},'filter');filter();restoreSelection();};
  all.onclick=()=>{savedTree=null;search.value='';render(true);filter();};collapse.onclick=()=>{savedTree=null;search.value='';render(false);const first=tree.querySelector<HTMLDetailsElement>('.structure-node');if(first)first.open=false;filter();};search.oninput=filter;

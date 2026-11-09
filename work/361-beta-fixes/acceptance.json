@@ -1,0 +1,73 @@
+{
+  "basis": "PR #361 beta fix instructions, 2026-11-09",
+  "source": "6d5646e37413be00fe1637e3e4f8a602bd6d72b9",
+  "checks": [
+    {
+      "id": "BETA-001",
+      "cases": [
+        "1280",
+        "393"
+      ],
+      "condition": "構造エクスプローラーのベータレビュー",
+      "guarantee": "集計行を全幅で切れずに読める",
+      "reason": "依頼された明らかなバグ修正と対象外の保持",
+      "verification": "web/test-structure-beta-fixes.mjs / web/test-structure-beta-browser.mjs"
+    },
+    {
+      "id": "BETA-002",
+      "cases": [
+        "1280-280",
+        "393-280"
+      ],
+      "condition": "構造エクスプローラーのベータレビュー",
+      "guarantee": "既定280pxのツリーでラベルを省略せず横スクロールなしで読める",
+      "reason": "依頼された明らかなバグ修正と対象外の保持",
+      "verification": "web/test-structure-beta-fixes.mjs / web/test-structure-beta-browser.mjs"
+    },
+    {
+      "id": "BETA-003",
+      "cases": [
+        "activity-label"
+      ],
+      "condition": "構造エクスプローラーのベータレビュー",
+      "guarantee": "Activityの表示名をJSONの用語に合わせて一貫させる",
+      "reason": "依頼された明らかなバグ修正と対象外の保持",
+      "verification": "web/test-structure-beta-fixes.mjs / web/test-structure-beta-browser.mjs"
+    },
+    {
+      "id": "BETA-004",
+      "cases": [
+        "no-match",
+        "clear",
+        "compatibility"
+      ],
+      "condition": "構造エクスプローラーのベータレビュー",
+      "guarantee": "検索0件を表示し、検索解除と既存互換フィルターを維持する",
+      "reason": "依頼された明らかなバグ修正と対象外の保持",
+      "verification": "web/test-structure-beta-fixes.mjs / web/test-structure-beta-browser.mjs"
+    },
+    {
+      "id": "BETA-005",
+      "cases": [
+        "down-right-enter",
+        "up-left-home-end",
+        "filtered"
+      ],
+      "condition": "構造エクスプローラーのベータレビュー",
+      "guarantee": "表示中の行だけを矢印で移動しEnterで詳細を選択する",
+      "reason": "依頼された明らかなバグ修正と対象外の保持",
+      "verification": "web/test-structure-beta-fixes.mjs / web/test-structure-beta-browser.mjs"
+    },
+    {
+      "id": "BETA-006",
+      "cases": [
+        "all-samples",
+        "sample-only-diff"
+      ],
+      "condition": "構造エクスプローラーのベータレビュー",
+      "guarantee": "全339項目を点検し意味のないサンプルだけ修正する。元JSONは保持し配信用コピーのsampleValueだけを変更する",
+      "reason": "依頼された明らかなバグ修正と対象外の保持",
+      "verification": "web/test-structure-beta-fixes.mjs / web/test-structure-beta-browser.mjs"
+    }
+  ]
+}

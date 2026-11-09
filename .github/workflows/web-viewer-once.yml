@@ -189,3 +189,60 @@ jobs:
           path: web-viewer/web/evidence/json-roles/
           if-no-files-found: ignore
           retention-days: 14
+
+      - name: Retain beta regression observations
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: structure-beta-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/structure-beta-fixes/
+          if-no-files-found: error
+          retention-days: 14
+
+  verify-published-beta:
+    if: github.event.pull_request.number == 361 && github.event.pull_request.head.ref == 'review/340-structure-explorer-main'
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: web-viewer
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run build
+      - name: Install public browser driver
+        run: npm install --prefix "$RUNNER_TEMP/published-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Install Japanese review-image font
+        run: |
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 \
+              https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf \
+              --output "$FONT_FILE"
+            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
+            fc-cache -f "$HOME/.local/share/fonts"
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Verify fixed public files and the six beta review items
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/published-browser/node_modules/playwright
+          EXPECTED_DIR: ${{ runner.temp }}/expected-preview
+          EVIDENCE_DIR: ${{ runner.temp }}/published-beta
+        run: node web/test-structure-beta-published.mjs
+      - name: Retain public beta observations
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: published-beta-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/published-beta/
+          if-no-files-found: error
+          retention-days: 14

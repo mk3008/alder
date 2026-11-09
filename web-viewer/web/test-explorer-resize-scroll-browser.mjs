@@ -45,6 +45,12 @@ export async function verifyExplorerResizeScroll(browser){
    await separator.press('ArrowRight');assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1,'right arrow widens the drawer');
    const documentTab=page.locator('#explorer-tab-document'),structureTab=page.locator('#explorer-tab-structure');await documentTab.click();assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1);await structureTab.click();
    await page.locator('#explorer-structure-panel .structure-toolbar button').first().click();
+   const fitted=await tree.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth}));
+   assert(fitted.scroll<=fitted.client,'review labels fit the resized drawer');
+   // EXPLORER-SCROLL-001 is conditional on content wider than the drawer.
+   // BETA-002 now wraps ordinary labels, so force that condition separately
+   // and retain the horizontal-scroll fallback and selection assertions.
+   const wideRows=await page.addStyleTag({content:'.structure-tree .structure-node-row{min-width:700px}'});
    const before=await tree.evaluate(el=>({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,toolbarLeft:el.parentElement.querySelector('.structure-toolbar').getBoundingClientRect().left}));
    assert(before.scrollWidth>before.clientWidth+10,'expanded hierarchy creates genuine horizontal overflow');
    await tree.evaluate(el=>{el.scrollLeft=el.scrollWidth;});
@@ -52,6 +58,7 @@ export async function verifyExplorerResizeScroll(browser){
    assert(after.scrollLeft>0,'tree scrolls horizontally');assert(after.textRight<=after.right+1,'furthest label can be reached');assert.equal(after.toolbarLeft,before.toolbarLeft,'tree scrolling does not move the toolbar');assert.equal(after.pageOverflow,false,'whole page does not overflow');
    await page.locator('[data-scroll-test="target"]').click();assert(await page.locator('[data-scroll-test="target"]').evaluate(el=>el.closest('summary').classList.contains('structure-selected')),'scrolled item is selectable');
    await page.screenshot({path:`${out}/tree-${width}.png`});
+   await wideRows.evaluate(el=>el.remove());
    const search=page.locator('#explorer-structure-panel input[type=search]');await search.fill('業務');assert(await page.locator('#explorer-structure-panel .structure-item:not([hidden])').count()>0);await search.fill('');
    const filter=page.locator('#explorer-structure-panel .structure-compatibility-filter input');assert(await filter.isChecked());await filter.uncheck();assert(!await filter.isChecked());await filter.check();
    await page.locator('#design-explorer .shell-heading button').click();assert(!await explorer.isVisible());await page.locator('#node-list-toggle').click();assert(Math.abs((await explorer.boundingBox()).width-dragged)<=1,'opening the drawer retains its width');
