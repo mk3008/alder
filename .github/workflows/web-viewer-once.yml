@@ -296,10 +296,11 @@ jobs:
       run:
         working-directory: web-viewer
     steps:
-      - uses: actions/checkout@v4.4.0
+      - name: Check out immutable published beta for read-only verification
+        uses: actions/checkout@v4.4.0
         with:
           persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: 7ebe732f6ccc1676d591d564d95b711e473c60a3
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '24.22.1'

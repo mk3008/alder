@@ -39,3 +39,11 @@ node work/361-b-path-review/verify.mjs work/361-b-path-review/browser-results.js
 ```
 
 ゲートは固定blobを一括読取し、byte不変とID/cases/results欠落・重複・失敗の負例を機械照合する。正常な過去の観測JSONが任意に偽装されないことを保証する仕組みではなく、この実行の記録と対象を明示するためのもの。配布buildがない場合は第2・第3引数を省略し、browserをpendingのまま実行できる。全体CIの結果はPRの最終headコメントを参照する。既存固定Previewは変更・再配信していない。
+
+## 固定公開版の検証経路
+
+`8f03b275` のChrome55群は成功したが、最終jobの事前照合で、公開検証がPR headをcheckoutし、そのHEADから公開URLを組み立てることを確認した。新しいheadを配信しない今回の条件では、未公開URLの出現を待つことになる。
+
+B-V-2: `verify-published-beta` のcheckoutだけを公開済み `7ebe732f6ccc1676d591d564d95b711e473c60a3` へ固定する。既存の全assertion、配信ファイル・manifest hash・Chrome・作成ガイド・変更前後の照合を保持する。現在候補の製品はcurrent-headのChrome55群とverifyが担当し、固定公開版はその固定ソースから再構築して照合する。公開がCIの暗黙の前提にならないよう版の所有を分ける。artifact名は起動したPR headを示し、中身のmanifestは公開版のsourceを示す。配信・公開版上書きは一切行わない。
+
+製品ソースは独立レビュー済み4ecと不変。新しい最終headで全体CIを再実行する。8f03b275の実行結果を新headの全体成功の代用にしない。
