@@ -78,15 +78,16 @@
     "commit": "f35d695d068aa70ec46dc921cea2dea5299c45ca",
     "id": 42772560495,
     "url": "https://github.com/mk3008/alder/actions/runs/42772560495",
-    "attempt": 1,
+    "attempt": 2,
     "conclusion": "failure",
     "annotation": "Timeout reached, aborting!",
-    "deploymentId": 7675747232,
+    "deploymentId": 7676009162,
     "deploymentState": "failure",
     "changes": {
       "additions": 18,
       "modifiedExisting": 0
-    }
+    },
+    "retryCount": 1
   },
   "publicCheck": {
     "id": 42773941190,
@@ -103,7 +104,17 @@
     },
     "assetsVerified": 0,
     "uiVerified": false,
-    "artifact": 13743670097
+    "artifact": 13743670097,
+    "attempt": 1,
+    "probeObservedAt": "2026-11-10T07:15:18Z",
+    "recheck": {
+      "status": "denied",
+      "executed": false,
+      "action": "github_rerun_workflow_job",
+      "jobId": 129687949560,
+      "reason": "Automatic approval review: job rerun may trigger another deployment; no trusted user authorization for an additional retry; exhausted retries",
+      "verifiedRunAttemptAfterDenial": 1
+    }
   },
   "independentReview": {
     "status": "parent-reported-pass",
@@ -119,9 +130,10 @@
   },
   "humanGuiReview": "not-performed",
   "remaining": [
-    "Pages timeout and public manifest HTTP 503; no deployment retry performed",
-    "all public asset hashes unverified",
-    "public UI/copy/focus/close checks not executed"
+    "Pages deploy timed out on initial run and one authorized retry; no further deployment retry",
+    "Last public manifest observation HTTP 503; no newer HTTP observation",
+    "all 17 public asset hashes and public UI/copy/focus/close unverified",
+    "Read-only verification job rerun denied by automatic approval review; not executed; no alternate route used"
   ],
   "serviceStatus": {
     "source": "https://www.githubstatus.com/api/v2/summary.json",
@@ -156,7 +168,7 @@
     "fail": 1,
     "pending": 1
   },
-  "overall": "incomplete: public deployment and verification blocked",
+  "overall": "incomplete: Pages attempts 1 and 2 failed; public verification retry denied",
   "verificationRole": "same implementing agent, separate read-only reconciliation; independent review separately parent-reported",
   "results": [
     {
@@ -487,13 +499,13 @@
       "id": "CLEAN-006",
       "case": "published-files",
       "status": "fail",
-      "evidence": "https://github.com/mk3008/alder/actions/runs/42773941190; public manifest HTTP 503; asset hashes unverified"
+      "evidence": "https://github.com/mk3008/alder/actions/runs/42773941190; initial public manifest HTTP 503; Pages attempts 1/2 timeout; further verification-job rerun denied and not executed"
     },
     {
       "id": "CLEAN-006",
       "case": "published-ui",
       "status": "pending",
-      "evidence": "Not executed: public manifest HTTP 503; no successful public verification claimed"
+      "evidence": "Not executed: no verified public manifest; recheck job rerun denied; no successful public verification claimed"
     }
   ]
 }
