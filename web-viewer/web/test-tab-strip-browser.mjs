@@ -1,3 +1,4 @@
+import {verifyTabClose} from './test-tab-close-browser.mjs';
 import {activityTabFixture} from './document-test-view.mjs';
 import {parseDesign} from '../src/graph.ts';
 import {openSourceAction} from './source-menu-browser.mjs';
@@ -93,6 +94,7 @@ export async function verifyTabStrip(browser){
    }
   }
   await page.evaluate(()=>{document.body.style.zoom='1';});await page.setViewportSize({width:1280,height:960});const before=await page.locator('.tab').count();await page.locator('.tab').last().locator('.close').click();await page.waitForFunction(n=>document.querySelectorAll('.tab').length===n,before-1,{timeout:5000});assert.equal(await page.locator('.tab').count(),before-1);await checkVertical();assert.deepEqual(errors,[]);
+  await verifyTabClose(browser);
   return {checks:'Source refresh before PNG actions and sharing; sample/text gray disabled controls skipped by natural Tab/Shift+Tab; URL pointer/Enter/Space reread; text/sample tab switching; one tab no scroll; many tabs horizontal scrolling; no vertical overflow or clipped close controls; light/dark; 320/360/393/480/600/1000/1280; CSS zoom1/1.25; classic17px scrollbar fixture',results,pageErrors:errors,limit:'CSS scrollbar/zoom fixture in Linux Chrome, not Windows OS/native browser zoom'};
  }finally{await context.close();}
 }

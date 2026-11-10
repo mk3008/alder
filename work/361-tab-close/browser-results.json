@@ -1,0 +1,792 @@
+{
+  "results": [
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-1280-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-1280-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-1280-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-1280-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-393-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-393-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-393-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-393-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-1280-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-1280-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-1280-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-1280-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-393-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-393-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-393-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-393-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "pointer-inactive",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "pointer-active",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "Enter",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "Space",
+      "status": "pass"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "touch-393",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "active",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "active",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "active",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "active",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "active",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "active",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "active",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "active",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "active",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "active",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "inactive",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "inactive",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "inactive",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "inactive",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "light",
+      "width": 393,
+      "state": "inactive",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.846118 0.849647 0.853882)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "active",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "active",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "active",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "active",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "active",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "state": "inactive",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "active",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "active",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "active",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 485
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "active",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "active",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "inactive",
+      "kind": "business",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "inactive",
+      "kind": "subsystems",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "inactive",
+      "kind": "concept",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 484
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "inactive",
+      "kind": "states",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    },
+    {
+      "theme": "dark",
+      "width": 393,
+      "state": "inactive",
+      "kind": "tests",
+      "hit": {
+        "width": 32,
+        "height": 44
+      },
+      "circle": {
+        "width": "24px",
+        "height": "24px",
+        "radius": "50%",
+        "background": "color(srgb 0.240549 0.281255 0.315529)"
+      },
+      "changed": 486
+    }
+  ],
+  "pageErrors": []
+}
