@@ -1,0 +1,88 @@
+{
+  "format": "viewer-verification/1",
+  "start": "75f6b85451dd99c055901a61abf6516649780673",
+  "source": "trusted user history supplied by parent 01a1a74c-7b7e-7445-8e68-a34469ffe0cb, 2026-11-10",
+  "scope": "新しい仮説補完・表示要求。前回B/コピー/タブcloseの凍結正本を変更しない。",
+  "philosophy": [
+    "docs/philosophy.md",
+    "docs/adoption.md",
+    "business-design/alder/README.md"
+  ],
+  "checks": [
+    {
+      "id": "REVIEW-HYP-001",
+      "condition": "固定Preview候補を作成する。",
+      "guarantee": "全339項目に静的な確認する立場候補（依頼者/設計者/開発者、複数可）と理由・出典を持つ。既存用途を残し、空の338項目にその項目の使用目的候補を補完する。元の表示サンプルが未記載/null/空文字/空配列/空objectの対象へ、既存定義に沿う非空の具体例を仮説として添える。値0/falseは空と扱わない。",
+      "reason": "本人の空サンプル・用途の仮説補完と名称の採用指示。",
+      "cases": [
+        "339-fields",
+        "338-purposes",
+        "all-empty-examples",
+        "valid-domain-types",
+        "grounded-diagnostics",
+        "multi-perspectives",
+        "provenance"
+      ],
+      "verification": "静的catalogと開始版・候補のデータ照合、代表手書き期待、意味レビュー。"
+    },
+    {
+      "id": "REVIEW-HYP-002",
+      "condition": "元データ・過去の改善・正式な仕様を維持する。",
+      "guarantee": "元JSONとSchema/Plugin/保存器・過去正本はbyte不変。配信用JSONは前回表示用JSONへPreview候補metaを加えるだけ。既存値・記述・null許容未決47件/理由・全reviewStateを保持し、仮説を承認済みへ変えない。",
+      "reason": "本人が明示した保護境界。",
+      "cases": [
+        "protected-bytes",
+        "only-preview-meta",
+        "all-existing-values",
+        "47-undecided",
+        "all-review-states",
+        "old-copy-hover"
+      ],
+      "verification": "固定hashとdeep/byte比較、既存Node/browser。"
+    },
+    {
+      "id": "REVIEW-HYP-003",
+      "condition": "項目一覧と属性詳細を表示する。",
+      "guarantee": "自由文の用途ラベルを使用目的へ変更し、その項目を何に使うかと、確認する立場を別々に表示。仮説は仮説（未確認）と示し、元のサンプルや記述があれば残して区別する。元IDの通常表示欄は増やさない。",
+      "reason": "本人の名称・意味・レビューで訂正できる候補の要求。旧正本の用途captionだけはこの新要求が更新し、値と他の表示保証は保持。",
+      "cases": [
+        "table",
+        "attribute",
+        "original-plus-hypothesis",
+        "purpose-separate-from-roles",
+        "provenance-visible",
+        "no-approval-claim"
+      ],
+      "verification": "Node DOM、1280/393px light/dark実Chrome。"
+    },
+    {
+      "id": "REVIEW-HYP-004",
+      "condition": "候補metaなし、別JSON、または不正な候補metaを表示する。",
+      "guarantee": "Viewerは静的な明示候補だけを読み、実行時に値や確認する立場を推測しない。欠落・不正・未知の立場や未確認以外の候補状態は採用せず、元の情報を安全なtextで表示。候補の有無は業務の承認状態を変えない。",
+      "reason": "ユーザーが実行時推測と正式Schema変更を禁止。既存STRUCTURE-SAMPLE-002/003の任意JSONへの非推測を継続。",
+      "cases": [
+        "absent-meta",
+        "malformed-meta",
+        "unknown-role",
+        "unsafe-text",
+        "no-runtime-generation"
+      ],
+      "verification": "独立した合成入力と非推測/安全表示検査。"
+    },
+    {
+      "id": "REVIEW-HYP-005",
+      "condition": "コピーと探索・選択・狭幅を操作する。",
+      "guarantee": "識別情報コピーのpayload、Shift/全文の操作・成功失敗通知・配置、探索/選択/戻る/タッチ/closeの保証を保つ。全文は新captionと候補の未確認表示を含み、操作ボタンや通知をラベルへ混ぜない。長い値/目的/複数立場が狭幅で重ならず読める。",
+      "reason": "既存コピー/ホバー維持と新しい内容のレビューを両立。旧payloadの用途というcaptionだけは新しい名称へ更新。",
+      "cases": [
+        "identity-copy",
+        "full-copy-hypothesis",
+        "shift-and-notification",
+        "navigation",
+        "mobile-wrap",
+        "tab-close"
+      ],
+      "verification": "既存copy/heading/tabStrip、追加Node/browser、最終全体CI。"
+    }
+  ]
+}
