@@ -139,7 +139,7 @@ function attributeDescription(info:{description?:unknown},mapping:Mapping|undefi
  return typeof value==='string'&&value.trim()?value:'この項目の説明はまだ記載されていません。';
 }
 
-function addCopyActions(root:HTMLElement,list:HTMLElement,identity:string,sourcePaths:string[]=[]){
+function addCopyActions(root:HTMLElement,list:HTMLElement,heading:HTMLElement,identity:string,sourcePaths:string[]=[]){
  const controls=document.createElement('div');controls.className='structure-copy-actions';
  const status=document.createElement('span');status.className='structure-copy-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
  const fullText=()=>{
@@ -154,7 +154,7 @@ function addCopyActions(root:HTMLElement,list:HTMLElement,identity:string,source
    }).filter(Boolean).join(' / ');
    const value=table?Array.from(table.querySelectorAll('tr')).map(row=>Array.from(row.children).map(cellText).join(' | ')).join('\n'):
     Array.from(details.childNodes).map(node=>node.nodeName==='BR'?'\n':node.textContent??'').join('');
-   lines.push((item.textContent??'')+'：'+value);
+   lines.push((item.querySelector('.structure-detail-caption')?.textContent??item.textContent??'')+'：'+value);
   }
   return [identity,...(sourcePaths.length?['元の定義：'+sourcePaths.join('、')]:[]),...lines].join('\n');
  };
@@ -169,7 +169,9 @@ function addCopyActions(root:HTMLElement,list:HTMLElement,identity:string,source
  const short=document.createElement('button');short.type='button';short.className='structure-copy-id';short.textContent='識別情報をコピー';
  short.title='Shiftを押しながら選ぶと全文をコピー';short.addEventListener('click',event=>{void copy(event.shiftKey);});
  const full=document.createElement('button');full.type='button';full.className='structure-copy-full';full.textContent='全文をコピー';full.addEventListener('click',()=>{void copy(true);});
- controls.append(short,full,status);root.insertBefore(controls,list);
+ controls.append(short,full);
+ const caption=document.createElement('span');caption.className='structure-detail-caption';caption.textContent=heading.textContent;
+ heading.classList.add('structure-copy-heading');heading.replaceChildren(caption,controls,status);
 }
 
 /** Present only information declared on the selected concept, field or relation. */
@@ -183,16 +185,16 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   return {local:typeof authored?.logicalName==='string'&&authored.logicalName?authored.logicalName:node?.name??id,type:typeof authored?.typeName==='string'&&authored.typeName?authored.typeName:node?.name??'未定義'};};
  const list=document.createElement('dl');list.className='structure-detail-list';root.append(list);
  const select=(next:StructureSelection)=>{if(onSelect)onSelect(next);else renderStructureDetails(root,model,next);if(next.kind==='attribute')root.querySelector<HTMLButtonElement>('.structure-attribute-back')?.focus();else if(selection.kind==='attribute')Array.from(root.querySelectorAll<HTMLTableRowElement>('.structure-attribute-table tbody tr')).find(row=>row.dataset.informationId===selection.informationId)?.querySelector<HTMLButtonElement>('.structure-attribute-select')?.focus();};
- const add=(label:string,value:string|string[]|undefined)=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;const values=Array.isArray(value)?value:[value??'未定義'];if(!values.length)dd.textContent='なし';else for(const [index,item]of values.entries()){if(index)dd.append(document.createElement('br'));dd.append(document.createTextNode(item));}list.append(dt,dd);};
+ const add=(label:string,value:string|string[]|undefined)=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;const values=Array.isArray(value)?value:[value??'未定義'];if(!values.length)dd.textContent='なし';else for(const [index,item]of values.entries()){if(index)dd.append(document.createElement('br'));dd.append(document.createTextNode(item));}list.append(dt,dd);return dt;};
  if(selection.kind==='attribute'){
   if(selection.returnTo){const back=document.createElement('button');back.type='button';back.className='structure-attribute-back';back.textContent='項目一覧に戻る';back.onclick=()=>select(selection.returnTo!);root.insertBefore(back,list);}
   const info=concept.information.find(item=>item.id===selection.informationId);if(!info){list.remove();text(root,'p','項目が見つかりません。');return;}
   const mapping=graph.mappings.get(info.id),data=info as typeof info&{description?:unknown};
   const context=names(concept.id),identity='概念モデル：'+model.id+'（'+model.revision+'）\n構造：'+context.type+'［'+concept.id+'］\n項目：'+info.name+(mapping?.physicalName?'（'+shortPhysicalName(mapping.physicalName)+'）':'')+'［'+info.id+'］';
   const sourcePaths=Array.isArray(meta.schemaCoverage)?meta.schemaCoverage.flatMap(item=>item&&typeof item==='object'&&item.informationId===info.id&&typeof item.path==='string'?[item.path]:[]):[];
-  addCopyActions(root,list,identity,sourcePaths);
   const references=mapping?.relationIds.flatMap(id=>{const edges=(graph.edges.get(concept.id)??[]).filter(edge=>edge.relation.id===id);return edges.length?edges.map(edge=>names(edge.to).local+'（'+labels[edge.direction]+'）'):[id+'（未定義）'];});
-  add('論理名',mapping?.physicalName?shortPhysicalName(mapping.physicalName):undefined);add('ローカル名',info.name);add('型名',typeLabel(mapping));
+  addCopyActions(root,list,add('論理名',mapping?.physicalName?shortPhysicalName(mapping.physicalName):undefined),identity,sourcePaths);
+  add('ローカル名',info.name);add('型名',typeLabel(mapping));
   add('サンプル',sampleValue(mapping)??'未記載');
   add('null許容',nullableLabel(mapping));
   // An automatically supplied nullability reason is not an explanation of
@@ -214,7 +216,6 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  const edge=selection.relationId?graph.edges.get(selection.fromId??'')?.find(item=>item.relation.id===selection.relationId&&item.to===concept.id):undefined;
  const n=names(concept.id);
  const identity='概念モデル：'+model.id+'（'+model.revision+'）\n構造：'+n.type+'［'+concept.id+'］'+(selection.relationId?'\n関係：'+selection.relationId:'');
- addCopyActions(root,list,identity);
  const named=(id:string)=>{const value=names(id);return value.local+'（'+value.type+'）';};
  const owners=(graph.edges.get(concept.id)??[]).filter(item=>item.direction==='owner').map(item=>named(item.to));
  const ownership=edge?.direction==='owned'?[named(edge.from)]:owners;
@@ -225,7 +226,8 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
  // A single source array can represent several concept relationships. Its
  // name is not the logical name of each of those relationships.
  const relationNames=edge?.fieldDetails.filter(field=>!study||![...graph.mappings.values()].some(mapping=>mapping.physicalName===field.physicalName&&mapping.relationIds.length>1)).map(field=>field.physicalName).filter(Boolean).map(shortPhysicalName);
- add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type);add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
+ addCopyActions(root,list,add('論理名',edge?(relationNames?.length?relationNames:undefined):n.type),identity);
+ add('ローカル名',edge?.roleName??edge?.fieldDetails[0]?.name??n.local);add('型名',n.type);
  // A class selection summarizes its own attributes, never those of children.
  // Samples are authored per field and may come from different source records.
  const attributes=concept.information.filter(info=>!graph.relationKeys.has(info.id)&&(selection.hideLegacy===false||marks.field(info.id,concept.id)?.kind!=='legacy'));

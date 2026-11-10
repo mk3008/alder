@@ -1,0 +1,392 @@
+{
+  "browser": "154.0.8037.57",
+  "results": [
+    {
+      "width": 1280,
+      "kind": "structure",
+      "geometry": {
+        "heading": {
+          "left": 304,
+          "right": 1256,
+          "top": 162.1875,
+          "bottom": 198.1875,
+          "height": 36
+        },
+        "caption": {
+          "left": 304,
+          "right": 340.015625,
+          "top": 171.6875,
+          "bottom": 188.6875,
+          "height": 17
+        },
+        "buttons": [
+          {
+            "left": 348.015625,
+            "right": 482.015625,
+            "top": 162.1875,
+            "bottom": 198.1875,
+            "height": 36
+          },
+          {
+            "left": 490.015625,
+            "right": 596.015625,
+            "top": 162.1875,
+            "bottom": 198.1875,
+            "height": 36
+          }
+        ],
+        "value": {
+          "left": 304,
+          "right": 1256,
+          "top": 201.1875,
+          "bottom": 222.875,
+          "height": 21.6875
+        },
+        "nextCaption": {
+          "left": 304,
+          "right": 1256,
+          "top": 238.875,
+          "bottom": 255.875,
+          "height": 17
+        },
+        "scroll": 1000,
+        "client": 1000,
+        "valueText": "DocumentPackage"
+      },
+      "keyboard": true,
+      "touch": false,
+      "pageErrors": []
+    },
+    {
+      "width": 1280,
+      "kind": "attribute",
+      "geometry": {
+        "heading": {
+          "left": 304,
+          "right": 1256,
+          "top": 206.1875,
+          "bottom": 242.1875,
+          "height": 36
+        },
+        "caption": {
+          "left": 304,
+          "right": 340.015625,
+          "top": 215.6875,
+          "bottom": 232.6875,
+          "height": 17
+        },
+        "buttons": [
+          {
+            "left": 348.015625,
+            "right": 482.015625,
+            "top": 206.1875,
+            "bottom": 242.1875,
+            "height": 36
+          },
+          {
+            "left": 490.015625,
+            "right": 596.015625,
+            "top": 206.1875,
+            "bottom": 242.1875,
+            "height": 36
+          }
+        ],
+        "value": {
+          "left": 304,
+          "right": 1256,
+          "top": 245.1875,
+          "bottom": 266.875,
+          "height": 21.6875
+        },
+        "nextCaption": {
+          "left": 304,
+          "right": 1256,
+          "top": 282.875,
+          "bottom": 299.875,
+          "height": 17
+        },
+        "scroll": 1000,
+        "client": 1000,
+        "valueText": "format"
+      },
+      "keyboard": true,
+      "touch": false,
+      "pageErrors": []
+    },
+    {
+      "width": 1280,
+      "kind": "long-name",
+      "geometry": {
+        "heading": {
+          "left": 304,
+          "right": 1256,
+          "top": 162.1875,
+          "bottom": 198.1875,
+          "height": 36
+        },
+        "caption": {
+          "left": 304,
+          "right": 340.015625,
+          "top": 171.6875,
+          "bottom": 188.6875,
+          "height": 17
+        },
+        "buttons": [
+          {
+            "left": 348.015625,
+            "right": 482.015625,
+            "top": 162.1875,
+            "bottom": 198.1875,
+            "height": 36
+          },
+          {
+            "left": 490.015625,
+            "right": 596.015625,
+            "top": 162.1875,
+            "bottom": 198.1875,
+            "height": 36
+          }
+        ],
+        "value": {
+          "left": 304,
+          "right": 1256,
+          "top": 201.1875,
+          "bottom": 374.6875,
+          "height": 173.5
+        },
+        "nextCaption": {
+          "left": 304,
+          "right": 1256,
+          "top": 390.6875,
+          "bottom": 407.6875,
+          "height": 17
+        },
+        "scroll": 1000,
+        "client": 1000,
+        "valueText": "DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_"
+      },
+      "keyboard": false,
+      "touch": false,
+      "pageErrors": []
+    },
+    {
+      "width": 393,
+      "kind": "structure",
+      "geometry": {
+        "heading": {
+          "left": 12,
+          "right": 381,
+          "top": 158.1875,
+          "bottom": 198.1875,
+          "height": 40
+        },
+        "caption": {
+          "left": 12,
+          "right": 48.015625,
+          "top": 169.6875,
+          "bottom": 186.6875,
+          "height": 17
+        },
+        "buttons": [
+          {
+            "left": 56.015625,
+            "right": 190.015625,
+            "top": 158.1875,
+            "bottom": 198.1875,
+            "height": 40
+          },
+          {
+            "left": 198.015625,
+            "right": 304.015625,
+            "top": 158.1875,
+            "bottom": 198.1875,
+            "height": 40
+          }
+        ],
+        "value": {
+          "left": 12,
+          "right": 381,
+          "top": 201.1875,
+          "bottom": 222.875,
+          "height": 21.6875
+        },
+        "nextCaption": {
+          "left": 12,
+          "right": 381,
+          "top": 238.875,
+          "bottom": 255.875,
+          "height": 17
+        },
+        "scroll": 393,
+        "client": 393,
+        "valueText": "DocumentPackage"
+      },
+      "keyboard": true,
+      "touch": true,
+      "wrapped": {
+        "heading": {
+          "left": 12,
+          "right": 232,
+          "top": 158.1875,
+          "bottom": 296.1875,
+          "height": 138
+        },
+        "caption": {
+          "left": 12,
+          "right": 48.015625,
+          "top": 158.1875,
+          "bottom": 175.1875,
+          "height": 17
+        },
+        "buttons": [
+          {
+            "left": 12,
+            "right": 146,
+            "top": 183.1875,
+            "bottom": 223.1875,
+            "height": 40
+          },
+          {
+            "left": 12,
+            "right": 118,
+            "top": 231.1875,
+            "bottom": 271.1875,
+            "height": 40
+          }
+        ],
+        "value": {
+          "left": 12,
+          "right": 381,
+          "top": 299.1875,
+          "bottom": 320.875,
+          "height": 21.6875
+        },
+        "nextCaption": {
+          "left": 12,
+          "right": 381,
+          "top": 336.875,
+          "bottom": 353.875,
+          "height": 17
+        },
+        "scroll": 393,
+        "client": 393,
+        "valueText": "DocumentPackage"
+      },
+      "denied": "denied",
+      "pageErrors": []
+    },
+    {
+      "width": 393,
+      "kind": "attribute",
+      "geometry": {
+        "heading": {
+          "left": 12,
+          "right": 381,
+          "top": 210.1875,
+          "bottom": 250.1875,
+          "height": 40
+        },
+        "caption": {
+          "left": 12,
+          "right": 48.015625,
+          "top": 221.6875,
+          "bottom": 238.6875,
+          "height": 17
+        },
+        "buttons": [
+          {
+            "left": 56.015625,
+            "right": 190.015625,
+            "top": 210.1875,
+            "bottom": 250.1875,
+            "height": 40
+          },
+          {
+            "left": 198.015625,
+            "right": 304.015625,
+            "top": 210.1875,
+            "bottom": 250.1875,
+            "height": 40
+          }
+        ],
+        "value": {
+          "left": 12,
+          "right": 381,
+          "top": 253.1875,
+          "bottom": 274.875,
+          "height": 21.6875
+        },
+        "nextCaption": {
+          "left": 12,
+          "right": 381,
+          "top": 290.875,
+          "bottom": 307.875,
+          "height": 17
+        },
+        "scroll": 393,
+        "client": 393,
+        "valueText": "format"
+      },
+      "keyboard": true,
+      "touch": true,
+      "pageErrors": []
+    },
+    {
+      "width": 393,
+      "kind": "long-name",
+      "geometry": {
+        "heading": {
+          "left": 12,
+          "right": 381,
+          "top": 158.1875,
+          "bottom": 198.1875,
+          "height": 40
+        },
+        "caption": {
+          "left": 12,
+          "right": 48.015625,
+          "top": 169.6875,
+          "bottom": 186.6875,
+          "height": 17
+        },
+        "buttons": [
+          {
+            "left": 56.015625,
+            "right": 190.015625,
+            "top": 158.1875,
+            "bottom": 198.1875,
+            "height": 40
+          },
+          {
+            "left": 198.015625,
+            "right": 304.015625,
+            "top": 158.1875,
+            "bottom": 198.1875,
+            "height": 40
+          }
+        ],
+        "value": {
+          "left": 12,
+          "right": 381,
+          "top": 201.1875,
+          "bottom": 634.9375,
+          "height": 433.75
+        },
+        "nextCaption": {
+          "left": 12,
+          "right": 381,
+          "top": 650.9375,
+          "bottom": 667.9375,
+          "height": 17
+        },
+        "scroll": 393,
+        "client": 393,
+        "valueText": "DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_DocumentPackage_長い論理名_"
+      },
+      "keyboard": false,
+      "touch": false,
+      "pageErrors": []
+    }
+  ],
+  "scope": "Actual app UI, native clipboard keyboard/touch and actual denied permission; 220px heading constraint tests wrapping inside393px viewport."
+}

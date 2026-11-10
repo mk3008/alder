@@ -41,6 +41,7 @@ const covered=[];
 try{
  window.eval(source+';globalThis.Explorer=Explorer;');const host=window.document.getElementById('host'),detail=window.document.createElement('div');
  let shown;const render=(model,rootId)=>{shown=model;window.Explorer.renderStructureExplorer(host,model,{rootId,select:selection=>window.Explorer.renderStructureDetails(detail,model,selection)});host.querySelector('.structure-root > li > details > summary').click();};
+ const detailText=()=>{const copy=detail.cloneNode(true);copy.querySelector('.structure-copy-actions')?.remove();return copy.textContent;};
  const open=details=>{details.open=true;details.dispatchEvent(new window.Event('toggle'));};
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
  const pairs=summary=>{assert(!summary.querySelector('.structure-element-type'));const item=summary.closest('.structure-item'),parent=item.parentElement.closest('.structure-item'),probe=window.document.createElement('div');window.Explorer.renderStructureDetails(probe,shown,{kind:'structure',conceptId:item.dataset.conceptId,fromId:parent.dataset.conceptId,relationId:item.dataset.relationId});const type=[...probe.querySelectorAll('dt')].find(dt=>dt.textContent==='型名').nextElementSibling.textContent;return [...summary.querySelectorAll(':scope > .structure-element')].map(node=>[node.querySelector('strong').textContent,'型：'+type]);};
@@ -61,7 +62,7 @@ try{
  assert.equal(root.querySelector('.structure-element'),null,'a root is a type, not a child property');
  const attribute=detail.querySelector('.structure-attribute-table tbody tr');assert(!host.querySelector('.structure-field'));
  assert.match(attribute.textContent,/識別子.*型：未定義/,'an attribute shows its name and known or undefined type');
- window.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-step',informationId:attribute.dataset.informationId});assert.match(detail.textContent,/論理名id/);assert.equal(normalized.meta.fieldMappings.find(item=>item.informationId===attribute.dataset.informationId).physicalName,'steps.id','the full mapping remains in the model');
+ window.Explorer.renderStructureDetails(detail,normalized,{kind:'attribute',conceptId:'n-step',informationId:attribute.dataset.informationId});assert.match(detailText(),/論理名id/);assert.equal(normalized.meta.fieldMappings.find(item=>item.informationId===attribute.dataset.informationId).physicalName,'steps.id','the full mapping remains in the model');
  open(host.querySelector('[data-relation-id="nr-step-exchange"] > details'));
  const paired=row('nr-exchange-pair');
  assert.deepEqual(pairs(paired),[['対応する手順','型：Step']]);
@@ -121,7 +122,7 @@ try{
  assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > strong').textContent,'主体（Who）','missing types use the declared original label');
  assert.equal(host.querySelector('.structure-root > .structure-item > details > summary > .structure-type'),null,'a logical name alone does not invent a type association');
  const declaredInteger=structuredClone(normalized);declaredInteger.meta.fieldMappings.find(item=>item.informationId==='n-who-field-1').valueType='int';render(declaredInteger,'n-who');
- const integerField=detail.querySelector('.structure-attribute-table tbody tr');assert.match(integerField.textContent,/識別子.*型：int/,'an explicitly declared primitive type is shown as recorded');window.Explorer.renderStructureDetails(detail,declaredInteger,{kind:'attribute',conceptId:'n-who',informationId:integerField.dataset.informationId});assert.match(detail.textContent,/論理名id/);assert.equal(declaredInteger.meta.fieldMappings.find(item=>item.informationId===integerField.dataset.informationId).physicalName,'actors.id');
+ const integerField=detail.querySelector('.structure-attribute-table tbody tr');assert.match(integerField.textContent,/識別子.*型：int/,'an explicitly declared primitive type is shown as recorded');window.Explorer.renderStructureDetails(detail,declaredInteger,{kind:'attribute',conceptId:'n-who',informationId:integerField.dataset.informationId});assert.match(detailText(),/論理名id/);assert.equal(declaredInteger.meta.fieldMappings.find(item=>item.informationId===integerField.dataset.informationId).physicalName,'actors.id');
  covered.push('STRUCTURE-LABEL-003');
 }finally{window.close();}
 coverage(covered);for(const path of Object.keys(hashes))verify(path,readFileSync(path));

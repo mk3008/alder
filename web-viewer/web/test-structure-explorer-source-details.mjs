@@ -20,7 +20,7 @@ try{
  w.eval(code+';globalThis.Explorer=Explorer;');const detail=w.document.querySelector('#detail'),tree=w.document.querySelector('#tree');
  const field=(m,path)=>{const mapping=m.meta.fieldMappings.find(item=>item.physicalName===path),owner=m.concepts.find(c=>c.information.some(i=>i.id===mapping?.informationId));assert(mapping&&owner,path);return {mapping,owner,info:owner.information.find(i=>i.id===mapping.informationId)};};
  const show=(m,path)=>{const f=field(m,path);w.Explorer.renderStructureDetails(detail,m,{kind:'attribute',conceptId:f.owner.id,informationId:f.info.id});return f.mapping;};
- const value=label=>[...detail.querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling?.textContent;
+ const value=label=>[...detail.querySelectorAll('dt')].find(dt=>(dt.querySelector('.structure-detail-caption')?.textContent??dt.textContent)===label)?.nextElementSibling?.textContent;
  const diagnostics=show(model,'Package.diagnostics');assert.equal(value('定義元'),undefined);assert.equal(value('参照元の型表記'),undefined);
  assert.equal(value('論理名'),'diagnostics');assert.equal(value('型名'),'string[]');assert.equal(value('null許容'),'許容する');assert(value('説明').includes('文書に残す補足'));assert(!value('説明').includes('null許容の理由：'));assert.equal(value('サンプル'),'[]');assert(!detail.textContent.includes('Package.diagnostics'));
  assert.equal(diagnostics.sourceSchemaPath,'Package.diagnostics');assert.equal(diagnostics.valueType,'string[]');

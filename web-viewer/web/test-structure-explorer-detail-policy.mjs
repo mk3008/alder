@@ -22,7 +22,7 @@ const w=new JSDOM('<div id="tree"></div><div id="detail"></div>',{url:'https://v
 try{
  w.eval(code+';globalThis.Explorer=Explorer;');const detail=w.document.querySelector('#detail'),tree=w.document.querySelector('#tree');
  const show=(m,selection)=>w.Explorer.renderStructureDetails(detail,m,selection);
- const value=label=>{const dt=[...detail.querySelectorAll('dt')].find(item=>item.textContent===label);return dt?.nextElementSibling?.textContent;};
+ const value=label=>{const dt=[...detail.querySelectorAll('dt')].find(item=>(item.querySelector('.structure-detail-caption')?.textContent??item.textContent)===label);return dt?.nextElementSibling?.textContent;};
  const hidden=['構造のID','関係のID','情報項目のID','対応する項目','確認状態','関係の確認状態'];
  const assertHidden=()=>{for(const label of hidden)assert.equal(value(label),undefined,label);};
  show(model,{kind:'structure',conceptId:'n-bd',fromId:'n-package',relationId:'nr-package-bd'});

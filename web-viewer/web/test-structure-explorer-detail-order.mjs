@@ -20,9 +20,9 @@ try{
  w.eval(code+';globalThis.Explorer=Explorer;');const detail=w.document.querySelector('#detail');
  const field=(m,path)=>{const mapping=m.meta.fieldMappings.find(item=>item.physicalName===path),owner=m.concepts.find(c=>c.information.some(i=>i.id===mapping?.informationId));assert(mapping&&owner,path);return {mapping,owner,info:owner.information.find(i=>i.id===mapping.informationId)};};
  const show=(m,path)=>{const f=field(m,path);w.Explorer.renderStructureDetails(detail,m,{kind:'attribute',conceptId:f.owner.id,informationId:f.info.id});return f;};
- const value=label=>[...detail.querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling?.textContent;
- const lines=label=>{const dd=[...detail.querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling;return dd?[...dd.childNodes].filter(node=>node.nodeType===w.Node.TEXT_NODE).map(node=>node.textContent):[];};
- show(model,'format');const labels=[...detail.querySelectorAll('dt')].map(item=>item.textContent);
+ const value=label=>[...detail.querySelectorAll('dt')].find(dt=>(dt.querySelector('.structure-detail-caption')?.textContent??dt.textContent)===label)?.nextElementSibling?.textContent;
+ const lines=label=>{const dd=[...detail.querySelectorAll('dt')].find(dt=>(dt.querySelector('.structure-detail-caption')?.textContent??dt.textContent)===label)?.nextElementSibling;return dd?[...dd.childNodes].filter(node=>node.nodeType===w.Node.TEXT_NODE).map(node=>node.textContent):[];};
+ show(model,'format');const labels=[...detail.querySelectorAll('dt')].map(item=>item.querySelector('.structure-detail-caption')?.textContent??item.textContent);
  assert.deepEqual(labels.slice(0,6),['論理名','ローカル名','型名','サンプル','null許容','説明']);assert.equal(value('サンプル'),'alder-document-package');
  show(model,'activities.name');assert(value('サンプル').includes('1回の点数を計算する'));assert(!value('サンプル').includes('参考：'));assert.equal(field(model,'activities.name').mapping.referenceValue,'業務設計');
  const examples=structuredClone(model),sample=field(examples,'activities.name').mapping;delete sample.referenceValue;

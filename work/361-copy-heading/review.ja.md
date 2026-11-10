@@ -9,3 +9,17 @@
 実装開始前にacceptance.jsonを固定し、全ID・全適用ケース・上位の本人承認を記録した。開始版から取得したコピーpayloadは配置変更の前後不変の参照であり、業務意味の承認の代わりにはしない。重要な識別とcaptionは独立したliteral期待値でも照合する。
 
 反復ではコピー／詳細の関連Node、structureSampleHeaderのbrowserを先行する。限定実行時点の残りのbrowser群は未検証とし、最終CIで全群を確認する。元JSON・サンプル値・説明・用途・保存形式・公開Previewは変更しない。新Preview配信と追加PRコメントも行わない。
+
+## 実装と先行検証
+
+構造と属性の共通addCopyActionsを、生成済みの論理名dtに配置した。dtのcaptionをspanへ分け、全文ではそのspanだけを読む。通知は同じdt内の独立した行とし、通知が増えても2ボタンがcaption行から押し出されないことを実画面で確認した。空のlive regionはDOMに保持し、display:noneにはしていない。
+
+構造／属性／関係の開始版payloadと通常・全文・Shiftが完全一致。繰返し成功後と失敗後にもcaption汚染なし。同名でモデル・構造IDが違う例、利用不可・拒否の通知も確認した。関連構造Node22/22、コピー・filter回帰と新規Node検査は成功。
+
+実Chromium154で構造／属性／長い論理名を1280/393pxの6画面として確認した。native clipboardのEnter／Space／Shift+Enter、393pxのtapで識別情報・全文が取得でき、CDPで実際にclipboard-writeをdeniedへ変更した失敗通知も確認。初回はpage-level CDPでTarget.getBrowserContextsがNot allowedとなり、browser-level sessionへ正しく切り替えて成功した（platform承認拒否ではない）。393px viewport内でheading幅だけ220pxへ制約するケースは操作の折返しを検査し、220px viewport対応の主張とは区別する。
+
+実表示ではcaptionとボタン、値、次のローカル名が順に並び、次のcaptionまで16pxの余白が残ることを座標と画像で確認した。通知をボタングループへ含めた初回では通知後に操作全体が別行へ移るため、通知を同じdtの別行へ分離し、通知後の位置assertionを追加した。サンプル・説明・用途の値と生成処理は変更していない。
+
+検証取得adapterは既存Node7ファイルとbrowser統合1ファイル。旧期待値・regex・assertを維持し、取得adapterと追加browser呼出しだけを逆変換すると旧ファイル全体のbyteに一致することをverify.pyで確認する。291保護ファイルには前回Bの全フォルダー、既存受入正本、元データ、Schema・Plugin・保存器、workflow、shell、filter回帰を含む。
+
+修正と別プロセスの読み取り専用照合は同一Agentが担当した。独立Agentとは呼ばない。全25ケースの結果を対応付け、全体CI／公開固定版の最終観測はCIが終了するまでpending-ciとする。生成行だけで個別実行済みとは扱わず、Nodeの実結果・browser座標／操作結果と対応付ける。

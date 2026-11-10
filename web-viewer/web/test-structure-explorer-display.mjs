@@ -41,7 +41,7 @@ try{
  const render=(m,id)=>{shown=m;w.Explorer.renderStructureExplorer(host,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection)});host.querySelector('.structure-root > li > details > summary').click();};
  const row=id=>host.querySelector(`[data-relation-id="${id}"] > details > summary`);
  const attribute=path=>{const id=shown.meta.fieldMappings.find(item=>item.physicalName===path)?.informationId;if(!detail.querySelector('.structure-attribute-table'))host.querySelector('.structure-root > li > details > summary').click();return detail.querySelector(`.structure-attribute-table [data-information-id="${id}"]`);};
- const values=label=>{const dt=[...detail.querySelectorAll('dt')].find(node=>node.textContent===label),dd=dt?.nextElementSibling;return dd?[...dd.childNodes].filter(node=>node.nodeType===w.Node.TEXT_NODE).map(node=>node.textContent):[];};
+ const values=label=>{const dt=[...detail.querySelectorAll('dt')].find(node=>(node.querySelector('.structure-detail-caption')?.textContent??node.textContent)===label),dd=dt?.nextElementSibling;return dd?[...dd.childNodes].filter(node=>node.nodeType===w.Node.TEXT_NODE).map(node=>node.textContent):[];};
  const samples=path=>{attribute(path)?.querySelector('button').click();const result=values('サンプル');detail.querySelector('.structure-attribute-back')?.click();return result.length===1&&['なし','未定義','未記載'].includes(result[0])?[]:result;};
  const sample=path=>samples(path)[0];
  const showRelation=(conceptId,fromId,relationId)=>w.Explorer.renderStructureDetails(detail,shown,{kind:'structure',conceptId,fromId,relationId});

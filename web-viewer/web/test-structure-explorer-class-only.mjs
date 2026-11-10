@@ -25,7 +25,7 @@ try{
  const root=()=>tree.querySelector('.structure-root > li > details > summary');
  const mapping=(m,path)=>{const item=m.meta.fieldMappings.find(x=>x.physicalName===path);assert(item,path);return item;};
  const row=(m,path)=>detail.querySelector(`.structure-attribute-table tr[data-information-id="${mapping(m,path).informationId}"]`);
- const field=label=>[...detail.querySelectorAll('dt')].find(dt=>dt.textContent===label)?.nextElementSibling?.textContent;
+ const field=label=>[...detail.querySelectorAll('dt')].find(dt=>(dt.querySelector('.structure-detail-caption')?.textContent??dt.textContent)===label)?.nextElementSibling?.textContent;
  const query=value=>{const search=tree.querySelector('input[type=search]');search.value=value;search.dispatchEvent(new w.Event('input',{bubbles:true}));};
  const toggle=on=>{const input=tree.querySelector('.structure-compatibility-filter input');input.checked=on;input.dispatchEvent(new w.Event('change',{bubbles:true}));};
  const visible=element=>!!element&&!element.closest('[hidden]');

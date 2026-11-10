@@ -23,7 +23,7 @@ try{
  const render=(m,id)=>{w.Explorer.renderStructureExplorer(tree,m,{rootId:id,select:selection=>w.Explorer.renderStructureDetails(detail,m,selection)});tree.querySelector('.structure-root > li > details > summary').click();};
  const mapping=path=>model.meta.fieldMappings.find(item=>item.physicalName===path);
  const field=(path,m=model)=>{const id=m.meta.fieldMappings.find(item=>item.physicalName===path)?.informationId;if(detail.querySelector('.structure-attribute-back'))detail.querySelector('.structure-attribute-back').click();return detail.querySelector(`[data-information-id="${id}"] button`);};
- const value=label=>{const dt=[...detail.querySelectorAll('dt')].find(item=>item.textContent===label);return dt?.nextElementSibling?.textContent;};
+ const value=label=>{const dt=[...detail.querySelectorAll('dt')].find(item=>(item.querySelector('.structure-detail-caption')?.textContent??item.textContent)===label);return dt?.nextElementSibling?.textContent;};
  const assertFields=(expected)=>{for(const [label,content] of Object.entries(expected))assert.equal(value(label),content,label);};
  render(model,'n-activity');const name=field('activities.name');assert(name);assert.match(name.closest('tr').textContent,/名前.*型：string/);assert(!name.textContent.includes('activities.name'));assert(!name.textContent.includes('例：'));
  const step=tree.querySelector('[data-relation-id="nr-activity-step"] > details > summary');assert.match(step.textContent,/1\.\.N.*標準手順/);assert(!step.textContent.includes('型：'));assert(!step.textContent.includes('順序と実施条件を持ち'));assert(!step.querySelector('button.structure-open'));covered.push('STRUCTURE-DETAIL-001');
