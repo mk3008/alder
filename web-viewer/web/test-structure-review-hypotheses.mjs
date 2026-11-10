@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {execFileSync} from 'node:child_process';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 import {reviewHypothesisPackage,candidates} from '../../work/361-review-hypotheses/prepare-preview.mjs';
@@ -27,7 +26,10 @@ const diagnostic=mappings.find(m=>m.physicalName==='Package.diagnostics'),dc=fie
 assert.deepEqual(dc.sample,['0回の入力を未入力と区別する必要があるかは確認中。']);assert.equal(dc.purpose,'文書を読む際に残る補足や確認事項を共有し、合意済みの業務ルールと混同しない。');assert.deepEqual(dc.perspectives,['依頼者','設計者']);
 record('REVIEW-HYP-001',['339-fields','338-purposes','all-empty-examples','valid-domain-types','grounded-diagnostics','multi-perspectives','provenance']);
 assert.deepEqual(model.meta.fieldMappings,baseModel.meta.fieldMappings);assert.equal(mappings.filter(m=>m.nullable===null).length,47);
-const css=readFileSync('src/viewer-shell.css'),oldCss=execFileSync('git',['show','75f6b85451dd99c055901a61abf6516649780673:web-viewer/src/viewer-shell.css']);assert.ok(css.subarray(0,oldCss.length).equals(oldCss),'all prior CSS, including close and copy headings, is unchanged');
+// Pinned bytes from 75f6b854; a shallow CI checkout need not contain its Git object.
+const css=readFileSync('src/viewer-shell.css'),oldCssLength=36219,oldCssSha256='5c3e52aec090299ba0702dcf0a4afb772665360296a568cdb28dc8d0048f75af';
+assert.equal(createHash('sha256').update(css.subarray(0,oldCssLength)).digest('hex'),oldCssSha256,'all prior CSS, including close and copy headings, is unchanged');
+const changed=Buffer.from(css.subarray(0,oldCssLength));changed[0]^=1;assert.notEqual(createHash('sha256').update(changed).digest('hex'),oldCssSha256,'a prior-style byte change is rejected');
 record('REVIEW-HYP-002',['only-preview-meta','all-existing-values','47-undecided','all-review-states','old-copy-hover']);
 const code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
 const w=new JSDOM('<div id="detail"></div>',{url:'https://viewer.test/',runScripts:'outside-only'}).window;w.eval(code+';globalThis.Explorer=Explorer;');
