@@ -1,0 +1,35 @@
+{
+  "source": "08b90c2a7e8594558e041a686d89046c29415332",
+  "sourceTree": "9486b8b26550d5db7db24a07e04f7b4b66cacc67",
+  "mainBase": "c0376fcd34eb7227f695d26da07c9fe2d04f0778",
+  "modelSource": "887c0f60a191d06e1db0ed50567844cca2ec1950",
+  "originalSha256": "e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181",
+  "reviewedSha256": "e2ba038b99db60f947680f677b0090c435ba424fc999b0821e4f0ab3ca5b89de",
+  "humanGuiReview": "not-performed",
+  "files": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/canvas-toolbar-aYSe-n1e.js": "b62ceb5ee11a41a22f65c305cd1ed1372750f8ac3fed831fc8ce22c2c34e9cbb",
+    "assets/concept-C2-zV7OO.js": "96873ec03883f4dbe6423cd32cae668a5ff97a3a5f0d3daf79ca3a83aace2f3e",
+    "assets/concept-DZziS4lh.css": "50c4fb6e1388f50986405b4f4f767fbc9f00ac0eab6b4782e874ad0452b6a9ad",
+    "assets/main-DRKalWx5.css": "5bdc277124fa25c0572508cbff6908673869306f7060cbbda2cc97a046a97a3a",
+    "assets/main-DqJJ7suj.js": "d66efd38e9cf9dbfc753534b985602cf94f33a9e227b1c6247c5aebca2a2eebd",
+    "concept.html": "4363f77df4b2d17fb8cb0297f1e319e311e9400f353aade12f04c010fd7e14d9",
+    "display-copy-provenance.json": "35ef38688613e443297453eeba32f1f2b6c6f34f45ba412dfacc80a055337862",
+    "examples/json-complete-concept-review.json": "e2ba038b99db60f947680f677b0090c435ba424fc999b0821e4f0ab3ca5b89de",
+    "examples/json-complete-concept-review.original.json": "e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181",
+    "flowstep-authoring-guide.html": "1728564089b936e10ac941a7c5b349a9d27ff5e5cbf1d9c5a3557cf3c4274db8",
+    "index.html": "c6ccea4dea93402b9303fef4788f992b29b5e92776960f86124d58472f2ecf04",
+    "named-plans-example.json": "4f14c3bfb776a62d984703390ca8abc8fc173aea41ff8d3d54f4d7581409ba9b",
+    "preview-authoring-guide.js": "b7d5b860fdcb22540aa7ec7818f07824e5c6b112b5f58a9c2a05435547324b4b",
+    "structure-review-candidates.json": "f8c1628f8e0a6ae27ecb02beecfae97c53f6b69080bae964322da5592cc36085"
+  },
+  "displayCopy": "display-copy-provenance.json",
+  "authoringGuide": "flowstep-authoring-guide.html",
+  "reviewHypotheses": {
+    "catalog": "structure-review-candidates.json",
+    "status": "unreviewed",
+    "sha256": "f8c1628f8e0a6ae27ecb02beecfae97c53f6b69080bae964322da5592cc36085"
+  }
+}
