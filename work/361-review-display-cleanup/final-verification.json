@@ -1,0 +1,499 @@
+{
+  "source": "07a732f5d874b75fe89962000728c15cb0fe7131",
+  "start": "08b90c2a7e8594558e041a686d89046c29415332",
+  "ci": {
+    "id": 42771331522,
+    "url": "https://github.com/mk3008/alder/actions/runs/42771331522",
+    "conclusion": "success",
+    "jobs": 5,
+    "chrome": {
+      "source": "07a732f5d874b75fe89962000728c15cb0fe7131",
+      "selected": [
+        "conceptInitial",
+        "tabScroll",
+        "subsystemOverview",
+        "jsonRoles",
+        "jsonStates",
+        "explorerResizeScroll",
+        "activityWorkspace",
+        "findings",
+        "sessionConcurrency",
+        "saveConflictNoop",
+        "lifecycleSave",
+        "sourceSharing",
+        "gettingStarted",
+        "routeCache",
+        "layoutLock",
+        "documentOrder",
+        "labelLayout",
+        "scopeGeometry:fixed-drawer",
+        "scopeGeometry:drawer-only",
+        "viewerShell",
+        "jsonLayout",
+        "jsonDocuments",
+        "conceptValueDomains",
+        "namedPlans",
+        "jsonOfflinePreview",
+        "relatedChecks",
+        "saveState",
+        "markdownEditor",
+        "editorViewport",
+        "toolbarSettings",
+        "savedStatePreflight",
+        "emptyState",
+        "bottomClearance",
+        "facingRoutes",
+        "nodeDrawer",
+        "scopeOption",
+        "edgeOption",
+        "scopeShortcut",
+        "sharedCaptions",
+        "structureSampleHeader",
+        "jsonBoundaries",
+        "documentActions",
+        "graphPng",
+        "headerControls",
+        "layoutReset",
+        "drawerOpeningFocus",
+        "returnRoutes",
+        "initialLeftMargin",
+        "nodeEdgeDrag",
+        "touchZoom",
+        "previewIsolation",
+        "tabStrip",
+        "exceptionOption",
+        "scopeGeometry:combined",
+        "legacySmoke"
+      ],
+      "passed": 55,
+      "failed": 0
+    },
+    "structureNode": 22,
+    "node": 124,
+    "integrityCases": 54,
+    "lintWarnings": 96,
+    "lintErrors": 0
+  },
+  "pages": {
+    "commit": "f35d695d068aa70ec46dc921cea2dea5299c45ca",
+    "id": 42772560495,
+    "url": "https://github.com/mk3008/alder/actions/runs/42772560495",
+    "attempt": 1,
+    "conclusion": "failure",
+    "annotation": "Timeout reached, aborting!",
+    "deploymentId": 7675747232,
+    "deploymentState": "failure",
+    "changes": {
+      "additions": 18,
+      "modifiedExisting": 0
+    }
+  },
+  "publicCheck": {
+    "id": 42773941190,
+    "url": "https://github.com/mk3008/alder/actions/runs/42773941190",
+    "executionHead": "eda9c1a3b7d901f32bebafdef1b967aa7b351f10",
+    "productCheckout": "07a732f5d874b75fe89962000728c15cb0fe7131",
+    "conclusion": "failure",
+    "probe": {
+      "source": "07a732f5d874b75fe89962000728c15cb0fe7131",
+      "base": "https://mk3008.github.io/alder/preview/pr-357/07a732f5d874b75fe89962000728c15cb0fe7131-main-review/",
+      "manifestStatus": 503,
+      "actualSha256": "27927b33ebee49d7f096737f4a7dab00e26a6e03c5490c66377bcaf383a247a4",
+      "expectedSha256": "827ca9aeb6863ff20526d0a885764955cea8516b5ef0fe8d30f3caeeb373a74a"
+    },
+    "assetsVerified": 0,
+    "uiVerified": false,
+    "artifact": 13743670097
+  },
+  "independentReview": {
+    "status": "parent-reported-pass",
+    "source": "07a732f5d874b75fe89962000728c15cb0fe7131",
+    "allowedRejectedCases": 46,
+    "contentCounts": [
+      339,
+      338,
+      207
+    ],
+    "browserReview": "code and CI evidence; reviewer did not execute browser",
+    "meaningApproval": "not-evaluated"
+  },
+  "humanGuiReview": "not-performed",
+  "remaining": [
+    "Pages timeout and public manifest HTTP 503; no deployment retry performed",
+    "all public asset hashes unverified",
+    "public UI/copy/focus/close checks not executed"
+  ],
+  "serviceStatus": {
+    "source": "https://www.githubstatus.com/api/v2/summary.json",
+    "pageUpdatedAt": "2026-11-10T06:12:53.209Z",
+    "pages": "operational",
+    "actions": "operational",
+    "currentIncidents": 0,
+    "causalLinkToFailure": "unknown"
+  },
+  "acceptance": {
+    "commit": "fecb6530d7ad646d1bfadd4a5cf74ab263f7f1e0",
+    "sha256": "4b9fc2d3c280aa8c20972fc1a8e7693df7236080da2adf3fe38b0e33a81c5643",
+    "ids": [
+      "CLEAN-001",
+      "CLEAN-002",
+      "CLEAN-003",
+      "CLEAN-004",
+      "CLEAN-005",
+      "CLEAN-006"
+    ],
+    "cases": 56
+  },
+  "protectedFiles": 179,
+  "negativeTests": [
+    "authority-byte-change",
+    "id-deletion",
+    "case-deletion",
+    "result-omission"
+  ],
+  "coverage": {
+    "pass": 54,
+    "fail": 1,
+    "pending": 1
+  },
+  "overall": "incomplete: public deployment and verification blocked",
+  "verificationRole": "same implementing agent, separate read-only reconciliation; independent review separately parent-reported",
+  "results": [
+    {
+      "id": "CLEAN-001",
+      "case": "339-values",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "338-purposes",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "207-sample-types",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "pain-condition",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "document-fragment",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "table",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "attribute",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "attributes",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "full",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "shift",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "legacy-input",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "real-package",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "wrong-model",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "same-revision-edit",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "reorder",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "rename",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "delete",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "duplicate-id",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "pointer-id",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "missing-dependency",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "extra-target",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "missing-target",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "candidate-type",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "origin-bytes",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "replacement-success",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "replacement-failure",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "mutation-pending",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "mutation-after",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "crypto-failure",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "protected-bytes",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "original-values",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "47-undecided",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "review-state",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "identity-copy",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "copy-rejected",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "tab-close",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "1280-light",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "393-light",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "1280-dark",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "393-dark",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "keyboard",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "touch",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "long-name",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "authority-bytes",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "id-deletion-negative",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "case-deletion-negative",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "missing-result-negative",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "lint",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "build",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "contract",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "node",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "browser",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "full-ci",
+      "status": "pass",
+      "evidence": "https://github.com/mk3008/alder/actions/runs/42771331522"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "independent-review",
+      "status": "pass",
+      "evidence": "Parent-confirmed focused read-only review of product 07a732f5, 46 type cases and ID-wise preservation; technical only"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "published-files",
+      "status": "fail",
+      "evidence": "https://github.com/mk3008/alder/actions/runs/42773941190; public manifest HTTP 503; asset hashes unverified"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "published-ui",
+      "status": "pending",
+      "evidence": "Not executed: public manifest HTTP 503; no successful public verification claimed"
+    }
+  ]
+}
