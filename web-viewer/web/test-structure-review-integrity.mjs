@@ -15,6 +15,36 @@ assert.deepEqual(pain.sample.when,[{target:{conceptId:'n-activity',informationId
 assert.equal(await validate(model),'valid');pass('real-package');
 assert.throws(()=>verifyReviewOrigin(Buffer.from('changed source'),candidates.origin),/original source bytes/);pass('origin-bytes');
 assert.equal(await reviewDigest(new TextEncoder().encode('abc')),'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');assert.equal(canonicalReviewJSON({z:[false,0,null],a:'x'}),'{"a":"x","z":[false,0,null]}');pass('independent-canonical-and-sha');
+// Independent review reproduction: keep the bound model identical and mutate
+// only the candidate for the real scalar-union field.
+const unionId='cf-3756ccb9208e42',unionField=candidates.fields.find(f=>f.target.informationId===unionId);
+assert.equal(model.meta.fieldMappings.find(m=>m.informationId===unionId).valueType,'string | number');assert.equal(unionField.sample.value,7);assert.equal(model.meta.fieldMappings.find(m=>m.informationId===unionId).nullable,false);assert.equal(model.meta.fieldMappings.find(m=>m.informationId===unionId).valueDomain.kind,'scalar');
+for(const [name,value,expected] of [['number',7,'valid'],['string','7','valid'],['object',{unexpected:true},'sample-type'],['null',null,'sample-type'],['boolean',true,'sample-type'],['array',[7],'sample-type']]){
+ const changed=clone();changed.meta.previewStructureReview.fields.find(f=>f.target.informationId===unionId).sample.value=value;
+ assert.equal(await validate(changed),expected,'string | number: '+name);pass('scalar-union-'+name);
+}
+// Existing other authored unions retain every declared member. Changing their
+// model declaration here explicitly rebinds the test fixture, never the catalog.
+for(const [type,values] of [['string | number | boolean',['text',0,false]],['string | null',['text',null]],['boolean | null',[true,false,null]],['number',[0,7]]]){
+ for(const value of values){const changed=clone();changed.meta.fieldMappings.find(m=>m.informationId===unionId).valueType=type;changed.meta.previewStructureReview.basedOn.modelSha256=await reviewDigest(reviewModelBytes(changed));changed.meta.previewStructureReview.fields.find(f=>f.target.informationId===unionId).sample.value=value;assert.equal(await validate(changed),'valid',type+': '+JSON.stringify(value));}
+ pass('declared-members-'+type);
+}
+for(const [type,validValues,invalidValues] of [
+ ['number',[0,7],[null,false,'7',{},[]]],
+ ['string | null',['text',null],[false,0,{},[]]],
+ ['boolean | null',[true,false,null],['true',0,{},[]]],
+ ['string | number | boolean',['text',7,false],[null,{},[]]],
+ ['string（未決／なし／あり）',['text'],[null,0,false,{},[]]],
+ ['object（任意構造）',[{any:true}],[null,[],0,false,'text']],
+ ['array',[[7]],[null,{},0,false,'text']],
+ ['string[]',[['text']],[null,{},[7],false,'text']],
+]){
+ const changed=clone();changed.meta.fieldMappings.find(m=>m.informationId===unionId).valueType=type;changed.meta.previewStructureReview.basedOn.modelSha256=await reviewDigest(reviewModelBytes(changed));
+ for(const value of validValues){changed.meta.previewStructureReview.fields.find(f=>f.target.informationId===unionId).sample.value=value;assert.equal(await validate(changed),'valid',type+' accepts '+JSON.stringify(value));}
+ for(const value of invalidValues){changed.meta.previewStructureReview.fields.find(f=>f.target.informationId===unionId).sample.value=value;assert.equal(await validate(changed),'sample-type',type+' rejects '+JSON.stringify(value));}
+ pass('existing-type-boundary-'+type);
+}
+assert.equal(model.meta.fieldMappings.filter(m=>m.valueType===undefined).length,32);assert.equal(await validate(model),'valid');pass('32-unspecified-preserved-without-inference');
 const negatives=[
  ['wrong-model',m=>m.id+='x','wrong-model'],
  ['same-revision-edit',m=>m.concepts[0].description+='x','model-content-mismatch'],

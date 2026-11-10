@@ -5,6 +5,23 @@ export const noStructureReview:ReviewProjection={enabled:false,get:()=>undefined
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const present=(v:unknown):v is string=>typeof v==='string'&&!!v.trim();
 const keys=(v:Record<string,unknown>,allowed:string[])=>Object.keys(v).every(k=>allowed.includes(k));
+/** Validate only authored type alternatives; null is allowed only when named.
+ * Parenthesized Japanese annotations accompany existing string/object types. */
+function sampleMatchesType(value:unknown,type:unknown){
+ if(type===undefined)return true;
+ if(typeof type!=='string')return false;
+ const alternatives=type.split('|').map(part=>part.trim());
+ return alternatives.some(part=>{
+  if(part==='string'||/^string（[^）]*）$/.test(part))return typeof value==='string';
+  if(part==='number')return typeof value==='number'&&Number.isFinite(value);
+  if(part==='boolean')return typeof value==='boolean';
+  if(part==='null')return value===null;
+  if(part==='string[]')return Array.isArray(value)&&value.every(v=>typeof v==='string');
+  if(part==='array')return Array.isArray(value);
+  if(part==='object'||part==='object（任意構造）')return object(value);
+  return false;
+ });
+}
 export function canonicalReviewJSON(value:unknown):string{
  if(Array.isArray(value))return '['+value.map(canonicalReviewJSON).join(',')+']';
  if(object(value))return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+canonicalReviewJSON(value[k])).join(',')+'}';
@@ -52,7 +69,7 @@ export async function structureReviewCandidates(model:ConceptModel,digest=review
    const s=entry.sample;if(!object(s)||!keys(s,['value','coverage','when'])||!Object.hasOwn(s,'value')||!['field-value','document-fragment'].includes(String(s.coverage)))return fail('sample-shape');
    if(s.coverage==='document-fragment'&&(!Array.isArray(s.value)||!s.value.every(object)))return fail('fragment-shape');
    const type=mapping.valueType,value=s.value,domain=mapping.valueDomain;
-   if((type==='string[]'&&(!Array.isArray(value)||!value.every(v=>typeof v==='string')))||(type==='array'&&!Array.isArray(value))||(type==='boolean'&&typeof value!=='boolean')||(typeof type==='string'&&type.startsWith('object')&&!object(value))||(typeof type==='string'&&type.startsWith('string')&&!type.includes('number')&&!type.includes('boolean')&&type!=='string[]'&&typeof value!=='string'))return fail('sample-type');
+   if(!sampleMatchesType(value,type))return fail('sample-type');
    if(object(domain)&&Array.isArray(domain.values)&&!domain.values.some(v=>object(v)&&canonicalReviewJSON(v.value)===canonicalReviewJSON(value)))return fail('sample-domain');
    if(s.when!==undefined){if(!Array.isArray(s.when)||!s.when.length)return fail('condition-shape');for(const condition of s.when){if(!object(condition)||!keys(condition,['target','predicate'])||condition.predicate!=='nonempty'||!object(condition.target)||!keys(condition.target,['conceptId','informationId'])||infos.get(String(condition.target.informationId))!==condition.target.conceptId||condition.target.conceptId!==target.conceptId)return fail('missing-dependency');}}
    try{sample=typeof s.value==='string'?(s.value||'""'):JSON.stringify(s.value);}catch{return fail('sample-shape');}if(sample===undefined)return fail('sample-shape');

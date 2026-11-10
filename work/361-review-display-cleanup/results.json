@@ -71,109 +71,109 @@
       "id": "CLEAN-003",
       "case": "real-package",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "wrong-model",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "same-revision-edit",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "reorder",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "rename",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "delete",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "duplicate-id",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "pointer-id",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "missing-dependency",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "extra-target",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "missing-target",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "candidate-type",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "origin-bytes",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "replacement-success",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "replacement-failure",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "mutation-pending",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "mutation-after",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-003",
       "case": "crypto-failure",
       "status": "pass",
-      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例; 独立レビュー修正: 既存型のunion/明示null/number/32未指定を含む整合性54ケース成功"
     },
     {
       "id": "CLEAN-004",
@@ -323,7 +323,7 @@
       "id": "CLEAN-006",
       "case": "independent-review",
       "status": "pending",
-      "evidence": "候補push後の全体CI・独立事後レビュー・公開照合で確認する。未実施。"
+      "evidence": "初回事後レビュー完了、和集合型の1件を修正。修正版の集中再レビュー待ち。"
     },
     {
       "id": "CLEAN-006",
