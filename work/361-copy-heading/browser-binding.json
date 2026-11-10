@@ -4,7 +4,7 @@
     "web-viewer/src/structure-explorer.ts": "2d776ade4d5504ac27436799c5e5428d3ddc3d4963f452b2102bac2feae3f407",
     "web-viewer/src/structure-explorer.css": "888dddf77d22ab0526245b0be2827dbe2951babccb00299d202bc23d8e94adcc",
     "web-viewer/web/test-structure-copy-heading.mjs": "538c49b3126e3bff72ccc1d835077c3c1d802518176f84b6a4ba984b27d3fa9e",
-    "web-viewer/web/test-structure-copy-heading-browser.mjs": "9271b366511b026681f93821725e9cd2c77fbea8ac2b35036e2182160ef5229b"
+    "web-viewer/web/test-structure-copy-heading-browser.mjs": "f459655a008a0057d10f9e14e5a4f1584fa0e251e0f1de38199671b534d59ecb"
   },
   "servedBuildSha256": {
     "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
@@ -27,7 +27,7 @@
     "long-name-1280.png": "e43eb4b382529c539f85723f2f57278ad955d25641594f0bd897f80b4871811b",
     "long-name-393.png": "70ff14c49199ff32bae8870378fce8776c3bddf2aa83e2518cfd13615c5b3d3a",
     "structure-1280.png": "c8dd6c40e720e830f0731bc76185e2d605adef254b2f868e9877da17847ac162",
-    "structure-393.png": "cc330e271d981ff386618668a0a43ce980f8f69d0848aec1ae9fea0090c97c8d",
+    "structure-393.png": "c8449ad5f57104e06230ce75c82d266022b1c16f5e7ec8a5408583d9f06e69bb",
     "wrapped-393.png": "1bda8921844a91d4a43176f2d6b22c26e5c08d84964b8a327dd67ae52b6b34cf"
   }
 }

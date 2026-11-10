@@ -35,8 +35,9 @@ export async function verifyStructureCopyHeading(browser){
    let wrapped,denied;
    if(width===393&&kind==='structure'){
     await heading.evaluate(el=>el.style.maxWidth='220px');wrapped=await geometry();assert(wrapped.buttons[1].top>=wrapped.buttons[0].bottom,'both controls wrap under constrained available width');assert(wrapped.value.top>=wrapped.heading.bottom-1);await page.screenshot({path:out+'/wrapped-393.png'});await heading.evaluate(el=>el.style.removeProperty('max-width'));
-    const cdp=await browser.newBrowserCDPSession(),{browserContextIds}=await cdp.send('Target.getBrowserContexts');
-    await cdp.send('Browser.setPermission',{permission:{name:'clipboard-write'},setting:'denied',origin:'http://127.0.0.1:4173',browserContextId:browserContextIds.at(-1)});
+    const targetSession=await context.newCDPSession(page),{targetInfo}=await targetSession.send('Target.getTargetInfo');assert(targetInfo.browserContextId);
+    const cdp=await browser.newBrowserCDPSession();
+    await cdp.send('Browser.setPermission',{permission:{name:'clipboard-write'},setting:'denied',origin:'http://127.0.0.1:4173',browserContextId:targetInfo.browserContextId});
     denied=await page.evaluate(async()=> (await navigator.permissions.query({name:'clipboard-write'})).state);assert.equal(denied,'denied');await full.tap();await status.getByText('コピーできませんでした。ブラウザーの設定を確認してください。',{exact:true}).waitFor();
     await page.screenshot({path:out+'/denied-393.png'});
    }
