@@ -1,0 +1,1 @@
+const badge=document.getElementById('preview-badge');if(badge){const link=document.createElement('a');link.href='./flowstep-authoring-guide.html';link.textContent='FlowStep 作成ガイド';link.style.color='inherit';link.style.marginInlineStart='1em';badge.append(link);}
