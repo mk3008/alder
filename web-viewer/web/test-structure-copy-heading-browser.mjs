@@ -3,6 +3,8 @@ import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 
 export async function verifyStructureCopyHeading(browser){
  const raw=JSON.parse(readFileSync('../business-design/alder/json-complete-concept-review.json')),snapshot=JSON.parse(readFileSync('../work/361-copy-heading/payloads.json'));
+ // Only the explicitly renamed UI caption differs from the frozen payload.
+ for(const item of snapshot.cases)item.full=item.full.replaceAll(' | 用途',' | 使用目的').replaceAll('\n用途：','\n使用目的：');
  const out='web/evidence/structure-copy-heading';mkdirSync(out,{recursive:true});const results=[];
  for(const width of [1280,393])for(const kind of ['structure','attribute','long-name']){
   const context=await browser.newContext({viewport:{width,height:900},hasTouch:width===393,permissions:['clipboard-read','clipboard-write']}),page=await context.newPage(),errors=[];

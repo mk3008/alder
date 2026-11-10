@@ -1,0 +1,4286 @@
+{
+  "format": "alder-preview-structure-review/1",
+  "status": "hypothesis",
+  "source": {
+    "revision": "887c0f60a191d06e1db0ed50567844cca2ec1950",
+    "path": "business-design/alder/json-complete-concept-review.json",
+    "sha256": "e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181",
+    "baselinePreviewSha256": "570a81cb16b6b4a1968e6e678e9130a351f15c1052daaadfe8d88ac010ea7f86"
+  },
+  "scenario": "モルックの点数計算を中心とした項目ごとの確認用仮説。各例をまとめた完成文書や実運用の実例ではない。",
+  "definitions": {
+    "purpose": "その項目を何に使うか。",
+    "perspectives": "必要性や正しさをどの立場で判断するか。依頼者・設計者・開発者から複数可。"
+  },
+  "fields": {
+    "n-bd-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/0",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務設計書を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-bd-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/1",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務設計書を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "n-bd-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/2",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務設計書の改訂を特定し、異なる時点の内容を取り違えない。"
+    },
+    "cf-d960c2305c621c": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/304",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務設計書を対応する形式として読み込み、未対応の形式を誤って解釈しない。"
+    },
+    "cf-a2fb46ff8c8c15": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/305",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務設計書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。"
+    },
+    "cf-9b0df810c60eb0": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/306",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "点数計算の設計を読む前に、対象の競技ルールや説明上の前提を共有する。"
+    },
+    "cf-32d24ca3a0642d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/307",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "どこまでを点数計算の設計に含めるかを示し、記録や大会運営まで無意識に広げない。"
+    },
+    "n-who-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/3",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "主体を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-who-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/4",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "人の役割と自動実行を区別し、誰が仕事を担う想定かを確認する。"
+    },
+    "n-who-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/5",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "主体を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "n-who-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/6",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "図に現れる人の役割を見分ける。権限や実行主体の種類を色だけで決めない。"
+    },
+    "n-activity-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/7",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-activity-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/8",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "n-activity-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/9",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務に対応する主体を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "score-reviewer",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-activity-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/10",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "この業務をシステム化する想定か、外部の仕事として接続だけを示すかを確認する。"
+    },
+    "n-activity-field-5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/11",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "点数を計算する仕事が必要な理由を依頼者と確かめ、手段だけを目的にしない。"
+    },
+    "n-activity-field-6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/12",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "どの入力や先行結果が揃ったときに計算を始めるかを確認する。"
+    },
+    "cf-f7851e4656568f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/310",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "場所や利用環境で手順や条件が変わるかを確認し、影響がなければ規定しない。"
+    },
+    "cf-79e1f59247290a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/311",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "sample": "手計算の転記時に各回の点数を取り違えることがある。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-423df2519d7898": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/312",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "確認した課題の影響の程度を示し、改善を検討する優先度の判断材料にする。",
+      "sample": "Medium",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。課題があると仮定した場合の程度であり、現状に課題やPainが存在するとの判断ではない。"
+    },
+    "cf-bed444b46e4cc9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/338",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "課題をまだ聞いていない状態と、課題なし・課題ありの確認結果を区別する。"
+    },
+    "n-object-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/13",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "対象を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-object-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/14",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "対象を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "n-object-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/15",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "対象をシステム内で扱うか外部として扱うかを確認し、表示範囲と責務を合わせる。"
+    },
+    "cf-adc18421aa701a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/308",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "図の対象を視覚的に見分ける。名前や意味の代わりにアイコンだけで判断しない。"
+    },
+    "n-information-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/16",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "情報項目を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-information-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/17",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "情報項目を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "n-information-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/18",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "情報項目に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "player",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-c5477c2457429c": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/309",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "投擲順と棒の番号など、同じ項目名でも解釈が分かれ得る情報の内容を確認する。"
+    },
+    "n-data-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/19",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "情報項目グループを他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-data-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/20",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "受け渡す情報のまとまりに名前を付け、各業務の入出力を同じ単位で対応付ける。"
+    },
+    "n-dataitem-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/21",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "グループ構成項目に対応する情報項目グループを特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throws",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-dataitem-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/22",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "グループ構成項目に対応する情報項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throws-info",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-dataitem-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/23",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "いつその情報項目をまとまりへ含めるかを確認し、条件付きの項目を常時必須にしない。",
+      "sample": "投擲が1回以上ある場合に含める。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7e9fb3e051ad15": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/337",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "含める条件が未決なのか、無条件なのか、条件があるのかを区別する。"
+    },
+    "n-step-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/24",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "手順行を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-step-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/26",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "受け取る・計算する・伝えるなど、その手順で実際に行うことを確認する。"
+    },
+    "n-step-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/27",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "目視や自動計算などの実施方法が業務上必要かを確認し、単なる実装案と分ける。"
+    },
+    "n-step-field-5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/28",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "相手との受渡しか内部の処理かを区別し、相手や情報の確認が必要な箇所を見つける。"
+    },
+    "cf-db0d007e8ba4d3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/313",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "旧形式の手順文を移行時に参照し、構造化した結果から元の意図が失われていないか確認する。",
+      "sample": "記録係は投擲結果を受け取り、各回の点数を計算する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7c34239a2778a4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/316",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "対象を作る・読む・更新するなどの業務上の効果を確認し、実装のCRUDから逆算しない。",
+      "sample": "read",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-ece66e4839b029": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/327",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "対象項目をまだ決めていない状態と、項目なし・項目ありを区別する。"
+    },
+    "cf-d17f8349434605": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/328",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "前提が未決なのか、前提なしなのか、指定済みなのかを確認する。"
+    },
+    "n-exchange-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/30",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "受渡しに対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "receive",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-exchange-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/31",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "受渡しに対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "player",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-exchange-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/32",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "実行主体が何を受け取り、何を相手へ渡すかを区別する。"
+    },
+    "n-exchange-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/33",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "相手へ求める内容と返ってくる内容を対応付け、要求と応答を混ぜない。"
+    },
+    "n-exchange-field-5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/34",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "受渡しに対応する業務・対象の関係を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "rel-input",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-exchange-field-6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/35",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "受渡しに対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "return-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-4d9f01f0e8739f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/329",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "受渡す情報が未決なのか、情報なしなのか、指定済みなのかを区別する。"
+    },
+    "n-party-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/36",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "手順の当事者に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "receive",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-party-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/37",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "一つの受渡しで送る側と受ける側を区別し、向きを取り違えない。",
+      "sample": "from",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-party-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/38",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務を担う主体か受渡しの対象かを区別し、同じ名前でも役割を混ぜない。",
+      "sample": "who",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-party-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/39",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "手順の当事者に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "player",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-dependency-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/40",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "手順の前提に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "receive",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-dependency-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/41",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "手順の前提に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "receive",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-dependency-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/42",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "手順の前提に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "valid",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-order-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/43",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "順序制約に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-order-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/44",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "手順の前後関係が必須か、入れ替えてよいかを確認する。",
+      "sample": "before",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-order-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/45",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "順序制約に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "receive",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-order-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/46",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "順序制約に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-result-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/47",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務結果を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-result-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/48",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務結果に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-result-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/49",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "仕事が終わった後に何が成立するかを確認し、実施手段と達成結果を区別する。"
+    },
+    "n-decision-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/50",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定表を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-decision-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/51",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定表に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-decision-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/52",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "判定表を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "n-decision-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/53",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "認可・入力検査・正常計算を分け、異なる判断目的の条件や結果を一つの表に混ぜない。"
+    },
+    "n-decision-field-5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/54",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定表に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "valid",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-e53cb54e69e740": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/317",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "判定を繰り返す単位や適用上の補足を、条件そのものと分けて共有する。"
+    },
+    "n-axis-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/55",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定軸を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-axis-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/56",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定軸に対応する判定表を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "input-validation",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-axis-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/57",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "結果を分ける入力や状態を名前で示し、重要な判断条件の抜けを確認する。"
+    },
+    "cf-cb0ff580fce019": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/318",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "数値や回数の解釈を揃え、同じ値を別の単位で比較しない。"
+    },
+    "cf-9d0f2986c601ef": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/319",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "真に該当する状態を業務の言葉で表示し、真偽の取り違えを防ぐ。"
+    },
+    "cf-3ded4095bb9185": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/320",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "偽に該当する状態を業務の言葉で表示し、不明や未決と区別する。"
+    },
+    "n-row-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/58",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定行を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-row-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/59",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定行に対応する判定表を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "input-validation",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-row-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/60",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "正常・エラー・計算値・未決の結果を区別して期待結果を確認する。"
+    },
+    "n-row-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/61",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "その条件が成立したときに何を返す・成立させるかを確認する。"
+    },
+    "n-condition-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/62",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定条件セルに対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "valid",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-condition-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/63",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定条件セルに対応する判定軸を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "axis-numbers",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-condition-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/64",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "具体値・その他・不問・未決のどの条件かを示し、未決をワイルドカードとして扱わない。"
+    },
+    "n-condition-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/65",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "等しい・以上など、値をどの関係で比較するかを確認する。"
+    },
+    "n-condition-field-5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/66",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "判定を分ける具体値や境界値を示し、条件と期待結果を具体的に照合する。"
+    },
+    "n-rowcheck-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/67",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定行とチェックの対応に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "valid",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-rowcheck-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/68",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "判定行とチェックの対応に対応するチェック項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "check-01",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-rowcheck-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/69",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "判定行のどの範囲をチェックが保証するかを示し、部分対応を全体対応と誤認しない。"
+    },
+    "n-exception-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/70",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務の例外を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-exception-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/71",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務の例外に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-exception-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/72",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務の例外を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "n-exception-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/73",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "正常な仕事を妨げる場合とその扱いを確認し、例外を正常の開始条件へ混ぜない。"
+    },
+    "cf-b1693377ad86be": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/332",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "例外が業務全体に掛かるか特定の手順で起きるかを確認する。"
+    },
+    "cf-72bb8e0364abb4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/333",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "どの状態や入力で例外になるかを確認し、例外名だけで扱いを決めない。"
+    },
+    "cf-fc923775ebb84a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/334",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "目的未達のときにも残る状態や後続への影響を確認する。"
+    },
+    "n-continuity-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/74",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "中断・再開の扱いに対応する業務の例外を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "invalid-input",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-continuity-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/75",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "どの条件で作業を中断するかを確認する。",
+      "sample": "入力に誤りが見つかり、利用者へ訂正を求めたとき。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-continuity-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/76",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "中断後に再開・終了などのどの扱いを取るかを確認する。"
+    },
+    "n-continuity-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/77",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "中断した仕事を再開できる条件を確認し、無条件のやり直しにしない。"
+    },
+    "n-continuity-field-5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/78",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "再開時に誰が何をして元の仕事へ戻るかを確認する。"
+    },
+    "cf-1443c584c8cbc3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/321",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "中断時に情報を残す・破棄するなど、再開に影響する処置を確認する。",
+      "sample": "訂正前の入力と誤りの位置を保持する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-fe7d8ed39bf915": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/330",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "中断時に保持する項目が未決なのか、なしなのか、指定済みなのかを区別する。",
+      "sample": "あり",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-relation-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/79",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務・対象の関係を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-relation-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/80",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務間の入力・出力などの関係を区別し、手順と相関図の読み方を揃える。"
+    },
+    "n-relation-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/81",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務・対象の関係に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-relation-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/82",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務・対象の関係に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3b6b631818c9b6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/322",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務間で渡されるものや関係を図上で短く示し、本文の対応箇所へ辿りやすくする。",
+      "sample": "投擲結果を受け取る",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-finding-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/83",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "設計上の確認事項を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "finding-zero-throws",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-finding-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/84",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "確認事項が未解決か整理済みかを区別し、未決を解消済みとして扱わない。",
+      "sample": "open",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-finding-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/85",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "どの範囲の業務や項目について確認が必要かを絞る。",
+      "sample": "items",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-finding-field-4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/86",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "確認が必要な点を一覧で見分け、詳細を読む対象を選ぶ。",
+      "sample": "0回の入力をどう表示するかを確認する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3cb2fc6fcef42b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/323",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "元の所見と現在の記録を対応付け、別の問題として重複して扱わない。",
+      "sample": "finding-input-empty",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-355de6f886c0ad": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/324",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "記述上の不一致や判断待ちなど、確認事項の性質を分けて担当へ渡す。",
+      "sample": "question",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-1b9826d21acdc9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/325",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "何が不明・不一致で、何を確認すればよいかを依頼者や設計者へ伝える。",
+      "sample": "0回の場合に空の各回一覧だけを返すか、説明も添えるかを依頼者に確認する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-35bce68582d0a4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/326",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "未決が残る具体的な対象を示し、文書全体を曖昧なまま承認しない。",
+      "sample": [
+        "calculate-score"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-external-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/87",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "外部業務設計書の目録項目を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "bd-tournament",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-external-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/88",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "外部業務設計書の目録項目の改訂を特定し、異なる時点の内容を取り違えない。",
+      "sample": "review-1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-5246ed43cf82fc": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/103",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "外部業務設計書の目録項目の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": "businessDesign",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-checkdoc-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/89",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェック文書を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-checkdoc-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/90",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェック文書の改訂を特定し、異なる時点の内容を取り違えない。"
+    },
+    "n-checkdoc-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/91",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェックがどの業務設計と改訂を前提にするかを特定する。"
+    },
+    "cf-d479ca1faa5493": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/107",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェック文書を対応する形式として読み込み、未対応の形式を誤って解釈しない。"
+    },
+    "cf-7002a402a9b4a2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/108",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "チェック文書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。"
+    },
+    "cf-460e5fb604bcb6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/109",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "チェック文書を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-d7b8496c2d645a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/110",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "前提とした業務設計書の改訂を特定し、原典の変更が確認範囲に影響するか判断する。"
+    },
+    "cf-47944f407a4814": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/111",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "原典との対応確認が済んだかを記録し、単なる参照を検証済みと誤認しない。"
+    },
+    "n-check-field-1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/92",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェック項目を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "n-check-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/93",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー中にチェックを短く呼び分ける。文書内外の安定した識別子とは分けて扱う。"
+    },
+    "n-check-field-3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/94",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "チェック項目が人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。"
+    },
+    "cf-2af7e5abeb81ef": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/132",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "チェック項目を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-c9266f8766647e": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/133",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "そのチェックで確認する条件や結果を一覧で把握する。"
+    },
+    "cf-c9b1db9948abbf": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/134",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェック項目に対応するチェックの節を特定し、関連する記述を往復して一致を確認する。"
+    },
+    "cf-fa56ab6bd9ad29": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/95",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "文書パッケージを対応する形式として読み込み、未対応の形式を誤って解釈しない。"
+    },
+    "cf-cb2cab3103539a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/96",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "文書パッケージを対応する形式として読み込み、未対応の形式を誤って解釈しない。"
+    },
+    "cf-56a9d80cc8c10f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/97",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "複数の文書をまとめた内容の改訂を区別し、古いまとまりを最新の前提として使わない。"
+    },
+    "cf-3907e6aa0081d2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/98",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "関連する業務設計・Check・状態・概念の文書をひとまとまりで読み、相互参照を辿れるようにする。",
+      "sample": [
+        {
+          "kind": "businessDesign",
+          "id": "bd-score-example",
+          "schemaVersion": "0.6",
+          "revision": "bd-review-1",
+          "title": "モルックの点数計算",
+          "activities": []
+        }
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。文書の種類と識別を示す部分例であり、送信・保存用の完成JSONではない。"
+    },
+    "cf-2afe02557bfa91": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/106",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "文書を読む際に残る補足や確認事項を共有し、合意済みの業務ルールと混同しない。",
+      "sample": [
+        "0回の入力を未入力と区別する必要があるかは確認中。"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-1591c4b77df1b7": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/137",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移文書を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "states-score-example",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-46c7022c8c0c56": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/138",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移文書を対応する形式として読み込み、未対応の形式を誤って解釈しない。",
+      "sample": "0.1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-d45319b8ff1cdd": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/139",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "状態遷移文書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": "stateTransition",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8f9f0382a64e3c": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/140",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移文書の改訂を特定し、異なる時点の内容を取り違えない。",
+      "sample": "states-review-1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-79972e22c66be7": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/141",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "状態遷移文書を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-7471e29c30cd89": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/142",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "前提とした業務設計書の改訂を特定し、原典の変更が確認範囲に影響するか判断する。",
+      "sample": "bd-review-1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-99898735b216fb": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/143",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "状態遷移図と業務設計の原典の対応確認が済んだかを区別する。",
+      "sample": "unverified",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-0c6928ded152e8": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/144",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移文書に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throws-info",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-cb26e3ccac9a71": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/147",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "どの状態から対象の仕事を開始するかを確認する。",
+      "sample": "ready",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b63c33876057e6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/148",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "どの状態を終わりとして扱うかを確認し、単なる途中の状態と区別する。",
+      "sample": "calculated",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-0d219db14d46ce": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/149",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "状態や遷移の確認がどこまで済んだかを示し、不完全な草案を網羅済みとして扱わない。",
+      "sample": "partial",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7beeaac9a2b451": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/150",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "状態遷移を導いた元の記述へ戻り、業務上の条件との対応を確認する。",
+      "sample": "業務設計書の「1回の点数を計算する」のWhenとResult。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8dce497869ab6c": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/164",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念モデル文書を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "cf-65c7c1e771c6fb": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/165",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念モデル文書を対応する形式として読み込み、未対応の形式を誤って解釈しない。"
+    },
+    "cf-3baed98548504d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/166",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念モデル文書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。"
+    },
+    "cf-710c131201eaed": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/167",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念モデル文書の改訂を特定し、異なる時点の内容を取り違えない。"
+    },
+    "cf-013cc0b1c39ea6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/168",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "前提とした業務設計書の改訂を特定し、原典の変更が確認範囲に影響するか判断する。"
+    },
+    "cf-f0cc7fdbbd6852": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/169",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念モデルと業務設計の原典の対応確認が済んだかを区別する。"
+    },
+    "cf-6d5369a568adaa": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/289",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "構造の分け方によって期待する業務上の利点を確認する。",
+      "sample": [
+        "投擲ごとに入力と点数を対応付けて確認できる。"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-21a3e76ff23010": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/290",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "構造の採用前に考慮すべき制約や注意点を共有する。",
+      "sample": [
+        "0回の入力と未入力を混同しない。"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-06162a37975af9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/291",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念の必要性・同一性・多重性など、人間が確認したい点をレビューで取り上げる。",
+      "sample": [
+        "複数の投擲を一括訂正できる必要があるか。"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7595370fd7be76": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/292",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念モデルに付けた補足の出所と意味を、正式な概念や属性とは区別して共有する。",
+      "sample": {
+        "questions": [
+          "0回の入力時の合計点の扱いは合意済みか。"
+        ]
+      },
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b4221e246a23a0": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/293",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "業務ごとに関係する概念や機能を表示し、業務と構造を往復して確認する。",
+      "sample": {
+        "calculate-score": {
+          "conceptIds": [
+            "throw",
+            "score"
+          ]
+        }
+      },
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-ce0494dcadcd31": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/294",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "その概念を作る業務へ辿り、作成と利用の責務を確かめる。",
+      "sample": {
+        "throw": [
+          "receive-throws"
+        ]
+      },
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-79fd909da0c750": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/295",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "表示する例が何を示すかを説明し、実運用の記録や合意済み仕様と誤認しない。",
+      "sample": "1回目に7番の棒だけが倒れた場合を示す仮説の例。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-ebf08005cd2b97": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/296",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステム別の表示を指定した場合と、省略された場合を区別する。"
+    },
+    "cf-489ca19c33a72b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/297",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "全体図で示すサブシステム間の受渡しを指定し、業務間の接続を確認する。",
+      "sample": [
+        "handoff-score"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-051ba4217cc539": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/99",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "原典情報に対応する業務設計書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "bd-score-example",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8f72903f661259": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/100",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "取得した原典の改訂を示し、参照した内容と現在の内容を取り違えない。",
+      "sample": "bd-review-1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b911ffd2749455": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/101",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "参照した原典と現在の取得内容が同じかを比較し、版名だけでは分からない差を検出する。",
+      "sample": "9a152e3330d21556369e535f34f3bd08238156ac8ec746d642e785a5329a700d",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-1b534ed06c44c9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/102",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "根拠となる資料を開き、文書内容を確認する。",
+      "sample": "https://example.com/designs/molkky.json",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-c60748c7739ecb": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/104",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "外部業務の目録項目を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "record-result",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-d31f49c46d6346": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/105",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "外部業務の目録項目を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "計算結果を記録する",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-6f159c6e766495": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/112",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "通常文・参照・リンクなどの表現を区別し、安全に読み取って表示する。",
+      "sample": "text",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-4deeafa4495eb6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/113",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "チェックの導入説明を読み、期待結果を確認するための背景を共有する。",
+      "sample": "入力された各回の点数を業務の期待と見比べる。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-448e853c63ca63": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/114",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "文章・参照・リンクの要素に対応するチェック文書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "checks-score-example",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-56f97e9b7600ee": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/115",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "リンク先を開く前に、何を参照するかを読者へ示す。",
+      "sample": "点数計算の業務設計",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-c6d2e7337685ae": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/116",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "関連資料を開き、本文だけでは足りない根拠を確認する。",
+      "sample": "https://example.com/designs/molkky.json",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-558d1ceac82fda": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/117",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務とチェックの索引に対応する業務を特定し、関連する記述を往復して一致を確認する。"
+    },
+    "cf-cf897c96883299": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/118",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "その業務のチェックが何の達成を確かめるかを一覧で把握する。"
+    },
+    "cf-4bf003cc4cfb12": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/119",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "先行・後続業務とのつながりを確認し、単独の業務だけでチェックを閉じない。"
+    },
+    "cf-ebbba991e05cb9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/120",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "対象業務に対応するチェックをまとめて辿る。"
+    },
+    "cf-6acc343166294c": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/121",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェックの節を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "cf-68a6486ee86bf1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/122",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェックの節に対応する業務を特定し、関連する記述を往復して一致を確認する。"
+    },
+    "cf-9045914e8197f9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/123",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "チェックの節を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-c404e79971073d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/124",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "保証を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "guarantee-zero-throws",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-57a0a7286f565e": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/125",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "保証に対応するチェックの節を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "score-check-section",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-eb3975a7bf5a82": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/126",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "保証を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "0回では各回の点数を作らない",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-e3a3e8b9cc7f36": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/127",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "保証の説明と具体例などのブロックを区別して順序どおり表示する。",
+      "sample": "prose",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8b153b4b9bac15": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/128",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "保証の記述に対応するチェックのサンプルを特定し、関連する記述を往復して一致を確認する。",
+      "sample": "example-zero-throws",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3f7785142487ff": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/129",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェックのサンプルを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "example-zero-throws",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-683948d485e46d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/130",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "チェックのサンプルに対応する保証を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "guarantee-zero-throws",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-40c3d844066dc2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/131",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "具体例で比較する値の列を揃え、条件差と結果差を見比べる。",
+      "sample": [
+        "倒れた棒の番号",
+        "期待する点数"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-a754e953ec59de": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/135",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "注記を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "note-score-range",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-26c07fc54a97e6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/136",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "注記を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "倒れた棒の番号と本数を区別する",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3fd46e3efaae37": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/145",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "ready",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-e0526c3d4b96d3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/146",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "状態を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-f7d1cbaf255a14": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/151",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "transition-calculate",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8908f4c37f4836": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/152",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "transition-calculate",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7dabb063b220f1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/153",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移に対応する状態を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "ready",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-047059a93be7e2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/154",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-12d3ee506e635b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/155",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "どの出来事で状態が変わるかを確認する。"
+    },
+    "cf-8e1a6f3eb42961": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/156",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "同じ出来事でも状態変更が許される条件を確認する。"
+    },
+    "cf-248bd7cd7e22cb": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/157",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移に対応する状態を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "ready",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-9a18a448b9efaa": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/158",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "遷移後に何が成立するかを、遷移の契機とは分けて確認する。"
+    },
+    "cf-37cfb1f0b37861": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/159",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "正常な経路か例外・戻りの経路かを区別し、業務のつながりを追う。"
+    },
+    "cf-782e7748652561": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/160",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "その状態変更を許す根拠となる業務の記述を確認する。",
+      "sample": "業務設計書の計算結果と入力検査の判定行。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-c7b7a3c41c1024": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/161",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "状態遷移の解釈に必要な補足を条件や結果の本体と区別して共有する。",
+      "sample": "入力エラーでは計算済みへ遷移しない想定。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-d000e290c72442": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/162",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "状態遷移に対応する業務の例外を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "invalid-input",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-33d907fd2b7851": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/163",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "長い条件を図上で短く見分ける。表示名が条件の意味を変更した扱いにしない。",
+      "sample": "入力が有効",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-5d1e7f527404d3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/335",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "新規の対象を作る遷移か、既存の状態から変わる遷移かを区別する。"
+    },
+    "cf-7e4981f3bac2be": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/336",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "依頼者が業務上の期待、設計者が条件との対応、開発者が実装・テストへの引継ぎを確認する想定。",
+      "purpose": "具体的な状態に至るのか、対象を作らないのか、未決なのかを区別する。"
+    },
+    "cf-acb00996ceae6d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/170",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "関連する状態遷移の参照に対応する状態遷移文書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "states-score-example",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-181348b6d8666b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/171",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "関連する状態遷移文書のどの改訂を参照しているかを示し、モデルとの対応を確認する。",
+      "sample": "states-review-1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-efee92b9c80efc": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/172",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "関連する状態文書との対応確認が済んだかを区別する。",
+      "sample": "unverified",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-95b8e55978fb10": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/173",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サブシステムを他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "cf-acb6b29b28e391": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/174",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステムを一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-c407aa8717369e": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/175",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステムが業務上どの役割を担うかを確認する。"
+    },
+    "cf-5440c55d88a9b8": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/176",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステムが扱う情報のまとまりを示し、情報の責任境界を確認する。"
+    },
+    "cf-0e471e4abe3209": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/177",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステムを分ける理由を確認し、画面や実装の都合だけで責任を固定しない。"
+    },
+    "cf-2b4a79c4f0f3e6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/178",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サブシステムに対応する業務を特定し、関連する記述を往復して一致を確認する。"
+    },
+    "cf-012d8473a1a69a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/179",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステムが人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。"
+    },
+    "cf-18185457d05149": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/180",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "cf-2a626ff0ff7d02": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/181",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-b051d0d470095e": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/182",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。"
+    },
+    "cf-0e6cac31d5e179": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/187",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念の分け方や扱いが必要な背景を確認し、不要な制約を固定しない。"
+    },
+    "cf-a9d8fb1ee82e79": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/188",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念の内容と境界を共有し、名前だけでは分からない扱いを確認する。"
+    },
+    "cf-12e62a5c4c6af0": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/189",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": [
+        "throws-info"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-d2c0cd0cfdbdca": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/197",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念が人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。"
+    },
+    "cf-a6fbbbc43cae98": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/183",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念の情報項目を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "cf-ecd49d7d756a04": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/184",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念の情報項目を一覧や図で見分け、内容を開いて確認する。"
+    },
+    "cf-9d0e9d927202a9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/185",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "情報項目の責任が未決か確認済みかを区別し、仮の割当てを確定済みとして扱わない。",
+      "sample": "未決",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7370db16dbe90f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/186",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念の情報項目に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": "score-entry",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8a79bb8d0da177": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/190",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "業務との対応に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8ae7f7e818ffb5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/191",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "その業務が概念を作成・参照・更新するなど、業務と概念の関わり方を確認する。",
+      "sample": [
+        "各回の投擲結果を読み、点数を求める。"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-f6bc7d2abf5cf0": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/192",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "根拠の参照に対応する業務設計書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "bd-score-example",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-96da1d6b8c09fc": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/193",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念の根拠とした原典の改訂を特定し、後の変更で意味がずれていないか確認する。",
+      "sample": "bd-review-1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-6409e9670e47fe": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/194",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "原典内で参照する対象の種類を区別し、同じ識別子でも別の種類へ取り違えない。",
+      "sample": "activity",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-136963f419b6bc": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/195",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "根拠の参照の「参照先」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-13dd73356c7793": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/196",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "原典のどの箇所を根拠にしたかを特定し、文書全体だけの曖昧な参照にしない。",
+      "sample": "Result",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-15584cfab64de4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/198",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念間の関係を他の記録と区別し、関連する記述から同じ対象を特定する。"
+    },
+    "cf-f2500eabc99f36": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/199",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念間の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。"
+    },
+    "cf-b14e90806c9ace": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/200",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念間の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。"
+    },
+    "cf-a256be08d32335": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/201",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "一つの対象に対する件数を確認し、一件と複数件の扱いを取り違えない。"
+    },
+    "cf-ac8bd26ae595ac": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/202",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "反対側から見た件数を確認し、関係の向きで多重性を誤読しない。"
+    },
+    "cf-1ee8b5979a8779": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/203",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "関係が成立する条件を確認し、条件付きの関係を常時成立と扱わない。"
+    },
+    "cf-6adc11eb0279bd": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/204",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念間の関係が人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。"
+    },
+    "cf-0d428562e56d4f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/205",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "図の出発側に表示する役割名を確認し、同じ概念間の別の関係と区別する。"
+    },
+    "cf-aaa7b589b330e5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/206",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "図の到着側に表示する役割名を確認し、同じ概念間の別の関係と区別する。"
+    },
+    "cf-3fa56825fe3b69": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/207",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念を含む関係と別の概念を参照する関係を区別し、依存や責任境界を確認する。"
+    },
+    "cf-e34451304a3099": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/208",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サブシステム間の受渡しを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "handoff-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-e9daa257c2795f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/209",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サブシステム間の受渡しに対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": "score-entry",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-758ba4f5975fe3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/210",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サブシステム間の受渡しに対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": "score-recording",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-c0d8a7beda5359": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/211",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステム間で何が渡されるかを確認し、受渡しの欠落を見つける。",
+      "sample": "各回の点数",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b7bb16b824dde8": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/212",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "受渡す情報と処理のつながりを、出発側と到着側の双方で確認する。",
+      "sample": "計算された各回の点数を記録側へ渡す。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8db9bb0dea3381": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/213",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サブシステム間の受渡しに対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": [
+        "calculate-score"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-dc9e78bca09235": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/214",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "送りの流れか返りの流れかを区別し、受渡しを片方向だけで捉えない。",
+      "sample": "forward",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8b35f69146b6ae": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/215",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステム間の受渡しが人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。",
+      "sample": "未レビュー",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-5fa9cfe53d9c72": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/216",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念レビューの単位を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "group-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-2a972279c5ff4d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/217",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念レビューの単位に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": "score-entry",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-96de7fa9ecd918": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/218",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "概念レビューの単位を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "投擲と点数の対応",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-e03f8ffc6530a7": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/219",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビューでどの範囲と論点を扱うかを共有し、無関係な情報を混ぜない。",
+      "sample": "各回の投擲結果と点数の対応を確認する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-43c418ff860c65": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/220",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "そのレビューで誰の立場から意味を確認する想定かを示す。今回追加する項目単位の確認する立場とは別の既存データ。",
+      "sample": "requester",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-c1744ad741086d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/221",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念レビューの単位に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": [
+        "calculate-score"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-6b50a0c386c8ec": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/222",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "概念レビューの単位に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": [
+        "throw",
+        "score"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-0bf8348b380872": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/237",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビュー単位でサブシステム別表示を指定した場合と省略した場合を区別する。",
+      "sample": true,
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-82616e95cee368": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/253",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "そのレビューで扱う受渡しを選び、対象外の接続と区別する。",
+      "sample": [
+        "handoff-score"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-74e3c7a00a6888": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/287",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "人間に確認したい問いを残し、仮定を合意済みへ読み替えない。",
+      "sample": [
+        "1回の投擲を訂正した場合、他の回を保持する必要があるか。"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-20033ad39c9221": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/288",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "確認のために置いた仮説を明示し、原典の事実や合意した業務意味と分けて訂正する。",
+      "sample": {
+        "singleThrowCorrection": "他の回を保持して訂正できる必要がある、という未確認の仮説。"
+      },
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-872111986cbb04": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/223",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー図の概念に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-0ab2e9ffd441dc": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/224",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビュー図の概念を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "投擲",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-0fae178ed578b4": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/225",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "図の概念カードで確認する情報項目を選び、表示上の省略とモデル上の欠落を区別する。",
+      "sample": [
+        "投擲順",
+        "倒れた棒の番号"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-4bc3013a01f24b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/226",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビュー図の概念の内容と境界を共有し、名前だけでは分からない扱いを確認する。",
+      "sample": "1回の投擲に入力された棒の番号を持つ。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-42bad405d14c41": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/227",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "図に表示した概念の説明を元の情報へ戻って確認する。",
+      "sample": [
+        "業務設計書：Input / 投擲結果"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-cbb08a4110ca13": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/228",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する概念を必要とする業務へ戻り、構造だけを根拠に必要性を決めない。",
+      "sample": [
+        "calculate-score"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-5301fdbc9906a9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/229",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー図の関係を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "edge-throw-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-93690ea3ee9262": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/230",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー図の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-135acb3994fe5a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/231",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー図の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7ea37b8b8340eb": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/232",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー図の関係に対応する概念間の関係を特定し、関連する記述を往復して一致を確認する。",
+      "sample": [
+        "throw-has-number"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-e9917c3f5a263a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/233",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビュー図でどの関係を対象とするかを絞り、他の図との違いを確認する。",
+      "sample": "within-subsystem",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b2d932ed3dc905": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/234",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "図の出発側で見せる件数を示し、元の多重性と見比べる。",
+      "sample": "1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-651d015c32251d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/235",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "図の到着側で見せる件数を示し、元の多重性と見比べる。",
+      "sample": "0..*",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-fef3e4afdf720a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/236",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビュー図の関係の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": "down",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-4e67ab723e70e5": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/238",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する概念を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "subview-throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-f2f85c784ba351": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/239",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する概念に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-9e0636e646317b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/240",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する概念に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": "score-entry",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-bdb4dd8ad16827": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/241",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "表示する概念を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "投擲",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-40ac5527dfd311": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/242",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "表示する概念の内容と境界を共有し、名前だけでは分からない扱いを確認する。",
+      "sample": "点数を求める前の投擲結果を表示する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-17dad34b3c55c0": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/243",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サブシステム別の図に表示する情報を元の記述と照合する。",
+      "sample": [
+        "業務設計書：投擲結果"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-c2d4fcf9f8b82b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/244",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "図のカードに見せる項目名を示し、情報項目との対応を確認する。",
+      "sample": "倒れた棒の番号",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-1e973b3890d796": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/245",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する項目に対応する概念の情報項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throw-number",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-f8c85e50030df1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/246",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する関係を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "subedge-throw-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-ca79b879ba2b5f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/247",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する関係に対応する表示する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "subview-throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-2e669ee69a1b69": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/248",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する関係に対応する表示する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "subview-throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-adaf9f4f2c177c": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/249",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "表示する関係に対応する概念間の関係を特定し、関連する記述を往復して一致を確認する。",
+      "sample": [
+        "throw-has-number"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-451606ab2ec7d0": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/250",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "表示図の出発側の件数を示し、元の関係と照合する。",
+      "sample": "1",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-254d5ccd385212": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/251",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "表示図の到着側の件数を示し、元の関係と照合する。",
+      "sample": "0..*",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-2407b1f8ff5fe3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/252",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "表示する関係の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": "down",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-22da58339a49f3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/254",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "構造についての確認事項を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "statement-throw-identity",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-0ae2dd148a5964": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/255",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "構造についての確認事項を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "投擲ごとに入力と点数が対応する",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-9e7ab1bab14e9f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/256",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "どの構造上の条件を確認したいかを業務の言葉で共有する。",
+      "sample": "各回の入力と点数が投擲順で対応していることを確認する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-52bfaa02936440": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/257",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "構造についての確認事項を具体例へ結び付け、抽象的な説明だけで判断しない。",
+      "sample": [
+        "sample-one-pin"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-f053259698f7db": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/258",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "機能を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "calculate-one-throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3b70ce3b31b5ba": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/259",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "機能を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "1回の投擲の点数を求める",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-bcbf430241c767": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/260",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "機能が行うことと達成する結果を確認し、業務上必要な振舞いを明らかにする。",
+      "sample": "1本だけ倒れた場合はその棒の番号を点数として求める。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b1e34fc5ffd0b7": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/261",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "機能に関する補足や仮説を、正式な条件や期待結果とは分けて共有する。",
+      "sample": {
+        "question": "入力が未確定の間の表示は依頼者に確認する。"
+      },
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b4e88ec9fe4c1d": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/277",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "機能とCheckの対応を指定した状態か省略した状態かを区別する。",
+      "sample": true,
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-f6c2348108ab40": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/278",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "機能の可否判定を示す具体例を開き、条件の違いを確認する。",
+      "sample": [
+        "example-one-pin"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3b28b45d18839e": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/279",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "機能の可否判定が満たすべきチェックへ辿る。",
+      "sample": [
+        "check-valid-input"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-454865bf2f4ea9": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/280",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "機能の処理結果が満たすべきチェックへ辿る。",
+      "sample": [
+        "check-01"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-8883a41bc28a26": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/281",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "機能の使われ方を具体例で確認し、条件と結果をレビューする。",
+      "sample": [
+        "sample-one-pin"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-e4eed8f01f48b8": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/262",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "機能のサンプルを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "sample-one-pin",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-09dc6622db3672": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/263",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "機能のサンプルを一覧や図で見分け、内容を開いて確認する。",
+      "sample": "7番の棒だけが倒れた場合",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-f4a8445a61d27a": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/264",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "その例が成立する入力や状況を示し、別の条件の結果を混同しない。",
+      "sample": "7番の棒だけが倒れた投擲を1回入力する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-2f5c9c597760c6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/265",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "その例で何を確かめるかを示し、単なるデータ一覧を保証と誤認しない。",
+      "sample": "倒れた本数1を、そのまま点数1として返さないことを確認する。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-4221263a67b8bd": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/275",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "例の読み方や適用範囲に関する補足を、期待結果の本体と分けて伝える。",
+      "sample": "競技ルールの実例ではなく、構造の必要性を検討するための例。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-cefad66baec8fb": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/276",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "具体例と対応するチェックを結び付け、どの保証の例かを辿る。",
+      "sample": [
+        "check-01"
+      ],
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3f99f834385412": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/266",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サンプルの表に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-eebd7c70c2be51": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/274",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "該当する行がない場合にも空の意味を伝え、表示の欠落と誤認しない。",
+      "sample": "この条件に該当する投擲はない。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-43f6bcc1c32685": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/267",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サンプルの列を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "column-number",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-61152952713ecb": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/268",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "サンプルの列を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "倒れた棒の番号",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-b46f7844799233": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/269",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サンプルの列に対応する概念の情報項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "throw-number",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-41a34811493a5f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/270",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サンプルの行を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "row-first-throw",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-10479709494816": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/271",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "サンプルの値に対応するサンプルの列を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "column-number",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-3756ccb9208e42": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/272",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "条件や結果の具体的な値を比較表のセルで示す。",
+      "sample": 7,
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-40910446fb8734": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/273",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "例の値から対応する対象を開き、他の情報とのつながりを確認する。",
+      "sample": "throw-first",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-f0e7e38b2e5d4e": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/282",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "制約を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": "limit-pin-range",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-fbfca64ed42ab8": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/283",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "制約を一覧や図で見分け、内容を開いて確認する。",
+      "sample": "棒の番号は1から12まで",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-172e5ea8df32b1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/284",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "機能や構造の適用上の制約を確認し、成り立たない条件を合意済みの範囲へ混ぜない。",
+      "sample": "棒の番号は1から12の整数とする、という確認用の想定。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-85cfee4fb84b28": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/285",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "その制約が必要な理由を確認し、不要な制限を設計へ固定しない。",
+      "sample": "範囲外の番号を得点計算へ渡すかどうかを依頼者と確認するため。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-5e9aee6eef1ae1": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/286",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "制約の補足を、制約そのものや合意した条件と区別して共有する。",
+      "sample": {
+        "reviewQuestion": "番号の入力方法は未決。"
+      },
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-efa8c8f2127ad8": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/298",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー間の関係の「出発側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": "group-input",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-da22657a98dc03": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/299",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー間の関係の「到着側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": "group-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-88d642dad3d62b": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/300",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー間の境界の「出発側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": "group-input",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-2e3bc4744a9d96": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/301",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "レビュー間の境界の「到着側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": "group-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-9a9846ff4aacd6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/302",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビュー単位の境界で何を受け渡すかを図上で短く示し、受渡しの約束を読む入口にする。",
+      "sample": "投擲結果を渡す",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-7ab2a2bd886a9f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/303",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "レビュー単位間で受け渡す情報や守る条件を共有し、片側だけで成立と判断しない。",
+      "sample": "投擲順と倒れた棒の番号を合わせて渡し、計算する回を取り違えない。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-step-field-2": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/25",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "フロー内の手順に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "calculate-score",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "n-step-field-6": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/29",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ],
+      "perspectiveReason": "参照・形式・表示の整合性を設計と実装の両面で確認する想定。",
+      "purpose": "フロー内の手順に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": "valid",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-325c153e7c0af3": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/314",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "すべての場合に行う手順か、任意の手順かを確認する。"
+    },
+    "cf-d6937d0cbb9486": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/315",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "どの条件でフロー内の手順が必要かを確認し、条件付きの手順を常時必須にしない。",
+      "sample": "入力が有効と判定された場合。",
+      "sampleReason": "値の形と使う場面を具体的にレビューするための仮説。実運用の記録・合意済み条件ではない。元のnull・空値・未記載は維持する。値が必要な場面があると仮定した比較例。"
+    },
+    "cf-fde33f3870ef9f": {
+      "status": "hypothesis",
+      "source": "business-design/alder/json-complete-concept-review.json#/documents/2/meta/fieldMappings/331",
+      "reason": "既存の項目定義・関係とAlderの依頼者/設計者による意味確認、実装への引継ぎを基にした候補。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ],
+      "perspectiveReason": "業務上の必要性と意味を依頼者と設計者が確認する想定。",
+      "purpose": "手順の並びが未決か、順番ありか、順不同かを確認する。"
+    }
+  }
+}

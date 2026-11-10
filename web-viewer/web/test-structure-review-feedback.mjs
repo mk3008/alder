@@ -37,19 +37,19 @@ try{
  domain.values=[{value:'<script>alert(1)</script>'}];show(alt,'n-who');assert(!detail.querySelector('script'));assert(row(alt,'actors.kind').textContent.includes('<script>alert(1)</script>'));
  covered.push('STRUCTURE-FEEDBACK-001');
 
- show(model,'n-activity');assert.deepEqual([...detail.querySelectorAll('thead th')].map(x=>x.textContent),['項目','サンプル','説明','用途']);
+ show(model,'n-activity');assert.deepEqual([...detail.querySelectorAll('thead th')].map(x=>x.textContent),['項目','サンプル','説明','使用目的']);
  assert.equal(row(model,'activities.problem').querySelectorAll('td')[2].textContent,'業務改善を検討する際、解決したい困りごとを把握する。');
  assert.equal(row(model,'activities.painLevel').querySelectorAll('td')[2].textContent,'');
- row(model,'activities.problem').querySelector('button').click();assert.equal(value('用途'),'業務改善を検討する際、解決したい困りごとを把握する。');
- show(model,'n-activity');row(model,'activities.painLevel').querySelector('button').click();assert.equal(value('用途'),'');
+ row(model,'activities.problem').querySelector('button').click();assert.equal(value('使用目的'),'業務改善を検討する際、解決したい困りごとを把握する。');
+ show(model,'n-activity');row(model,'activities.painLevel').querySelector('button').click();assert.equal(value('使用目的'),'');
  covered.push('STRUCTURE-FEEDBACK-002');
 
  const writes=[];Object.defineProperty(w.navigator,'clipboard',{configurable:true,value:{writeText:async text=>{writes.push(text);}}});
  show(model,'n-activity');row(model,'activities.problem').querySelector('button').click();
  detail.querySelector('.structure-copy-id').click();await new Promise(resolve=>setTimeout(resolve,0));
- const short=writes.at(-1);assert(short.includes(model.id));assert(short.includes('n-activity'));assert(short.includes(map(model,'activities.problem').informationId));assert(!short.includes('用途：'));
+ const short=writes.at(-1);assert(short.includes(model.id));assert(short.includes('n-activity'));assert(short.includes(map(model,'activities.problem').informationId));assert(!short.includes('使用目的：'));
  detail.querySelector('.structure-copy-full').click();await new Promise(resolve=>setTimeout(resolve,0));
- const full=writes.at(-1);assert(full.includes(short));assert(full.includes('用途：業務改善を検討'));assert(full.includes('元の定義：'));assert(detail.querySelector('[role="status"]').textContent.includes('全文'));
+ const full=writes.at(-1);assert(full.includes(short));assert(full.includes('使用目的：業務改善を検討'));assert(full.includes('元の定義：'));assert(detail.querySelector('[role="status"]').textContent.includes('全文'));
  detail.querySelector('.structure-copy-id').dispatchEvent(new w.MouseEvent('click',{bubbles:true,shiftKey:true}));await new Promise(resolve=>setTimeout(resolve,0));assert.equal(writes.at(-1),full);
  show(model,'n-who');detail.querySelector('.structure-copy-id').click();await new Promise(resolve=>setTimeout(resolve,0));assert(writes.at(-1).includes('n-who'));assert.notEqual(writes.at(-1),short);
  detail.querySelector('.structure-copy-full').click();await new Promise(resolve=>setTimeout(resolve,0));

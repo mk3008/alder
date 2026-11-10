@@ -1,0 +1,138 @@
+{
+  "results": [
+    {
+      "id": "REVIEW-HYP-005",
+      "case": "navigation",
+      "status": "pass",
+      "evidence": "Actual Chromium 1280/393 light/dark; Enter/tap/clipboard/back and wrapped geometry"
+    },
+    {
+      "id": "REVIEW-HYP-005",
+      "case": "mobile-wrap",
+      "status": "pass",
+      "evidence": "Actual Chromium 1280/393 light/dark; Enter/tap/clipboard/back and wrapped geometry"
+    }
+  ],
+  "observations": [
+    {
+      "width": 1280,
+      "theme": "light",
+      "geometry": {
+        "panel": [
+          280,
+          1280
+        ],
+        "table": [
+          304,
+          1256
+        ],
+        "scroll": 1000,
+        "client": 1000,
+        "page": 1280,
+        "window": 1280,
+        "columns": [
+          209.21875,
+          190.1875,
+          190.1875,
+          218.71875,
+          142.6875
+        ]
+      },
+      "nativeKeyboard": true,
+      "touch": false,
+      "provenance": true,
+      "unresolved": 47,
+      "pageErrors": []
+    },
+    {
+      "width": 1280,
+      "theme": "dark",
+      "geometry": {
+        "panel": [
+          280,
+          1280
+        ],
+        "table": [
+          304,
+          1256
+        ],
+        "scroll": 1000,
+        "client": 1000,
+        "page": 1280,
+        "window": 1280,
+        "columns": [
+          209.21875,
+          190.1875,
+          190.1875,
+          218.71875,
+          142.6875
+        ]
+      },
+      "nativeKeyboard": true,
+      "touch": false,
+      "provenance": true,
+      "unresolved": 47,
+      "pageErrors": []
+    },
+    {
+      "width": 393,
+      "theme": "light",
+      "geometry": {
+        "panel": [
+          0,
+          393
+        ],
+        "table": [
+          12,
+          381
+        ],
+        "scroll": 393,
+        "client": 393,
+        "page": 393,
+        "window": 393,
+        "columns": [
+          80.953125,
+          73.59375,
+          73.59375,
+          84.625,
+          55.234375
+        ]
+      },
+      "nativeKeyboard": true,
+      "touch": true,
+      "provenance": true,
+      "unresolved": 47,
+      "pageErrors": []
+    },
+    {
+      "width": 393,
+      "theme": "dark",
+      "geometry": {
+        "panel": [
+          0,
+          393
+        ],
+        "table": [
+          12,
+          381
+        ],
+        "scroll": 393,
+        "client": 393,
+        "page": 393,
+        "window": 393,
+        "columns": [
+          80.953125,
+          73.59375,
+          73.59375,
+          84.625,
+          55.234375
+        ]
+      },
+      "nativeKeyboard": true,
+      "touch": true,
+      "provenance": true,
+      "unresolved": 47,
+      "pageErrors": []
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import {verifyStructureReviewHypotheses} from './test-structure-review-hypotheses-browser.mjs';
 import {verifyStructureCopyHeading} from './test-structure-copy-heading-browser.mjs';
 import {verifyStructureCopy} from './test-structure-copy-browser.mjs';
 import {verifyStructureBetaFixes} from './test-structure-beta-browser.mjs';
@@ -33,11 +34,11 @@ export async function verifyStructureSampleHeader(browser){
    const after=await body.evaluate(el=>{const header=el.querySelector('thead th'),table=el.querySelector('table'),body=el.getBoundingClientRect(),head=header.getBoundingClientRect(),t=table.getBoundingClientRect(),style=getComputedStyle(header),wrap=getComputedStyle(table.parentElement);return {scrollTop:el.scrollTop,bodyTop:body.top,bodyLeft:body.left,bodyRight:body.right,paddingTop:parseFloat(getComputedStyle(el).paddingTop),headerTop:head.top,headerBottom:head.bottom,tableBottom:t.bottom,tableLeft:t.left,tableRight:t.right,position:style.position,background:style.backgroundColor,wrapOverflowX:wrap.overflowX};});
    assert(after.scrollTop>0);assert.equal(after.position,'sticky');assert(after.headerTop>=after.bodyTop-1&&after.headerTop<=after.bodyTop+after.paddingTop+2,'header stays visible at the content top');assert(after.tableBottom>after.headerBottom,'header stays in the table bounds');assert.notEqual(after.background,'rgba(0, 0, 0, 0)');assert.equal(after.wrapOverflowX,'visible');
    assert(after.tableLeft>=after.bodyLeft-1&&after.tableRight<=after.bodyRight+1,'table fits within the content');
-   assert.deepEqual(await table.locator('thead th').allTextContents(),['項目','サンプル','説明','用途']);
+   assert.deepEqual(await table.locator('thead th').allTextContents(),['項目','サンプル','説明','使用目的']);
    await page.screenshot({path:`${out}/content-${width}.png`});
    await page.locator('#theme').click();assert.notEqual(await header.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)','sticky heading remains opaque in dark mode');
    assert.deepEqual(errors,[]);results.push({width,contentScrollTop:after.scrollTop,headerTop:after.headerTop,bodyTop:after.bodyTop,tableFits:true});
   }finally{await context.close();}
  }
- return {browser:browser.version(),results,beta:await verifyStructureBetaFixes(browser),copy:await verifyStructureCopy(browser),copyHeading:await verifyStructureCopyHeading(browser)};
+ return {browser:browser.version(),results,hypotheses:await verifyStructureReviewHypotheses(browser),beta:await verifyStructureBetaFixes(browser),copy:await verifyStructureCopy(browser),copyHeading:await verifyStructureCopyHeading(browser)};
 }

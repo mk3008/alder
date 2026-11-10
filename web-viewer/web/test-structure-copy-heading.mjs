@@ -1,8 +1,11 @@
+import './test-structure-review-hypotheses.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 const snapshot=JSON.parse(readFileSync('../work/361-copy-heading/payloads.json'));
+// Only the explicitly renamed UI caption differs from the frozen payload.
+for(const item of snapshot.cases)item.full=item.full.replaceAll(' | 用途',' | 使用目的').replaceAll('\n用途：','\n使用目的：');
 const model=JSON.parse(readFileSync('../business-design/alder/json-complete-concept-review.json')).documents.find(d=>d.kind==='conceptModel');
 const before=JSON.stringify(model),code=(await build({entryPoints:['src/structure-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'Explorer'})).outputFiles[0].text;
 const w=new JSDOM('<div id="detail"></div>',{url:'https://viewer.test/',runScripts:'outside-only'}).window;

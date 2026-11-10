@@ -185,3 +185,9 @@
 
 /* Preserve close-to-search keyboard order while keeping the mode tabs visible. */
 #design-explorer>.shell-heading{order:-2}.explorer-mode-tabs{order:-1}
+
+/* Authored Preview hypotheses stay distinct from original values and approval. */
+.structure-review-hypothesis{display:flex;flex-direction:column;gap:4px;margin-top:6px;overflow-wrap:anywhere}.structure-review-hypothesis-label{font-size:11px;font-weight:600;color:var(--line)}.structure-review-hypothesis-value{white-space:pre-wrap;overflow-wrap:anywhere}.structure-review-perspectives{min-width:0}.structure-review-candidate-source{margin-top:8px;font-size:12px;overflow-wrap:anywhere}.structure-review-candidate-source summary{cursor:pointer}.structure-review-candidate-source p{margin:6px 0;white-space:pre-wrap}
+.structure-attribute-table.structure-review-table thead th:first-child{width:22%}.structure-attribute-table.structure-review-table thead th:nth-child(2){width:20%}.structure-attribute-table.structure-review-table thead th:nth-child(3){width:20%}.structure-attribute-table.structure-review-table thead th:nth-child(4){width:23%}.structure-attribute-table.structure-review-table thead th:nth-child(5){width:15%}
+
+.structure-review-perspective{display:inline-block;white-space:nowrap}
