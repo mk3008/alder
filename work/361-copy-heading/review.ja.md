@@ -1,0 +1,11 @@
+# コピー操作を論理名の見出しへ配置する
+
+開始headは94dde496cbec339b1ac29f224ffa1f54b732c4e4。PRとremoteを再取得し一致を確認した。作業ツリーはclean、worktreeは1つ、実行中の編集／npm／Vite／Playwright／commit／pushプロセスはなく、このthreadの他Agentも実行中でない。親から前回thread完了との確認を受けた。元ローカルチャット01a1c076-d02c-73db-a4d7-8d9385509028は親側でDesktopThreadReadUnavailableであり、その内部状態までは確認できていない。確認できた範囲で競合は検出しなかった。
+
+本人が承認した配置のみを変更する。論理名のcaption内へ2操作を移し、caption文字列を別spanで保持する。全文生成はこのspanだけをラベルとして読む。識別情報・本文・Shift・通知は変更しない。構造／属性の違い（sourcePathsや関係ID）は保持する。
+
+既存正本のSTRUCTURE-FEEDBACK-003のコピー保証、DETAIL/POLICY/ORDER/CLASS-ONLY/SIDEBARの表示・選択保証を継承する。前回のB正本・固定台帳は変更しない。旧Bの『269既存検証ファイルをbyte不変』は旧B候補の証拠であり、この承認されたDOM変更でも全269ファイルが不変と主張しない。必要なcaption取得adapterだけを変更し、逆変換で旧テストの全バイトへ戻ることを別工程で照合する。期待値・assertは削除・弱化しない。
+
+実装開始前にacceptance.jsonを固定し、全ID・全適用ケース・上位の本人承認を記録した。開始版から取得したコピーpayloadは配置変更の前後不変の参照であり、業務意味の承認の代わりにはしない。重要な識別とcaptionは独立したliteral期待値でも照合する。
+
+反復ではコピー／詳細の関連Node、structureSampleHeaderのbrowserを先行する。限定実行時点の残りのbrowser群は未検証とし、最終CIで全群を確認する。元JSON・サンプル値・説明・用途・保存形式・公開Previewは変更しない。新Preview配信と追加PRコメントも行わない。
