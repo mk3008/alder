@@ -1,6 +1,6 @@
 import {createElement,Box,Link,Search} from 'lucide';
 import type {ConceptModel} from './concept-model';
-import {structureReviewCandidates,type StructureReviewCandidate} from './structure-review-candidates.ts';
+import {structureReviewCandidates,noStructureReview,canonicalReviewJSON,type ReviewProjection} from './structure-review-candidates.ts';
 
 type ValueDomain={kind?:unknown;values?:unknown;note?:unknown};
 type Mapping={informationId:string;physicalName:string;relationIds:string[];valueType?:string;valueDomain?:ValueDomain;nullable?:boolean|null;nullableReason?:string;nullableStatus?:string;optional?:boolean;sourceSchemaPath?:string;logicalSourcePaths?:string[];logicalMeaning?:string;logicalPurpose?:string;representation?:string;relationKeyIds?:unknown;sampleValue?:unknown;sampleKind?:string;referenceValue?:unknown;referenceSource?:string};
@@ -109,15 +109,26 @@ const labels:Record<Direction,string>={owned:'所有',reference:'参照',owner:'
 const icon=(which:typeof Box,label?:string)=>{const svg=createElement(which,{'aria-hidden':'true','stroke-width':1.8});svg.classList.add('structure-icon');if(label){svg.removeAttribute('aria-hidden');svg.setAttribute('role','img');svg.setAttribute('aria-label',label);const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=label;svg.prepend(title);}return svg;};
 const text=(root:HTMLElement,tag:string,value:string,className?:string)=>{const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;root.append(el);return el;};
 const markReview=(row:HTMLElement,mark:ReviewMark|undefined)=>{if(!mark)return;row.classList.add('structure-review-'+mark.kind);text(row,'span',reviewLabel(mark),'structure-review-badge');};
-function hypothesis(root:HTMLElement,value:string|string[],reason:string){
- const block=text(root,'div','','structure-review-hypothesis');block.title=reason;
- text(block,'span','仮説（未確認）','structure-review-hypothesis-label');const content=text(block,'span','','structure-review-hypothesis-value');
- if(Array.isArray(value))for(const [index,role]of value.entries()){if(index)content.append(document.createTextNode('・'));text(content,'span',role,'structure-review-perspective');}else content.textContent=value;
+function supplement(root:HTMLElement,value:string|string[]){
+ const block=text(root,'div','','structure-review-value');
+ if(Array.isArray(value))for(const [index,role]of value.entries()){if(index)block.append(document.createTextNode('・'));text(block,'span',role,'structure-review-perspective');}else block.textContent=value;
 }
-function candidateSource(root:HTMLElement,candidate:StructureReviewCandidate){
- const details=document.createElement('details');details.className='structure-review-candidate-source';root.append(details);
- text(details,'summary','候補の根拠');text(details,'p',candidate.reason);text(details,'p',candidate.perspectiveReason);
- if(candidate.sampleReason)text(details,'p',candidate.sampleReason);text(details,'p','出典：'+candidate.source);
+const detailGeneration=new WeakMap<HTMLElement,object>();
+/** Snapshot before hashing and before projecting any candidate values. Never
+ * retain a mutable source model as a validated projection's backing store. */
+export async function renderStructureDetails(root:HTMLElement,model:ConceptModel,selection?:StructureSelection,onSelect?:(next:StructureSelection)=>void){
+ const generation={};detailGeneration.set(root,generation);
+ if(!model.meta||typeof model.meta!=='object'||!Object.hasOwn(model.meta,'previewStructureReview')){renderStructureSnapshot(root,model,selection,onSelect);return;}
+ const snapshot=JSON.parse(JSON.stringify(model)) as ConceptModel,input=canonicalReviewJSON(snapshot);
+ renderStructureSnapshot(root,snapshot,selection,onSelect);
+ const result=await structureReviewCandidates(snapshot);
+ if(detailGeneration.get(root)!==generation||!result.projection.enabled)return;
+ try{if(canonicalReviewJSON(model)!==input)return;}catch{return;}
+ const focused=root.contains(root.ownerDocument.activeElement)?root.ownerDocument.activeElement as HTMLElement:undefined;
+ const focusClass=focused?.className,focusId=focused?.closest<HTMLElement>('[data-information-id]')?.dataset.informationId;
+ renderStructureSnapshot(root,snapshot,selection,onSelect,result.projection);
+ if(focusId)Array.from(root.querySelectorAll<HTMLElement>('[data-information-id]')).find(row=>row.dataset.informationId===focusId)?.querySelector<HTMLElement>('button')?.focus();
+ else if(focusClass&&/^(structure-copy-id|structure-copy-full|structure-attribute-back)$/.test(focusClass))root.querySelector<HTMLElement>('.'+focusClass)?.focus();
 }
 const shortPhysicalName=(path:string)=>path.split(' / ').map(part=>part.trim().split('.').pop()??part).join(' / ');
 function typeLabel(mapping:Mapping|undefined){
@@ -186,17 +197,16 @@ function addCopyActions(root:HTMLElement,list:HTMLElement,heading:HTMLElement,id
 }
 
 /** Present only information declared on the selected concept, field or relation. */
-export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selection?:StructureSelection,onSelect?:(next:StructureSelection)=>void){
+function renderStructureSnapshot(root:HTMLElement,model:ConceptModel,selection?:StructureSelection,onSelect?:(next:StructureSelection)=>void,candidates:ReviewProjection=noStructureReview){
  root.replaceChildren();
  if(!selection){text(root,'p','ツリーの項目を選択すると詳細を確認できます。');return;}
  const graph=structureGraph(model),marks=reviewMarks(model),concept=graph.nodes.get(selection.conceptId);if(!concept){text(root,'p','項目が見つかりません。');return;}
  const meta=model.meta&&typeof model.meta==='object'?model.meta as {modelStatus?:unknown;schemaCoverage?:unknown}:{};
- const candidates=structureReviewCandidates(model.meta);
  const study=meta.modelStatus==='normalized-study'||meta.modelStatus==='complete-package-study';
  const names=(id:string)=>{const node=graph.nodes.get(id),authored=graph.conceptNames[id] as {typeName?:unknown;logicalName?:unknown}|undefined;
   return {local:typeof authored?.logicalName==='string'&&authored.logicalName?authored.logicalName:node?.name??id,type:typeof authored?.typeName==='string'&&authored.typeName?authored.typeName:node?.name??'未定義'};};
  const list=document.createElement('dl');list.className='structure-detail-list';root.append(list);
- const select=(next:StructureSelection)=>{if(onSelect)onSelect(next);else renderStructureDetails(root,model,next);if(next.kind==='attribute')root.querySelector<HTMLButtonElement>('.structure-attribute-back')?.focus();else if(selection.kind==='attribute')Array.from(root.querySelectorAll<HTMLTableRowElement>('.structure-attribute-table tbody tr')).find(row=>row.dataset.informationId===selection.informationId)?.querySelector<HTMLButtonElement>('.structure-attribute-select')?.focus();};
+ const select=(next:StructureSelection)=>{if(onSelect)onSelect(next);else if(candidates.enabled)renderStructureSnapshot(root,model,next,undefined,candidates);else void renderStructureDetails(root,model,next);if(next.kind==='attribute')root.querySelector<HTMLButtonElement>('.structure-attribute-back')?.focus();else if(selection.kind==='attribute')Array.from(root.querySelectorAll<HTMLTableRowElement>('.structure-attribute-table tbody tr')).find(row=>row.dataset.informationId===selection.informationId)?.querySelector<HTMLButtonElement>('.structure-attribute-select')?.focus();};
  const add=(label:string,value:string|string[]|undefined)=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;const values=Array.isArray(value)?value:[value??'未定義'];if(!values.length)dd.textContent='なし';else for(const [index,item]of values.entries()){if(index)dd.append(document.createElement('br'));dd.append(document.createTextNode(item));}list.append(dt,dd);return dt;};
  if(selection.kind==='attribute'){
   if(selection.returnTo){const back=document.createElement('button');back.type='button';back.className='structure-attribute-back';back.textContent='項目一覧に戻る';back.onclick=()=>select(selection.returnTo!);root.insertBefore(back,list);}
@@ -208,14 +218,14 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
   addCopyActions(root,list,add('論理名',mapping?.physicalName?shortPhysicalName(mapping.physicalName):undefined),identity,sourcePaths);
   add('ローカル名',info.name);add('型名',typeLabel(mapping));
   const candidate=candidates.get(info.id),sampleHeading=add('サンプル',sampleValue(mapping)??'未記載');
-  if(candidate?.sample!==undefined)hypothesis(sampleHeading.nextElementSibling as HTMLElement,candidate.sample,candidate.sampleReason!);
+  if(candidate?.sample!==undefined)supplement(sampleHeading.nextElementSibling as HTMLElement,candidate.sample);
   add('null許容',nullableLabel(mapping));
   // An automatically supplied nullability reason is not an explanation of
   // the field. Only display an authored meaning, and make gaps explicit.
   add('説明',attributeDescription(data,mapping));
   const purpose=typeof mapping?.logicalPurpose==='string'?mapping.logicalPurpose:'',purposeHeading=add('使用目的',purpose);
-  if(!purpose.trim()&&candidate?.purpose)hypothesis(purposeHeading.nextElementSibling as HTMLElement,candidate.purpose,candidate.reason);
-  if(candidates.enabled){const heading=add('確認する立場',candidate?'':'未指定');if(candidate){const value=heading.nextElementSibling as HTMLElement;hypothesis(value,candidate.perspectives,candidate.perspectiveReason);candidateSource(value,candidate);}}
+  if(!purpose.trim()&&candidate?.purpose)supplement(purposeHeading.nextElementSibling as HTMLElement,candidate.purpose);
+  if(candidates.enabled){const heading=add('確認する立場',candidate?'':'未指定');if(candidate){const value=heading.nextElementSibling as HTMLElement;supplement(value,candidate.perspectives);}}
   if(mapping?.nullableReason)add('null許容の理由',mapping.nullableReason);
   const values=domainValues(mapping);if(values.length)add(mapping?.valueDomain?.kind==='fixed'?'値':'選択肢',values.map(domainValueText));
   const constraint=domainNote(mapping);if(constraint)add('制約',constraint);
@@ -263,11 +273,11 @@ export function renderStructureDetails(root:HTMLElement,model:ConceptModel,selec
    const constraint=domainNote(mapping);if(constraint)text(name,'span','制約：'+constraint,'structure-attribute-meta');
    const example=sampleValue(mapping);if(example!==undefined)text(samples,'span',example,'structure-attribute-sample');
    else text(samples,'span','未記載','structure-attribute-missing');
-   const candidate=candidates.get(info.id);if(candidate?.sample!==undefined)hypothesis(samples,candidate.sample,candidate.sampleReason!);
+   const candidate=candidates.get(info.id);if(candidate?.sample!==undefined)supplement(samples,candidate.sample);
    description.textContent=attributeDescription(data,mapping);purpose.textContent=typeof mapping?.logicalPurpose==='string'?mapping.logicalPurpose:'';
-   if(!purpose.textContent.trim()&&candidate?.purpose)hypothesis(purpose,candidate.purpose,candidate.reason);
+   if(!purpose.textContent.trim()&&candidate?.purpose)supplement(purpose,candidate.purpose);
    tr.append(name,samples,description,purpose);
-   if(candidates.enabled){const perspectives=document.createElement('td');perspectives.className='structure-review-perspectives';if(candidate){hypothesis(perspectives,candidate.perspectives,candidate.perspectiveReason);candidateSource(perspectives,candidate);}else perspectives.textContent='未指定';tr.append(perspectives);}
+   if(candidates.enabled){const perspectives=document.createElement('td');perspectives.className='structure-review-perspectives';if(candidate){supplement(perspectives,candidate.perspectives);}else perspectives.textContent='未指定';tr.append(perspectives);}
    tbody.append(tr);
   }
  }

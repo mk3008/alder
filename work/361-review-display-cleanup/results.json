@@ -1,0 +1,341 @@
+{
+  "phase": "candidate; pending future checks are not success",
+  "results": [
+    {
+      "id": "CLEAN-001",
+      "case": "339-values",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "338-purposes",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "207-sample-types",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "pain-condition",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-001",
+      "case": "document-fragment",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: ID別deepEqual/JSON型と固定per-ID SHA256; Pain条件/fragment期待"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "table",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "attribute",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "attributes",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "full",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "shift",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-002",
+      "case": "legacy-input",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs / integrity: table/detail/属性/旧v1 sentinel/全文/Shift; 実Chrome clipboard"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "real-package",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "wrong-model",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "same-revision-edit",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "reorder",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "rename",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "delete",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "duplicate-id",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "pointer-id",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "missing-dependency",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "extra-target",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "missing-target",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "candidate-type",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "origin-bytes",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "replacement-success",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "replacement-failure",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "mutation-pending",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "mutation-after",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-003",
+      "case": "crypto-failure",
+      "status": "pass",
+      "evidence": "test-structure-review-integrity.mjs: 手書きSHA/正規化期待、real package、origin byte負例、全mutation/遅着/参照負例"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "protected-bytes",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "original-values",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "47-undecided",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "review-state",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "identity-copy",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "copy-rejected",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-004",
+      "case": "tab-close",
+      "status": "pass",
+      "evidence": "verify.py protected bytes + 構造Node22/22と既存copy payload/実権限拒否、tabStrip/40条件"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "1280-light",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "393-light",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "1280-dark",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "393-dark",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "keyboard",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "touch",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-005",
+      "case": "long-name",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses-browser.mjs / copy-heading-browser: 1280/393 light/dark、font12px/line-height normal/baseline差<=1、45px hit・非重複、long-name/折返し/keyboard/touch"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "authority-bytes",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "id-deletion-negative",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "case-deletion-negative",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "missing-result-negative",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "lint",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "build",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "contract",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "node",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "browser",
+      "status": "pass",
+      "evidence": "verify.py + npm lint/build/verify:contract/test:structure-explorer + targeted structureSampleHeader/tabStrip"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "full-ci",
+      "status": "pending",
+      "evidence": "候補push後の全体CI・独立事後レビュー・公開照合で確認する。未実施。"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "independent-review",
+      "status": "pending",
+      "evidence": "候補push後の全体CI・独立事後レビュー・公開照合で確認する。未実施。"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "published-files",
+      "status": "pending",
+      "evidence": "候補push後の全体CI・独立事後レビュー・公開照合で確認する。未実施。"
+    },
+    {
+      "id": "CLEAN-006",
+      "case": "published-ui",
+      "status": "pending",
+      "evidence": "候補push後の全体CI・独立事後レビュー・公開照合で確認する。未実施。"
+    }
+  ]
+}

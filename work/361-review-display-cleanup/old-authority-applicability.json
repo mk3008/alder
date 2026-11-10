@@ -1,0 +1,765 @@
+[
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-001",
+    "case": "1280",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-001",
+    "case": "393",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-002",
+    "case": "1280-280",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-002",
+    "case": "393-280",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-003",
+    "case": "activity-label",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-004",
+    "case": "no-match",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-004",
+    "case": "clear",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-004",
+    "case": "compatibility",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-005",
+    "case": "down-right-enter",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-005",
+    "case": "up-left-home-end",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-005",
+    "case": "filtered",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-006",
+    "case": "all-samples",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-beta-fixes/acceptance.json",
+    "id": "BETA-006",
+    "case": "sample-only-diff",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-001",
+    "case": "structure",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-001",
+    "case": "attribute",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-001",
+    "case": "relation",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-002",
+    "case": "structure-short-full-shift",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-002",
+    "case": "attribute-short-full-shift",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-002",
+    "case": "relation-short-full-shift",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-002",
+    "case": "same-name-identities",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-002",
+    "case": "repeat-after-success",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-002",
+    "case": "repeat-after-failure",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-003",
+    "case": "keyboard-1280",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-003",
+    "case": "keyboard-393",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-003",
+    "case": "touch-393",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-003",
+    "case": "denied",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-003",
+    "case": "unavailable",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-004",
+    "case": "structure-1280",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-004",
+    "case": "structure-393",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-004",
+    "case": "attribute-1280",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-004",
+    "case": "attribute-393",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-004",
+    "case": "long-name-1280",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-004",
+    "case": "long-name-393",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-004",
+    "case": "wrapped-controls",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-005",
+    "case": "frozen-authorities-and-data",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-005",
+    "case": "existing-assertions",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-005",
+    "case": "full-ci",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-heading/acceptance.json",
+    "id": "COPY-HEADING-005",
+    "case": "fixed-preview-unmodified",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-001",
+    "case": "flowstep-description",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-001",
+    "case": "authoring-guide",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-001",
+    "case": "no-conversation-example",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-002",
+    "case": "frozen-bytes",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-002",
+    "case": "display-copy-delta",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-002",
+    "case": "generic-input-preserved",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-003",
+    "case": "surface-review",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-003",
+    "case": "ordinary-positive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-003",
+    "case": "necessary-status-positive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-003",
+    "case": "developer-negative",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-004",
+    "case": "before-after",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "COPY-004",
+    "case": "new-preview-only",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "INTEGRATE-001",
+    "case": "partition55",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "INTEGRATE-001",
+    "case": "assert-preservation",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "INTEGRATE-001",
+    "case": "workflow-propagation",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "INTEGRATE-001",
+    "case": "artifact-ownership",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "INTEGRATE-001",
+    "case": "full-ci",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-copy-separation/acceptance.json",
+    "id": "INTEGRATE-001",
+    "case": "timing",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-005"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-001",
+    "case": "339-fields",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-001",
+    "case": "338-purposes",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-001",
+    "case": "all-empty-examples",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-001",
+    "case": "valid-domain-types",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-001",
+    "case": "grounded-diagnostics",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-001",
+    "case": "multi-perspectives",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-001",
+    "case": "provenance",
+    "applicability": "internal freeword provenance replaced with typed stable reference; content protection retained",
+    "newContract": "CLEAN-003"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-002",
+    "case": "protected-bytes",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-002",
+    "case": "only-preview-meta",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-002",
+    "case": "all-existing-values",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-002",
+    "case": "47-undecided",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-002",
+    "case": "all-review-states",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-002",
+    "case": "old-copy-hover",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-003",
+    "case": "table",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-003",
+    "case": "attribute",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-003",
+    "case": "original-plus-hypothesis",
+    "applicability": "superseded presentation by CLEAN-002",
+    "newContract": "CLEAN-002"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-003",
+    "case": "purpose-separate-from-roles",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-003",
+    "case": "provenance-visible",
+    "applicability": "superseded presentation by CLEAN-002",
+    "newContract": "CLEAN-002"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-003",
+    "case": "no-approval-claim",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-004",
+    "case": "absent-meta",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-004",
+    "case": "malformed-meta",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-004",
+    "case": "unknown-role",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-004",
+    "case": "unsafe-text",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-004",
+    "case": "no-runtime-generation",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-005",
+    "case": "identity-copy",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-005",
+    "case": "full-copy-hypothesis",
+    "applicability": "superseded presentation by CLEAN-002",
+    "newContract": "CLEAN-002"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-005",
+    "case": "shift-and-notification",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-005",
+    "case": "navigation",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-005",
+    "case": "mobile-wrap",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-review-hypotheses/acceptance.json",
+    "id": "REVIEW-HYP-005",
+    "case": "tab-close",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "light-1280-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "light-1280-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "light-393-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "light-393-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "dark-1280-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "dark-1280-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "dark-393-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-001",
+    "case": "dark-393-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "light-1280-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "light-1280-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "light-393-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "light-393-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "dark-1280-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "dark-1280-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "dark-393-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-002",
+    "case": "dark-393-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-003",
+    "case": "pointer-active",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-003",
+    "case": "pointer-inactive",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-003",
+    "case": "Enter",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-003",
+    "case": "Space",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-003",
+    "case": "touch-393",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-004",
+    "case": "protected-bytes",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  },
+  {
+    "authority": "work/361-tab-close/acceptance.json",
+    "id": "TAB-CLOSE-004",
+    "case": "old-assertions",
+    "applicability": "retained; old authority bytes unchanged",
+    "newContract": "CLEAN-004"
+  }
+]
