@@ -1,0 +1,53 @@
+name: Verify published field-review hypotheses
+on:
+  push:
+    branches: ['review/361-hypotheses-published-check-2bc435ed']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: web-viewer
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+          ref: 2bc435ed32c4868a6cad20fb03f3331ddbb337f7
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run build
+      - name: Install browser driver
+        run: npm install --prefix "$RUNNER_TEMP/published-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Install Japanese review-image font
+        run: |
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 \
+              https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf \
+              --output "$FONT_FILE"
+            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
+            fc-cache -f "$HOME/.local/share/fonts"
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Compare immutable public bytes and exercise actual published app
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/published-browser/node_modules/playwright
+          EXPECTED_DIR: ${{ runner.temp }}/expected-hypotheses-preview
+        run: node ../work/361-review-hypotheses/verify-published.mjs
+      - name: Retain public display and close observations
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: published-field-hypotheses-2bc435ed
+          path: |
+            web-viewer/web/evidence/review-hypotheses/
+            web-viewer/web/evidence/tab-close/
+          if-no-files-found: error
+          retention-days: 14
