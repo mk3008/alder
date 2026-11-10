@@ -1,7 +1,7 @@
 name: Verify published field-review hypotheses
 on:
   push:
-    branches: ['review/361-hypotheses-published-check-2bc435ed']
+    branches: ['review/361-hypotheses-published-check-08b90c2a']
 permissions:
   contents: read
 jobs:
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4.4.0
         with:
           persist-credentials: false
-          ref: 2bc435ed32c4868a6cad20fb03f3331ddbb337f7
+          ref: 08b90c2a7e8594558e041a686d89046c29415332
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '24.22.1'
@@ -45,7 +45,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: published-field-hypotheses-2bc435ed
+          name: published-field-hypotheses-08b90c2a
           path: |
             web-viewer/web/evidence/review-hypotheses/
             web-viewer/web/evidence/tab-close/
