@@ -29,8 +29,12 @@ export async function verifyStructureBetaFixes(browser,{base='http://127.0.0.1:4
    console.log(JSON.stringify({structureBeta:width,stage:'geometry-and-search-passed'}));
    // Reproduce the reported path from the Activity's Who reference with native keys.
    await page.goto(url('structure-explorer'));await page.locator('.structure-detail-page:not([hidden]) table').waitFor();await showSidebar();
-   const bd=tree.locator('.structure-root > li > details > .structure-children > [data-concept-id="n-bd"] > details');if(!await bd.evaluate(el=>el.open))await bd.locator(':scope > summary').click();
-   const activity=bd.locator(':scope > .structure-children > [data-relation-id="nr-bd-activity"] > details');if(!await activity.evaluate(el=>el.open))await activity.locator(':scope > summary').click();
+   const openStructure=async node=>{
+    const row=node.locator(':scope > summary');await row.click();
+    if(!await node.evaluate(el=>el.open))await row.press('ArrowRight');
+   };
+   const bd=tree.locator('.structure-root > li > details > .structure-children > [data-concept-id="n-bd"] > details');await openStructure(bd);
+   const activity=bd.locator(':scope > .structure-children > [data-relation-id="nr-bd-activity"] > details');await openStructure(activity);
    assert.equal(await activity.locator(':scope > summary strong').innerText(),'業務');
    const packageTab=page.getByRole('button',{name:'データ構造：構造-文書パッケージ',exact:true});
    const designTab=page.getByRole('button',{name:'データ構造：構造-業務設計書',exact:true});
@@ -51,7 +55,7 @@ export async function verifyStructureBetaFixes(browser,{base='http://127.0.0.1:4
    await page.keyboard.press('Home');const root=tree.locator('.structure-root > li > details > summary');assert(await root.evaluate(el=>document.activeElement===el));await page.keyboard.press('ArrowLeft');assert.equal(await root.evaluate(el=>el.parentElement.open),false);await page.keyboard.press('ArrowRight');assert.equal(await root.evaluate(el=>el.parentElement.open),true);await page.keyboard.press('ArrowRight');const childWasOpen=await page.evaluate(()=>document.activeElement.parentElement.open);await page.keyboard.press('ArrowLeft');if(childWasOpen)await page.keyboard.press('ArrowLeft');assert(await root.evaluate(el=>document.activeElement===el));
    await page.screenshot({path:out+'/keyboard-'+width+'.png'});
    // The reviewed samples must reach the displayed table, including on public Pages.
-   await page.goto(url('structure-explorer:n-bd'));await page.locator('[data-information-id="cf-9b0df810c60eb0"]').waitFor();
+   await page.goto(url('structure-explorer:n-bd'));await detail.locator('[data-information-id="cf-9b0df810c60eb0"]').waitFor();
    const preface=page.locator('.structure-detail-page:not([hidden]) [data-information-id="cf-9b0df810c60eb0"] td').first();assert.equal(await preface.innerText(),reviewSamples().documents.find(d=>d.kind==='conceptModel').meta.fieldMappings.find(f=>f.informationId==='cf-9b0df810c60eb0').sampleValue);
    if(width<800&&await sidebar.isVisible())await page.locator('#design-explorer .shell-heading button').click();await page.screenshot({path:out+'/samples-'+width+'.png'});
    await page.goto(url('overview'));await page.frameLocator('iframe[data-concept-view="overview"]').getByText('業務（Activity）',{exact:true}).waitFor();
