@@ -1,0 +1,33 @@
+{
+  "resultsSha256": "269eae9e7c6768358b99479d566e5e28e42a818ddc2027a9f55474e43b5806ff",
+  "sourceSha256": {
+    "web-viewer/src/structure-explorer.ts": "2d776ade4d5504ac27436799c5e5428d3ddc3d4963f452b2102bac2feae3f407",
+    "web-viewer/src/structure-explorer.css": "888dddf77d22ab0526245b0be2827dbe2951babccb00299d202bc23d8e94adcc",
+    "web-viewer/web/test-structure-copy-heading.mjs": "538c49b3126e3bff72ccc1d835077c3c1d802518176f84b6a4ba984b27d3fa9e",
+    "web-viewer/web/test-structure-copy-heading-browser.mjs": "f459655a008a0057d10f9e14e5a4f1584fa0e251e0f1de38199671b534d59ecb"
+  },
+  "servedBuildSha256": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/canvas-toolbar-aYSe-n1e.js": "b62ceb5ee11a41a22f65c305cd1ed1372750f8ac3fed831fc8ce22c2c34e9cbb",
+    "assets/concept-C2-zV7OO.js": "96873ec03883f4dbe6423cd32cae668a5ff97a3a5f0d3daf79ca3a83aace2f3e",
+    "assets/concept-DZziS4lh.css": "50c4fb6e1388f50986405b4f4f767fbc9f00ac0eab6b4782e874ad0452b6a9ad",
+    "assets/main-BI_bL1kp.css": "9bc8771cf77321a2a13370613e3a06bbc284fc26e1852fb30ed1d3c0b695dba1",
+    "assets/main-UeIicMPe.js": "922176e435590af447728df57f643cc81c7ad9eb977969f645933febf7e71252",
+    "concept.html": "4363f77df4b2d17fb8cb0297f1e319e311e9400f353aade12f04c010fd7e14d9",
+    "index.html": "513e2b270aa4bd8933c7509868cced96bcf5fd2617cc7b417e3e4c403894c4ee",
+    "named-plans-example.json": "4f14c3bfb776a62d984703390ca8abc8fc173aea41ff8d3d54f4d7581409ba9b"
+  },
+  "scope": "Actual local browser run after build; all served dist bytes reacquired from4173 and matched. This is evidence binding, not proof against arbitrary fabricated observations.",
+  "screenshotsSha256": {
+    "attribute-1280.png": "1c7b23bc2b95ab2ec1743cc876a20eae8878c871dc5adb6d5e97719587954381",
+    "attribute-393.png": "1165c971dea48d82bbe19e8fe118f309883dbdf924b733bab4293f3704608197",
+    "denied-393.png": "7c4f6bedbe1ba2f901cf2f3d4a2dcccf43e3f7f7240a78c8745f1fd56a71fc6c",
+    "long-name-1280.png": "e43eb4b382529c539f85723f2f57278ad955d25641594f0bd897f80b4871811b",
+    "long-name-393.png": "70ff14c49199ff32bae8870378fce8776c3bddf2aa83e2518cfd13615c5b3d3a",
+    "structure-1280.png": "c8dd6c40e720e830f0731bc76185e2d605adef254b2f868e9877da17847ac162",
+    "structure-393.png": "c8449ad5f57104e06230ce75c82d266022b1c16f5e7ec8a5408583d9f06e69bb",
+    "wrapped-393.png": "1bda8921844a91d4a43176f2d6b22c26e5c08d84964b8a327dd67ae52b6b34cf"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PR #361 issuecomment-6740904002 / issuecomment-6740926068 and 2026-11-09 user work order",
+  "checks": [
+    {"id":"COPY-001","condition":"Published review copy","guarantee":"FlowStep explains meaning, sequence and decision-row relationship; authoring rules are separately labelled; conversational example absent from normal explanation","cases":["flowstep-description","authoring-guide","no-conversation-example"]},
+    {"id":"COPY-002","condition":"Source and general Viewer","guarantee":"Frozen originals, approval states and nullable reasons stay unchanged; exact source mappings retained; no keyword-based suppression in general Viewer","cases":["frozen-bytes","display-copy-delta","generic-input-preserved"]},
+    {"id":"COPY-003","condition":"Explanation surfaces","guarantee":"Review structure/field descriptions, purposes, tooltips and examples for author metadata; preserve ordinary explanations, null-pending, compatibility and preview states","cases":["surface-review","ordinary-positive","necessary-status-positive","developer-negative"]},
+    {"id":"COPY-004","condition":"Final candidate","guarantee":"Before/after actual browser evidence and immutable new Preview; existing Preview and main unchanged","cases":["before-after","new-preview-only"]},
+    {"id":"INTEGRATE-001","condition":"Same final integrated head","guarantee":"55 existing Chrome cases pass in exact partition with no missing/duplicate/unknown cases; original asserts retained; lint/build/Node/structure/contract pass; frozen authority fetch and beta/public evidence retained; failure/cancel/skip reject final verify; timing measured anew","cases":["partition55","assert-preservation","workflow-propagation","artifact-ownership","full-ci","timing"]}
+  ]
+}

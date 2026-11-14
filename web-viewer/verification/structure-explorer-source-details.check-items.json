@@ -1,0 +1,10 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "概念モデルの属性詳細にある元JSONの定義情報",
+  "source": "2026-11-06 本人指摘：定義元と参照元の型表記の意味・必要性を確認する。今回は概念モデルをレビューし、元JSON自体は変更しない。",
+  "supersedes": "STRUCTURE-NULL-003とSTRUCTURE-ORDER-004の元の型表記に関する通常画面表示を、モデル内での保持と移行時の照合に変更する。概念上の型・null許容・未決・意味のある説明は引き続き表示する。",
+  "checks": [
+    {"id":"STRUCTURE-SOURCE-001","condition":"参照元の定義パスや型表記を持つ属性を表示する","guarantee":"『定義元』『参照元の型表記』を詳細に表示せず、型名とnull許容および説明・サンプルは表示する。","reason":"通常の概念レビューで内部の元JSON情報を重複表示しない。","verification":"画面のPackage.diagnosticsと、元型がnullを含む属性を確認する。"},
+    {"id":"STRUCTURE-SOURCE-002","condition":"元の型と概念上のnull許容が異なる場合、または元情報が欠ける場合","guarantee":"元の型・定義元はデータ内に保持し、サンプル・元型・省略可否からnull許容を推測せず、未決・未定義は明示する。","reason":"将来の変換時の照合に必要な情報と概念設計上の未決を失わない。","verification":"元のboolean | null、nullの例、未決、未定義を確認し、元データをバイト比較する。"}
+  ]
+}

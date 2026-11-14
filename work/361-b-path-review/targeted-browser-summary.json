@@ -1,0 +1,128 @@
+{
+  "browserSummary": {
+    "scope": "targeted",
+    "available": 55,
+    "selected": [
+      "structureSampleHeader",
+      "explorerResizeScroll"
+    ],
+    "durationMs": 87193,
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "results": [
+      {
+        "name": "structureSampleHeader",
+        "status": "passed",
+        "result": {
+          "browser": "154.0.8037.57",
+          "results": [
+            {
+              "width": 1280,
+              "contentScrollTop": 374,
+              "headerTop": 125,
+              "bodyTop": 109,
+              "tableFits": true
+            },
+            {
+              "width": 393,
+              "contentScrollTop": 374,
+              "headerTop": 121,
+              "bodyTop": 109,
+              "tableFits": true
+            }
+          ],
+          "beta": {
+            "base": "http://127.0.0.1:4173/",
+            "published": false,
+            "results": [
+              {
+                "width": 1280,
+                "sidebar": 280,
+                "summaryFits": true,
+                "treeOverflow": {
+                  "scroll": 279,
+                  "client": 279,
+                  "labels": []
+                },
+                "zeroResults": true,
+                "nativeKeyboard": true,
+                "samples": true,
+                "activityNames": "業務 / 業務（Activity）",
+                "pageErrors": []
+              },
+              {
+                "width": 393,
+                "sidebar": 280,
+                "summaryFits": true,
+                "treeOverflow": {
+                  "scroll": 279,
+                  "client": 279,
+                  "labels": []
+                },
+                "zeroResults": true,
+                "nativeKeyboard": true,
+                "samples": true,
+                "activityNames": "業務 / 業務（Activity）",
+                "pageErrors": []
+              }
+            ]
+          },
+          "copy": [
+            {
+              "width": 1280,
+              "before": false,
+              "description": "一つの標準フローまたは例外フローと、そこで使う手順との対応を表す。フロー内での順序と、参照する判定行は、この対応に属する。同じ業務の複数の流れから、共通の手順を参照できる。",
+              "nullPending47": true,
+              "compatibilityVisible": true,
+              "previewIdentifier": false,
+              "authoringGuide": false,
+              "pageErrors": []
+            },
+            {
+              "width": 393,
+              "before": false,
+              "description": "一つの標準フローまたは例外フローと、そこで使う手順との対応を表す。フロー内での順序と、参照する判定行は、この対応に属する。同じ業務の複数の流れから、共通の手順を参照できる。",
+              "nullPending47": true,
+              "compatibilityVisible": true,
+              "previewIdentifier": false,
+              "authoringGuide": false,
+              "pageErrors": []
+            }
+          ]
+        },
+        "durationMs": 61240
+      },
+      {
+        "name": "explorerResizeScroll",
+        "status": "passed",
+        "result": {
+          "checks": [
+            "EXPLORER-RESIZE-001",
+            "EXPLORER-RESIZE-002",
+            "EXPLORER-SCROLL-001",
+            "EXPLORER-REGRESSION-001"
+          ],
+          "browser": "154.0.8037.57",
+          "results": [
+            {
+              "width": 1280,
+              "initial": 280,
+              "dragged": 340,
+              "horizontalOverflow": 510,
+              "scrollLeft": 510
+            },
+            {
+              "width": 393,
+              "initial": 280,
+              "dragged": 360,
+              "horizontalOverflow": 509,
+              "scrollLeft": 509
+            }
+          ]
+        },
+        "durationMs": 25952
+      }
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "format": "viewer-verification/1",
+  "source": "trusted user instruction in delegated thread 01a1a74c-7b7e-7445-8e68-a34469ffe0cb, 2026-11-10",
+  "scope": "承認済み表示変更（過去B正本の更新ではない）",
+  "imageLimit": "このexecutorではLibrary画像取得がCONNECT403。親担当の実画像観測と本人文章を根拠に実装する後続指示に従う。画像の直接閲覧は未実施。",
+  "checks": [
+    {
+      "id": "TAB-CLOSE-001",
+      "condition": "全種別のcloseへhover、focus-visible、離脱。light/dark、1280/393px、active/inactive。",
+      "guarantee": "×の直近に灰色の円を表示し四方にタブ背景を残す。タブ背景・上下の帯・縁を塗らず、離脱でhover表示を除く。",
+      "reason": "本人の新しい表示指示。Chrome寸法の複製は不要。",
+      "cases": [
+        "light-1280-active",
+        "light-1280-inactive",
+        "light-393-active",
+        "light-393-inactive",
+        "dark-1280-active",
+        "dark-1280-inactive",
+        "dark-393-active",
+        "dark-393-inactive"
+      ],
+      "verification": "web/test-tab-close-browser.mjs"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "condition": "同じ表示条件でタブ名hover、通常表示、選択表示。",
+      "guarantee": "通常のタブ名hover、既存の種別色、active下線・強調を保持。close hoverでinactive親タブをhover色へ変えない。",
+      "reason": "VIEW-TAB-001/002と今回のタブデザイン保持要求。",
+      "cases": [
+        "light-1280-active",
+        "light-1280-inactive",
+        "light-393-active",
+        "light-393-inactive",
+        "dark-1280-active",
+        "dark-1280-inactive",
+        "dark-393-active",
+        "dark-393-inactive"
+      ],
+      "verification": "web/test-tab-close-browser.mjs"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "condition": "ポインター、Enter、Space、393pxタッチでclose。",
+      "guarantee": "32×44pxの既存ヒット領域を保持。対象だけ閉じ、inactive closeは現在の選択を変えない。通常のタブ選択、スクロール、閉じる操作を保持。",
+      "reason": "本人が既存操作と十分なヒット領域の保持を指示。TAB-SCROLL-002/003。",
+      "cases": [
+        "pointer-active",
+        "pointer-inactive",
+        "Enter",
+        "Space",
+        "touch-393"
+      ],
+      "verification": "web/test-tab-close-browser.mjs と既存tabStrip/viewerShell"
+    },
+    {
+      "id": "TAB-CLOSE-004",
+      "condition": "関連製品・正本・既存テスト。",
+      "guarantee": "CSS以外の製品ファイル、既存正本、前回B・copy-heading記録を保持。既存tabStripのassertは維持し新検査の呼出しだけ追加。",
+      "reason": "今回の変更範囲はclose表示だけ。",
+      "cases": [
+        "protected-bytes",
+        "old-assertions"
+      ],
+      "verification": "work/361-tab-close/verify.py"
+    }
+  ]
+}

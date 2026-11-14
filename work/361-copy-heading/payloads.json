@@ -1,0 +1,36 @@
+{
+  "start": "94dde496cbec339b1ac29f224ffa1f54b732c4e4",
+  "note": "Pre-change preservation snapshots. Identity/caption correctness is also tested using independently authored literals.",
+  "cases": [
+    {
+      "name": "structure",
+      "selection": {
+        "kind": "structure",
+        "conceptId": "n-package"
+      },
+      "short": "概念モデル：alder-complete-package-study（package-study-1）\n構造：DocumentPackage［n-package］",
+      "full": "概念モデル：alder-complete-package-study（package-study-1）\n構造：DocumentPackage［n-package］\n論理名：DocumentPackage\nローカル名：文書パッケージ\n型名：DocumentPackage\n項目とサンプル：項目 | サンプル | 説明 | 用途\n形式 / 論理名：format / 型：\"alder-document-package\" / null許容：許容しない / 値： / alder-document-package | alder-document-package | このファイルがAlderの文書パッケージであることを示し、他のJSON形式と区別する。 | \n形式の版 / 論理名：formatVersion / 型：版・改訂 / null許容：許容しない / 制約：空文字や空白のみは使用しない。 | 0.7 | 文書パッケージの構造を解釈するための形式の版。パッケージ内容の改訂とは別。 | \n改訂 / 論理名：revision / 型：版・改訂 / null許容：許容しない / 制約：空文字や空白のみは使用しない。 | normalized-example-source-1 | 文書パッケージの内容の改訂を区別する値。形式の版とは別。 | \n診断 / 論理名：diagnostics / 型：string[] / null許容：許容する | [] | 文書に残す補足情報。検証時に計算される結果とは別に記録する。 | \n所属：未定義\n含む構造：業務設計書（BusinessDesign）\nチェック文書（CheckDocument）\n状態遷移文書（StateTransitionDocument）\n概念モデル文書（ConceptModelDocument）\n原典情報（SourceRecord）\n参照：なし\n説明：文書と、その原典・外部目録をまとめる。"
+    },
+    {
+      "name": "attribute",
+      "selection": {
+        "kind": "attribute",
+        "conceptId": "n-package",
+        "informationId": "cf-fa56ab6bd9ad29"
+      },
+      "short": "概念モデル：alder-complete-package-study（package-study-1）\n構造：DocumentPackage［n-package］\n項目：形式（format）［cf-fa56ab6bd9ad29］",
+      "full": "概念モデル：alder-complete-package-study（package-study-1）\n構造：DocumentPackage［n-package］\n項目：形式（format）［cf-fa56ab6bd9ad29］\n元の定義：Package.format\n論理名：format\nローカル名：形式\n型名：\"alder-document-package\"\nサンプル：alder-document-package\nnull許容：許容しない\n説明：このファイルがAlderの文書パッケージであることを示し、他のJSON形式と区別する。\n用途：\nnull許容の理由：文書とその改訂・解釈を区別し、参照元との対応を確認するために必要。\n値：alder-document-package\n所属：文書パッケージ（DocumentPackage）\n参照：なし"
+    },
+    {
+      "name": "relation",
+      "selection": {
+        "kind": "structure",
+        "conceptId": "n-bd",
+        "fromId": "n-package",
+        "relationId": "nr-package-bd"
+      },
+      "short": "概念モデル：alder-complete-package-study（package-study-1）\n構造：BusinessDesign［n-bd］\n関係：nr-package-bd",
+      "full": "概念モデル：alder-complete-package-study（package-study-1）\n構造：BusinessDesign［n-bd］\n関係：nr-package-bd\n論理名：未定義\nローカル名：業務設計書\n型名：BusinessDesign\n項目とサンプル：項目 | サンプル | 説明 | 用途\n識別子 / 論理名：id / 型：識別子 / null許容：許容しない / 制約：空文字や空白のみは使用しない。 | bd-score-example | 業務設計書を他の文書と区別し、原典や参照を追跡する識別子。 | \n名前 / 論理名：title / 型：string / null許容：許容しない / 制約：空文字や空白のみは使用しない。 | モルックの点数計算 | 依頼者と設計者が、どの業務についての設計書かを識別する名前。 | \n改訂 / 論理名：revision / 型：版・改訂 / null許容：許容しない / 制約：空文字や空白のみは使用しない。 | bd-review-1 | 同じ業務設計書の改訂を区別する値。 | \n文書の版 / 論理名：schemaVersion / 型：版・改訂 / null許容：許容しない / 制約：空文字や空白のみは使用しない。 | 0.6 | 業務設計書の構造を解釈するための文書形式の版。内容の改訂とは別。 | \n文書の種類 / 論理名：kind / 型：\"businessDesign\" / null許容：許容しない / 値： / businessDesign | businessDesign | この文書が業務設計書であることを示す区分。 | \n前書き / 論理名：preface / 型：string / null許容：許容する | 画面確認用の合成例。点数計算機能を自動主体とする分類は仮定。 | 業務設計書全体に共通する前提や補足、未決事項。 | \n対象範囲の説明 / 論理名：scope / 型：string / null許容：許容する | \"\" | 設計書全体で扱う業務・対象と、その範囲を説明する。個々のシステム化対象の判定とは区別する。 | \n所属：文書パッケージ（DocumentPackage）\n含む構造：主体（Who）\n業務（Activity）\n対象（Object）\n情報項目グループ（InformationGroup）\n業務・対象の関係（BusinessRelation）\n設計上の確認事項（DesignFinding）\n参照：なし\n関係の種類：所有\n多重度：0..N\n反対側の多重度：1\n参照元：チェック文書：原典の業務設計書\n状態遷移文書：原典の業務設計書\n概念モデル文書：原典の業務設計書\n根拠の参照：根拠の業務設計書\n原典情報：原典の業務設計書"
+    }
+  ]
+}

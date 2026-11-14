@@ -7,6 +7,8 @@ on:
       - 'business-design/alder/business-design.json'
       - 'business-design/alder/README.md'
       - 'tools/viewer-preview.mjs'
+      - 'work/361-beta-fixes/**'
+      - 'work/361-copy-separation/**'
       - 'work/viewer-json/issue-274/layout-regression/**'
       - 'tools/document_storage/**'
       - 'tools/business_graph/**'
@@ -48,6 +50,7 @@ jobs:
         env:
           SHARD: ${{ matrix.shard }}
         run: node web/browser-shards.mjs "$SHARD" >> "$GITHUB_OUTPUT"
+
       - run: npm run build
       - name: Install browser driver
         run: npm install --prefix "$RUNNER_TEMP/viewer-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
@@ -97,6 +100,15 @@ jobs:
             web-viewer/web/evidence/
           if-no-files-found: error
           retention-days: 14
+      - name: Retain beta regression observations
+        if: always() && matrix.shard == '1'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: structure-beta-${{ github.event.pull_request.head.sha }}
+          path: web-viewer/web/evidence/structure-beta-fixes/
+          if-no-files-found: error
+          retention-days: 14
+
   verify:
     needs: chrome
     if: always()
@@ -125,7 +137,7 @@ jobs:
       - name: Lint Viewer source and tests
         run: npm run lint
       - name: Fetch frozen pre-B verification authority
-        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e
+        run: git fetch --no-tags --depth=1 origin 55d69577d0cf2faf54f5ab49c1e2495a7d43698e 777b79a4f919a1456c74a724b949bc7748f32df1 887c0f60a191d06e1db0ed50567844cca2ec1950 d3123341bdb69aae3e5dca8f6e648bffed0389d7
       - name: Verify UI verification authority
         run: npm run verify:contract
       - run: npm test
@@ -272,4 +284,54 @@ jobs:
           name: json-roles-${{ github.event.pull_request.head.sha }}
           path: web-viewer/web/evidence/json-roles/
           if-no-files-found: ignore
+          retention-days: 14
+
+
+  verify-published-beta:
+    if: github.event.pull_request.number == 361 && github.event.pull_request.head.ref == 'review/340-structure-explorer-main'
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: web-viewer
+    steps:
+      - name: Check out immutable published beta for read-only verification
+        uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+          ref: 7ebe732f6ccc1676d591d564d95b711e473c60a3
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.1'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run build
+      - name: Install public browser driver
+        run: npm install --prefix "$RUNNER_TEMP/published-browser" --ignore-scripts --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - name: Install Japanese review-image font
+        run: |
+          if ! fc-match -f '%{family}\n' ':lang=ja' | grep -q 'Noto.*CJK'; then
+            FONT_FILE="$RUNNER_TEMP/NotoSansCJKjp-Regular.otf"
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 90 --retry 1 --retry-max-time 120 \
+              https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf \
+              --output "$FONT_FILE"
+            test "$(git hash-object "$FONT_FILE")" = f56224957fb13a81b4c14bac34f2f058a017f9fb
+            mkdir -p "$HOME/.local/share/fonts"
+            install -m 644 "$FONT_FILE" "$HOME/.local/share/fonts/NotoSansCJKjp-Regular.otf"
+            fc-cache -f "$HOME/.local/share/fonts"
+          fi
+          fc-match -f '%{family}\n' ':lang=ja' | grep 'Noto.*CJK'
+      - name: Verify fixed public files and the six beta review items
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/published-browser/node_modules/playwright
+          EXPECTED_DIR: ${{ runner.temp }}/expected-preview
+          EVIDENCE_DIR: ${{ runner.temp }}/published-beta
+        run: node web/test-structure-beta-published.mjs
+      - name: Retain public beta observations
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: published-beta-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/published-beta/
+          if-no-files-found: error
           retention-days: 14

@@ -1,0 +1,36 @@
+{
+  "base": "http://127.0.0.1:4173/",
+  "published": false,
+  "results": [
+    {
+      "width": 1280,
+      "sidebar": 280,
+      "summaryFits": true,
+      "treeOverflow": {
+        "scroll": 279,
+        "client": 279,
+        "labels": []
+      },
+      "zeroResults": true,
+      "nativeKeyboard": true,
+      "samples": true,
+      "activityNames": "業務 / 業務（Activity）",
+      "pageErrors": []
+    },
+    {
+      "width": 393,
+      "sidebar": 280,
+      "summaryFits": true,
+      "treeOverflow": {
+        "scroll": 279,
+        "client": 279,
+        "labels": []
+      },
+      "zeroResults": true,
+      "nativeKeyboard": true,
+      "samples": true,
+      "activityNames": "業務 / 業務（Activity）",
+      "pageErrors": []
+    }
+  ]
+}

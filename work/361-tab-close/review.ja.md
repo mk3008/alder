@@ -1,0 +1,15 @@
+# タブcloseの表示修正
+
+開始版は `fe5eaeb06e9472cb234f7ae538a92970798b9bba`。PR/コメント・remoteを再取得し、1 worktree、tracked差分なしを確認した。残存Viteは前回の自身のpreviewで、他writerは確認されなかった。元Desktop threadの内容を新たに読めたとは扱わない。
+
+今回の本人指示は新しい表示仕様であり、以前のB改善や正本を差し替える工程ではない。実装前commit `4dc8f2a4` に受入定義を分離し、既存16,669ファイルと2正本を固定した。TAB-CLOSE-001〜004の23ケース、既存9IDの適用範囲を保持する。旧tabStripはimportと呼出しの2行だけ追加し、逆変換で旧byteへ一致する。
+
+32×44pxの操作対象内に24pxの円を描画し、hover/focus-visibleを示す。親hoverはclose領域を除き、元の種別色とactiveの下線・強調、通常のラベルhoverを維持する。`:where`で既存active規則の優先順位を保つ。モデル・JSON・Schema・Plugin・保存・コピーpayload・既存Bは無変更。
+
+Library画像2件はこのexecutorでCONNECT403となり未取得。画像の直接閲覧は未実施。別経路へ迂回していない。親担当が正規経路で確認した観測と本人の文章仕様で進めてよいという後続指示に従った。Chromeの寸法・色を厳密に複製したとは主張しない。取得先 `sdmntprwestus3.oaiusercontent.com:443` のCloud allowlist変更ツールは利用可能なツールに見つからなかった。
+
+反復ではtabStrip、tabScroll、viewerShellを選択した。共通タブの幾何・混在種別・選択/close・隣接drawerが対象のためである。選択外の52群はこの段階では未実施。Node shell2件、lint/build/contractも成功。追加の単体実ブラウザー検査は業務・構造・状態・サブシステム・テスト仕様の5種別、light/dark、1280/393px、active/inactiveの40条件でhover/focus/離脱を確認する。操作21結果行と40観測はbrowser-results.jsonに保存。結果行数を個別assert数と混同しない。
+
+初回の製品候補では親hoverセレクターがactive色を上書きしたため、独立した色期待の検査で検出し`:where`へ修正した。新しいテストの初回ではnative close後の非同期render待機が不足していたため、期待を維持してcount待機を追加。長いタブのlocator screenshotが横scrollを変えてhoverを外す問題は、表示された操作領域をpage clipで撮影するよう修正した。画素は円以外で不変、親背景はcomputed styleで不変、全画面は画像で確認した。
+
+照合は同じAgentの実装と別の読み取り専用工程である。verify.pyは凍結commitから正本と全ID/ケースを取り出し、hash不変・結果網羅性を照合する。ID削除・ケース削除・結果欠落の負例を確認する。既存要求の意図と、active/inactive・種別・drawer固有差を維持したことをレビューし、出力同士の一致だけを根拠にしない。全体CIとベータ公開結果はPR本文で実行済み/未実施を区別して追記する。

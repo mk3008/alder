@@ -1,0 +1,20 @@
+{
+  "productRevision": "4ec70543763c7abc41270e2d130b22b2581445f4",
+  "sourceSha256": "fde424bef282388a03fdef472b3fbfb6fade89ba5d2beab4f63a6164e286b6e7",
+  "resultsSha256": "932066d04cdef8d7bad8861737d50c3d130f6b9cae1f4d63f458fd01eabf02e9",
+  "servedBuildSha256": {
+    "LICENSE.txt": "2e07df526d2437bcc23770e737c77b965e33dd13f06dcff9ba45b9f8dd97b815",
+    "THIRD_PARTY_LICENSES.txt": "8a70ce8ac3677063b024b9bc93cc2781638aef8731cdf1fbb599ff38a4a57e40",
+    "assets/canvas-toolbar-JZS1kHdY.css": "beda5d3f0c457952b08d2571206d8e9af394ac50950d67b3353882d31a90e8a9",
+    "assets/canvas-toolbar-aYSe-n1e.js": "b62ceb5ee11a41a22f65c305cd1ed1372750f8ac3fed831fc8ce22c2c34e9cbb",
+    "assets/concept-C2-zV7OO.js": "96873ec03883f4dbe6423cd32cae668a5ff97a3a5f0d3daf79ca3a83aace2f3e",
+    "assets/concept-DZziS4lh.css": "50c4fb6e1388f50986405b4f4f767fbc9f00ac0eab6b4782e874ad0452b6a9ad",
+    "assets/main-DQElh5F4.js": "869db6d54ace208c4c32198ed397f9a56a59ac0318fe5f385ae59b7c40523871",
+    "assets/main-z682XLpA.css": "666375e6e7b496643f069bec5f2f95d0a42101e4e2673e3bf82379b77fc19eef",
+    "concept.html": "4363f77df4b2d17fb8cb0297f1e319e311e9400f353aade12f04c010fd7e14d9",
+    "index.html": "60b454c08dbcef293b3f30b26cec771c10d6303fd56e93b22f56703c2af58d1b",
+    "named-plans-example.json": "4f14c3bfb776a62d984703390ca8abc8fc173aea41ff8d3d54f4d7581409ba9b"
+  },
+  "browser": "Chromium 154.0.8037.57",
+  "scope": "Local preview started after successful build at product revision 4ec70543; response bytes of every dist file compared to local build after targeted execution. This binds recorded observations; it is not a verifier of arbitrary forged evidence."
+}

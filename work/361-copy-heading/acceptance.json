@@ -1,0 +1,13 @@
+{
+  "format": "viewer-verification/1",
+  "start": "94dde496cbec339b1ac29f224ffa1f54b732c4e4",
+  "source": "2026-11-10 delegated owner approval: 論理名の見出しに識別情報をコピー／全文をコピーを配置する案に『ボタンの配置についてはそれでOKです。文字もそれでいいです。』",
+  "scope": "Approved presentation change only; prior B authorities remain immutable. This acceptance supersedes only the independent pre-dl placement of the copy controls.",
+  "checks": [
+    {"id":"COPY-HEADING-001","condition":"構造または属性の詳細を表示する","guarantee":"論理名のcaption行に2操作を配置し、値は次行へ表示する。新しいID欄や通常表示の内部IDを追加しない。ボタン文言を保持する。","reason":"承認されたcaption→value構造へ揃える。","cases":["structure","attribute","relation"],"verification":"test-structure-copy-heading.mjs; browser placement observations"},
+    {"id":"COPY-HEADING-002","condition":"識別情報／全文／Shiftを操作する","guarantee":"モデル・構造・項目・関係の識別とコピー内容を開始版どおり保持する。全文のcaptionへボタンや成功／失敗statusの文字を混入させない。","reason":"配置だけを変え、対象と共有内容を変えない。","cases":["structure-short-full-shift","attribute-short-full-shift","relation-short-full-shift","same-name-identities","repeat-after-success","repeat-after-failure"],"verification":"frozen pre-change payloads and independent literal identity/caption assertions"},
+    {"id":"COPY-HEADING-003","condition":"キーボード・タッチまたはclipboard失敗","guarantee":"ネイティブボタンのキーボードとタッチで両操作を利用でき、成功と拒否／利用不可を明示する。Shiftで全文の既存操作を保持する。","reason":"入力方式とブラウザー権限の差を保持する。","cases":["keyboard-1280","keyboard-393","touch-393","denied","unavailable"],"verification":"DOM clipboard controls; actual browser keyboard/touch/rejection"},
+    {"id":"COPY-HEADING-004","condition":"1280px／393pxと長い論理名","guarantee":"操作と値が重ならず、内容幅内で必要に応じ折り返す。長い論理名を切らず、captionとvalueの順序・周囲の余白を保つ。","reason":"狭幅でも同じ情報と操作へ到達する。","cases":["structure-1280","structure-393","attribute-1280","attribute-393","long-name-1280","long-name-393","wrapped-controls"],"verification":"actual browser geometry and screenshots"},
+    {"id":"COPY-HEADING-005","condition":"変更前後と最終候補","guarantee":"元JSON、Schema、Plugin、保存形式、null未決47、既存サンプル・説明・用途、前回Bの正本とfilter改善、探索と選択、公開Previewを保持する。既存期待値を弱めない。公開配信と追加PRコメントは行わない。","reason":"今回の承認はコピー操作の配置に限定される。","cases":["frozen-authorities-and-data","existing-assertions","full-ci","fixed-preview-unmodified"],"verification":"read-only byte/case reconciliation; existing Node/contract and full CI"}
+  ]
+}

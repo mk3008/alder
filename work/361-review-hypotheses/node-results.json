@@ -1,0 +1,161 @@
+{
+  "results": [
+    {
+      "id": "REVIEW-HYP-001",
+      "case": "339-fields",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-001",
+      "case": "338-purposes",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-001",
+      "case": "all-empty-examples",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-001",
+      "case": "valid-domain-types",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-001",
+      "case": "grounded-diagnostics",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-001",
+      "case": "multi-perspectives",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-001",
+      "case": "provenance",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-002",
+      "case": "only-preview-meta",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-002",
+      "case": "all-existing-values",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-002",
+      "case": "47-undecided",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-002",
+      "case": "all-review-states",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-002",
+      "case": "old-copy-hover",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-003",
+      "case": "table",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-003",
+      "case": "attribute",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-003",
+      "case": "original-plus-hypothesis",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-003",
+      "case": "purpose-separate-from-roles",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-003",
+      "case": "provenance-visible",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-003",
+      "case": "no-approval-claim",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-004",
+      "case": "absent-meta",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-004",
+      "case": "no-runtime-generation",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-004",
+      "case": "malformed-meta",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-004",
+      "case": "unknown-role",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-004",
+      "case": "unsafe-text",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-005",
+      "case": "identity-copy",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-005",
+      "case": "full-copy-hypothesis",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    },
+    {
+      "id": "REVIEW-HYP-005",
+      "case": "shift-and-notification",
+      "status": "pass",
+      "evidence": "test-structure-review-hypotheses.mjs: independent data/DOM/payload assertions"
+    }
+  ],
+  "scope": "Node/DOM/data; protected bytes and browser geometry/navigation/close remain separate"
+}

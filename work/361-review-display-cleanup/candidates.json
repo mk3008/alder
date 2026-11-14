@@ -1,0 +1,4709 @@
+{
+  "format": "alder-preview-structure-review/2",
+  "basedOn": {
+    "kind": "conceptModel",
+    "documentId": "alder-complete-package-study",
+    "revision": "package-study-1",
+    "modelSha256": "f6e53e1957aff6a813c7bd36c93f8858cba6c9c75170c3c0b31e73156fb3a698"
+  },
+  "origin": {
+    "repository": "mk3008/alder",
+    "commit": "887c0f60a191d06e1db0ed50567844cca2ec1950",
+    "path": "business-design/alder/json-complete-concept-review.json",
+    "sha256": "e93657d3680bac31907b7d54e96498e79dcff8ffd66c420ef3ca9441cc5a7181"
+  },
+  "fields": [
+    {
+      "target": {
+        "conceptId": "n-bd",
+        "informationId": "n-bd-field-1"
+      },
+      "purpose": "業務設計書を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-bd",
+        "informationId": "n-bd-field-2"
+      },
+      "purpose": "業務設計書を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-bd",
+        "informationId": "n-bd-field-3"
+      },
+      "purpose": "業務設計書の改訂を特定し、異なる時点の内容を取り違えない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-bd",
+        "informationId": "cf-d960c2305c621c"
+      },
+      "purpose": "業務設計書を対応する形式として読み込み、未対応の形式を誤って解釈しない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-bd",
+        "informationId": "cf-a2fb46ff8c8c15"
+      },
+      "purpose": "業務設計書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-bd",
+        "informationId": "cf-9b0df810c60eb0"
+      },
+      "purpose": "点数計算の設計を読む前に、対象の競技ルールや説明上の前提を共有する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-bd",
+        "informationId": "cf-32d24ca3a0642d"
+      },
+      "purpose": "どこまでを点数計算の設計に含めるかを示し、記録や大会運営まで無意識に広げない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-who",
+        "informationId": "n-who-field-1"
+      },
+      "purpose": "主体を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-who",
+        "informationId": "n-who-field-2"
+      },
+      "purpose": "人の役割と自動実行を区別し、誰が仕事を担う想定かを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-who",
+        "informationId": "n-who-field-3"
+      },
+      "purpose": "主体を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-who",
+        "informationId": "n-who-field-4"
+      },
+      "purpose": "図に現れる人の役割を見分ける。権限や実行主体の種類を色だけで決めない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "n-activity-field-1"
+      },
+      "purpose": "業務を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "n-activity-field-2"
+      },
+      "purpose": "業務を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "n-activity-field-3"
+      },
+      "purpose": "業務に対応する主体を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "score-reviewer",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "n-activity-field-4"
+      },
+      "purpose": "この業務をシステム化する想定か、外部の仕事として接続だけを示すかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "n-activity-field-5"
+      },
+      "purpose": "点数を計算する仕事が必要な理由を依頼者と確かめ、手段だけを目的にしない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "n-activity-field-6"
+      },
+      "purpose": "どの入力や先行結果が揃ったときに計算を始めるかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "cf-f7851e4656568f"
+      },
+      "purpose": "場所や利用環境で手順や条件が変わるかを確認し、影響がなければ規定しない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "cf-79e1f59247290a"
+      },
+      "sample": {
+        "value": "手計算の転記時に各回の点数を取り違えることがある。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "cf-423df2519d7898"
+      },
+      "purpose": "確認した課題の影響の程度を示し、改善を検討する優先度の判断材料にする。",
+      "sample": {
+        "value": "Medium",
+        "coverage": "field-value",
+        "when": [
+          {
+            "target": {
+              "conceptId": "n-activity",
+              "informationId": "cf-79e1f59247290a"
+            },
+            "predicate": "nonempty"
+          }
+        ]
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-activity",
+        "informationId": "cf-bed444b46e4cc9"
+      },
+      "purpose": "課題をまだ聞いていない状態と、課題なし・課題ありの確認結果を区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-object",
+        "informationId": "n-object-field-1"
+      },
+      "purpose": "対象を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-object",
+        "informationId": "n-object-field-2"
+      },
+      "purpose": "対象を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-object",
+        "informationId": "n-object-field-3"
+      },
+      "purpose": "対象をシステム内で扱うか外部として扱うかを確認し、表示範囲と責務を合わせる。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-object",
+        "informationId": "cf-adc18421aa701a"
+      },
+      "purpose": "図の対象を視覚的に見分ける。名前や意味の代わりにアイコンだけで判断しない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-information",
+        "informationId": "n-information-field-1"
+      },
+      "purpose": "情報項目を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-information",
+        "informationId": "n-information-field-2"
+      },
+      "purpose": "情報項目を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-information",
+        "informationId": "n-information-field-3"
+      },
+      "purpose": "情報項目に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "player",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-information",
+        "informationId": "cf-c5477c2457429c"
+      },
+      "purpose": "投擲順と棒の番号など、同じ項目名でも解釈が分かれ得る情報の内容を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-data",
+        "informationId": "n-data-field-1"
+      },
+      "purpose": "情報項目グループを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-data",
+        "informationId": "n-data-field-2"
+      },
+      "purpose": "受け渡す情報のまとまりに名前を付け、各業務の入出力を同じ単位で対応付ける。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-dataitem",
+        "informationId": "n-dataitem-field-1"
+      },
+      "purpose": "グループ構成項目に対応する情報項目グループを特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throws",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-dataitem",
+        "informationId": "n-dataitem-field-2"
+      },
+      "purpose": "グループ構成項目に対応する情報項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throws-info",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-dataitem",
+        "informationId": "n-dataitem-field-3"
+      },
+      "purpose": "いつその情報項目をまとまりへ含めるかを確認し、条件付きの項目を常時必須にしない。",
+      "sample": {
+        "value": "投擲が1回以上ある場合に含める。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-dataitem",
+        "informationId": "cf-7e9fb3e051ad15"
+      },
+      "purpose": "含める条件が未決なのか、無条件なのか、条件があるのかを区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "n-step-field-1"
+      },
+      "purpose": "手順行を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "n-step-field-3"
+      },
+      "purpose": "受け取る・計算する・伝えるなど、その手順で実際に行うことを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "n-step-field-4"
+      },
+      "purpose": "目視や自動計算などの実施方法が業務上必要かを確認し、単なる実装案と分ける。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "n-step-field-5"
+      },
+      "purpose": "相手との受渡しか内部の処理かを区別し、相手や情報の確認が必要な箇所を見つける。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "cf-db0d007e8ba4d3"
+      },
+      "purpose": "旧形式の手順文を移行時に参照し、構造化した結果から元の意図が失われていないか確認する。",
+      "sample": {
+        "value": "記録係は投擲結果を受け取り、各回の点数を計算する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "cf-7c34239a2778a4"
+      },
+      "purpose": "対象を作る・読む・更新するなどの業務上の効果を確認し、実装のCRUDから逆算しない。",
+      "sample": {
+        "value": "read",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "cf-ece66e4839b029"
+      },
+      "purpose": "対象項目をまだ決めていない状態と、項目なし・項目ありを区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-step",
+        "informationId": "cf-d17f8349434605"
+      },
+      "purpose": "前提が未決なのか、前提なしなのか、指定済みなのかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exchange",
+        "informationId": "n-exchange-field-1"
+      },
+      "purpose": "受渡しに対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "receive",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exchange",
+        "informationId": "n-exchange-field-2"
+      },
+      "purpose": "受渡しに対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "player",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exchange",
+        "informationId": "n-exchange-field-3"
+      },
+      "purpose": "実行主体が何を受け取り、何を相手へ渡すかを区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exchange",
+        "informationId": "n-exchange-field-4"
+      },
+      "purpose": "相手へ求める内容と返ってくる内容を対応付け、要求と応答を混ぜない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exchange",
+        "informationId": "n-exchange-field-5"
+      },
+      "purpose": "受渡しに対応する業務・対象の関係を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "rel-input",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exchange",
+        "informationId": "n-exchange-field-6"
+      },
+      "purpose": "受渡しに対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "return-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exchange",
+        "informationId": "cf-4d9f01f0e8739f"
+      },
+      "purpose": "受渡す情報が未決なのか、情報なしなのか、指定済みなのかを区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-party",
+        "informationId": "n-party-field-1"
+      },
+      "purpose": "手順の当事者に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "receive",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-party",
+        "informationId": "n-party-field-2"
+      },
+      "purpose": "一つの受渡しで送る側と受ける側を区別し、向きを取り違えない。",
+      "sample": {
+        "value": "from",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-party",
+        "informationId": "n-party-field-3"
+      },
+      "purpose": "業務を担う主体か受渡しの対象かを区別し、同じ名前でも役割を混ぜない。",
+      "sample": {
+        "value": "who",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-party",
+        "informationId": "n-party-field-4"
+      },
+      "purpose": "手順の当事者に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "player",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-dependency",
+        "informationId": "n-dependency-field-1"
+      },
+      "purpose": "手順の前提に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "receive",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-dependency",
+        "informationId": "n-dependency-field-2"
+      },
+      "purpose": "手順の前提に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "receive",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-dependency",
+        "informationId": "n-dependency-field-3"
+      },
+      "purpose": "手順の前提に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "valid",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-order",
+        "informationId": "n-order-field-1"
+      },
+      "purpose": "順序制約に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-order",
+        "informationId": "n-order-field-2"
+      },
+      "purpose": "手順の前後関係が必須か、入れ替えてよいかを確認する。",
+      "sample": {
+        "value": "before",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-order",
+        "informationId": "n-order-field-3"
+      },
+      "purpose": "順序制約に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "receive",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-order",
+        "informationId": "n-order-field-4"
+      },
+      "purpose": "順序制約に対応する手順行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-result",
+        "informationId": "n-result-field-1"
+      },
+      "purpose": "業務結果を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-result",
+        "informationId": "n-result-field-2"
+      },
+      "purpose": "業務結果に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-result",
+        "informationId": "n-result-field-3"
+      },
+      "purpose": "仕事が終わった後に何が成立するかを確認し、実施手段と達成結果を区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-decision",
+        "informationId": "n-decision-field-1"
+      },
+      "purpose": "判定表を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-decision",
+        "informationId": "n-decision-field-2"
+      },
+      "purpose": "判定表に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-decision",
+        "informationId": "n-decision-field-3"
+      },
+      "purpose": "判定表を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-decision",
+        "informationId": "n-decision-field-4"
+      },
+      "purpose": "認可・入力検査・正常計算を分け、異なる判断目的の条件や結果を一つの表に混ぜない。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-decision",
+        "informationId": "n-decision-field-5"
+      },
+      "purpose": "判定表に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "valid",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-decision",
+        "informationId": "cf-e53cb54e69e740"
+      },
+      "purpose": "判定を繰り返す単位や適用上の補足を、条件そのものと分けて共有する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-axis",
+        "informationId": "n-axis-field-1"
+      },
+      "purpose": "判定軸を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-axis",
+        "informationId": "n-axis-field-2"
+      },
+      "purpose": "判定軸に対応する判定表を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "input-validation",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-axis",
+        "informationId": "n-axis-field-3"
+      },
+      "purpose": "結果を分ける入力や状態を名前で示し、重要な判断条件の抜けを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-axis",
+        "informationId": "cf-cb0ff580fce019"
+      },
+      "purpose": "数値や回数の解釈を揃え、同じ値を別の単位で比較しない。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-axis",
+        "informationId": "cf-9d0f2986c601ef"
+      },
+      "purpose": "真に該当する状態を業務の言葉で表示し、真偽の取り違えを防ぐ。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-axis",
+        "informationId": "cf-3ded4095bb9185"
+      },
+      "purpose": "偽に該当する状態を業務の言葉で表示し、不明や未決と区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-row",
+        "informationId": "n-row-field-1"
+      },
+      "purpose": "判定行を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-row",
+        "informationId": "n-row-field-2"
+      },
+      "purpose": "判定行に対応する判定表を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "input-validation",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-row",
+        "informationId": "n-row-field-3"
+      },
+      "purpose": "正常・エラー・計算値・未決の結果を区別して期待結果を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-row",
+        "informationId": "n-row-field-4"
+      },
+      "purpose": "その条件が成立したときに何を返す・成立させるかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-condition",
+        "informationId": "n-condition-field-1"
+      },
+      "purpose": "判定条件セルに対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "valid",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-condition",
+        "informationId": "n-condition-field-2"
+      },
+      "purpose": "判定条件セルに対応する判定軸を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "axis-numbers",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-condition",
+        "informationId": "n-condition-field-3"
+      },
+      "purpose": "具体値・その他・不問・未決のどの条件かを示し、未決をワイルドカードとして扱わない。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-condition",
+        "informationId": "n-condition-field-4"
+      },
+      "purpose": "等しい・以上など、値をどの関係で比較するかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-condition",
+        "informationId": "n-condition-field-5"
+      },
+      "purpose": "判定を分ける具体値や境界値を示し、条件と期待結果を具体的に照合する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-rowcheck",
+        "informationId": "n-rowcheck-field-1"
+      },
+      "purpose": "判定行とチェックの対応に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "valid",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-rowcheck",
+        "informationId": "n-rowcheck-field-2"
+      },
+      "purpose": "判定行とチェックの対応に対応するチェック項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "check-01",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-rowcheck",
+        "informationId": "n-rowcheck-field-3"
+      },
+      "purpose": "判定行のどの範囲をチェックが保証するかを示し、部分対応を全体対応と誤認しない。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exception",
+        "informationId": "n-exception-field-1"
+      },
+      "purpose": "業務の例外を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exception",
+        "informationId": "n-exception-field-2"
+      },
+      "purpose": "業務の例外に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exception",
+        "informationId": "n-exception-field-3"
+      },
+      "purpose": "業務の例外を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exception",
+        "informationId": "n-exception-field-4"
+      },
+      "purpose": "正常な仕事を妨げる場合とその扱いを確認し、例外を正常の開始条件へ混ぜない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exception",
+        "informationId": "cf-b1693377ad86be"
+      },
+      "purpose": "例外が業務全体に掛かるか特定の手順で起きるかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exception",
+        "informationId": "cf-72bb8e0364abb4"
+      },
+      "purpose": "どの状態や入力で例外になるかを確認し、例外名だけで扱いを決めない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-exception",
+        "informationId": "cf-fc923775ebb84a"
+      },
+      "purpose": "目的未達のときにも残る状態や後続への影響を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-continuity",
+        "informationId": "n-continuity-field-1"
+      },
+      "purpose": "中断・再開の扱いに対応する業務の例外を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "invalid-input",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-continuity",
+        "informationId": "n-continuity-field-2"
+      },
+      "purpose": "どの条件で作業を中断するかを確認する。",
+      "sample": {
+        "value": "入力に誤りが見つかり、利用者へ訂正を求めたとき。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-continuity",
+        "informationId": "n-continuity-field-3"
+      },
+      "purpose": "中断後に再開・終了などのどの扱いを取るかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-continuity",
+        "informationId": "n-continuity-field-4"
+      },
+      "purpose": "中断した仕事を再開できる条件を確認し、無条件のやり直しにしない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-continuity",
+        "informationId": "n-continuity-field-5"
+      },
+      "purpose": "再開時に誰が何をして元の仕事へ戻るかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-continuity",
+        "informationId": "cf-1443c584c8cbc3"
+      },
+      "purpose": "中断時に情報を残す・破棄するなど、再開に影響する処置を確認する。",
+      "sample": {
+        "value": "訂正前の入力と誤りの位置を保持する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-continuity",
+        "informationId": "cf-fe7d8ed39bf915"
+      },
+      "purpose": "中断時に保持する項目が未決なのか、なしなのか、指定済みなのかを区別する。",
+      "sample": {
+        "value": "あり",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-relation",
+        "informationId": "n-relation-field-1"
+      },
+      "purpose": "業務・対象の関係を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-relation",
+        "informationId": "n-relation-field-2"
+      },
+      "purpose": "業務間の入力・出力などの関係を区別し、手順と相関図の読み方を揃える。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-relation",
+        "informationId": "n-relation-field-3"
+      },
+      "purpose": "業務・対象の関係に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-relation",
+        "informationId": "n-relation-field-4"
+      },
+      "purpose": "業務・対象の関係に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-relation",
+        "informationId": "cf-3b6b631818c9b6"
+      },
+      "purpose": "業務間で渡されるものや関係を図上で短く示し、本文の対応箇所へ辿りやすくする。",
+      "sample": {
+        "value": "投擲結果を受け取る",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "n-finding-field-1"
+      },
+      "purpose": "設計上の確認事項を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "finding-zero-throws",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "n-finding-field-2"
+      },
+      "purpose": "確認事項が未解決か整理済みかを区別し、未決を解消済みとして扱わない。",
+      "sample": {
+        "value": "open",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "n-finding-field-3"
+      },
+      "purpose": "どの範囲の業務や項目について確認が必要かを絞る。",
+      "sample": {
+        "value": "items",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "n-finding-field-4"
+      },
+      "purpose": "確認が必要な点を一覧で見分け、詳細を読む対象を選ぶ。",
+      "sample": {
+        "value": "0回の入力をどう表示するかを確認する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "cf-3cb2fc6fcef42b"
+      },
+      "purpose": "元の所見と現在の記録を対応付け、別の問題として重複して扱わない。",
+      "sample": {
+        "value": "finding-input-empty",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "cf-355de6f886c0ad"
+      },
+      "purpose": "記述上の不一致や判断待ちなど、確認事項の性質を分けて担当へ渡す。",
+      "sample": {
+        "value": "question",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "cf-1b9826d21acdc9"
+      },
+      "purpose": "何が不明・不一致で、何を確認すればよいかを依頼者や設計者へ伝える。",
+      "sample": {
+        "value": "0回の場合に空の各回一覧だけを返すか、説明も添えるかを依頼者に確認する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-finding",
+        "informationId": "cf-35bce68582d0a4"
+      },
+      "purpose": "未決が残る具体的な対象を示し、文書全体を曖昧なまま承認しない。",
+      "sample": {
+        "value": [
+          "calculate-score"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-external",
+        "informationId": "n-external-field-1"
+      },
+      "purpose": "外部業務設計書の目録項目を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "bd-tournament",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-external",
+        "informationId": "n-external-field-2"
+      },
+      "purpose": "外部業務設計書の目録項目の改訂を特定し、異なる時点の内容を取り違えない。",
+      "sample": {
+        "value": "review-1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-external",
+        "informationId": "cf-5246ed43cf82fc"
+      },
+      "purpose": "外部業務設計書の目録項目の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": {
+        "value": "businessDesign",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "n-checkdoc-field-1"
+      },
+      "purpose": "チェック文書を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "n-checkdoc-field-2"
+      },
+      "purpose": "チェック文書の改訂を特定し、異なる時点の内容を取り違えない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "n-checkdoc-field-3"
+      },
+      "purpose": "チェックがどの業務設計と改訂を前提にするかを特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "cf-d479ca1faa5493"
+      },
+      "purpose": "チェック文書を対応する形式として読み込み、未対応の形式を誤って解釈しない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "cf-7002a402a9b4a2"
+      },
+      "purpose": "チェック文書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "cf-460e5fb604bcb6"
+      },
+      "purpose": "チェック文書を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "cf-d7b8496c2d645a"
+      },
+      "purpose": "前提とした業務設計書の改訂を特定し、原典の変更が確認範囲に影響するか判断する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-checkdoc",
+        "informationId": "cf-47944f407a4814"
+      },
+      "purpose": "原典との対応確認が済んだかを記録し、単なる参照を検証済みと誤認しない。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-check",
+        "informationId": "n-check-field-1"
+      },
+      "purpose": "チェック項目を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-check",
+        "informationId": "n-check-field-2"
+      },
+      "purpose": "レビュー中にチェックを短く呼び分ける。文書内外の安定した識別子とは分けて扱う。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-check",
+        "informationId": "n-check-field-3"
+      },
+      "purpose": "チェック項目が人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-check",
+        "informationId": "cf-2af7e5abeb81ef"
+      },
+      "purpose": "チェック項目を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-check",
+        "informationId": "cf-c9266f8766647e"
+      },
+      "purpose": "そのチェックで確認する条件や結果を一覧で把握する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-check",
+        "informationId": "cf-c9b1db9948abbf"
+      },
+      "purpose": "チェック項目に対応するチェックの節を特定し、関連する記述を往復して一致を確認する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-package",
+        "informationId": "cf-fa56ab6bd9ad29"
+      },
+      "purpose": "文書パッケージを対応する形式として読み込み、未対応の形式を誤って解釈しない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-package",
+        "informationId": "cf-cb2cab3103539a"
+      },
+      "purpose": "文書パッケージを対応する形式として読み込み、未対応の形式を誤って解釈しない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-package",
+        "informationId": "cf-56a9d80cc8c10f"
+      },
+      "purpose": "複数の文書をまとめた内容の改訂を区別し、古いまとまりを最新の前提として使わない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-package",
+        "informationId": "cf-3907e6aa0081d2"
+      },
+      "purpose": "関連する業務設計・Check・状態・概念の文書をひとまとまりで読み、相互参照を辿れるようにする。",
+      "sample": {
+        "value": [
+          {
+            "kind": "businessDesign",
+            "id": "bd-score-example",
+            "schemaVersion": "0.6",
+            "revision": "bd-review-1",
+            "title": "モルックの点数計算",
+            "activities": []
+          }
+        ],
+        "coverage": "document-fragment"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-package",
+        "informationId": "cf-2afe02557bfa91"
+      },
+      "purpose": "文書を読む際に残る補足や確認事項を共有し、合意済みの業務ルールと混同しない。",
+      "sample": {
+        "value": [
+          "0回の入力を未入力と区別する必要があるかは確認中。"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-1591c4b77df1b7"
+      },
+      "purpose": "状態遷移文書を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "states-score-example",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-46c7022c8c0c56"
+      },
+      "purpose": "状態遷移文書を対応する形式として読み込み、未対応の形式を誤って解釈しない。",
+      "sample": {
+        "value": "0.1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-d45319b8ff1cdd"
+      },
+      "purpose": "状態遷移文書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": {
+        "value": "stateTransition",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-8f9f0382a64e3c"
+      },
+      "purpose": "状態遷移文書の改訂を特定し、異なる時点の内容を取り違えない。",
+      "sample": {
+        "value": "states-review-1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-79972e22c66be7"
+      },
+      "purpose": "状態遷移文書を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-7471e29c30cd89"
+      },
+      "purpose": "前提とした業務設計書の改訂を特定し、原典の変更が確認範囲に影響するか判断する。",
+      "sample": {
+        "value": "bd-review-1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-99898735b216fb"
+      },
+      "purpose": "状態遷移図と業務設計の原典の対応確認が済んだかを区別する。",
+      "sample": {
+        "value": "unverified",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-0c6928ded152e8"
+      },
+      "purpose": "状態遷移文書に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throws-info",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-cb26e3ccac9a71"
+      },
+      "purpose": "どの状態から対象の仕事を開始するかを確認する。",
+      "sample": {
+        "value": "ready",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-b63c33876057e6"
+      },
+      "purpose": "どの状態を終わりとして扱うかを確認し、単なる途中の状態と区別する。",
+      "sample": {
+        "value": "calculated",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-0d219db14d46ce"
+      },
+      "purpose": "状態や遷移の確認がどこまで済んだかを示し、不完全な草案を網羅済みとして扱わない。",
+      "sample": {
+        "value": "partial",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-state-doc",
+        "informationId": "cf-7beeaac9a2b451"
+      },
+      "purpose": "状態遷移を導いた元の記述へ戻り、業務上の条件との対応を確認する。",
+      "sample": {
+        "value": "業務設計書の「1回の点数を計算する」のWhenとResult。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-8dce497869ab6c"
+      },
+      "purpose": "概念モデル文書を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-65c7c1e771c6fb"
+      },
+      "purpose": "概念モデル文書を対応する形式として読み込み、未対応の形式を誤って解釈しない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-3baed98548504d"
+      },
+      "purpose": "概念モデル文書の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-710c131201eaed"
+      },
+      "purpose": "概念モデル文書の改訂を特定し、異なる時点の内容を取り違えない。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-013cc0b1c39ea6"
+      },
+      "purpose": "前提とした業務設計書の改訂を特定し、原典の変更が確認範囲に影響するか判断する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-f0cc7fdbbd6852"
+      },
+      "purpose": "概念モデルと業務設計の原典の対応確認が済んだかを区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-6d5369a568adaa"
+      },
+      "purpose": "構造の分け方によって期待する業務上の利点を確認する。",
+      "sample": {
+        "value": [
+          "投擲ごとに入力と点数を対応付けて確認できる。"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-21a3e76ff23010"
+      },
+      "purpose": "構造の採用前に考慮すべき制約や注意点を共有する。",
+      "sample": {
+        "value": [
+          "0回の入力と未入力を混同しない。"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-06162a37975af9"
+      },
+      "purpose": "概念の必要性・同一性・多重性など、人間が確認したい点をレビューで取り上げる。",
+      "sample": {
+        "value": [
+          "複数の投擲を一括訂正できる必要があるか。"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-7595370fd7be76"
+      },
+      "purpose": "概念モデルに付けた補足の出所と意味を、正式な概念や属性とは区別して共有する。",
+      "sample": {
+        "value": {
+          "questions": [
+            "0回の入力時の合計点の扱いは合意済みか。"
+          ]
+        },
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-b4221e246a23a0"
+      },
+      "purpose": "業務ごとに関係する概念や機能を表示し、業務と構造を往復して確認する。",
+      "sample": {
+        "value": {
+          "calculate-score": {
+            "conceptIds": [
+              "throw",
+              "score"
+            ]
+          }
+        },
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-ce0494dcadcd31"
+      },
+      "purpose": "その概念を作る業務へ辿り、作成と利用の責務を確かめる。",
+      "sample": {
+        "value": {
+          "throw": [
+            "receive-throws"
+          ]
+        },
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-79fd909da0c750"
+      },
+      "purpose": "表示する例が何を示すかを説明し、実運用の記録や合意済み仕様と誤認しない。",
+      "sample": {
+        "value": "1回目に7番の棒だけが倒れた場合を示す仮説の例。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-ebf08005cd2b97"
+      },
+      "purpose": "サブシステム別の表示を指定した場合と、省略された場合を区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-concept-doc",
+        "informationId": "cf-489ca19c33a72b"
+      },
+      "purpose": "全体図で示すサブシステム間の受渡しを指定し、業務間の接続を確認する。",
+      "sample": {
+        "value": [
+          "handoff-score"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f72e806aab63f8",
+        "informationId": "cf-051ba4217cc539"
+      },
+      "purpose": "原典情報に対応する業務設計書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "bd-score-example",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f72e806aab63f8",
+        "informationId": "cf-8f72903f661259"
+      },
+      "purpose": "取得した原典の改訂を示し、参照した内容と現在の内容を取り違えない。",
+      "sample": {
+        "value": "bd-review-1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f72e806aab63f8",
+        "informationId": "cf-b911ffd2749455"
+      },
+      "purpose": "参照した原典と現在の取得内容が同じかを比較し、版名だけでは分からない差を検出する。",
+      "sample": {
+        "value": "9a152e3330d21556369e535f34f3bd08238156ac8ec746d642e785a5329a700d",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f72e806aab63f8",
+        "informationId": "cf-1b534ed06c44c9"
+      },
+      "purpose": "根拠となる資料を開き、文書内容を確認する。",
+      "sample": {
+        "value": "https://example.com/designs/molkky.json",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f6845a968ec2f3",
+        "informationId": "cf-c60748c7739ecb"
+      },
+      "purpose": "外部業務の目録項目を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "record-result",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f6845a968ec2f3",
+        "informationId": "cf-d31f49c46d6346"
+      },
+      "purpose": "外部業務の目録項目を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "計算結果を記録する",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-241397ef723b2b",
+        "informationId": "cf-6f159c6e766495"
+      },
+      "purpose": "通常文・参照・リンクなどの表現を区別し、安全に読み取って表示する。",
+      "sample": {
+        "value": "text",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-241397ef723b2b",
+        "informationId": "cf-4deeafa4495eb6"
+      },
+      "purpose": "チェックの導入説明を読み、期待結果を確認するための背景を共有する。",
+      "sample": {
+        "value": "入力された各回の点数を業務の期待と見比べる。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-241397ef723b2b",
+        "informationId": "cf-448e853c63ca63"
+      },
+      "purpose": "文章・参照・リンクの要素に対応するチェック文書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "checks-score-example",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-241397ef723b2b",
+        "informationId": "cf-56f97e9b7600ee"
+      },
+      "purpose": "リンク先を開く前に、何を参照するかを読者へ示す。",
+      "sample": {
+        "value": "点数計算の業務設計",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-241397ef723b2b",
+        "informationId": "cf-c6d2e7337685ae"
+      },
+      "purpose": "関連資料を開き、本文だけでは足りない根拠を確認する。",
+      "sample": {
+        "value": "https://example.com/designs/molkky.json",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-9a087ebdf10360",
+        "informationId": "cf-558d1ceac82fda"
+      },
+      "purpose": "業務とチェックの索引に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-9a087ebdf10360",
+        "informationId": "cf-cf897c96883299"
+      },
+      "purpose": "その業務のチェックが何の達成を確かめるかを一覧で把握する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-9a087ebdf10360",
+        "informationId": "cf-4bf003cc4cfb12"
+      },
+      "purpose": "先行・後続業務とのつながりを確認し、単独の業務だけでチェックを閉じない。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-9a087ebdf10360",
+        "informationId": "cf-ebbba991e05cb9"
+      },
+      "purpose": "対象業務に対応するチェックをまとめて辿る。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ebdc5848ce938e",
+        "informationId": "cf-6acc343166294c"
+      },
+      "purpose": "チェックの節を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ebdc5848ce938e",
+        "informationId": "cf-68a6486ee86bf1"
+      },
+      "purpose": "チェックの節に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ebdc5848ce938e",
+        "informationId": "cf-9045914e8197f9"
+      },
+      "purpose": "チェックの節を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-d5e58e7c97899e",
+        "informationId": "cf-c404e79971073d"
+      },
+      "purpose": "保証を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "guarantee-zero-throws",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-d5e58e7c97899e",
+        "informationId": "cf-57a0a7286f565e"
+      },
+      "purpose": "保証に対応するチェックの節を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "score-check-section",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-d5e58e7c97899e",
+        "informationId": "cf-eb3975a7bf5a82"
+      },
+      "purpose": "保証を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "0回では各回の点数を作らない",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2137820ffea042",
+        "informationId": "cf-e3a3e8b9cc7f36"
+      },
+      "purpose": "保証の説明と具体例などのブロックを区別して順序どおり表示する。",
+      "sample": {
+        "value": "prose",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2137820ffea042",
+        "informationId": "cf-8b153b4b9bac15"
+      },
+      "purpose": "保証の記述に対応するチェックのサンプルを特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "example-zero-throws",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-68122134eabe2b",
+        "informationId": "cf-3f7785142487ff"
+      },
+      "purpose": "チェックのサンプルを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "example-zero-throws",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-68122134eabe2b",
+        "informationId": "cf-683948d485e46d"
+      },
+      "purpose": "チェックのサンプルに対応する保証を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "guarantee-zero-throws",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-68122134eabe2b",
+        "informationId": "cf-40c3d844066dc2"
+      },
+      "purpose": "具体例で比較する値の列を揃え、条件差と結果差を見比べる。",
+      "sample": {
+        "value": [
+          "倒れた棒の番号",
+          "期待する点数"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-aa71fb518740f9",
+        "informationId": "cf-a754e953ec59de"
+      },
+      "purpose": "注記を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "note-score-range",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-aa71fb518740f9",
+        "informationId": "cf-26c07fc54a97e6"
+      },
+      "purpose": "注記を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "倒れた棒の番号と本数を区別する",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-dee923ba0e4112",
+        "informationId": "cf-3fd46e3efaae37"
+      },
+      "purpose": "状態を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "ready",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-dee923ba0e4112",
+        "informationId": "cf-e0526c3d4b96d3"
+      },
+      "purpose": "状態を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-f7d1cbaf255a14"
+      },
+      "purpose": "状態遷移を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "transition-calculate",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-8908f4c37f4836"
+      },
+      "purpose": "状態遷移を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "transition-calculate",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-7dabb063b220f1"
+      },
+      "purpose": "状態遷移に対応する状態を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "ready",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-047059a93be7e2"
+      },
+      "purpose": "状態遷移に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-12d3ee506e635b"
+      },
+      "purpose": "どの出来事で状態が変わるかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-8e1a6f3eb42961"
+      },
+      "purpose": "同じ出来事でも状態変更が許される条件を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-248bd7cd7e22cb"
+      },
+      "purpose": "状態遷移に対応する状態を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "ready",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-9a18a448b9efaa"
+      },
+      "purpose": "遷移後に何が成立するかを、遷移の契機とは分けて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-37cfb1f0b37861"
+      },
+      "purpose": "正常な経路か例外・戻りの経路かを区別し、業務のつながりを追う。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-782e7748652561"
+      },
+      "purpose": "その状態変更を許す根拠となる業務の記述を確認する。",
+      "sample": {
+        "value": "業務設計書の計算結果と入力検査の判定行。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-c7b7a3c41c1024"
+      },
+      "purpose": "状態遷移の解釈に必要な補足を条件や結果の本体と区別して共有する。",
+      "sample": {
+        "value": "入力エラーでは計算済みへ遷移しない想定。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-d000e290c72442"
+      },
+      "purpose": "状態遷移に対応する業務の例外を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "invalid-input",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-33d907fd2b7851"
+      },
+      "purpose": "長い条件を図上で短く見分ける。表示名が条件の意味を変更した扱いにしない。",
+      "sample": {
+        "value": "入力が有効",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-5d1e7f527404d3"
+      },
+      "purpose": "新規の対象を作る遷移か、既存の状態から変わる遷移かを区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-3389910e106420",
+        "informationId": "cf-7e4981f3bac2be"
+      },
+      "purpose": "具体的な状態に至るのか、対象を作らないのか、未決なのかを区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-b4278294b5f080",
+        "informationId": "cf-acb00996ceae6d"
+      },
+      "purpose": "関連する状態遷移の参照に対応する状態遷移文書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "states-score-example",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-b4278294b5f080",
+        "informationId": "cf-181348b6d8666b"
+      },
+      "purpose": "関連する状態遷移文書のどの改訂を参照しているかを示し、モデルとの対応を確認する。",
+      "sample": {
+        "value": "states-review-1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-b4278294b5f080",
+        "informationId": "cf-efee92b9c80efc"
+      },
+      "purpose": "関連する状態文書との対応確認が済んだかを区別する。",
+      "sample": {
+        "value": "unverified",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-bb240ce62355fa",
+        "informationId": "cf-95b8e55978fb10"
+      },
+      "purpose": "サブシステムを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-bb240ce62355fa",
+        "informationId": "cf-acb6b29b28e391"
+      },
+      "purpose": "サブシステムを一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-bb240ce62355fa",
+        "informationId": "cf-c407aa8717369e"
+      },
+      "purpose": "サブシステムが業務上どの役割を担うかを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-bb240ce62355fa",
+        "informationId": "cf-5440c55d88a9b8"
+      },
+      "purpose": "サブシステムが扱う情報のまとまりを示し、情報の責任境界を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-bb240ce62355fa",
+        "informationId": "cf-0e471e4abe3209"
+      },
+      "purpose": "サブシステムを分ける理由を確認し、画面や実装の都合だけで責任を固定しない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-bb240ce62355fa",
+        "informationId": "cf-2b4a79c4f0f3e6"
+      },
+      "purpose": "サブシステムに対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-bb240ce62355fa",
+        "informationId": "cf-012d8473a1a69a"
+      },
+      "purpose": "サブシステムが人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-a661f11490568f",
+        "informationId": "cf-18185457d05149"
+      },
+      "purpose": "概念を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-a661f11490568f",
+        "informationId": "cf-2a626ff0ff7d02"
+      },
+      "purpose": "概念を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-a661f11490568f",
+        "informationId": "cf-b051d0d470095e"
+      },
+      "purpose": "概念に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-a661f11490568f",
+        "informationId": "cf-0e6cac31d5e179"
+      },
+      "purpose": "概念の分け方や扱いが必要な背景を確認し、不要な制約を固定しない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-a661f11490568f",
+        "informationId": "cf-a9d8fb1ee82e79"
+      },
+      "purpose": "概念の内容と境界を共有し、名前だけでは分からない扱いを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-a661f11490568f",
+        "informationId": "cf-12e62a5c4c6af0"
+      },
+      "purpose": "概念に対応する対象を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": [
+          "throws-info"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-a661f11490568f",
+        "informationId": "cf-d2c0cd0cfdbdca"
+      },
+      "purpose": "概念が人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-df1ae8aaf7a602",
+        "informationId": "cf-a6fbbbc43cae98"
+      },
+      "purpose": "概念の情報項目を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-df1ae8aaf7a602",
+        "informationId": "cf-ecd49d7d756a04"
+      },
+      "purpose": "概念の情報項目を一覧や図で見分け、内容を開いて確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-df1ae8aaf7a602",
+        "informationId": "cf-9d0e9d927202a9"
+      },
+      "purpose": "情報項目の責任が未決か確認済みかを区別し、仮の割当てを確定済みとして扱わない。",
+      "sample": {
+        "value": "未決",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-df1ae8aaf7a602",
+        "informationId": "cf-7370db16dbe90f"
+      },
+      "purpose": "概念の情報項目に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "score-entry",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f4c788364ffcb1",
+        "informationId": "cf-8a79bb8d0da177"
+      },
+      "purpose": "業務との対応に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f4c788364ffcb1",
+        "informationId": "cf-8ae7f7e818ffb5"
+      },
+      "purpose": "その業務が概念を作成・参照・更新するなど、業務と概念の関わり方を確認する。",
+      "sample": {
+        "value": [
+          "各回の投擲結果を読み、点数を求める。"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cddfb7eed853ea",
+        "informationId": "cf-f6bc7d2abf5cf0"
+      },
+      "purpose": "根拠の参照に対応する業務設計書を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "bd-score-example",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cddfb7eed853ea",
+        "informationId": "cf-96da1d6b8c09fc"
+      },
+      "purpose": "概念の根拠とした原典の改訂を特定し、後の変更で意味がずれていないか確認する。",
+      "sample": {
+        "value": "bd-review-1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cddfb7eed853ea",
+        "informationId": "cf-6409e9670e47fe"
+      },
+      "purpose": "原典内で参照する対象の種類を区別し、同じ識別子でも別の種類へ取り違えない。",
+      "sample": {
+        "value": "activity",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cddfb7eed853ea",
+        "informationId": "cf-136963f419b6bc"
+      },
+      "purpose": "根拠の参照の「参照先」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cddfb7eed853ea",
+        "informationId": "cf-13dd73356c7793"
+      },
+      "purpose": "原典のどの箇所を根拠にしたかを特定し、文書全体だけの曖昧な参照にしない。",
+      "sample": {
+        "value": "Result",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-15584cfab64de4"
+      },
+      "purpose": "概念間の関係を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-f2500eabc99f36"
+      },
+      "purpose": "概念間の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-b14e90806c9ace"
+      },
+      "purpose": "概念間の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-a256be08d32335"
+      },
+      "purpose": "一つの対象に対する件数を確認し、一件と複数件の扱いを取り違えない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-ac8bd26ae595ac"
+      },
+      "purpose": "反対側から見た件数を確認し、関係の向きで多重性を誤読しない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-1ee8b5979a8779"
+      },
+      "purpose": "関係が成立する条件を確認し、条件付きの関係を常時成立と扱わない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-6adc11eb0279bd"
+      },
+      "purpose": "概念間の関係が人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-0d428562e56d4f"
+      },
+      "purpose": "図の出発側に表示する役割名を確認し、同じ概念間の別の関係と区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-aaa7b589b330e5"
+      },
+      "purpose": "図の到着側に表示する役割名を確認し、同じ概念間の別の関係と区別する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-2df4f3cb2c3787",
+        "informationId": "cf-3fa56825fe3b69"
+      },
+      "purpose": "概念を含む関係と別の概念を参照する関係を区別し、依存や責任境界を確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-e34451304a3099"
+      },
+      "purpose": "サブシステム間の受渡しを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "handoff-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-e9daa257c2795f"
+      },
+      "purpose": "サブシステム間の受渡しに対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "score-entry",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-758ba4f5975fe3"
+      },
+      "purpose": "サブシステム間の受渡しに対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "score-recording",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-c0d8a7beda5359"
+      },
+      "purpose": "サブシステム間で何が渡されるかを確認し、受渡しの欠落を見つける。",
+      "sample": {
+        "value": "各回の点数",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-b7bb16b824dde8"
+      },
+      "purpose": "受渡す情報と処理のつながりを、出発側と到着側の双方で確認する。",
+      "sample": {
+        "value": "計算された各回の点数を記録側へ渡す。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-8db9bb0dea3381"
+      },
+      "purpose": "サブシステム間の受渡しに対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": [
+          "calculate-score"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-dc9e78bca09235"
+      },
+      "purpose": "送りの流れか返りの流れかを区別し、受渡しを片方向だけで捉えない。",
+      "sample": {
+        "value": "forward",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-885e9b200c2404",
+        "informationId": "cf-8b35f69146b6ae"
+      },
+      "purpose": "サブシステム間の受渡しが人間の確認前か判断済みかを区別し、未確認を合意済みとして扱わない。",
+      "sample": {
+        "value": "未レビュー",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-5fa9cfe53d9c72"
+      },
+      "purpose": "概念レビューの単位を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "group-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-2a972279c5ff4d"
+      },
+      "purpose": "概念レビューの単位に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "score-entry",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-96de7fa9ecd918"
+      },
+      "purpose": "概念レビューの単位を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "投擲と点数の対応",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-e03f8ffc6530a7"
+      },
+      "purpose": "レビューでどの範囲と論点を扱うかを共有し、無関係な情報を混ぜない。",
+      "sample": {
+        "value": "各回の投擲結果と点数の対応を確認する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-43c418ff860c65"
+      },
+      "purpose": "そのレビューで誰の立場から意味を確認する想定かを示す。今回追加する項目単位の確認する立場とは別の既存データ。",
+      "sample": {
+        "value": "requester",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-c1744ad741086d"
+      },
+      "purpose": "概念レビューの単位に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": [
+          "calculate-score"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-6b50a0c386c8ec"
+      },
+      "purpose": "概念レビューの単位に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": [
+          "throw",
+          "score"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-0bf8348b380872"
+      },
+      "purpose": "レビュー単位でサブシステム別表示を指定した場合と省略した場合を区別する。",
+      "sample": {
+        "value": true,
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-82616e95cee368"
+      },
+      "purpose": "そのレビューで扱う受渡しを選び、対象外の接続と区別する。",
+      "sample": {
+        "value": [
+          "handoff-score"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-74e3c7a00a6888"
+      },
+      "purpose": "人間に確認したい問いを残し、仮定を合意済みへ読み替えない。",
+      "sample": {
+        "value": [
+          "1回の投擲を訂正した場合、他の回を保持する必要があるか。"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-479460dfd2aa11",
+        "informationId": "cf-20033ad39c9221"
+      },
+      "purpose": "確認のために置いた仮説を明示し、原典の事実や合意した業務意味と分けて訂正する。",
+      "sample": {
+        "value": {
+          "singleThrowCorrection": "他の回を保持して訂正できる必要がある、という未確認の仮説。"
+        },
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ee0e1966321a10",
+        "informationId": "cf-872111986cbb04"
+      },
+      "purpose": "レビュー図の概念に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ee0e1966321a10",
+        "informationId": "cf-0ab2e9ffd441dc"
+      },
+      "purpose": "レビュー図の概念を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "投擲",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ee0e1966321a10",
+        "informationId": "cf-0fae178ed578b4"
+      },
+      "purpose": "図の概念カードで確認する情報項目を選び、表示上の省略とモデル上の欠落を区別する。",
+      "sample": {
+        "value": [
+          "投擲順",
+          "倒れた棒の番号"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ee0e1966321a10",
+        "informationId": "cf-4bc3013a01f24b"
+      },
+      "purpose": "レビュー図の概念の内容と境界を共有し、名前だけでは分からない扱いを確認する。",
+      "sample": {
+        "value": "1回の投擲に入力された棒の番号を持つ。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ee0e1966321a10",
+        "informationId": "cf-42bad405d14c41"
+      },
+      "purpose": "図に表示した概念の説明を元の情報へ戻って確認する。",
+      "sample": {
+        "value": [
+          "業務設計書：Input / 投擲結果"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-ee0e1966321a10",
+        "informationId": "cf-cbb08a4110ca13"
+      },
+      "purpose": "表示する概念を必要とする業務へ戻り、構造だけを根拠に必要性を決めない。",
+      "sample": {
+        "value": [
+          "calculate-score"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-5301fdbc9906a9"
+      },
+      "purpose": "レビュー図の関係を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "edge-throw-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-93690ea3ee9262"
+      },
+      "purpose": "レビュー図の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-135acb3994fe5a"
+      },
+      "purpose": "レビュー図の関係に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-7ea37b8b8340eb"
+      },
+      "purpose": "レビュー図の関係に対応する概念間の関係を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": [
+          "throw-has-number"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-e9917c3f5a263a"
+      },
+      "purpose": "レビュー図でどの関係を対象とするかを絞り、他の図との違いを確認する。",
+      "sample": {
+        "value": "within-subsystem",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-b2d932ed3dc905"
+      },
+      "purpose": "図の出発側で見せる件数を示し、元の多重性と見比べる。",
+      "sample": {
+        "value": "1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-651d015c32251d"
+      },
+      "purpose": "図の到着側で見せる件数を示し、元の多重性と見比べる。",
+      "sample": {
+        "value": "0..*",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-984738bcdd15a0",
+        "informationId": "cf-fef3e4afdf720a"
+      },
+      "purpose": "レビュー図の関係の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": {
+        "value": "down",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cf1ab9792c4afd",
+        "informationId": "cf-4e67ab723e70e5"
+      },
+      "purpose": "表示する概念を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "subview-throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cf1ab9792c4afd",
+        "informationId": "cf-f2f85c784ba351"
+      },
+      "purpose": "表示する概念に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cf1ab9792c4afd",
+        "informationId": "cf-9e0636e646317b"
+      },
+      "purpose": "表示する概念に対応するサブシステムを特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "score-entry",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cf1ab9792c4afd",
+        "informationId": "cf-bdb4dd8ad16827"
+      },
+      "purpose": "表示する概念を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "投擲",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cf1ab9792c4afd",
+        "informationId": "cf-40ac5527dfd311"
+      },
+      "purpose": "表示する概念の内容と境界を共有し、名前だけでは分からない扱いを確認する。",
+      "sample": {
+        "value": "点数を求める前の投擲結果を表示する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-cf1ab9792c4afd",
+        "informationId": "cf-17dad34b3c55c0"
+      },
+      "purpose": "サブシステム別の図に表示する情報を元の記述と照合する。",
+      "sample": {
+        "value": [
+          "業務設計書：投擲結果"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f00cd2058baea0",
+        "informationId": "cf-c2d4fcf9f8b82b"
+      },
+      "purpose": "図のカードに見せる項目名を示し、情報項目との対応を確認する。",
+      "sample": {
+        "value": "倒れた棒の番号",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-f00cd2058baea0",
+        "informationId": "cf-1e973b3890d796"
+      },
+      "purpose": "表示する項目に対応する概念の情報項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throw-number",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-67599703cb1878",
+        "informationId": "cf-f8c85e50030df1"
+      },
+      "purpose": "表示する関係を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "subedge-throw-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-67599703cb1878",
+        "informationId": "cf-ca79b879ba2b5f"
+      },
+      "purpose": "表示する関係に対応する表示する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "subview-throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-67599703cb1878",
+        "informationId": "cf-2e669ee69a1b69"
+      },
+      "purpose": "表示する関係に対応する表示する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "subview-throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-67599703cb1878",
+        "informationId": "cf-adaf9f4f2c177c"
+      },
+      "purpose": "表示する関係に対応する概念間の関係を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": [
+          "throw-has-number"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-67599703cb1878",
+        "informationId": "cf-451606ab2ec7d0"
+      },
+      "purpose": "表示図の出発側の件数を示し、元の関係と照合する。",
+      "sample": {
+        "value": "1",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-67599703cb1878",
+        "informationId": "cf-254d5ccd385212"
+      },
+      "purpose": "表示図の到着側の件数を示し、元の関係と照合する。",
+      "sample": {
+        "value": "0..*",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-67599703cb1878",
+        "informationId": "cf-2407b1f8ff5fe3"
+      },
+      "purpose": "表示する関係の種類を区別し、それぞれに合う読み取りや表示で内容を確認する。",
+      "sample": {
+        "value": "down",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-4e8bcd5e5b6991",
+        "informationId": "cf-22da58339a49f3"
+      },
+      "purpose": "構造についての確認事項を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "statement-throw-identity",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-4e8bcd5e5b6991",
+        "informationId": "cf-0ae2dd148a5964"
+      },
+      "purpose": "構造についての確認事項を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "投擲ごとに入力と点数が対応する",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-4e8bcd5e5b6991",
+        "informationId": "cf-9e7ab1bab14e9f"
+      },
+      "purpose": "どの構造上の条件を確認したいかを業務の言葉で共有する。",
+      "sample": {
+        "value": "各回の入力と点数が投擲順で対応していることを確認する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-4e8bcd5e5b6991",
+        "informationId": "cf-52bfaa02936440"
+      },
+      "purpose": "構造についての確認事項を具体例へ結び付け、抽象的な説明だけで判断しない。",
+      "sample": {
+        "value": [
+          "sample-one-pin"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-f053259698f7db"
+      },
+      "purpose": "機能を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "calculate-one-throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-3b70ce3b31b5ba"
+      },
+      "purpose": "機能を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "1回の投擲の点数を求める",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-bcbf430241c767"
+      },
+      "purpose": "機能が行うことと達成する結果を確認し、業務上必要な振舞いを明らかにする。",
+      "sample": {
+        "value": "1本だけ倒れた場合はその棒の番号を点数として求める。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-b1e34fc5ffd0b7"
+      },
+      "purpose": "機能に関する補足や仮説を、正式な条件や期待結果とは分けて共有する。",
+      "sample": {
+        "value": {
+          "question": "入力が未確定の間の表示は依頼者に確認する。"
+        },
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-b4e88ec9fe4c1d"
+      },
+      "purpose": "機能とCheckの対応を指定した状態か省略した状態かを区別する。",
+      "sample": {
+        "value": true,
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-f6c2348108ab40"
+      },
+      "purpose": "機能の可否判定を示す具体例を開き、条件の違いを確認する。",
+      "sample": {
+        "value": [
+          "example-one-pin"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-3b28b45d18839e"
+      },
+      "purpose": "機能の可否判定が満たすべきチェックへ辿る。",
+      "sample": {
+        "value": [
+          "check-valid-input"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-454865bf2f4ea9"
+      },
+      "purpose": "機能の処理結果が満たすべきチェックへ辿る。",
+      "sample": {
+        "value": [
+          "check-01"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95cabd9dcf8a99",
+        "informationId": "cf-8883a41bc28a26"
+      },
+      "purpose": "機能の使われ方を具体例で確認し、条件と結果をレビューする。",
+      "sample": {
+        "value": [
+          "sample-one-pin"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-c2b2d686587864",
+        "informationId": "cf-e4eed8f01f48b8"
+      },
+      "purpose": "機能のサンプルを他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "sample-one-pin",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-c2b2d686587864",
+        "informationId": "cf-09dc6622db3672"
+      },
+      "purpose": "機能のサンプルを一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "7番の棒だけが倒れた場合",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-c2b2d686587864",
+        "informationId": "cf-f4a8445a61d27a"
+      },
+      "purpose": "その例が成立する入力や状況を示し、別の条件の結果を混同しない。",
+      "sample": {
+        "value": "7番の棒だけが倒れた投擲を1回入力する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-c2b2d686587864",
+        "informationId": "cf-2f5c9c597760c6"
+      },
+      "purpose": "その例で何を確かめるかを示し、単なるデータ一覧を保証と誤認しない。",
+      "sample": {
+        "value": "倒れた本数1を、そのまま点数1として返さないことを確認する。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-c2b2d686587864",
+        "informationId": "cf-4221263a67b8bd"
+      },
+      "purpose": "例の読み方や適用範囲に関する補足を、期待結果の本体と分けて伝える。",
+      "sample": {
+        "value": "競技ルールの実例ではなく、構造の必要性を検討するための例。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-c2b2d686587864",
+        "informationId": "cf-cefad66baec8fb"
+      },
+      "purpose": "具体例と対応するチェックを結び付け、どの保証の例かを辿る。",
+      "sample": {
+        "value": [
+          "check-01"
+        ],
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-fa68cedac024c1",
+        "informationId": "cf-3f99f834385412"
+      },
+      "purpose": "サンプルの表に対応する概念を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-fa68cedac024c1",
+        "informationId": "cf-eebd7c70c2be51"
+      },
+      "purpose": "該当する行がない場合にも空の意味を伝え、表示の欠落と誤認しない。",
+      "sample": {
+        "value": "この条件に該当する投擲はない。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95968cadda360a",
+        "informationId": "cf-43f6bcc1c32685"
+      },
+      "purpose": "サンプルの列を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "column-number",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95968cadda360a",
+        "informationId": "cf-61152952713ecb"
+      },
+      "purpose": "サンプルの列を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "倒れた棒の番号",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-95968cadda360a",
+        "informationId": "cf-b46f7844799233"
+      },
+      "purpose": "サンプルの列に対応する概念の情報項目を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "throw-number",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-930d0be564d125",
+        "informationId": "cf-41a34811493a5f"
+      },
+      "purpose": "サンプルの行を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "row-first-throw",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-5be91edc9a7f6b",
+        "informationId": "cf-10479709494816"
+      },
+      "purpose": "サンプルの値に対応するサンプルの列を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "column-number",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-5be91edc9a7f6b",
+        "informationId": "cf-3756ccb9208e42"
+      },
+      "purpose": "条件や結果の具体的な値を比較表のセルで示す。",
+      "sample": {
+        "value": 7,
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-5be91edc9a7f6b",
+        "informationId": "cf-40910446fb8734"
+      },
+      "purpose": "例の値から対応する対象を開き、他の情報とのつながりを確認する。",
+      "sample": {
+        "value": "throw-first",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-0fbe265bb9e0c2",
+        "informationId": "cf-f0e7e38b2e5d4e"
+      },
+      "purpose": "制約を他の記録と区別し、関連する記述から同じ対象を特定する。",
+      "sample": {
+        "value": "limit-pin-range",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-0fbe265bb9e0c2",
+        "informationId": "cf-fbfca64ed42ab8"
+      },
+      "purpose": "制約を一覧や図で見分け、内容を開いて確認する。",
+      "sample": {
+        "value": "棒の番号は1から12まで",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-0fbe265bb9e0c2",
+        "informationId": "cf-172e5ea8df32b1"
+      },
+      "purpose": "機能や構造の適用上の制約を確認し、成り立たない条件を合意済みの範囲へ混ぜない。",
+      "sample": {
+        "value": "棒の番号は1から12の整数とする、という確認用の想定。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-0fbe265bb9e0c2",
+        "informationId": "cf-85cfee4fb84b28"
+      },
+      "purpose": "その制約が必要な理由を確認し、不要な制限を設計へ固定しない。",
+      "sample": {
+        "value": "範囲外の番号を得点計算へ渡すかどうかを依頼者と確認するため。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-0fbe265bb9e0c2",
+        "informationId": "cf-5e9aee6eef1ae1"
+      },
+      "purpose": "制約の補足を、制約そのものや合意した条件と区別して共有する。",
+      "sample": {
+        "value": {
+          "reviewQuestion": "番号の入力方法は未決。"
+        },
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-8f29ddbbb0111f",
+        "informationId": "cf-efa8c8f2127ad8"
+      },
+      "purpose": "レビュー間の関係の「出発側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": {
+        "value": "group-input",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-8f29ddbbb0111f",
+        "informationId": "cf-da22657a98dc03"
+      },
+      "purpose": "レビュー間の関係の「到着側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": {
+        "value": "group-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-afef9bf65df472",
+        "informationId": "cf-88d642dad3d62b"
+      },
+      "purpose": "レビュー間の境界の「出発側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": {
+        "value": "group-input",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-afef9bf65df472",
+        "informationId": "cf-2e3bc4744a9d96"
+      },
+      "purpose": "レビュー間の境界の「到着側」で参照する対象を特定し、関係する記述との対応を確認する。",
+      "sample": {
+        "value": "group-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-afef9bf65df472",
+        "informationId": "cf-9a9846ff4aacd6"
+      },
+      "purpose": "レビュー単位の境界で何を受け渡すかを図上で短く示し、受渡しの約束を読む入口にする。",
+      "sample": {
+        "value": "投擲結果を渡す",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "c-afef9bf65df472",
+        "informationId": "cf-7ab2a2bd886a9f"
+      },
+      "purpose": "レビュー単位間で受け渡す情報や守る条件を共有し、片側だけで成立と判断しない。",
+      "sample": {
+        "value": "投擲順と倒れた棒の番号を合わせて渡し、計算する回を取り違えない。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-flow-step",
+        "informationId": "n-step-field-2"
+      },
+      "purpose": "フロー内の手順に対応する業務を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "calculate-score",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-flow-step",
+        "informationId": "n-step-field-6"
+      },
+      "purpose": "フロー内の手順に対応する判定行を特定し、関連する記述を往復して一致を確認する。",
+      "sample": {
+        "value": "valid",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "設計者",
+        "開発者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-flow-step",
+        "informationId": "cf-325c153e7c0af3"
+      },
+      "purpose": "すべての場合に行う手順か、任意の手順かを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-flow-step",
+        "informationId": "cf-d6937d0cbb9486"
+      },
+      "purpose": "どの条件でフロー内の手順が必要かを確認し、条件付きの手順を常時必須にしない。",
+      "sample": {
+        "value": "入力が有効と判定された場合。",
+        "coverage": "field-value"
+      },
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    },
+    {
+      "target": {
+        "conceptId": "n-flow-step",
+        "informationId": "cf-fde33f3870ef9f"
+      },
+      "purpose": "手順の並びが未決か、順番ありか、順不同かを確認する。",
+      "perspectives": [
+        "依頼者",
+        "設計者"
+      ]
+    }
+  ]
+}

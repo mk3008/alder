@@ -1,0 +1,62 @@
+{
+  "basisMain": "777b79a4f919a1456c74a724b949bc7748f32df1",
+  "sourceHead": "887c0f60a191d06e1db0ed50567844cca2ec1950",
+  "checks": [
+    {
+      "id": "MAIN-REVIEW-001",
+      "cases": [
+        "fixed-source"
+      ],
+      "condition": "#357の固定JSONを表示する",
+      "guarantee": "JSONをbyte同一で保持し、nullable=nullの全47項目と理由を保持する。件数の履歴差は候補変更と混同しない。",
+      "reason": "本人が同じ版をGUIで確認できること",
+      "basis": "依頼3・#340 Done",
+      "verification": "web/test-main-structure-review.mjs"
+    },
+    {
+      "id": "MAIN-REVIEW-002",
+      "cases": [
+        "main-preservation"
+      ],
+      "condition": "main 777b79a4へ表示を追加する",
+      "guarantee": "mainの既存製品コードはshell/resize/CSSの統合点以外byte不変。Schema・保存器・Plugin・原業務JSON・既存検証正本はbyte不変。",
+      "reason": "表示・操作はmainが正本、契約候補を暗黙採用しない",
+      "basis": "依頼2・やらないこと、#340優先順位1/3",
+      "verification": "web/test-main-structure-review.mjs、既存verify:contract"
+    },
+    {
+      "id": "MAIN-REVIEW-003",
+      "cases": [
+        "all-undecided-details"
+      ],
+      "condition": "47項目の個別詳細を表示する（互換項目はフィルター解除）",
+      "guarantee": "全項目のnull許容を未決と表示し、元JSONの理由を独立した欄に表示する。表示は原モデルを変更しない。",
+      "reason": "未決を隠して合格扱いにしない",
+      "basis": "依頼3・#340 Done",
+      "verification": "web/test-main-structure-review.mjs"
+    },
+    {
+      "id": "MAIN-REVIEW-004",
+      "cases": [
+        "main-drawer-return",
+        "structure-routes"
+      ],
+      "condition": "構造URL／左構造ツリーを使用し、mainの各画面へ戻る",
+      "guarantee": "構造画面の中央詳細と他画面の右Drawerの状態・ナビゲーションを分離して保持する。",
+      "reason": "mainの操作と構造探索の意図した差を残す",
+      "basis": "依頼2・#357 sidebar/tab正本",
+      "verification": "test-structure-explorer-sidebar.mjs、test-structure-explorer-focus-tabs.mjs、既存contract/browser全体"
+    },
+    {
+      "id": "MAIN-REVIEW-005",
+      "cases": [
+        "isolated-preview"
+      ],
+      "condition": "GitHub Pagesのベータを追加する",
+      "guarantee": "新しいpreview/pr-357/<head>-main-review/配下だけに追加し、元JSONの版/hashを固定する。本番ルートと旧Previewは不変。本人GUIレビューは未実施として返す。",
+      "reason": "固定した人間レビュー環境だけを用意する",
+      "basis": "依頼5・完了報告方法・やらないこと",
+      "verification": "公開時のtree差分・manifest hash照合・HTTP/Chrome検査、Draft PR"
+    }
+  ]
+}

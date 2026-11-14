@@ -1,0 +1,43 @@
+{
+  "format": "viewer-verification/1",
+  "scope": "概念モデルの型・用途・コピーとFlowStepのレビュー指摘",
+  "source": "2026-11-07 本人指示。元の保存形式と業務データは変更しない。",
+  "supersedes": "procedure-goal-acceptance.json の実施条件文・確定状態に関する部分、および structure-explorer-compatibility.check-items.json の適用条件を要確認とする部分。その他の保証は維持する。",
+  "checks": [
+    {
+      "id": "STRUCTURE-FEEDBACK-001",
+      "condition": "有限の値域を持つ項目を一覧または詳細で見る",
+      "guarantee": "構造化済みの値からTypeScript形式のリテラル型を表示し、値の意味・サンプル・null許容を維持する。文字列以外や空文字も区別する。",
+      "reason": "取り得る値と意味を同じ定義から確認する。",
+      "verification": "文字列・数値・真偽・空文字、未定義、一覧と詳細を検証する。"
+    },
+    {
+      "id": "STRUCTURE-FEEDBACK-002",
+      "condition": "構造の項目一覧または項目詳細を見る",
+      "guarantee": "説明と用途は別々に表示し、用途が未記載なら空欄とする。用途を推測しない。",
+      "reason": "項目の意味と利用目的を区別する。",
+      "verification": "根拠のある用途と未記載、PC幅・スマホ幅を確認する。"
+    },
+    {
+      "id": "STRUCTURE-FEEDBACK-003",
+      "condition": "構造または属性をコピーする",
+      "guarantee": "モデル・構造・項目を区別できる短い識別情報と、表示中の説明などを含む全文を選択できる。通常は識別情報、Shiftで全文をコピーし、タッチでも両方選べる。失敗は明示する。",
+      "reason": "AIや人に対象を正確に伝える。",
+      "verification": "短文・全文、Shift、タッチ可能な操作、失敗時、同名要素の識別を確認する。"
+    },
+    {
+      "id": "STRUCTURE-FEEDBACK-004",
+      "condition": "FlowStepの候補を表示する",
+      "guarantee": "適用条件の旧記述は互換・移行用としてのみ残し、実施条件の確定状態は設けない。旧条件の原記録やnullを推測変換しない。",
+      "reason": "判定・例外と重複する自由文や曖昧な状態を現行概念にしない。",
+      "verification": "通常表示と互換表示、旧値・原本・判定参照を確認する。"
+    },
+    {
+      "id": "STRUCTURE-FEEDBACK-005",
+      "condition": "FlowStepの説明を読む",
+      "guarantee": "バリデーション失敗は例外、通過後は通常フロー、対象がない場合に何もしないだけの手順には独立条件を設けないという記述例を示す。",
+      "reason": "人とAIが設計時の書き方を判断できる。",
+      "verification": "説明と例外・通常フロー・手順の対応を照合する。"
+    }
+  ]
+}

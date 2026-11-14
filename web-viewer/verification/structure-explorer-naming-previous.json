@@ -1,0 +1,130 @@
+{
+  "conceptNames": {
+    "n-bd": {
+      "typeName": "Business Design",
+      "logicalName": "業務設計書"
+    },
+    "n-information": {
+      "typeName": "Information",
+      "logicalName": "情報項目"
+    },
+    "n-data": {
+      "typeName": "Data",
+      "logicalName": "情報のまとまり"
+    },
+    "n-dataitem": {
+      "typeName": "DataItem",
+      "logicalName": "Data項目"
+    },
+    "n-exchange": {
+      "typeName": "Interaction",
+      "logicalName": "受渡し"
+    },
+    "n-party": {
+      "typeName": "Party",
+      "logicalName": "操作主体・対象"
+    },
+    "n-dependency": {
+      "typeName": "Dependency",
+      "logicalName": "手順の前提"
+    },
+    "n-order": {
+      "typeName": "OrderRule",
+      "logicalName": "旧順序規則"
+    },
+    "n-result": {
+      "typeName": "Activity Result",
+      "logicalName": "業務結果"
+    },
+    "n-decision": {
+      "typeName": "Decision",
+      "logicalName": "判定表"
+    },
+    "n-axis": {
+      "typeName": "Decision Axis",
+      "logicalName": "判定軸"
+    },
+    "n-row": {
+      "typeName": "Decision Row",
+      "logicalName": "判定行"
+    },
+    "n-condition": {
+      "typeName": "Condition",
+      "logicalName": "条件セル"
+    },
+    "n-rowcheck": {
+      "typeName": "判定行とCheckの対応",
+      "logicalName": "判定行とCheckの対応"
+    },
+    "n-exception": {
+      "typeName": "Exception",
+      "logicalName": "例外"
+    },
+    "n-continuity": {
+      "typeName": "Continuity",
+      "logicalName": "中断・再開"
+    },
+    "n-relation": {
+      "typeName": "Relation",
+      "logicalName": "入出力の関係"
+    },
+    "n-finding": {
+      "typeName": "Finding",
+      "logicalName": "確認事項"
+    },
+    "n-external": {
+      "typeName": "外部業務設計書目録",
+      "logicalName": "外部業務設計書目録"
+    },
+    "n-checkdoc": {
+      "typeName": "Check Items",
+      "logicalName": "チェック文書"
+    },
+    "n-check": {
+      "typeName": "Check",
+      "logicalName": "チェック項目"
+    }
+  },
+  "relationNames": {
+    "nr-bd-data": "情報のまとまり",
+    "nr-data-dataitem": "構成する項目",
+    "nr-dataitem-information": "構成する情報項目",
+    "nr-step-party": "操作主体・対象",
+    "nr-step-data": "操作対象データ",
+    "nr-exchange-data": "受渡しデータ",
+    "nr-axis-data": "判定対象データ",
+    "nr-row-data": "判定結果のデータ",
+    "nr-continuity-data": "保持するデータ",
+    "nr-bd-relation": "入出力の関係",
+    "nr-bd-finding": "確認事項",
+    "nr-external-checkdoc": "原典の外部業務設計書目録"
+  },
+  "relationConditions": {
+    "nr-who-activity": "Activity.whoId。未決はNULLであり、主体がいないと確定したことを示さない。",
+    "nr-object-information": "情報項目の所属。",
+    "nr-bd-data": "業務設計書がDataを持つ。",
+    "nr-data-dataitem": "Dataを構成する項目。",
+    "nr-dataitem-information": "dataItems.informationId。",
+    "nr-step-party": "partiesが指定された場合に、主体側・対象側のうち記録された側を保持する。",
+    "nr-exchange-object": "stepInteractions.objectId。",
+    "nr-exchange-relation": "stepInteractions.relationId。",
+    "nr-step-data": "stepTargetDataで操作対象のDataを参照する。",
+    "nr-exchange-data": "interactionDataで受渡しのDataを参照する。",
+    "nr-axis-data": "axisDataが判定軸と対象Dataを対応付ける。",
+    "nr-row-data": "resultDataで判定結果のDataを参照する。",
+    "nr-continuity-data": "continuityDataは中断時に保持するDataを参照する。",
+    "nr-bd-relation": "入出力等の関係を保持する。"
+  },
+  "fields": {
+    "n-activity-field-4": "範囲",
+    "n-object-field-3": "範囲",
+    "n-information-field-2": "名前",
+    "n-data-field-2": "名前",
+    "n-dataitem-field-1": "情報のまとまり",
+    "n-dataitem-field-3": "条件",
+    "n-party-field-2": "主体または対象",
+    "n-party-field-3": "主体の種類",
+    "n-axis-field-3": "条件名",
+    "n-continuity-field-5": "再開方法"
+  }
+}

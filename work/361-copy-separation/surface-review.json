@@ -1,0 +1,26 @@
+{
+  "scope": "Display text inventory and candidate review for author metadata; not full semantic approval or full audit of all 66 structures",
+  "structureDescriptions": 66,
+  "fieldMappings": 339,
+  "logicalMeanings": 253,
+  "logicalPurposes": 1,
+  "samples": 128,
+  "nullableUndecided": 47,
+  "changed": [
+    "/documents/2/concepts/65/description",
+    "/documents/2/presentation/subsystemViews/nodes/13/description"
+  ],
+  "retained": [
+    "all nullable reasons and proposal statuses",
+    "compatibility/migration classifications and filter tooltip",
+    "Preview head badge and storage-isolation tooltip",
+    "ordinary field explanations/purposes",
+    "previous beta six sample edits, no additional sample edits",
+    "original referenceValue records and human review states"
+  ],
+  "tooltipSources": [
+    "fixed operational copy (copy action / compatibility filter)",
+    "relation.condition, cardinalities, physical mapping fields",
+    "concept presentation node description (both FlowStep copies handled)"
+  ]
+}

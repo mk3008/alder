@@ -67,7 +67,6 @@
   "shards": [
     {
       "id": "1",
-      "durationMs": 232243,
       "cases": [
         "sharedCaptions",
         "jsonBoundaries",
@@ -84,12 +83,13 @@
         "tabStrip",
         "exceptionOption",
         "scopeGeometry:combined",
-        "legacySmoke"
-      ]
+        "legacySmoke",
+        "structureSampleHeader"
+      ],
+      "baseline52DurationMs": 232243
     },
     {
       "id": "2",
-      "durationMs": 233436,
       "cases": [
         "conceptInitial",
         "tabScroll",
@@ -108,12 +108,13 @@
         "documentOrder",
         "labelLayout",
         "scopeGeometry:fixed-drawer",
-        "scopeGeometry:drawer-only"
-      ]
+        "scopeGeometry:drawer-only",
+        "explorerResizeScroll"
+      ],
+      "baseline52DurationMs": 233436
     },
     {
       "id": "3",
-      "durationMs": 233511,
       "cases": [
         "viewerShell",
         "jsonLayout",
@@ -132,8 +133,15 @@
         "nodeDrawer",
         "scopeOption",
         "edgeOption",
-        "scopeShortcut"
-      ]
+        "scopeShortcut",
+        "conceptValueDomains"
+      ],
+      "baseline52DurationMs": 233511
     }
-  ]
+  ],
+  "integration": {
+    "headBeforeIntegration": "bd5bb6febf87b25320ce41c4caeea077d43d75af",
+    "main": "c0376fcd",
+    "note": "Three PR #361 cases distributed one per shard; measurement above remains the historical 52-case observation. Re-measure the final 55-case candidate."
+  }
 }

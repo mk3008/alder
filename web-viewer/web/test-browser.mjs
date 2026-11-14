@@ -6,6 +6,9 @@ import {verifyJSONStates} from './test-json-states-browser.mjs';
 import {verifyJSONLayout} from './test-json-layout-browser.mjs';
 import {verifyActivityWorkspace} from './test-activity-workspace-browser.mjs';
 import {verifyJSONDocuments} from './test-json-document-browser.mjs';
+import {verifyStructureSampleHeader} from './test-structure-explorer-sample-header-browser.mjs';
+import {verifyExplorerResizeScroll} from './test-explorer-resize-scroll-browser.mjs';
+import {verifyConceptValueDomains} from './test-concept-value-domains-browser.mjs';
 import {verifyNamedPlans} from './test-named-plans-browser.mjs';
 import {verifyJSONBoundaries} from './test-json-boundaries-browser.mjs';
 import {verifyJSONOfflinePreview} from './test-json-offline-browser.mjs';
@@ -66,6 +69,9 @@ const cases=[
    {name:'jsonLayout',run:()=>verifyJSONLayout(browser)},
    {name:'sharedCaptions',run:()=>verifySharedCaptions(browser)},
    {name:'jsonDocuments',run:()=>verifyJSONDocuments(browser)},
+   {name:'structureSampleHeader',run:()=>verifyStructureSampleHeader(browser)},
+   {name:'explorerResizeScroll',run:()=>verifyExplorerResizeScroll(browser)},
+   {name:'conceptValueDomains',run:()=>verifyConceptValueDomains(browser)},
    {name:'namedPlans',run:()=>verifyNamedPlans(browser)},
    {name:'jsonBoundaries',run:()=>verifyJSONBoundaries(browser)},
    {name:'jsonOfflinePreview',run:()=>verifyJSONOfflinePreview(browser)},

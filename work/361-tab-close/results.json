@@ -1,0 +1,197 @@
+{
+  "stage": "targeted, before full CI; old IDs retain their scope and intentional differences",
+  "results": [
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-1280-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-1280-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-1280-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-1280-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-393-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-393-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "light-393-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "light-393-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-1280-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-1280-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-1280-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-1280-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-393-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-393-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-001",
+      "case": "dark-393-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-002",
+      "case": "dark-393-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "pointer-inactive",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "pointer-active",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "Enter",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "Space",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-003",
+      "case": "touch-393",
+      "status": "pass",
+      "evidence": "browser-results.json: real Chromium, pixel/geometry/native interaction assertions"
+    },
+    {
+      "id": "TAB-CLOSE-004",
+      "case": "protected-bytes",
+      "status": "pass",
+      "evidence": "verify.py: protected file hashes and inverse adapter byte comparison"
+    },
+    {
+      "id": "TAB-CLOSE-004",
+      "case": "old-assertions",
+      "status": "pass",
+      "evidence": "verify.py: protected file hashes and inverse adapter byte comparison"
+    },
+    {
+      "id": "VIEW-TAB-001",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "VIEW-DRAWER-001",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "VIEW-TAB-002",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "VIEW-CONCEPT-DETAIL-001",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "VIEW-CONCEPT-DETAIL-002",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "VIEW-CONCEPT-DETAIL-003",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "TAB-SCROLL-001",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "TAB-SCROLL-002",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    },
+    {
+      "id": "TAB-SCROLL-003",
+      "case": "default",
+      "status": "pass",
+      "evidence": "Related viewerShell/tabScroll/tabStrip Chromium and test-viewer-shell.mjs, test-structure-shell.mjs; same-agent read-only scope review"
+    }
+  ]
+}

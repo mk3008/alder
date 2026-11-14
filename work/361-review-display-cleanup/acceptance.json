@@ -1,0 +1,132 @@
+{
+  "format": "viewer-verification/1",
+  "start": "21ce2201c6b01e7327eca8c799b1cd77bb304640",
+  "source": "trusted owner correction and independent design review clarification supplied by parent, 2026-11-10",
+  "scope": "Preview display correction and integrity, new requirement outside previous B; not formal Schema or Plugin",
+  "checks": [
+    {
+      "id": "CLEAN-001",
+      "condition": "今回の訂正候補と新しい固定Previewに適用",
+      "guarantee": "ID別の内容保持。339立場・338目的・207例とJSON型を開始版と保持。今回だけの固定で、将来の明示scopeによる訂正は禁止しない。",
+      "reason": "本人の訂正・構造化/維持責務・コピー整列要求と独立設計確認",
+      "cases": [
+        "339-values",
+        "338-purposes",
+        "207-sample-types",
+        "pain-condition",
+        "document-fragment"
+      ],
+      "verification": "独立期待のdata/Node/DOM/実browser、別工程照合・CI・独立レビュー"
+    },
+    {
+      "id": "CLEAN-002",
+      "condition": "今回の訂正候補と新しい固定Previewに適用",
+      "guarantee": "table/detail/title/ARIA/全文/Shiftに管理ラベル・根拠・sourceのsentinelを出さない。実本文の業務語は保持。",
+      "reason": "本人の訂正・構造化/維持責務・コピー整列要求と独立設計確認",
+      "cases": [
+        "table",
+        "attribute",
+        "attributes",
+        "full",
+        "shift",
+        "legacy-input"
+      ],
+      "verification": "独立期待のdata/Node/DOM/実browser、別工程照合・CI・独立レビュー"
+    },
+    {
+      "id": "CLEAN-003",
+      "condition": "今回の訂正候補と新しい固定Previewに適用",
+      "guarantee": "builderはorigin byteとcatalog/model/安定参照を照合。Viewerはoriginを取得せず形・fingerprint・参照だけを照合。hashはprojection前の入力ConceptModelをcloneしmeta.previewStructureReviewだけ除いた正規化snapshotに対して計算。snapshotは検証と描画で同一。",
+      "reason": "本人の訂正・構造化/維持責務・コピー整列要求と独立設計確認",
+      "cases": [
+        "real-package",
+        "wrong-model",
+        "same-revision-edit",
+        "reorder",
+        "rename",
+        "delete",
+        "duplicate-id",
+        "pointer-id",
+        "missing-dependency",
+        "extra-target",
+        "missing-target",
+        "candidate-type",
+        "origin-bytes",
+        "replacement-success",
+        "replacement-failure",
+        "mutation-pending",
+        "mutation-after",
+        "crypto-failure"
+      ],
+      "verification": "独立期待のdata/Node/DOM/実browser、別工程照合・CI・独立レビュー"
+    },
+    {
+      "id": "CLEAN-004",
+      "condition": "今回の訂正候補と新しい固定Previewに適用",
+      "guarantee": "原典・旧正本・Schema/Plugin/保存器byte不変、元値・47未決・reviewState・コピーpayload・B経路・tabclose保持。",
+      "reason": "本人の訂正・構造化/維持責務・コピー整列要求と独立設計確認",
+      "cases": [
+        "protected-bytes",
+        "original-values",
+        "47-undecided",
+        "review-state",
+        "identity-copy",
+        "copy-rejected",
+        "tab-close"
+      ],
+      "verification": "独立期待のdata/Node/DOM/実browser、別工程照合・CI・独立レビュー"
+    },
+    {
+      "id": "CLEAN-005",
+      "condition": "今回の訂正候補と新しい固定Previewに適用",
+      "guarantee": "コピーを同じ論理名行・同文言に保ち、下線主体・枠なし。caption font-size/line-heightはローカル名と一致。caption baseline差1px以内、2button hit rectangles交差なし、各hit高さ24px以上、1280px単行と393px折返しでcaption/value衝突なし。",
+      "reason": "本人の訂正・構造化/維持責務・コピー整列要求と独立設計確認",
+      "cases": [
+        "1280-light",
+        "393-light",
+        "1280-dark",
+        "393-dark",
+        "keyboard",
+        "touch",
+        "long-name"
+      ],
+      "verification": "独立期待のdata/Node/DOM/実browser、別工程照合・CI・独立レビュー"
+    },
+    {
+      "id": "CLEAN-006",
+      "condition": "今回の訂正候補と新しい固定Previewに適用",
+      "guarantee": "全ID/ケース/結果を読み取り別工程で照合。旧正本byte保護。関連検証→全体CI→独立事後レビュー→新固定beta公開・全file/hash/操作照合。",
+      "reason": "本人の訂正・構造化/維持責務・コピー整列要求と独立設計確認",
+      "cases": [
+        "authority-bytes",
+        "id-deletion-negative",
+        "case-deletion-negative",
+        "missing-result-negative",
+        "lint",
+        "build",
+        "contract",
+        "node",
+        "browser",
+        "full-ci",
+        "independent-review",
+        "published-files",
+        "published-ui"
+      ],
+      "verification": "独立期待のdata/Node/DOM/実browser、別工程照合・CI・独立レビュー"
+    }
+  ],
+  "supersedes": {
+    "REVIEW-HYP-003": [
+      "original-plus-hypothesis",
+      "provenance-visible",
+      "no-approval-claim"
+    ],
+    "REVIEW-HYP-005": [
+      "full-copy-hypothesis"
+    ],
+    "REVIEW-HYP-001": "provenance文章の保持を型付き参照へ変更。内容保護は維持",
+    "REVIEW-HYP-002": "保護維持。copy headingのCSS表示のみ今回の明示scopeで変更",
+    "REVIEW-HYP-004": "推測なし維持。未検証v1は補足不採用"
+  },
+  "futureEdits": "今回のID別値固定を将来の訂正禁止には使わない。次の明示要求は別scopeで更新可能。"
+}
