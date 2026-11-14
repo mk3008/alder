@@ -10,7 +10,7 @@ import {createSubsystemOverview} from './subsystem-overview';
 import {createDataExamples} from './data-examples';
 import {renderRequesterChecks,renderLinkedChecks,renderDecisionExamples,renderDecisionChecks,renderResultChecks} from './document-view';
 import {sampleDestination,testFunctions} from './test-spec-functions';
-import {renderStructureExplorer,renderStructureDetails,type StructureSelection} from './structure-explorer';
+import {renderStructureExplorer,renderStructureDetails,structureGraph,structureTabNames,type StructureSelection} from './structure-explorer';
 import './structure-explorer.css';
 import type {Design} from './graph';
 import type {Check} from './json-document';
@@ -36,9 +36,10 @@ export function installViewerShell(app:HTMLElement,options:Options){
  const stateTabs=document.createElement('nav');stateTabs.className='state-tabs';stateTabs.setAttribute('aria-label','開いている状態遷移');tabScroll.append(stateTabs);
  const specTabs=document.createElement('nav');specTabs.className='spec-tabs';specTabs.setAttribute('aria-label','開いているテスト仕様');tabScroll.append(specTabs);
  const concept=document.createElement('section');concept.id='concept-workspace';concept.hidden=true;concept.setAttribute('aria-label','データ構造');concept.innerHTML='<main class="concept-main"><div class="concept-empty"><h2>データ構造</h2><p>この文書のデータ構造は未定義です。</p></div><article class="concept-review-landscape" hidden></article><iframe class="concept-frame" title="概念相関図" hidden></iframe></main><aside class="concept-related" id="concept-related-panel" aria-label="データ構造の情報" hidden><div class="shell-heading right-drawer-heading"><strong>データ構造の情報</strong><button type="button" aria-label="データ構造の情報を閉じる">×</button></div><div class="concept-drawer-body"><section class="concept-selection"><h2 hidden>選択中の概念</h2><button class="concept-selection-clear" type="button" hidden>カードの選択を解除</button><div class="concept-related-content"></div></section><section class="concept-page-details" hidden><article class="data-review-overview" aria-label="概念モデルの概要" tabindex="-1"></article><button class="concept-example-back" type="button" hidden>概要に戻る</button><article class="data-examples-panel" aria-label="場面別データ例"></article></section></div></aside>';center.append(concept);
- const structurePages=new Map<string,HTMLElement>();
+ const structurePages=new Map<string,{page:HTMLElement;tree:ReturnType<typeof renderStructureExplorer>}>();
+ const structureSources=new Map<string,string>();
  const structureDetails=new Map<string,HTMLElement>();
- const structureSelections=new Map<string,StructureSelection>();
+ const structureSelections=new Map<string,StructureSelection|undefined>();
  const states=document.createElement('section');states.id='states-workspace';states.hidden=true;states.setAttribute('aria-label','状態遷移');states.innerHTML='<article class="state-detail-page" tabindex="-1"></article>';center.append(states);
  const specs=document.createElement('section');specs.id='tests-workspace';specs.hidden=true;specs.setAttribute('aria-label','テスト仕様');specs.innerHTML='<main class="test-spec-page"></main>';center.append(specs);
  const specRelated=document.createElement('aside');specRelated.id='test-related-panel';specRelated.className='spec-related';specRelated.setAttribute('aria-label','関連資料');specRelated.hidden=true;specRelated.innerHTML='<div class="shell-heading right-drawer-heading"><strong>関連資料</strong><button type="button" aria-label="関連資料を閉じる">×</button></div><div class="spec-related-content"></div>';
@@ -52,11 +53,13 @@ export function installViewerShell(app:HTMLElement,options:Options){
  let context:ConceptContext|undefined,views:ReturnType<typeof createConceptViews>|undefined,samples:ReturnType<typeof createDataExamples>|undefined,logical:ReturnType<typeof createLogicalDetails>|undefined;
  let tables:Record<string,ConceptCard>={},ids:string[]=[],viewIds:string[]=[...wholeModes];
  let groupByKey=new Map<string,string>(),conceptByKey=new Map<string,string>(),groupKeys=new Map<string,string>(),conceptKeys=new Map<string,string>(),structureIds=new Map<string,string>();
- const structureKey=(id:string)=>structureView+':'+id,isStructureView=(id:string)=>id===structureView||structureIds.has(id);
+ let structureLabels=new Map<string,string>(),structureRoot:string|undefined;
+ const structureKey=(id:string)=>structureView+':'+id,isStructureView=(id:string)=>structureIds.has(id);
+ const normalizeStructureView=(id:string)=>id===structureView?(structureRoot?structureKey(structureRoot):'landscape'):id;
  const groupKey=(id:string)=>groupKeys.get(id)??id,conceptKey=(id:string)=>conceptKeys.get(id)??id;
  const findReviewGroup=(key:string|undefined|null)=>views?.findGroup(groupByKey.get(key??'')),contentFor=(key:string)=>samples?.contentFor(groupByKey.get(key)??''),
   findDataExample=(key:string,id:string|undefined|null)=>samples?.findDataExample(groupByKey.get(key)??'',id),examplesFor=(key:string)=>samples?.examplesFor(groupByKey.get(key)??'')??[];
- const conceptName=(id:string)=>id===structureView?'構造エクスプローラー':structureIds.has(id)?(context?.model.concepts.find(item=>item.id===structureIds.get(id))?.name??id)+'・構造':wholeModes.includes(id)?'全体図':contentFor(id)?.title??findReviewGroup(id)?.name??tables[conceptByKey.get(id)??'']?.name;
+ const conceptName=(id:string)=>isStructureView(id)?'構造-'+structureLabels.get(structureIds.get(id)!):wholeModes.includes(id)?'全体図':contentFor(id)?.title??findReviewGroup(id)?.name??tables[conceptByKey.get(id)??'']?.name;
  const relevantChecks=()=>{const c=options.business(),model=c.design?.model;return model?[...model.checks,...(c.relatedChecks??[])].filter(doc=>doc.basedOn.documentId===model.business.id):[];};
  const functions=()=>testFunctions(context,relevantChecks()),functionFor=(key:string)=>functions().find(item=>item.key===(key.startsWith('decision:')?key.slice(9):key));
  const functionName=(target:ReturnType<typeof functions>[number])=>functions().filter(item=>item.name===target.name).length>1?target.name+'（'+(options.business().activities.find(activity=>activity.id===target.activityId)?.name??'その他')+'）':target.name;
@@ -86,16 +89,34 @@ export function installViewerShell(app:HTMLElement,options:Options){
   for(const [key,value]of Object.entries(saved.lastExamples??saved.examples??{}))if(typeof value==='string'&&findDataExample(key,value))lastExamples.set(key,value);
   for(const [key,value]of Object.entries(saved.examples??{}))if(typeof value==='string'&&findDataExample(key,value))exampleModes.set(key,value);
   for(const [key,value]of Object.entries(saved.selected??{}))if(typeof value==='string'&&ids.includes(value))selectedConcepts.set(key,value);
-  conceptOpen=[...new Set<string>((Array.isArray(saved.concepts)?saved.concepts:[]).filter((id:unknown):id is string=>typeof id==='string'&&viewIds.includes(id)))];
-  active=conceptOpen.includes(saved.active)?saved.active:'landscape';
+  const savedTabs:unknown[]=Array.isArray(saved.concepts)?saved.concepts:[];
+  conceptOpen=[...new Set(savedTabs.filter((id):id is string=>typeof id==='string').map(normalizeStructureView).filter(id=>viewIds.includes(id)))];
+  const savedActive=normalizeStructureView(saved.active);
+  active=conceptOpen.includes(savedActive)?savedActive:'landscape';
+  if(savedTabs.includes(structureView)&&structureRoot)structureSources.set(structureKey(structureRoot),structureView);
+  for(const [id,source]of Object.entries(saved.structureSources??{}))if(isStructureView(id)&&typeof source==='string'&&(source===structureView||isStructureView(source)))structureSources.set(id,source);
  }
  let subsystemOverview:ReturnType<typeof createSubsystemOverview>|undefined;
- const save=()=>{try{sessionStorage.setItem(storage,JSON.stringify({documentKey,overviewClosed,selected:Object.fromEntries(selectedConcepts),examples:Object.fromEntries(exampleModes),lastExamples:Object.fromEntries(lastExamples),overviewModes:[...overviewModes],left:explorerOpen,explorerMode,expandedVersion:4,expanded:[...expanded],concepts:conceptOpen,active,states:stateOpen,specs:specOpen,activeSpec,specExamples:Object.fromEntries(specExamples),...(!options.rightDrawer?{rightOpen:drawer.isOpen()}:{})}));}catch{}};
+ const save=()=>{try{sessionStorage.setItem(storage,JSON.stringify({documentKey,overviewClosed,selected:Object.fromEntries(selectedConcepts),examples:Object.fromEntries(exampleModes),lastExamples:Object.fromEntries(lastExamples),overviewModes:[...overviewModes],left:explorerOpen,explorerMode,expandedVersion:4,expanded:[...expanded],concepts:conceptOpen,structureSources:Object.fromEntries(structureSources),active,states:stateOpen,specs:specOpen,activeSpec,specExamples:Object.fromEntries(specExamples),...(!options.rightDrawer?{rightOpen:drawer.isOpen()}:{})}));}catch{}};
  const remember=()=>{if(area==='concept'&&isStructureView(active))scrolls.set('structure:'+active,structureDetails.get(active)?.scrollTop??0);else if(area==='concept')scrolls.set('drawer:'+active,related.querySelector<HTMLElement>('.concept-drawer-body')!.scrollTop);if(area==='concept'&&drawer.isOpen()&&overviewModes.has(active))scrolls.set('review-overview:'+active,related.querySelector<HTMLElement>('.data-review-overview')!.scrollTop);if(area==='concept'&&exampleModes.has(active))scrolls.set('example:'+active+':'+exampleModes.get(active),related.querySelector<HTMLElement>('.data-examples-panel')!.scrollTop);if(area==='states'&&activeState)scrolls.set('state:'+activeState,stateArticle.scrollTop);if(area==='tests')scrolls.set('tests:'+activeSpec,specs.querySelector<HTMLElement>('.test-spec-page')!.scrollTop);if(area==='concept'&&active==='landscape')scrolls.set('concept:landscape',concept.querySelector<HTMLElement>('.concept-review-landscape')!.scrollTop);};
  function route(push=true){if(restoringRoute)return;const u=new URL(location.href);u.searchParams.set('view',area);u.searchParams.delete('concept');u.searchParams.delete('dataExample');u.searchParams.delete('dataView');if(area==='concept'&&drawer.isOpen()&&overviewModes.has(active))u.searchParams.set('dataView','overview');else if(area==='concept'&&findReviewGroup(active)&&!exampleModes.has(active))u.searchParams.set('dataView','structure');if(area==='concept'&&drawer.isOpen()&&exampleModes.has(active))u.searchParams.set('dataExample',exampleModes.get(active)!);if(area==='tests'&&specExamples.has(activeSpec))u.searchParams.set('dataExample',specExamples.get(activeSpec)!);u.searchParams.delete('state');u.searchParams.delete('activity');u.searchParams.delete('object');u.searchParams.delete('spec');if(area==='concept')u.searchParams.set('concept',active);if(area==='states'&&activeState)u.searchParams.set('state',activeState);if(area==='tests')u.searchParams.set('spec',activeSpec);if(area==='business'){const c=options.business(),v=c.views?.find(v=>v.key===c.viewKey);if(v?.activity)u.searchParams.set('activity',v.activity);else if(v?.object)u.searchParams.set('object',v.object);}if(u.href!==location.href)history[push?'pushState':'replaceState']({alderShell:true},'',u);}
  function text(root:HTMLElement,tag:string,value:string){const e=document.createElement(tag);e.textContent=value;root.append(e);return e;}
  function setArea(next:Area){if(next!==area){if(area==='business')options.capture();else remember();area=next;}business.hidden=area!=='business';concept.hidden=area!=='concept';states.hidden=area!=='states';specs.hidden=area!=='tests';empty.hidden=area!=='empty';app.dataset.workspaceArea=area;if(area==='business')options.refresh();syncChrome();renderExplorer();}
- function selectConcept(id:string,push=true){if(!hasModel)return;if(id==='subsystems')id='landscape';if(!viewIds.includes(id))return;remember();if(!conceptOpen.includes(id))conceptOpen.push(id);active=id;if(isStructureView(id)){explorerMode='structure';structureSideKey=id;}setArea('concept');renderConcept();renderTabs();save();if(push)route();}
+ function selectConcept(id:string,push=true){
+  if(!hasModel)return;
+  const wholeTree=id===structureView;
+  id=normalizeStructureView(id==='subsystems'?'landscape':id);
+  if(!viewIds.includes(id))return;
+  remember();if(!conceptOpen.includes(id))conceptOpen.push(id);active=id;
+  if(isStructureView(id)){
+   if(wholeTree)structureSources.set(id,structureView);
+   explorerMode='structure';structureSideKey=structureSources.get(id)??id;
+   const tree=ensureStructureTree(structureSideKey);
+   const selection=structureSelections.has(id)?structureSelections.get(id):{kind:'structure' as const,conceptId:structureIds.get(id)!};
+   if(selection)structureSelections.set(id,{...selection,hideLegacy:tree?.hidesLegacy()});
+  }
+  setArea('concept');renderConcept();renderTabs();save();if(push)route();
+ }
  function setOverview(){remember();exampleModes.delete(active);overviewModes.add(active);renderConcept();related.querySelector<HTMLElement>('.concept-drawer-body')!.scrollTop=scrolls.get('drawer-overview:'+active)??0;save();route();}
  function setExample(id?:string,focusPicker=true){if(id&&!findDataExample(active,id))return;const entering=!exampleModes.has(active),body=related.querySelector<HTMLElement>('.concept-drawer-body')!;if(entering)scrolls.set('drawer-overview:'+active,body.scrollTop);remember();overviewModes.delete(active);if(id){exampleModes.set(active,id);lastExamples.set(active,id);}else exampleModes.delete(active);drawer.setOpen(true);renderConcept();if(entering)body.scrollTop=0;save();route();if(focusPicker)related.querySelector<HTMLSelectElement>('.data-example-picker select')?.focus({preventScroll:true});}
  related.querySelector<HTMLButtonElement>('.concept-example-back')!.onclick=()=>{setOverview();related.querySelector<HTMLElement>('.data-review-overview')!.focus({preventScroll:true});};
@@ -190,14 +211,45 @@ export function installViewerShell(app:HTMLElement,options:Options){
  function renderStructureMain(key:string,resetScroll=false){const page=structureDetails.get(key);if(!page||!context)return;const root=page.querySelector<HTMLElement>('.structure-detail-content')!;renderStructureDetails(root,context.model,structureSelections.get(key),selection=>{structureSelections.set(key,selection);scrolls.set('structure:'+key,0);renderStructureMain(key,true);});if(resetScroll)page.scrollTop=0;}
  function ensureStructurePage(key:string){if(!context||!hasModel||!isStructureView(key))return;
   if(!structureDetails.has(key)){const page=document.createElement('article');page.className='structure-detail-page';page.hidden=area!=='concept'||active!==key;page.setAttribute('aria-label','構造の詳細');text(page,'h1','構造の詳細');const content=document.createElement('div');content.className='structure-detail-content';page.append(content);concept.querySelector('.concept-main')!.append(page);structureDetails.set(key,page);}
-  if(!structurePages.has(key)){const page=document.createElement('article');page.setAttribute('aria-label','構造エクスプローラー');structurePanel.append(page);structurePages.set(key,page);renderStructureExplorer(page,context.model,{rootId:structureIds.get(key),autoSelect:area==='concept'&&active===key&&!structureSelections.has(key),select:(selection,reason)=>{structureSelections.set(key,selection);if(reason==='select')scrolls.set('structure:'+key,0);if(reason==='select'&&(area!=='concept'||active!==key))selectConcept(key);else if(area==='concept'&&active===key)renderStructureMain(key,reason!=='filter');},clearSelection:()=>{structureSelections.delete(key);if(area==='concept'&&active===key)renderStructureMain(key);}});}
+ }
+ function ensureStructureTree(key:string){
+  if(!context)return;
+  const existing=structurePages.get(key);
+  if(existing)return existing.tree;
+  const page=document.createElement('article');page.setAttribute('aria-label','構造エクスプローラー');structurePanel.append(page);
+  const tree=renderStructureExplorer(page,context.model,{rootId:structureIds.get(key),
+   select:(selection,reason)=>{
+    if(reason==='select'){
+     const target=structureKey(selection.conceptId);
+     structureSelections.set(target,selection);
+     structureSources.set(target,key);
+     if(area==='concept'&&active===target)renderStructureMain(target,true);
+     else{scrolls.set('structure:'+target,0);selectConcept(target);}
+    }else if(reason==='filter'&&area==='concept'&&isStructureView(active)){
+     const current=structureSelections.get(active);
+     if(current){structureSelections.set(active,{...current,hideLegacy:selection.hideLegacy});renderStructureMain(active);}
+    }
+   },
+   clearSelection:()=>{if(area==='concept'&&isStructureView(active)){structureSelections.set(active,undefined);renderStructureMain(active);}},
+  });
+  structurePages.set(key,{page,tree});
+  return tree;
+ }
+ function showStructureTree(){
+  const tree=explorerMode==='structure'?ensureStructureTree(structureSideKey):undefined;
+  for(const [key,{page}]of structurePages)page.hidden=key!==structureSideKey;
+  const selection=area==='concept'&&isStructureView(active)?structureSelections.get(active):undefined;
+  tree?.setSelection(selection?.kind==='attribute'?selection.returnTo:selection);
+ }
+ function closeStructurePage(id:string){
+  structureDetails.get(id)?.remove();structureDetails.delete(id);structureSelections.delete(id);structureSources.delete(id);scrolls.delete('structure:'+id);
  }
  function configureFrame(f:HTMLIFrameElement){f.onload=()=>{theme();if(f.contentDocument){styleConceptToolbar(f.contentDocument);styleConceptNodes(f.contentDocument);}const id=f.dataset.conceptView??'overview';if(!views||!context)return;
   const group=findReviewGroup(id),graph=group?views.graph(group.id):id==='overview'?views.overviewGraph():{ids,edges:views.edges,tables};
   f.contentWindow?.postMessage({type:'alder-concept-data',graph,focus:conceptByKey.get(id),viewKey:id,documentKey:documentKey??context.model.id,clearSelectionOnBackground:!!group},messageOrigin);
   const selected=selectedConcepts.get(id);if(selected)f.contentWindow?.postMessage({type:'alder-concept-highlight',id:selected},messageOrigin);};}
  configureFrame(frame);frame.dataset.conceptView='overview';
- function clearConceptFrames(){related.querySelector<HTMLElement>('.concept-page-details')!.hidden=true;related.querySelector<HTMLButtonElement>('.concept-example-back')!.hidden=true;const overview=related.querySelector<HTMLElement>('.data-review-overview')!;overview.hidden=true;overview.replaceChildren();const samples=related.querySelector<HTMLElement>('.data-examples-panel')!;samples.hidden=true;samples.replaceChildren();delete samples.dataset.dataExample;subsystemOverview?.root.remove();subsystemOverview=undefined;for(const [id,f]of frames)if(id!=='overview'){f.remove();frames.delete(id);}for(const page of structurePages.values())page.remove();for(const page of structureDetails.values())page.remove();structurePages.clear();structureDetails.clear();structureSelections.clear();structureSideKey=structureView;frame.removeAttribute('src');frame.removeAttribute('srcdoc');selectedConcepts.clear();selectedViews.clear();selectedSubsystems.clear();}
+ function clearConceptFrames(){related.querySelector<HTMLElement>('.concept-page-details')!.hidden=true;related.querySelector<HTMLButtonElement>('.concept-example-back')!.hidden=true;const overview=related.querySelector<HTMLElement>('.data-review-overview')!;overview.hidden=true;overview.replaceChildren();const samples=related.querySelector<HTMLElement>('.data-examples-panel')!;samples.hidden=true;samples.replaceChildren();delete samples.dataset.dataExample;subsystemOverview?.root.remove();subsystemOverview=undefined;for(const [id,f]of frames)if(id!=='overview'){f.remove();frames.delete(id);}for(const {page}of structurePages.values())page.remove();for(const page of structureDetails.values())page.remove();structurePages.clear();structureDetails.clear();structureSelections.clear();structureSources.clear();structureSideKey=structureView;frame.removeAttribute('src');frame.removeAttribute('srcdoc');selectedConcepts.clear();selectedViews.clear();selectedSubsystems.clear();}
  function renderConcept(){concept.setAttribute('aria-label',active==='landscape'||findReviewGroup(active)?'サブシステム':'データ構造');concept.querySelector<HTMLElement>('.concept-empty')!.hidden=hasModel;
   const landscape=concept.querySelector<HTMLElement>('.concept-review-landscape')!,group=findReviewGroup(active),page=related.querySelector<HTMLElement>('.concept-page-details')!,overviewPanel=related.querySelector<HTMLElement>('.data-review-overview')!,panel=related.querySelector<HTMLElement>('.data-examples-panel')!;
   page.hidden=!hasModel||!group;overviewPanel.hidden=!hasModel||!group||exampleModes.has(active);panel.hidden=!hasModel||!group||!exampleModes.has(active);related.querySelector<HTMLButtonElement>('.concept-example-back')!.hidden=panel.hidden;
@@ -215,7 +267,6 @@ export function installViewerShell(app:HTMLElement,options:Options){
   landscape.hidden=!hasModel||!wholeModes.includes(active);
   if(hasModel&&isStructureView(active)){ensureStructurePage(active);renderStructureMain(active);}
   for(const [id,page]of structureDetails)page.hidden=!hasModel||id!==active;
-  for(const [id,page]of structurePages)page.hidden=!hasModel||id!==structureSideKey;
   if(hasModel&&wholeModes.includes(active)){if(active==='landscape'&&!subsystemOverview)subsystemOverview=createSubsystemOverview(document,context!,documentKey??context!.model.id,id=>selectConcept(groupKey(id)),()=>{});renderReviewLandscape(landscape,subsystemOverview?.root,active==='overview'?'graph':'overview');if(active==='landscape')subsystemOverview?.restore();}
   if(hasModel&&active!=='landscape'&&!isStructureView(active)&&!frames.has(active)){const f=document.createElement('iframe');f.className='concept-frame';f.dataset.conceptView=active;f.title=group?group.name+'のデータ構造':tables[conceptByKey.get(active)!].name+'と隣接する概念';f.hidden=true;frames.set(active,f);const focus=conceptByKey.get(active);if(focus)selectedConcepts.set(active,selectedConcepts.get(active)??focus);configureFrame(f);concept.querySelector('.concept-main')!.append(f);}
   for(const [id,f]of frames){f.hidden=!hasModel||id!==active;if(hasModel&&id===active&&!f.hasAttribute('src')&&!f.hasAttribute('srcdoc')){if(offlineConcept)f.srcdoc=offlineConcept;else f.src=new URL('concept.html?view=overview'+(findReviewGroup(id)?'&group='+encodeURIComponent(findReviewGroup(id)!.id):id==='overview'?'':'&focus='+encodeURIComponent(conceptByKey.get(id)!)),document.baseURI).href;}}
@@ -236,7 +287,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
  let visibleTab='';
  function renderTabs(){
   for(const wrap of Array.from(nativeTabs.querySelectorAll<HTMLElement>('.tab'))){const v=options.business().views?.find(v=>v.key===wrap.dataset.key);wrap.hidden=overviewClosed&&v?.activity===undefined&&v?.object===undefined;const selected=!wrap.hidden&&area==='business'&&wrap.dataset.key===options.business().viewKey;wrap.classList.toggle('active',selected);wrap.querySelector('button')?.setAttribute('aria-current',String(selected));}
-  const make=(root:HTMLElement,keys:string[],kind:'concept'|'states')=>{root.replaceChildren();for(const id of keys){const name=kind==='concept'?conceptName(id):(options.business().states?.find(s=>s.id===id)?.name??id),selected=area===kind&&id===(kind==='concept'?active:activeState),wrap=document.createElement('div');wrap.className='tab'+(selected?' active':'');const tabKind=kind==='concept'&&(id==='landscape'||findReviewGroup(id))?'subsystems':kind;wrap.dataset.viewKind=tabKind;const b=document.createElement('button');b.id=(kind==='concept'?'concept-tab-':'state-tab-')+id;viewTabLabel(b,tabKind,name);b.setAttribute('aria-current',String(selected));b.onclick=()=>kind==='concept'?selectConcept(id):selectState(id);wrap.append(b);const close=viewTabClose((tabKind==='subsystems'?'サブシステム：':kind==='concept'?'データ構造：':'状態遷移：')+name+'のタブを閉じる');close.onclick=()=>{remember();if(kind==='concept'){conceptOpen=conceptOpen.filter(k=>k!==id);if(id!=='overview'){frames.get(id)?.remove();frames.delete(id);}selectedConcepts.delete(id);selectedViews.delete(id);selectedSubsystems.delete(id);exampleModes.delete(id);lastExamples.delete(id);overviewModes.delete(id);if(area===kind&&active===id){if(conceptOpen.length)selectConcept(conceptOpen.at(-1)!,false);else fallback();}}else{stateOpen=stateOpen.filter(k=>k!==id);if(area===kind&&activeState===id){if(stateOpen.length)selectState(stateOpen.at(-1)!,false);else fallback();}}renderTabs();renderExplorer();save();route();strip.querySelector<HTMLElement>('[aria-current=true]')?.focus({preventScroll:true});};wrap.append(close);root.append(wrap);}};make(conceptTabs,conceptOpen,'concept');make(stateTabs,stateOpen,'states');
+  const make=(root:HTMLElement,keys:string[],kind:'concept'|'states')=>{root.replaceChildren();for(const id of keys){const name=kind==='concept'?conceptName(id):(options.business().states?.find(s=>s.id===id)?.name??id),selected=area===kind&&id===(kind==='concept'?active:activeState),wrap=document.createElement('div');wrap.className='tab'+(selected?' active':'');const tabKind=kind==='concept'&&(id==='landscape'||findReviewGroup(id))?'subsystems':kind;wrap.dataset.viewKind=tabKind;const b=document.createElement('button');b.id=(kind==='concept'?'concept-tab-':'state-tab-')+id;viewTabLabel(b,tabKind,name);b.setAttribute('aria-current',String(selected));b.onclick=()=>kind==='concept'?selectConcept(id):selectState(id);wrap.append(b);const close=viewTabClose((tabKind==='subsystems'?'サブシステム：':kind==='concept'?'データ構造：':'状態遷移：')+name+'のタブを閉じる');close.onclick=()=>{remember();if(kind==='concept'){conceptOpen=conceptOpen.filter(k=>k!==id);if(isStructureView(id))closeStructurePage(id);if(id!=='overview'){frames.get(id)?.remove();frames.delete(id);}selectedConcepts.delete(id);selectedViews.delete(id);selectedSubsystems.delete(id);exampleModes.delete(id);lastExamples.delete(id);overviewModes.delete(id);if(area===kind&&active===id){if(conceptOpen.length)selectConcept(conceptOpen.at(-1)!,false);else fallback();}}else{stateOpen=stateOpen.filter(k=>k!==id);if(area===kind&&activeState===id){if(stateOpen.length)selectState(stateOpen.at(-1)!,false);else fallback();}}renderTabs();renderExplorer();save();route();strip.querySelector<HTMLElement>('[aria-current=true]')?.focus({preventScroll:true});};wrap.append(close);root.append(wrap);}};make(conceptTabs,conceptOpen,'concept');make(stateTabs,stateOpen,'states');
   specTabs.replaceChildren();for(const id of specOpen){const name=specName(id),wrap=document.createElement('div');wrap.className='tab'+(area==='tests'&&id===activeSpec?' active':'');wrap.dataset.viewKind='tests';const b=document.createElement('button');b.id='spec-tab-'+id;viewTabLabel(b,'tests',name);b.setAttribute('aria-current',String(area==='tests'&&id===activeSpec));b.onclick=()=>selectSpec(id);const close=viewTabClose('テスト仕様：'+name+'のタブを閉じる');close.onclick=()=>{specOpen=specOpen.filter(key=>key!==id);if(area==='tests'&&activeSpec===id){if(specOpen.length)selectSpec(specOpen.at(-1)!,false);else fallback();}renderTabs();renderExplorer();save();route();};wrap.append(b,close);specTabs.append(wrap);}
   const selected=tabScroll.querySelector<HTMLElement>('.tab.active:not([hidden])'),key=area==='business'?'business:'+options.business().viewKey:area==='concept'?'concept:'+active:area==='states'?'states:'+activeState:area==='tests'?'tests:'+activeSpec:'';if(selected){if(key!==visibleTab)revealTab(tabScroll,selected);visibleTab=key;}else visibleTab='';
  }
@@ -274,7 +325,7 @@ export function installViewerShell(app:HTMLElement,options:Options){
   }
   if(q&&!matches)text(groups,'p','該当する項目はありません。').className='explorer-empty';groups.scrollTop=scroll;if(focused)Array.from(groups.querySelectorAll<HTMLElement>('[data-explorer-key]')).find(e=>e.dataset.explorerKey===focused)?.focus({preventScroll:true});
  }
- function syncExplorerMode(){if(!hasModel&&explorerMode==='structure')explorerMode='document';structureTab.disabled=!hasModel;documentTab.setAttribute('aria-selected',String(explorerMode==='document'));structureTab.setAttribute('aria-selected',String(explorerMode==='structure'));documentTab.tabIndex=explorerMode==='document'?0:-1;structureTab.tabIndex=explorerMode==='structure'?0:-1;documentPanel.hidden=explorerMode!=='document';structurePanel.hidden=explorerMode!=='structure';if(explorerMode==='structure')ensureStructurePage(structureSideKey);for(const [key,page]of structurePages)page.hidden=key!==structureSideKey;}
+ function syncExplorerMode(){if(!hasModel&&explorerMode==='structure')explorerMode='document';structureTab.disabled=!hasModel;documentTab.setAttribute('aria-selected',String(explorerMode==='document'));structureTab.setAttribute('aria-selected',String(explorerMode==='structure'));documentTab.tabIndex=explorerMode==='document'?0:-1;structureTab.tabIndex=explorerMode==='structure'?0:-1;documentPanel.hidden=explorerMode!=='document';structurePanel.hidden=explorerMode!=='structure';showStructureTree();}
  function setExplorerMode(mode:'document'|'structure'){if(mode==='structure'&&!hasModel)return;explorerMode=mode;syncExplorerMode();save();}
  documentTab.onclick=()=>setExplorerMode('document');structureTab.onclick=()=>setExplorerMode('structure');
  explorer.querySelector<HTMLElement>('.explorer-mode-tabs')!.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const next=event.key==='Home'||event.key==='ArrowLeft'?documentTab:structureTab;if(next.disabled)return;event.preventDefault();next.click();next.focus({preventScroll:true});});
@@ -311,6 +362,8 @@ export function installViewerShell(app:HTMLElement,options:Options){
    if(modelChanged){context=next;views=next?createConceptViews(next):undefined;samples=next?createDataExamples(next):undefined;logical=next?createLogicalDetails(next):undefined;
     hasModel=!!next;tables=views?.tables??{};ids=Object.keys(tables);
     structureIds=new Map((next?.model.concepts??[]).map(item=>[structureKey(item.id),item.id]));
+    const structure=next?structureGraph(next.model):undefined;
+    structureRoot=structure?.roots[0];structureLabels=structure?structureTabNames(structure):new Map();
     const groupIds=views?.groups.map(g=>g.id)??[],reserved=new Set([...wholeModes,'subsystems',structureView,...structureIds.keys()]);
     groupKeys=new Map(groupIds.map(id=>[id,reserved.has(id)||ids.includes(id)?'group:'+id:id]));
     conceptKeys=new Map(ids.map(id=>[id,reserved.has(id)||groupIds.includes(id)?'concept:'+id:id]));

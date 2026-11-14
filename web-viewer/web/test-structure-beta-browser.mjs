@@ -32,12 +32,22 @@ export async function verifyStructureBetaFixes(browser,{base='http://127.0.0.1:4
    const bd=tree.locator('.structure-root > li > details > .structure-children > [data-concept-id="n-bd"] > details');if(!await bd.evaluate(el=>el.open))await bd.locator(':scope > summary').click();
    const activity=bd.locator(':scope > .structure-children > [data-relation-id="nr-bd-activity"] > details');if(!await activity.evaluate(el=>el.open))await activity.locator(':scope > summary').click();
    assert.equal(await activity.locator(':scope > summary strong').innerText(),'業務');
+   const packageTab=page.getByRole('button',{name:'データ構造：構造-文書パッケージ',exact:true});
+   const designTab=page.getByRole('button',{name:'データ構造：構造-業務設計書',exact:true});
+   const activityTab=page.getByRole('button',{name:'データ構造：構造-業務',exact:true});
+   assert.equal(await packageTab.count(),1);assert.equal(await designTab.count(),1);assert.equal(await activityTab.getAttribute('aria-current'),'true');
+   if(width<800)await sidebar.getByRole('button',{name:'ナビゲーションを閉じる'}).click();
+   const detail=page.locator('.structure-detail-page:not([hidden])');
+   await packageTab.click();assert.match(await detail.innerText(),/型名\s+DocumentPackage/);
+   await activityTab.click();assert.match(await detail.innerText(),/型名\s+Activity/);
+   assert.equal(new URL(page.url()).searchParams.get('concept'),'structure-explorer:n-activity');
+   await showSidebar();assert.equal(await activity.evaluate(el=>el.open),true);
    const reference=activity.locator(':scope > .structure-children > [data-relation-id="nr-who-activity"] > details > summary');
    console.log(JSON.stringify({structureBeta:width,stage:'keyboard-reference-ready'}));await reference.focus();const start=await reference.getAttribute('data-structure-selection');
    for(const key of ['ArrowDown','ArrowDown','ArrowRight','ArrowDown','Enter'])await page.keyboard.press(key);
    const selected=tree.locator('.structure-selected');assert.notEqual(await selected.getAttribute('data-structure-selection'),start);assert(await selected.evaluate(el=>document.activeElement===el));
    const selectedId=await selected.evaluate(el=>el.closest('[data-concept-id]').dataset.conceptId);const selection=JSON.parse(await selected.getAttribute('data-structure-selection'));assert.equal(selectedId,selection[1]);
-   const detail=page.locator('.structure-detail-page:not([hidden])');assert(!(await detail.innerText()).includes('型名\nActivity\n'),'Enter updates detail');
+   assert(!(await detail.innerText()).includes('型名\nActivity\n'),'Enter updates detail');
    await page.keyboard.press('Home');const root=tree.locator('.structure-root > li > details > summary');assert(await root.evaluate(el=>document.activeElement===el));await page.keyboard.press('ArrowLeft');assert.equal(await root.evaluate(el=>el.parentElement.open),false);await page.keyboard.press('ArrowRight');assert.equal(await root.evaluate(el=>el.parentElement.open),true);await page.keyboard.press('ArrowRight');const childWasOpen=await page.evaluate(()=>document.activeElement.parentElement.open);await page.keyboard.press('ArrowLeft');if(childWasOpen)await page.keyboard.press('ArrowLeft');assert(await root.evaluate(el=>document.activeElement===el));
    await page.screenshot({path:out+'/keyboard-'+width+'.png'});
    // The reviewed samples must reach the displayed table, including on public Pages.
@@ -45,7 +55,7 @@ export async function verifyStructureBetaFixes(browser,{base='http://127.0.0.1:4
    const preface=page.locator('.structure-detail-page:not([hidden]) [data-information-id="cf-9b0df810c60eb0"] td').first();assert.equal(await preface.innerText(),reviewSamples().documents.find(d=>d.kind==='conceptModel').meta.fieldMappings.find(f=>f.informationId==='cf-9b0df810c60eb0').sampleValue);
    if(width<800&&await sidebar.isVisible())await page.locator('#design-explorer .shell-heading button').click();await page.screenshot({path:out+'/samples-'+width+'.png'});
    await page.goto(url('overview'));await page.frameLocator('iframe[data-concept-view="overview"]').getByText('業務（Activity）',{exact:true}).waitFor();
-   assert.deepEqual(errors,[]);results.push({width,sidebar:280,summaryFits:true,treeOverflow:overflow,zeroResults:true,nativeKeyboard:true,samples:true,activityNames:'業務 / 業務（Activity）',pageErrors:errors});
+   assert.deepEqual(errors,[]);results.push({width,sidebar:280,summaryFits:true,treeOverflow:overflow,zeroResults:true,nativeKeyboard:true,structureTabs:true,samples:true,activityNames:'業務 / 業務（Activity）',pageErrors:errors});
   }finally{await context.close();}
  }
  writeFileSync(out+'/results.json',JSON.stringify({base,published,results},null,2));return {base,published,results};

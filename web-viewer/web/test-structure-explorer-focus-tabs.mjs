@@ -53,24 +53,60 @@ try{
  const search=activityPage.querySelector('input[type=search]');search.value='名前';search.dispatchEvent(new w.Event('input'));content().querySelector('.structure-attribute-back').click();content().querySelector('[data-information-id="n-activity-field-2"] button').click();search.value='';search.dispatchEvent(new w.Event('input'));assert(activityPage.querySelector('.structure-selected'),'selection follows the restored tree after search');selectedField(d,'名前',/業務/);
  assert(activityRoot.querySelector('[data-relation-id="nr-activity-step"]'));assert(activityRoot.querySelector('[data-relation-id="nr-who-activity"]'));
  assert(!activityPage.textContent.includes('この起点からたどれない構造'));assert(!activityPage.textContent.includes('JSON全体のルートを'));
- assert.equal(new URL(w.location.href).searchParams.get('concept'),'structure-explorer:n-activity');assert(structureTab(d,'業務（Activity）・構造'));
- go('structure-explorer:n-step');const stepPage=livePage(d);assert.equal(firstRoot(stepPage).dataset.conceptId,'n-step');assert.equal(structureTab(d,'手順行（Step）・構造').getAttribute('aria-current'),'true');
- structureTab(d,'業務（Activity）・構造').click();assert.equal(livePage(d),activityPage);selectedField(d,'名前',/業務/);
- structureTab(d,'構造エクスプローラー').click();assert.equal(livePage(d),rootPage);assert(activity.open);selectedField(d,'識別子',/業務設計書/);
+ assert.equal(new URL(w.location.href).searchParams.get('concept'),'structure-explorer:n-activity');assert(structureTab(d,'構造-業務'));
+ go('structure-explorer:n-step');const stepPage=livePage(d);assert.equal(firstRoot(stepPage).dataset.conceptId,'n-step');assert.equal(structureTab(d,'構造-手順行').getAttribute('aria-current'),'true');
+ structureTab(d,'構造-業務').click();assert.equal(livePage(d),activityPage);selectedField(d,'名前',/業務/);
+ structureTab(d,'構造-業務設計書').click();assert.equal(livePage(d),rootPage);assert(activity.open);selectedField(d,'識別子',/業務設計書/);
  const count=d.querySelectorAll('.concept-tabs .tab').length;go('structure-explorer:n-activity');assert.equal(d.querySelectorAll('.concept-tabs .tab').length,count,'an existing direct URL reuses its tab');assert.equal(livePage(d),activityPage);selectedField(d,'名前',/業務/);covered.push('STRUCTURE-TAB-001');
  activityPage.querySelector('.structure-toolbar button').click();assert(activityPage.querySelector('.structure-seen'));assert(activityPage.querySelectorAll('.structure-item').length<=normal.model.relations.length+1);assert(activityPage.querySelector('[data-relation-id="nr-step-dependency"]'));assert.equal(activityPage.querySelectorAll('[data-relation-direction="owner"],[data-relation-direction="referencedBy"]').length,0);
  activityPage.querySelectorAll('.structure-toolbar button')[1].click();assert(!firstRoot(activityPage).querySelector(':scope > details').open);covered.push('STRUCTURE-TAB-003');
- saved=w.sessionStorage.getItem('alder-explorer-v1:/');structureTab(d,'手順行（Step）・構造').click();
- d.querySelector('[aria-label="データ構造：手順行（Step）・構造のタブを閉じる"]').click();assert.equal(livePage(d),activityPage);
- d.querySelector('[aria-label="データ構造：業務（Activity）・構造のタブを閉じる"]').click();assert.equal(livePage(d),rootPage);assert(activity.open);
- go('structure-explorer:n-activity');test.change(physical,'other');assert(!structureTab(d,'業務（Activity）・構造'));assert(!d.querySelector('[data-concept-id="n-activity"]'));
+ saved=w.sessionStorage.getItem('alder-explorer-v1:/');structureTab(d,'構造-手順行').click();
+ d.querySelector('[aria-label="データ構造：構造-手順行のタブを閉じる"]').click();assert.equal(livePage(d),activityPage);
+ d.querySelector('[aria-label="データ構造：構造-業務のタブを閉じる"]').click();assert.equal(livePage(d),rootPage);assert(activity.open);
+ go('structure-explorer:n-activity');test.change(physical,'other');assert(!structureTab(d,'構造-業務'));assert(!d.querySelector('[data-concept-id="n-activity"]'));
  d.querySelector('#explorer-tab-structure').click();assert.equal(firstRoot(livePage(d)).dataset.conceptId,'fmt-package');covered.push('STRUCTURE-TAB-002');
 }finally{test.w.close();}
 const direct=boot('https://viewer.test/?view=concept&concept=structure-explorer%3An-activity');
-try{assert.equal(firstRoot(livePage(direct.d)).dataset.conceptId,'n-activity');assert(structureTab(direct.d,'業務（Activity）・構造'));}finally{direct.w.close();}
+try{assert.equal(firstRoot(livePage(direct.d)).dataset.conceptId,'n-activity');assert(structureTab(direct.d,'構造-業務'));}finally{direct.w.close();}
 const restored=boot('https://viewer.test/?view=concept&concept=structure-explorer%3An-activity',normal,'candidate',saved);
-try{assert.equal(firstRoot(livePage(restored.d)).dataset.conceptId,'n-activity');assert(structureTab(restored.d,'構造エクスプローラー'));}finally{restored.w.close();}
+try{assert.equal(firstRoot(livePage(restored.d)).dataset.conceptId,'n-activity');assert(structureTab(restored.d,'構造-業務設計書'));}finally{restored.w.close();}
 const invalid=boot('https://viewer.test/?view=concept&concept=structure-explorer%3Amissing');
 try{assert.equal(livePage(invalid.d),null,'unknown direct roots do not select an unrelated structure');}finally{invalid.w.close();}
+
+const selected=boot('https://viewer.test/?view=concept&concept=structure-explorer');
+let selectedTabs,selectedUrl;
+try{
+ const {w,d}=selected,tree=livePage(d);
+ const activity=tree.querySelector('[data-relation-id="nr-bd-activity"] > details');
+ const open=(row)=>row.querySelector(':scope > summary').click();
+ open(activity);activity.open=true;activity.dispatchEvent(new w.Event('toggle'));
+ const activityTab=()=>structureTab(d,'構造-業務');
+ assert.equal(activityTab().getAttribute('aria-current'),'true');assert.equal(structureTab(d,'構造-業務設計書').getAttribute('aria-current'),'false');
+ assert.equal(detailValue(d,'ローカル名'),'業務');
+ assert.match(d.querySelector('.structure-detail-page:not([hidden]) .structure-detail-content').textContent,/BusinessDesign/);
+ const step=activity.querySelector('[data-relation-id="nr-activity-step"] > details');open(step);
+ assert.equal(detailValue(d,'型名'),'Step');assert.equal(livePage(d),tree);
+ const tabs=()=>d.querySelectorAll('.concept-tabs .tab').length;
+ assert.equal(tabs(),3);activityTab().click();assert.equal(detailValue(d,'型名'),'Activity');
+ assert.equal(tree.querySelector('[aria-current=true]').closest('[data-concept-id]').dataset.conceptId,'n-activity');
+ open(step);assert.equal(tabs(),3,'reselecting a structure uses its existing tab');
+ selectedTabs=w.sessionStorage.getItem('alder-explorer-v1:/');selectedUrl=w.location.href;
+}finally{selected.w.close();}
+const reloaded=boot(selectedUrl,normal,'candidate',selectedTabs);
+try{
+ assert.equal(firstRoot(livePage(reloaded.d)).dataset.conceptId,'n-bd','tree context survives reloading a tab opened from the full tree');
+ assert.equal(structureTab(reloaded.d,'構造-手順行').getAttribute('aria-current'),'true');
+ assert.equal(reloaded.d.querySelectorAll('.concept-tabs .tab').length,3);
+}finally{reloaded.w.close();}
+
+const duplicateNames=structuredClone(normal);
+duplicateNames.model.meta.conceptNames['n-bd'].logicalName='業務';
+const named=boot('https://viewer.test/?view=concept&concept=structure-explorer',duplicateNames);
+try{
+ const {d}=named;
+ assert(structureTab(d,'構造-業務1'));
+ livePage(d).querySelector('[data-relation-id="nr-bd-activity"] > details > summary').click();
+ assert(structureTab(d,'構造-業務1'));assert.equal(structureTab(d,'構造-業務2').getAttribute('aria-current'),'true');
+}finally{named.w.close();}
 checkCoverage(covered);checkAuthority(readFileSync(authorityPath));
 console.log('STRUCTURE-TAB-001..003: focused tabs, navigation, document isolation and bounded recursion verified.');

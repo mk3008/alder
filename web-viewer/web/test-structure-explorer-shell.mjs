@@ -20,15 +20,15 @@ try{
  const originalSrc=overview.getAttribute('src');assert.match(originalSrc,/concept\.html\?view=overview/);
  const structure=select('#explorer-tab-structure'),documents=select('#explorer-tab-document');assert(structure&&!structure.disabled);structure.click();assert(!select('#explorer-structure-panel').hidden);assert(!overview.hidden,'changing the explorer alone retains the current view');
  const root=select('.structure-root > [data-concept-id="n-bd"] > details > summary');assert(root);root.click();
- assert.equal(new URL(w.location.href).searchParams.get('concept'),'structure-explorer');
+ assert.equal(new URL(w.location.href).searchParams.get('concept'),'structure-explorer:n-bd');
  assert.equal(select('.structure-explorer').hidden,false);assert(select('#explorer-structure-panel [data-concept-id="n-bd"]'));assert(select('[data-concept-id="n-activity"]'));
- assert.equal(select('#concept-tab-structure-explorer').getAttribute('aria-current'),'true');assert.equal(overview.hidden,true);
+ assert.equal(select('[id="concept-tab-structure-explorer:n-bd"]').getAttribute('aria-current'),'true');assert.equal(overview.hidden,true);
  assert.equal(select('#drawer').disabled,true,'structure detail is in the main area');assert(select('#concept-related-panel').hidden);
  assert(!select('.structure-detail-page').hidden);select('.structure-detail-content .structure-attribute-select').click();assert.match(select('.structure-detail-content').textContent,/ローカル名識別子/);assert.match(select('.structure-detail-content').textContent,/所属業務設計書/);
  documents.click();select('[data-explorer-key="concept:overview"]').click();assert.equal(overview.hidden,false);assert.equal(overview.getAttribute('src'),originalSrc,'existing graph and its iframe are retained');
  assert.equal(select('#explorer-structure-panel').hidden,true);assert.equal(select('#drawer').disabled,false);
  structure.click();root.click();select('.structure-toolbar button').click();assert.equal(new Set([...d.querySelectorAll('.structure-explorer [data-concept-id]')].map(el=>el.dataset.conceptId)).size,25);
- const close=select('[aria-label="データ構造：構造エクスプローラーのタブを閉じる"]');assert(close);close.click();assert.equal(select('#concept-tab-structure-explorer'),null);assert.equal(overview.hidden,false);
+ const close=select('[aria-label="データ構造：構造-業務設計書のタブを閉じる"]');assert(close);close.click();assert.equal(select('[id="concept-tab-structure-explorer:n-bd"]'),null);assert.equal(overview.hidden,false);
  structure.click();select('.structure-root > [data-concept-id="n-bd"] > details > summary').click();
  current=physicalContext;key='other';shell.syncDocument();
  structure.click();assert(select('#explorer-structure-panel .structure-root > [data-concept-id="fmt-package"]'),'changing documents renders the new package root');
