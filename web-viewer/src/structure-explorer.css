@@ -29,11 +29,12 @@
 [data-theme=dark] .structure-icon,[data-theme=dark] .structure-count{color:#8fc8ef}[data-theme=dark] .structure-node>summary::before{color:#8fc8ef}
 @media(max-width:800px){.structure-detail-page{padding:12px}.structure-node-row,.structure-attribute-select,.structure-attribute-back{min-height:40px}}
 
-.structure-copy-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:32px 8px;margin-bottom:18px!important}
+.structure-detail-list .structure-copy-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:32px 8px;margin-bottom:6px}
+.structure-attribute-back+.structure-detail-list{padding-top:24px}
 .structure-copy-actions{display:flex;min-width:0;max-width:100%;font:inherit;font-weight:400;flex-wrap:wrap;align-items:baseline;gap:32px 12px;margin:0}
 .structure-copy-actions button{position:relative;max-width:100%;box-sizing:border-box;white-space:normal;min-height:0;padding:0;border:0;border-radius:0;background:transparent;color:var(--line);font:inherit;line-height:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-/* Extend the actual pointer target without increasing the caption's line box. */
-.structure-copy-actions button::before{content:"";position:absolute;inset:-14px -3px}
+/* Extend the hit area upwards so the next line can sit close to the caption. */
+.structure-copy-actions button::before{content:"";position:absolute;inset:-23px -3px -5px}
 .structure-copy-actions button:hover{background:transparent;text-decoration-thickness:2px}
 .structure-copy-actions button:focus-visible{outline:2px solid var(--accent,#357aa6);outline-offset:3px}
-.structure-copy-status{flex-basis:100%;color:var(--line);font-size:12px;font-weight:400}.structure-copy-status:empty{position:absolute}
+.structure-copy-status{flex-basis:100%;margin-top:-24px;color:var(--line);font-size:12px;font-weight:400}.structure-copy-status:empty{position:absolute}
