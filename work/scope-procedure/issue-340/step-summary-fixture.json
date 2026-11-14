@@ -1,0 +1,46 @@
+{
+  "candidateVersion": "step-summary-poc/1",
+  "roles": [{"id": "role-designer", "name": "設計者"}],
+  "objects": [
+    {"id": "notebook", "name": "ノート", "scope": true},
+    {"id": "customer", "name": "顧客", "scope": false},
+    {"id": "payment-service", "name": "決済サービス", "scope": false}
+  ],
+  "data": [
+    {"id": "d-name-filter", "name": "顧客名の検索条件"},
+    {"id": "d-name-result", "name": "顧客名の検索結果"},
+    {"id": "d-date-filter", "name": "受付日の検索条件"},
+    {"id": "d-date-result", "name": "受付日の検索結果"},
+    {"id": "d-change", "name": "変更連絡"},
+    {"id": "d-payment", "name": "送金依頼"}
+  ],
+  "activities": [
+    {
+      "id": "a-inquiry",
+      "name": "問合せを整理する",
+      "scope": true,
+      "who": {"kind": "role", "roleId": "role-designer"},
+      "when": "問合せ、または変更連絡が届いたとき",
+      "steps": [
+        {"id": "s-new-intake", "text": "新規の問合せ内容を確認する", "obligation": "required", "appliesWhen": "新規問合せのとき", "effect": null},
+        {"id": "s-change-intake", "text": "変更連絡の内容を確認する", "obligation": "required", "appliesWhen": "変更連絡のとき", "effect": null},
+        {"id": "s-name-query", "text": "顧客名で検索する", "obligation": "required", "appliesWhen": null, "effect": "read", "exchange": {"phase": "request", "direction": "output", "objectId": "notebook", "dataId": "d-name-filter"}},
+        {"id": "s-name-result", "text": "顧客名の検索結果を確認する", "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"phase": "response", "direction": "input", "objectId": "notebook", "dataId": "d-name-result"}},
+        {"id": "s-date-query", "text": "受付日で検索する", "obligation": "optional", "appliesWhen": "受付日が分かるとき", "effect": "read", "exchange": {"phase": "request", "direction": "output", "objectId": "notebook", "dataId": "d-date-filter"}},
+        {"id": "s-date-result", "text": "受付日の検索結果を確認する", "obligation": "required", "appliesWhen": "受付日で検索したとき", "effect": null, "exchange": {"phase": "response", "direction": "input", "objectId": "notebook", "dataId": "d-date-result"}},
+        {"id": "s-date-retry", "text": "必要なら同じ条件で再検索する", "obligation": "optional", "appliesWhen": "再確認が必要なとき", "effect": "read", "exchange": {"phase": "request", "direction": "output", "objectId": "notebook", "dataId": "d-date-filter"}},
+        {"id": "s-judge", "text": "必要な確認を判断する", "obligation": "required", "appliesWhen": null, "effect": null}
+      ]
+    },
+    {
+      "id": "a-payment",
+      "name": "送金を依頼する",
+      "scope": true,
+      "who": {"kind": "system", "name": "会計システム"},
+      "when": "送金時刻になったとき",
+      "steps": [
+        {"id": "s-pay", "text": "決済サービスへ送金を依頼する", "obligation": "required", "appliesWhen": null, "effect": null, "exchange": {"phase": "request", "direction": "output", "objectId": "payment-service", "dataId": "d-payment"}}
+      ]
+    }
+  ]
+}
