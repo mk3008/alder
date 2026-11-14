@@ -72,6 +72,21 @@ async function readingError(page){
 }
 async function failedDocument(page,body=concurrencyBodies.shared){await page.evaluate(()=>__saveStateControl.failWrites=1);await openText(page,body);await submit(page);await flush(page);await stateIs(page,'error');await guard(page,true,['error']);}
 
+// Wait for the native dialog result, not a navigation event that cannot occur after dismissal.
+async function canceledReload(page,context,seen,marker){
+ const session=await context.newCDPSession(page);let timer,onClosed;
+ try{
+  await session.send('Page.enable');
+  const closed=new Promise((resolve,reject)=>{
+   onClosed=event=>resolve(event);session.once('Page.javascriptDialogClosed',onClosed);
+   timer=setTimeout(()=>reject(Error('Native departure dialog did not close')),7000);
+  });
+  const [,event]=await Promise.all([session.send('Page.reload'),closed,seen]);
+  assert.equal(event.result,false,'the native dismissal must cancel navigation');
+  return {loaded:(await page.evaluate(()=>globalThis.__departureIdentity))!==marker};
+ }finally{clearTimeout(timer);if(onClosed)session.off('Page.javascriptDialogClosed',onClosed);await session.detach();}
+}
+
 async function withPage(browser,url,run,{viewport={width:1280,height:960},controls={}}={}){
  const context=await browser.newContext({viewport}),errors=[],external=[],dialogs=[];let expected;
  const origin=new URL(url).origin;
@@ -88,8 +103,8 @@ async function withPage(browser,url,run,{viewport={width:1280,height:960},contro
    // Real click/fill user activation in callers enables native beforeunload.
    let timeout;const seen=new Promise((resolve,reject)=>{expected={action,resolve,reject};timeout=setTimeout(()=>reject(Error('Expected actual beforeunload dialog did not appear')),7000);});
    const marker=await page.evaluate(()=>globalThis.__departureIdentity??=(Math.random().toString()));
-   const navigation=(trigger?trigger():page.reload()).then(()=>({loaded:true}),error=>({loaded:false,error:error.message}));
-   try{await seen;const result=await navigation;if(action==='dismiss'){if(!trigger)assert.equal(result.loaded,false,'dismissed departure must cancel navigation');assert.equal(await page.evaluate(()=>globalThis.__departureIdentity),marker,'dismissal retains the original document');}else{assert.equal(result.loaded,true,'accepted departure must navigate');await page.waitForFunction(marker=>globalThis.__departureIdentity!==marker,marker);await ready(page);}return result;}finally{clearTimeout(timeout);expected=undefined;}
+   const navigation=action==='dismiss'&&!trigger?canceledReload(page,context,seen,marker):(trigger?trigger():page.reload()).then(()=>({loaded:true}));
+   try{const [,result]=await Promise.all([seen,navigation]);if(action==='dismiss'){if(!trigger)assert.equal(result.loaded,false,'dismissed departure must cancel navigation');assert.equal(await page.evaluate(()=>globalThis.__departureIdentity),marker,'dismissal retains the original document');}else{assert.equal(result.loaded,true,'accepted departure must navigate');await page.waitForFunction(marker=>globalThis.__departureIdentity!==marker,marker);await ready(page);}return result;}finally{clearTimeout(timeout);expected=undefined;}
   };
   const result=await run({page,context,departure,dialogs,database:databaseFor(url)});
   assert.deepEqual(errors,[],'no page errors or unexpected dialogs');assert.deepEqual(external,[],'no external network calls');return result;
@@ -106,8 +121,21 @@ export async function verifySaveState(browser,{url='http://127.0.0.1:4173/'}={})
   await guard(page,false,['unchanged']);assert.equal(await page.evaluate(()=>__saveStateControl.writes.length),0);assert.deepEqual(await page.evaluate(readConcurrencyRecord,database),before);
   await cleanReload(page);assert.deepEqual(dialogs,[]);return {cleanReload:true,lifecycleWrites:0};
  });
- add('save state: native draft reload is dismissible and explicitly discardable',async({page,departure,database,dialogs})=>{
+ add('save state: native draft reload is dismissible and explicitly discardable',async({page,context,departure,database,dialogs})=>{
   await openSourceAction(page,'open-text');await guard(page,false,['unchanged']);await page.locator('#source-text').fill('Synthetic unsubmitted draft');await guard(page,true,['draft']);
+  // A real dialog followed by an unrelated protocol failure must not count as a successful dismissal.
+  const create=context.newCDPSession.bind(context);
+  context.newCDPSession=async target=>{
+   const session=await create(target),send=session.send.bind(session);
+   session.send=(method,...args)=>{
+    if(method!=='Page.reload')return send(method,...args);
+    const injected=new Promise((_,reject)=>target.once('dialog',()=>reject(Error('Injected navigation failure'))));
+    return Promise.all([send(method,...args),injected]).then(([value])=>value);
+   };return session;
+  };
+  try{await assert.rejects(departure('dismiss'),/Injected navigation failure/);}finally{context.newCDPSession=create;}
+  assert.deepEqual(dialogs.splice(0),[{type:'beforeunload',action:'dismiss'}]);
+  assert.equal(await page.locator('#source-text').inputValue(),'Synthetic unsubmitted draft');await guard(page,true,['draft']);
   await departure('dismiss');assert.equal(await page.locator('#source-text').inputValue(),'Synthetic unsubmitted draft');await guard(page,true,['draft']);
   await page.locator('#source-cancel').click();await guard(page,false,['unchanged']);await openSourceAction(page,'open-text');await guard(page,true,['draft']);
   await page.locator('#source-text').press('Escape');await guard(page,false,['unchanged']);assert.equal((await page.evaluate(readConcurrencyRecord,database)).current,undefined);
